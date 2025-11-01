@@ -66,6 +66,97 @@ function generateSlug(name: string): string {
     .trim()
 }
 
+// Map full state/province names to 2-letter codes
+function normalizeStateCode(state: string, country: string): string {
+  if (!state) return ''
+
+  const stateUpper = state.trim().toUpperCase()
+
+  // Already a 2-letter code
+  if (stateUpper.length === 2) return stateUpper
+
+  // Canadian provinces
+  const canadianProvinces: Record<string, string> = {
+    'ALBERTA': 'AB',
+    'BRITISH COLUMBIA': 'BC',
+    'MANITOBA': 'MB',
+    'NEW BRUNSWICK': 'NB',
+    'NEWFOUNDLAND AND LABRADOR': 'NL',
+    'NORTHWEST TERRITORIES': 'NT',
+    'NOVA SCOTIA': 'NS',
+    'NUNAVUT': 'NU',
+    'ONTARIO': 'ON',
+    'PRINCE EDWARD ISLAND': 'PE',
+    'QUEBEC': 'QC',
+    'SASKATCHEWAN': 'SK',
+    'YUKON': 'YT',
+  }
+
+  // US states
+  const usStates: Record<string, string> = {
+    'ALABAMA': 'AL',
+    'ALASKA': 'AK',
+    'ARIZONA': 'AZ',
+    'ARKANSAS': 'AR',
+    'CALIFORNIA': 'CA',
+    'COLORADO': 'CO',
+    'CONNECTICUT': 'CT',
+    'DELAWARE': 'DE',
+    'FLORIDA': 'FL',
+    'GEORGIA': 'GA',
+    'HAWAII': 'HI',
+    'IDAHO': 'ID',
+    'ILLINOIS': 'IL',
+    'INDIANA': 'IN',
+    'IOWA': 'IA',
+    'KANSAS': 'KS',
+    'KENTUCKY': 'KY',
+    'LOUISIANA': 'LA',
+    'MAINE': 'ME',
+    'MARYLAND': 'MD',
+    'MASSACHUSETTS': 'MA',
+    'MICHIGAN': 'MI',
+    'MINNESOTA': 'MN',
+    'MISSISSIPPI': 'MS',
+    'MISSOURI': 'MO',
+    'MONTANA': 'MT',
+    'NEBRASKA': 'NE',
+    'NEVADA': 'NV',
+    'NEW HAMPSHIRE': 'NH',
+    'NEW JERSEY': 'NJ',
+    'NEW MEXICO': 'NM',
+    'NEW YORK': 'NY',
+    'NORTH CAROLINA': 'NC',
+    'NORTH DAKOTA': 'ND',
+    'OHIO': 'OH',
+    'OKLAHOMA': 'OK',
+    'OREGON': 'OR',
+    'PENNSYLVANIA': 'PA',
+    'RHODE ISLAND': 'RI',
+    'SOUTH CAROLINA': 'SC',
+    'SOUTH DAKOTA': 'SD',
+    'TENNESSEE': 'TN',
+    'TEXAS': 'TX',
+    'UTAH': 'UT',
+    'VERMONT': 'VT',
+    'VIRGINIA': 'VA',
+    'WASHINGTON': 'WA',
+    'WEST VIRGINIA': 'WV',
+    'WISCONSIN': 'WI',
+    'WYOMING': 'WY',
+  }
+
+  // Check appropriate mapping based on country
+  if (country === 'CA' && canadianProvinces[stateUpper]) {
+    return canadianProvinces[stateUpper]
+  } else if (country === 'US' && usStates[stateUpper]) {
+    return usStates[stateUpper]
+  }
+
+  // Try both mappings if no country match
+  return canadianProvinces[stateUpper] || usStates[stateUpper] || state
+}
+
 // Main import function
 async function importAdvisors() {
   const csvPath = path.join(
@@ -111,7 +202,7 @@ async function importAdvisors() {
 
     // Map CSV to our schema
     const name = row.title || ''
-    const email = row['emails/0'] || ''
+    const email = row['emails/0'] || null
 
     if (!name) {
       console.warn(`Row ${i + 1}: Missing name, skipping`)
@@ -119,23 +210,19 @@ async function importAdvisors() {
       continue
     }
 
-    if (!email) {
-      console.warn(`Row ${i + 1}: ${name} - Missing email, skipping`)
-      skipped++
-      continue
-    }
+    // Check if email already exists (only if email is provided)
+    if (email) {
+      const { data: existing } = await supabase
+        .from('advisors')
+        .select('id')
+        .eq('email', email.toLowerCase())
+        .single()
 
-    // Check if email already exists
-    const { data: existing } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('email', email.toLowerCase())
-      .single()
-
-    if (existing) {
-      console.log(`Row ${i + 1}: ${name} - Email already exists, skipping`)
-      skipped++
-      continue
+      if (existing) {
+        console.log(`Row ${i + 1}: ${name} - Email already exists, skipping`)
+        skipped++
+        continue
+      }
     }
 
     const slug = generateSlug(name)
@@ -147,14 +234,14 @@ async function importAdvisors() {
     if (country === 'USA') country = 'US'
     if (country === 'Canada') country = 'CA'
 
-    // State code validation
-    let state = row.state || ''
-    if (state.length > 2) {
-      console.warn(`Row ${i + 1}: ${name} - State code too long: ${state}, skipping`)
-      skipped++
-      continue
+    // Normalize state/province code
+    let state = normalizeStateCode(row.state || '', country)
+    if (row.state && !state) {
+      console.warn(
+        `Row ${i + 1}: ${name} - Could not normalize state: ${row.state}, using as-is`
+      )
+      state = row.state.substring(0, 2).toUpperCase()
     }
-    state = state.toUpperCase()
 
     // Build description from advisor_name if available
     let description = ''
@@ -175,7 +262,7 @@ async function importAdvisors() {
       const { error } = await supabase.from('advisors').insert({
         name,
         slug,
-        email: email.toLowerCase(),
+        email: email ? email.toLowerCase() : null,
         phone: row.phone || null,
         website_url: row.website || null,
         address: row.street || null,
@@ -201,7 +288,9 @@ async function importAdvisors() {
         skipped++
       } else {
         imported++
-        console.log(`✓ Imported: ${name} (${email})`)
+        const location = row.city ? `${row.city}, ${state}` : state || 'location unknown'
+        const contact = email || 'no email'
+        console.log(`✓ Imported: ${name} (${location}) - ${contact}`)
       }
     } catch (err) {
       console.error(`Row ${i + 1}: ${name} - Exception:`, err)

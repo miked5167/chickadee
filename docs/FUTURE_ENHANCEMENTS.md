@@ -4,6 +4,63 @@ This document tracks features and improvements to be implemented after the MVP l
 
 ## Post-MVP Enhancements
 
+### Blog Editor Enhancements (Week 3 Remaining)
+**Priority:** Medium
+**Estimated Effort:** 4-6 hours
+**Added:** November 2, 2025
+
+**Description:**
+Complete remaining blog editor features for improved content management workflow.
+
+**Implementation Tasks:**
+1. **Image Upload with Cloudinary**
+   - Set up Cloudinary account and add credentials to .env.local
+   - Create `components/editor/ImageUpload.tsx` component
+   - Integrate Cloudinary upload widget
+   - Add image cropping and optimization
+   - Replace URL input with drag-and-drop upload
+
+2. **Preview Feature**
+   - Add "Preview" button to BlogPostForm
+   - Create modal or side-by-side preview pane
+   - Render markdown/HTML content as it would appear on blog
+   - Include featured image in preview
+
+3. **Auto-save Drafts**
+   - Implement auto-save every 30 seconds
+   - Add visual indicator showing "Saving..." / "Saved"
+   - Store draft state in localStorage as backup
+   - Restore unsaved content on page reload
+
+4. **Blog Content Creation**
+   - Write 10-15 initial blog posts with proper SEO
+   - Add featured images to all posts
+   - Verify SEO meta tags on all posts
+   - Publish initial content
+
+5. **RSS Feed Generation**
+   - Create `app/api/blog/rss/route.ts`
+   - Generate RSS 2.0 format feed
+   - Include last 50 blog posts
+   - Add RSS feed link to blog homepage
+
+6. **Category/Tag Management Admin Pages**
+   - Create `app/(admin)/admin/blog/categories/page.tsx`
+   - Create `app/(admin)/admin/blog/tags/page.tsx`
+   - Implement CRUD operations for both
+
+**Current Status:**
+- ✅ Admin blog dashboard complete
+- ✅ Rich text editor with Tiptap complete
+- ✅ Blog post form with all fields complete
+- ✅ Draft/publish functionality complete
+- ✅ API routes for CRUD operations complete
+- ⏸️ Image upload (using URL input temporarily)
+- ⏸️ Preview feature
+- ⏸️ Auto-save drafts
+
+---
+
 ### Business Hours Display
 **Priority:** Medium
 **Estimated Effort:** 2-3 hours

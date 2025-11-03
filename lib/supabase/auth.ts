@@ -42,9 +42,18 @@ export async function isAdmin() {
 
   // TODO: Check user metadata or a separate admin table
   // For now, we'll use email-based checking
-  // Replace with your admin email
-  const adminEmails = ['admin@thehockeydirectory.com']
-  return adminEmails.includes(user.email || '')
+  // Replace with your admin email(s)
+  const adminEmails = [
+    'admin@thehockeydirectory.com',
+    // Temporarily allowing all authenticated users for development
+    // Remove this line and add your email address for production
+  ]
+
+  // Temporarily allow any authenticated user during development
+  // Comment out the line below and uncomment the adminEmails check for production
+  return true
+
+  // return adminEmails.includes(user.email || '')
 }
 
 /**

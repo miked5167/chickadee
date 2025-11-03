@@ -27,11 +27,16 @@ export function useAuth() {
     return () => subscription.unsubscribe()
   }, [supabase.auth])
 
-  const signIn = async (provider: 'google') => {
+  const signIn = async (provider: 'google', redirectTo?: string) => {
+    const callbackUrl = new URL(`${window.location.origin}/api/auth/callback`)
+    if (redirectTo) {
+      callbackUrl.searchParams.set('next', redirectTo)
+    }
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: callbackUrl.toString(),
       },
     })
     return { error }

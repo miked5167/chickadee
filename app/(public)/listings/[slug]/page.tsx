@@ -230,6 +230,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
             {/* Contact Card */}
             <ContactCard
               advisorId={advisor.id}
+              advisorSlug={advisor.slug}
               phone={advisor.phone}
               email={advisor.email}
               websiteUrl={advisor.website_url}

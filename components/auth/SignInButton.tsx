@@ -4,13 +4,17 @@ import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/lib/hooks/use-auth'
 import { useState } from 'react'
 
-export function SignInButton() {
+interface SignInButtonProps {
+  redirectTo?: string
+}
+
+export function SignInButton({ redirectTo }: SignInButtonProps) {
   const { signIn } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSignIn = async () => {
     setIsLoading(true)
-    const { error } = await signIn('google')
+    const { error } = await signIn('google', redirectTo)
     if (error) {
       console.error('Error signing in:', error.message)
       alert('Failed to sign in. Please try again.')

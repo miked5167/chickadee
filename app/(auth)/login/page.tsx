@@ -1,7 +1,11 @@
 import { SignInButton } from '@/components/auth/SignInButton'
 import Link from 'next/link'
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: { redirectTo?: string }
+}) {
   return (
     <div className="bg-white rounded-lg shadow-lg p-8">
       <div className="text-center mb-8">
@@ -13,7 +17,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <SignInButton />
+      <SignInButton redirectTo={searchParams.redirectTo} />
 
       <p className="mt-6 text-center text-sm text-neutral-gray">
         By signing in, you agree to our{' '}

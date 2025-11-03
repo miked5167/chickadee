@@ -1,17 +1,19 @@
 'use client'
 
+import Link from 'next/link'
 import { FaPhone, FaEnvelope, FaGlobe } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface ContactCardProps {
   advisorId: string
+  advisorSlug: string
   phone?: string | null
   email?: string | null
   websiteUrl?: string | null
 }
 
-export function ContactCard({ advisorId, phone, email, websiteUrl }: ContactCardProps) {
+export function ContactCard({ advisorId, advisorSlug, phone, email, websiteUrl }: ContactCardProps) {
   const trackClick = async (clickType: 'phone' | 'email' | 'website') => {
     try {
       await fetch(`/api/advisors/${advisorId}/track-click`, {
@@ -80,9 +82,11 @@ export function ContactCard({ advisorId, phone, email, websiteUrl }: ContactCard
           </a>
         )}
 
-        <Button className="w-full mt-4" size="lg">
-          Contact Advisor
-        </Button>
+        <Link href={`/listings/${advisorSlug}/contact`} className="block mt-4">
+          <Button className="w-full" size="lg">
+            Contact Advisor
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   )

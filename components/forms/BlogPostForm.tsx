@@ -79,12 +79,12 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
 
         if (categoriesRes.ok) {
           const categoriesData = await categoriesRes.json()
-          setCategories(categoriesData)
+          setCategories(categoriesData.categories || [])
         }
 
         if (tagsRes.ok) {
           const tagsData = await tagsRes.json()
-          setTags(tagsData)
+          setTags(tagsData.tags || [])
         }
       } catch (error) {
         console.error('Error fetching categories/tags:', error)

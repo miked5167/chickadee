@@ -79,6 +79,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
     }
 
+    // Handle tags if provided
+    if (body.tag_ids && Array.isArray(body.tag_ids) && body.tag_ids.length > 0) {
+      const tagAssociations = body.tag_ids.map((tagId: string) => ({
+        post_id: post.id,
+        tag_id: tagId,
+      }))
+
+      const { error: tagError } = await supabase
+        .from('blog_post_tags')
+        .insert(tagAssociations)
+
+      if (tagError) {
+        console.error('Error associating tags:', tagError)
+        // Don't fail the whole request, just log the error
+      }
+    }
+
     return NextResponse.json(post, { status: 201 })
   } catch (error) {
     console.error('Error in POST /api/admin/blog/posts:', error)

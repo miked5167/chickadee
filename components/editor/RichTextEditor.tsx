@@ -1,6 +1,7 @@
 'use client'
 
 import { useEditor, EditorContent } from '@tiptap/react'
+import { useRef, useState } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
@@ -18,7 +19,9 @@ import {
   Quote,
   Code,
   Undo,
-  Redo
+  Redo,
+  Upload,
+  Loader2
 } from 'lucide-react'
 
 interface RichTextEditorProps {
@@ -28,6 +31,8 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -73,11 +78,58 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
     }
   }
 
-  const addImage = () => {
-    const url = window.prompt('Enter image URL:')
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      alert('Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.')
+      return
     }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024
+    if (file.size > maxSize) {
+      alert('File size too large. Maximum size is 10MB.')
+      return
+    }
+
+    setUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to upload image')
+      }
+
+      const data = await response.json()
+
+      // Insert the uploaded image into the editor
+      editor.chain().focus().setImage({ src: data.url }).run()
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert(error instanceof Error ? error.message : 'Failed to upload image')
+    } finally {
+      setUploading(false)
+      // Reset the input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  const addImage = () => {
+    fileInputRef.current?.click()
   }
 
   return (
@@ -204,10 +256,15 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
         <button
           type="button"
           onClick={addImage}
-          className="p-2 rounded hover:bg-gray-200"
-          title="Add Image"
+          disabled={uploading}
+          className="p-2 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          title={uploading ? "Uploading..." : "Upload Image"}
         >
-          <ImageIcon className="w-4 h-4" />
+          {uploading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Upload className="w-4 h-4" />
+          )}
         </button>
 
         <div className="w-px bg-gray-300 mx-1" />
@@ -235,6 +292,15 @@ export function RichTextEditor({ content, onChange, placeholder }: RichTextEdito
 
       {/* Editor Content */}
       <EditorContent editor={editor} />
+
+      {/* Hidden file input for image uploads */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/gif,image/webp"
+        onChange={handleImageUpload}
+        className="hidden"
+      />
     </div>
   )
 }

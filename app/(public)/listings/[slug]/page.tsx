@@ -1,11 +1,16 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { FaStar, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactCard } from '@/components/listing/ContactCard'
 import { LocationMap } from '@/components/listing/LocationMap'
+import { StarRating } from '@/components/listing/StarRating'
+import { ReviewsList } from '@/components/listing/ReviewsList'
+import { MessageSquarePlus, Building2 } from 'lucide-react'
 
 // Force dynamic rendering - don't try to statically generate at build time
 export const dynamic = 'force-dynamic'
@@ -49,17 +54,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   // Fetch advisor data
   const { data: advisor } = await supabase
     .from('advisors')
-    .select(`
-      *,
-      reviews (
-        id,
-        rating,
-        review_title,
-        review_text,
-        created_at,
-        user_id
-      )
-    `)
+    .select('*')
     .eq('slug', slug)
     .eq('is_published', true)
     .single()
@@ -67,6 +62,25 @@ export default async function ListingPage({ params }: ListingPageProps) {
   if (!advisor) {
     notFound()
   }
+
+  // Fetch initial reviews for the page (first 10, sorted by newest)
+  const { data: initialReviews, count: reviewCount } = await supabase
+    .from('reviews')
+    .select(`
+      id,
+      rating,
+      title,
+      review_text,
+      is_verified,
+      created_at,
+      reviewer:users_public!reviews_reviewer_id_fkey (
+        display_name
+      )
+    `, { count: 'exact' })
+    .eq('advisor_id', advisor.id)
+    .eq('is_published', true)
+    .order('created_at', { ascending: false })
+    .limit(10)
 
   // Increment view count
   await supabase.from('listing_views').insert({
@@ -77,7 +91,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   const location = [advisor.city, advisor.state].filter(Boolean).join(', ') || advisor.country
   const rating = advisor.average_rating || 0
-  const reviewCount = advisor.review_count || 0
+  const totalReviews = reviewCount || 0
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -111,20 +125,11 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </div>
 
               {/* Rating */}
-              {reviewCount > 0 && (
+              {totalReviews > 0 && (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <FaStar
-                        key={star}
-                        className={`w-5 h-5 ${
-                          star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <StarRating rating={rating} showNumber={true} />
                   <span className="text-gray-600">
-                    {rating.toFixed(1)} ({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})
+                    ({totalReviews} {totalReviews === 1 ? 'review' : 'reviews'})
                   </span>
                 </div>
               )}
@@ -185,44 +190,27 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </Card>
             )}
 
-            {/* Reviews */}
-            {advisor.reviews && advisor.reviews.length > 0 && (
-              <Card>
-                <CardHeader>
+            {/* Reviews Section */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
                   <CardTitle>Reviews</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {advisor.reviews.slice(0, 5).map((review: any) => (
-                      <div key={review.id} className="border-b last:border-b-0 pb-4 last:pb-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="flex">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <FaStar
-                                key={star}
-                                className={`w-4 h-4 ${
-                                  star <= review.rating
-                                    ? 'text-yellow-400 fill-yellow-400'
-                                    : 'text-gray-300'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="font-semibold">Anonymous User</span>
-                          <span className="text-sm text-gray-500">
-                            {new Date(review.created_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                        {review.review_title && (
-                          <h4 className="font-semibold mb-1">{review.review_title}</h4>
-                        )}
-                        {review.review_text && <p className="text-gray-700">{review.review_text}</p>}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                  <Link href={`/listings/${advisor.slug}/reviews/new`}>
+                    <Button size="sm">
+                      <MessageSquarePlus className="w-4 h-4 mr-2" />
+                      Write a Review
+                    </Button>
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ReviewsList
+                  advisorId={advisor.id}
+                  initialReviews={initialReviews || []}
+                  totalCount={totalReviews}
+                />
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
@@ -235,6 +223,26 @@ export default async function ListingPage({ params }: ListingPageProps) {
               email={advisor.email}
               websiteUrl={advisor.website_url}
             />
+
+            {/* Claim This Listing Card */}
+            {!advisor.is_claimed && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Own This Business?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Claim this listing to manage your profile, respond to reviews, and view leads.
+                  </p>
+                  <Link href={`/claim/${advisor.slug}`}>
+                    <Button variant="outline" className="w-full">
+                      <Building2 className="w-4 h-4 mr-2" />
+                      Claim This Listing
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Business Info */}
             <Card>

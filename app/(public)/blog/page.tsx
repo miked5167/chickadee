@@ -6,7 +6,7 @@ import { BlogHero } from '@/components/blog/BlogHero'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogSidebar } from '@/components/blog/BlogSidebar'
 import { Button } from '@/components/ui/button'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FaChevronLeft, FaChevronRight, FaRss } from 'react-icons/fa'
 
 interface BlogPost {
   id: string
@@ -175,12 +175,28 @@ export default function BlogPage() {
       {/* Page Header */}
       <div className="bg-gradient-to-r from-hockey-blue to-blue-800 text-white py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Hockey Insights & Advice
-          </h1>
-          <p className="text-xl text-blue-100 max-w-3xl">
-            Expert guidance for navigating the competitive hockey landscape
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                Hockey Insights & Advice
+              </h1>
+              <p className="text-xl text-blue-100 max-w-3xl">
+                Expert guidance for navigating the competitive hockey landscape
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <a
+                href="/api/blog/rss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-hockey-blue rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                title="Subscribe to RSS Feed"
+              >
+                <FaRss className="w-4 h-4" />
+                Subscribe RSS
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -63,11 +63,23 @@ export default async function AdminBlogPage() {
             Manage your blog content, create new posts, and edit existing ones.
           </p>
         </div>
-        <Link href="/admin/blog/new">
-          <Button size="lg">
-            Create New Post
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/admin/blog/categories">
+            <Button variant="outline" size="lg">
+              Categories
+            </Button>
+          </Link>
+          <Link href="/admin/blog/tags">
+            <Button variant="outline" size="lg">
+              Tags
+            </Button>
+          </Link>
+          <Link href="/admin/blog/new">
+            <Button size="lg">
+              Create New Post
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}

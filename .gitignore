@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# MCP (Model Context Protocol) configuration
+# Contains API tokens and should never be committed
+.claude.json
+**/mcp.json

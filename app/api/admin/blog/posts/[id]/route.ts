@@ -33,7 +33,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    return NextResponse.json(post)
+    // Fetch associated tags
+    const { data: postTags } = await supabase
+      .from('blog_post_tags')
+      .select('tag_id, tag:blog_tags(id, name, slug)')
+      .eq('post_id', params.id)
+
+    const tags = postTags?.map(pt => pt.tag) || []
+
+    return NextResponse.json({ ...post, tags })
   } catch (error) {
     console.error('Error in GET /api/admin/blog/posts/[id]:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -79,6 +87,32 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (error) {
       console.error('Error updating blog post:', error)
       return NextResponse.json({ error: 'Failed to update post' }, { status: 500 })
+    }
+
+    // Handle tags if provided
+    if (body.tag_ids !== undefined) {
+      // Delete existing tag associations
+      await supabase
+        .from('blog_post_tags')
+        .delete()
+        .eq('post_id', params.id)
+
+      // Insert new tag associations
+      if (Array.isArray(body.tag_ids) && body.tag_ids.length > 0) {
+        const tagAssociations = body.tag_ids.map((tagId: string) => ({
+          post_id: params.id,
+          tag_id: tagId,
+        }))
+
+        const { error: tagError } = await supabase
+          .from('blog_post_tags')
+          .insert(tagAssociations)
+
+        if (tagError) {
+          console.error('Error updating tags:', tagError)
+          // Don't fail the whole request, just log the error
+        }
+      }
     }
 
     return NextResponse.json(post)

@@ -1,13 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { SEOScoreIndicator } from '@/components/editor/SEOScoreIndicator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Upload, X, Check, AlertCircle, Clock } from 'lucide-react'
+import { useAutoSave, AutoSaveStatus } from '@/lib/hooks/use-auto-save'
 
 interface Category {
   id: string
@@ -35,14 +37,17 @@ interface BlogPostFormProps {
     meta_description?: string
     status: 'draft' | 'published' | 'scheduled'
     is_featured: boolean
+    tags?: Tag[]
   }
 }
 
 export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [tags, setTags] = useState<Tag[]>([])
+  const featuredImageInputRef = useRef<HTMLInputElement>(null)
 
   // Form state
   const [title, setTitle] = useState(initialData?.title || '')
@@ -56,6 +61,9 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
   const [metaDescription, setMetaDescription] = useState(initialData?.meta_description || '')
   const [status, setStatus] = useState<'draft' | 'published' | 'scheduled'>(initialData?.status || 'draft')
   const [isFeatured, setIsFeatured] = useState(initialData?.is_featured || false)
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
+    initialData?.tags?.map(tag => tag.id) || []
+  )
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -67,6 +75,56 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
       setSlug(generatedSlug)
     }
   }, [title, slug, postId])
+
+  // Auto-save data object
+  const autoSaveData = useMemo(() => ({
+    title,
+    slug,
+    excerpt,
+    content,
+    featured_image_url: featuredImageUrl || null,
+    featured_image_alt: featuredImageAlt || null,
+    category_id: categoryId || null,
+    meta_title: metaTitle || title,
+    meta_description: metaDescription || excerpt,
+    status: 'draft' as const,
+    is_featured: isFeatured,
+    tag_ids: selectedTagIds,
+  }), [title, slug, excerpt, content, featuredImageUrl, featuredImageAlt, categoryId, metaTitle, metaDescription, isFeatured, selectedTagIds])
+
+  // Auto-save hook
+  const autoSave = useAutoSave({
+    data: autoSaveData,
+    onSave: async (data) => {
+      // Only auto-save if we have at least a title
+      if (!data.title) return
+
+      const url = postId ? `/api/admin/blog/posts/${postId}` : '/api/admin/blog/posts'
+      const method = postId ? 'PATCH' : 'POST'
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to auto-save')
+      }
+
+      const result = await response.json()
+
+      // If this is a new post, update the postId for subsequent saves
+      if (!postId && result.post?.id) {
+        // Update URL to edit mode without refreshing
+        window.history.replaceState({}, '', `/admin/blog/${result.post.id}/edit`)
+      }
+    },
+    delay: 3000, // 3 seconds
+    enabled: !!title, // Only enable auto-save when there's a title
+  })
 
   // Fetch categories and tags
   useEffect(() => {
@@ -94,6 +152,54 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
     fetchData()
   }, [])
 
+  const handleFeaturedImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      alert('Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.')
+      return
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024
+    if (file.size > maxSize) {
+      alert('File size too large. Maximum size is 10MB.')
+      return
+    }
+
+    setUploadingImage(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to upload image')
+      }
+
+      const data = await response.json()
+      setFeaturedImageUrl(data.url)
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert(error instanceof Error ? error.message : 'Failed to upload image')
+    } finally {
+      setUploadingImage(false)
+      // Reset the input
+      if (featuredImageInputRef.current) {
+        featuredImageInputRef.current.value = ''
+      }
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent, saveStatus: 'draft' | 'published') => {
     e.preventDefault()
     setLoading(true)
@@ -111,6 +217,7 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
         meta_description: metaDescription || excerpt,
         status: saveStatus,
         is_featured: isFeatured,
+        tag_ids: selectedTagIds,
       }
 
       const url = postId ? `/api/admin/blog/posts/${postId}` : '/api/admin/blog/posts'
@@ -141,8 +248,49 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
     }
   }
 
+  const getAutoSaveIndicator = () => {
+    const { status, lastSaved, error } = autoSave
+
+    const statusConfig = {
+      idle: { icon: null, text: '', color: '' },
+      saving: {
+        icon: <Clock className="w-4 h-4 animate-pulse" />,
+        text: 'Saving...',
+        color: 'text-gray-500'
+      },
+      saved: {
+        icon: <Check className="w-4 h-4" />,
+        text: lastSaved ? `Saved at ${lastSaved.toLocaleTimeString()}` : 'Saved',
+        color: 'text-green-600'
+      },
+      error: {
+        icon: <AlertCircle className="w-4 h-4" />,
+        text: error || 'Auto-save failed',
+        color: 'text-red-600'
+      },
+    }
+
+    const config = statusConfig[status]
+
+    if (status === 'idle') return null
+
+    return (
+      <div className={`flex items-center gap-2 text-sm ${config.color}`}>
+        {config.icon}
+        <span>{config.text}</span>
+      </div>
+    )
+  }
+
   return (
     <form className="space-y-6">
+      {/* Auto-save Status Indicator */}
+      {title && (
+        <div className="flex justify-end">
+          {getAutoSaveIndicator()}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
@@ -236,6 +384,20 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
               </div>
             </div>
           </Card>
+
+          {/* SEO Score Indicator */}
+          {title && content && (
+            <SEOScoreIndicator
+              title={title}
+              excerpt={excerpt}
+              content={content}
+              metaTitle={metaTitle}
+              metaDescription={metaDescription}
+              slug={slug}
+              featuredImageUrl={featuredImageUrl}
+              featuredImageAlt={featuredImageAlt}
+            />
+          )}
         </div>
 
         {/* Sidebar */}
@@ -297,12 +459,77 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
             </select>
           </Card>
 
+          {/* Tags */}
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Tags</h3>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {tags.map((tag) => (
+                <label
+                  key={tag.id}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTagIds.includes(tag.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedTagIds([...selectedTagIds, tag.id])
+                      } else {
+                        setSelectedTagIds(selectedTagIds.filter(id => id !== tag.id))
+                      }
+                    }}
+                    className="w-4 h-4 text-hockey-blue border-gray-300 rounded focus:ring-hockey-blue"
+                  />
+                  <span className="text-sm">{tag.name}</span>
+                </label>
+              ))}
+              {tags.length === 0 && (
+                <p className="text-sm text-gray-500 text-center py-4">
+                  No tags available. Create tags in the admin panel.
+                </p>
+              )}
+            </div>
+          </Card>
+
           {/* Featured Image */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Featured Image</h3>
             <div className="space-y-4">
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  onClick={() => featuredImageInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  {uploadingImage ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </>
+                  )}
+                </Button>
+                {featuredImageUrl && (
+                  <Button
+                    type="button"
+                    onClick={() => setFeaturedImageUrl('')}
+                    variant="outline"
+                    size="icon"
+                    title="Remove image"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+
               <div>
-                <Label htmlFor="featuredImageUrl">Image URL</Label>
+                <Label htmlFor="featuredImageUrl">Or enter URL</Label>
                 <Input
                   id="featuredImageUrl"
                   value={featuredImageUrl}
@@ -326,6 +553,15 @@ export function BlogPostForm({ postId, initialData }: BlogPostFormProps) {
                   placeholder="Describe the image"
                 />
               </div>
+
+              {/* Hidden file input */}
+              <input
+                ref={featuredImageInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                onChange={handleFeaturedImageUpload}
+                className="hidden"
+              />
             </div>
           </Card>
         </div>

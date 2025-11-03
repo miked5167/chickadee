@@ -7,6 +7,19 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Loader2, CheckCircle } from 'lucide-react'
+import { z } from 'zod'
+
+// Validation schema
+const contactFormSchema = z.object({
+  parentName: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().optional(),
+  childAge: z.string().optional(),
+  message: z.string().min(50, 'Message must be at least 50 characters').max(1000, 'Message is too long'),
+  agreedToTerms: z.boolean().refine(val => val === true, 'You must agree to the terms'),
+})
+
+type ContactFormData = z.infer<typeof contactFormSchema>
 
 interface ContactFormProps {
   advisorId: string
@@ -32,21 +45,24 @@ export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
     setLoading(true)
     setError(null)
 
-    // Validation
-    if (!parentName || !email || !message) {
-      setError('Please fill in all required fields')
-      setLoading(false)
-      return
-    }
+    // Validate with Zod
+    try {
+      const formData: ContactFormData = {
+        parentName,
+        email,
+        phone,
+        childAge,
+        message,
+        agreedToTerms,
+      }
 
-    if (message.length < 50) {
-      setError('Message must be at least 50 characters')
-      setLoading(false)
-      return
-    }
-
-    if (!agreedToTerms) {
-      setError('You must agree to the terms of service')
+      contactFormSchema.parse(formData)
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message)
+      } else {
+        setError('Validation failed. Please check your inputs.')
+      }
       setLoading(false)
       return
     }

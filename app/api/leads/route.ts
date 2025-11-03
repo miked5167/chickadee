@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { hashIpAddress } from '@/lib/utils/security'
+import { sendLeadNotificationEmail, sendLeadConfirmationEmail } from '@/lib/utils/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -101,14 +102,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // TODO: Send email notification to advisor
-    // This will be implemented when email service is configured
-    // For now, just log the intent
-    console.log(`Lead created for advisor ${advisor.name}:`, {
-      leadId: lead.id,
-      advisorEmail: advisor.email,
-      parentName: parent_name,
-    })
+    // Send email notification to advisor
+    try {
+      await sendLeadNotificationEmail({
+        advisorName: advisor.name,
+        advisorEmail: advisor.email,
+        parentName: parent_name,
+        parentEmail: email,
+        parentPhone: phone,
+        childAge: child_age,
+        message,
+        leadId: lead.id,
+      })
+
+      // Send confirmation email to parent
+      await sendLeadConfirmationEmail(email, parent_name, advisor.name)
+    } catch (emailError) {
+      // Log email errors but don't fail the request
+      console.error('Error sending emails:', emailError)
+    }
 
     return NextResponse.json(
       { success: true, leadId: lead.id },

@@ -12,6 +12,9 @@ export function hashIP(ip: string): string {
     .digest('hex')
 }
 
+// Alias for backward compatibility
+export const hashIpAddress = hashIP
+
 /**
  * Generate a secure random session ID
  */

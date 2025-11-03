@@ -32,6 +32,14 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
     notFound()
   }
 
+  // Fetch associated tags
+  const { data: postTags } = await supabase
+    .from('blog_post_tags')
+    .select('tag_id, tag:blog_tags(id, name, slug)')
+    .eq('post_id', id)
+
+  const tags = postTags?.map(pt => pt.tag).filter(Boolean) || []
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">
       <div className="mb-8">
@@ -58,6 +66,7 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
           meta_description: post.meta_description,
           status: post.status,
           is_featured: post.is_featured,
+          tags: tags as any,
         }}
       />
     </div>

@@ -19,6 +19,7 @@ interface AdvisorCardProps {
     is_verified: boolean
     logo_url: string | null
     years_in_business: number | null
+    hasCoordinates?: boolean
   }
   showDistance?: boolean
   distance?: number
@@ -51,6 +52,11 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
                   <span className="text-xs text-gray-500">
                     • {distance < 1 ? '< 1' : Math.round(distance)} mi
                   </span>
+                )}
+                {showDistance && !distance && advisor.hasCoordinates === false && (
+                  <Badge variant="secondary" className="text-xs bg-gray-200 text-gray-600">
+                    Location approximate
+                  </Badge>
                 )}
               </CardDescription>
             </div>

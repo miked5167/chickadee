@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
-import { CheckCircle2, XCircle, AlertTriangle, Upload, FileText } from 'react-icons/fi'
+import { FiCheckCircle, FiXCircle, FiAlertTriangle, FiUpload, FiFileText } from 'react-icons/fi'
 
 interface ImportResult {
   success: boolean
@@ -139,7 +139,7 @@ export function CsvImporter() {
               className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
             >
               <div className="flex flex-col items-center space-y-2">
-                <Upload className="w-8 h-8 text-gray-400" />
+                <FiUpload className="w-8 h-8 text-gray-400" />
                 <span className="text-sm text-gray-600">
                   {file ? file.name : 'Click to select CSV file'}
                 </span>
@@ -211,7 +211,7 @@ export function CsvImporter() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <FileText className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                      <FiFileText className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                       <div className="text-2xl font-bold">{validationResult.summary.total}</div>
                       <div className="text-xs text-gray-600">Total Rows</div>
                     </div>
@@ -220,7 +220,7 @@ export function CsvImporter() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                      <FiCheckCircle className="w-8 h-8 mx-auto mb-2 text-green-600" />
                       <div className="text-2xl font-bold text-green-600">
                         {validationResult.summary.valid}
                       </div>
@@ -231,7 +231,7 @@ export function CsvImporter() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <XCircle className="w-8 h-8 mx-auto mb-2 text-red-600" />
+                      <FiXCircle className="w-8 h-8 mx-auto mb-2 text-red-600" />
                       <div className="text-2xl font-bold text-red-600">
                         {validationResult.summary.invalid}
                       </div>
@@ -242,7 +242,7 @@ export function CsvImporter() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <AlertTriangle className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+                      <FiAlertTriangle className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
                       <div className="text-2xl font-bold text-yellow-600">
                         {validationResult.summary.withWarnings}
                       </div>
@@ -255,7 +255,7 @@ export function CsvImporter() {
               {/* Errors */}
               {validationResult.errors.length > 0 && (
                 <Alert variant="destructive">
-                  <XCircle className="h-4 w-4" />
+                  <FiXCircle className="h-4 w-4" />
                   <AlertDescription>
                     <div className="font-medium mb-2">Validation Errors:</div>
                     <ul className="list-disc list-inside space-y-1 text-sm">
@@ -273,7 +273,7 @@ export function CsvImporter() {
               {/* Warnings */}
               {validationResult.warnings.length > 0 && (
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <FiAlertTriangle className="h-4 w-4" />
                   <AlertDescription>
                     <div className="font-medium mb-2">Data Quality Warnings:</div>
                     <ul className="list-disc list-inside space-y-1 text-sm">
@@ -296,9 +296,9 @@ export function CsvImporter() {
           {importResult && (
             <Alert variant={importResult.success ? 'default' : 'destructive'}>
               {importResult.success ? (
-                <CheckCircle2 className="h-4 w-4" />
+                <FiCheckCircle className="h-4 w-4" />
               ) : (
-                <XCircle className="h-4 w-4" />
+                <FiXCircle className="h-4 w-4" />
               )}
               <AlertDescription>
                 <div className="space-y-2">

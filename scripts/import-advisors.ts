@@ -167,7 +167,7 @@ async function importAdvisors() {
     'Desktop',
     'The Hockey Directory',
     'Advisor Info',
-    'Final Hockey Advisor List Oct 28 2025.csv'
+    'Final Advisor Listing Nov 2 2025.csv'
   )
 
   console.log('Reading CSV file...')

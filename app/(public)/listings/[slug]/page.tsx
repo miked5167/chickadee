@@ -1,10 +1,15 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { FaStar, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaCheckCircle } from 'react-icons/fa'
+import { FaStar, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ContactCard } from '@/components/listing/ContactCard'
+import { LocationMap } from '@/components/listing/LocationMap'
+
+// Force dynamic rendering - don't try to statically generate at build time
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface ListingPageProps {
   params: Promise<{
@@ -49,9 +54,10 @@ export default async function ListingPage({ params }: ListingPageProps) {
       reviews (
         id,
         rating,
-        comment,
-        reviewer_name,
-        created_at
+        review_title,
+        review_text,
+        created_at,
+        user_id
       )
     `)
     .eq('slug', slug)
@@ -202,12 +208,15 @@ export default async function ListingPage({ params }: ListingPageProps) {
                               />
                             ))}
                           </div>
-                          <span className="font-semibold">{review.reviewer_name}</span>
+                          <span className="font-semibold">Anonymous User</span>
                           <span className="text-sm text-gray-500">
                             {new Date(review.created_at).toLocaleDateString()}
                           </span>
                         </div>
-                        {review.comment && <p className="text-gray-700">{review.comment}</p>}
+                        {review.review_title && (
+                          <h4 className="font-semibold mb-1">{review.review_title}</h4>
+                        )}
+                        {review.review_text && <p className="text-gray-700">{review.review_text}</p>}
                       </div>
                     ))}
                   </div>
@@ -219,48 +228,12 @@ export default async function ListingPage({ params }: ListingPageProps) {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {advisor.phone && (
-                  <a
-                    href={`tel:${advisor.phone}`}
-                    className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <FaPhone className="text-hockey-blue" />
-                    <span className="text-gray-700">{advisor.phone}</span>
-                  </a>
-                )}
-
-                {advisor.email && (
-                  <a
-                    href={`mailto:${advisor.email}`}
-                    className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <FaEnvelope className="text-hockey-blue" />
-                    <span className="text-gray-700">{advisor.email}</span>
-                  </a>
-                )}
-
-                {advisor.website_url && (
-                  <a
-                    href={advisor.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    <FaGlobe className="text-hockey-blue" />
-                    <span className="text-gray-700">Visit Website</span>
-                  </a>
-                )}
-
-                <Button className="w-full mt-4" size="lg">
-                  Contact Advisor
-                </Button>
-              </CardContent>
-            </Card>
+            <ContactCard
+              advisorId={advisor.id}
+              phone={advisor.phone}
+              email={advisor.email}
+              websiteUrl={advisor.website_url}
+            />
 
             {/* Business Info */}
             <Card>
@@ -288,6 +261,15 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 )}
               </CardContent>
             </Card>
+
+            {/* Location Map */}
+            {advisor.latitude && advisor.longitude && (
+              <LocationMap
+                latitude={advisor.latitude}
+                longitude={advisor.longitude}
+                name={advisor.name}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -21,13 +21,16 @@ const urlSchema = z
   .optional()
   .or(z.literal(''))
 
-// US/Canada state codes (2-letter)
+// US/Canada state codes (2-letter) - XX is allowed as placeholder for unknown
 const stateCodeRegex = /^[A-Z]{2}$/
 const stateSchema = z
   .string()
   .length(2, 'State must be 2-letter code')
   .regex(stateCodeRegex, 'State must be uppercase 2-letter code')
   .transform((val) => val.toUpperCase())
+  .optional()
+  .or(z.literal(''))
+  .default('XX')
 
 // Zip code validation (US: 5 digits, Canada: A1A 1A1)
 const zipCodeRegex = /^(\d{5}(-\d{4})?|[A-Z]\d[A-Z]\s?\d[A-Z]\d)$/i
@@ -50,11 +53,11 @@ export function generateSlug(name: string): string {
 // CSV Row Schema
 export const advisorCsvSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  email: emailSchema,
+  email: emailSchema.optional().or(z.literal('')),
   phone: phoneSchema,
   website_url: urlSchema,
   address: z.string().optional().or(z.literal('')),
-  city: z.string().min(1, 'City is required'),
+  city: z.string().optional().or(z.literal('')).default('Unknown'),
   state: stateSchema,
   zip_code: zipCodeSchema,
   country: z
@@ -98,13 +101,13 @@ export const advisorCsvSchema = z.object({
     .optional()
     .or(z.literal(''))
     .transform((val) => val === 'true' || val === '1')
-    .default('false'),
+    .default(false),
   is_featured: z
     .string()
     .optional()
     .or(z.literal(''))
     .transform((val) => val === 'true' || val === '1')
-    .default('false'),
+    .default(false),
 })
 
 export type AdvisorCsvRow = z.infer<typeof advisorCsvSchema>
@@ -151,7 +154,7 @@ export function validateAdvisorRow(
   } catch (error) {
     if (error instanceof z.ZodError) {
       errors.push(
-        ...error.errors.map(
+        ...error.issues.map(
           (err) => `Row ${rowNumber}: ${err.path.join('.')} - ${err.message}`
         )
       )

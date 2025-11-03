@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAdmin } from '@/lib/supabase/auth'
-import { parseCsvText, validateCsvData } from '@/lib/utils/csv-import'
+import { parseCsvText } from '@/lib/utils/csv-import'
+import { validateCsvData } from '@/lib/utils/csv-validation'
 
 /**
  * POST /api/admin/csv/validate

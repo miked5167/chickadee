@@ -12,19 +12,20 @@ export const metadata: Metadata = {
 }
 
 interface EditBlogPostPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function EditBlogPostPage({ params }: EditBlogPostPageProps) {
+  const { id } = await params
   const supabase = await createClient()
 
   // Fetch the blog post
   const { data: post, error } = await supabase
     .from('blog_posts')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !post) {

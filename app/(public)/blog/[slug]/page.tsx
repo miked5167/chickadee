@@ -51,27 +51,58 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  // Fetch the blog post with category and author info
+  // Fetch the blog post - simplified query first
   const { data: post, error } = await supabase
     .from('blog_posts')
-    .select(`
-      *,
-      category:blog_categories(name, slug, color),
-      author:users_public(display_name, avatar_url)
-    `)
+    .select('*')
     .eq('slug', slug)
     .eq('status', 'published')
     .single()
 
-  if (error || !post) {
+  if (error) {
+    console.error('Error fetching blog post:', error)
     notFound()
+  }
+
+  if (!post) {
+    console.error('No blog post found for slug:', slug)
+    notFound()
+  }
+
+  // Fetch category separately
+  let category = null
+  if (post.category_id) {
+    const { data: categoryData } = await supabase
+      .from('blog_categories')
+      .select('name, slug, color')
+      .eq('id', post.category_id)
+      .single()
+    category = categoryData
+  }
+
+  // Fetch author separately
+  let author = null
+  if (post.author_id) {
+    const { data: authorData } = await supabase
+      .from('users_public')
+      .select('display_name, avatar_url')
+      .eq('id', post.author_id)
+      .single()
+    author = authorData
+  }
+
+  // Reassign with category and author
+  const postData = {
+    ...post,
+    category,
+    author
   }
 
   // Fetch tags for this post
   const { data: postTags } = await supabase
     .from('blog_post_tags')
     .select('tag:blog_tags(id, name, slug)')
-    .eq('post_id', post.id)
+    .eq('post_id', postData.id)
 
   const tags = postTags?.map(pt => pt.tag).filter(Boolean) || []
 
@@ -79,9 +110,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { data: relatedPosts } = await supabase
     .from('blog_posts')
     .select('id, title, slug, excerpt, featured_image_url, published_at, read_time_minutes')
-    .eq('category_id', post.category_id)
+    .eq('category_id', postData.category_id)
     .eq('status', 'published')
-    .neq('id', post.id)
+    .neq('id', postData.id)
     .order('published_at', { ascending: false })
     .limit(3)
 
@@ -89,10 +120,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/blog/track-view`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ postId: post.id }),
+    body: JSON.stringify({ postId: postData.id }),
   }).catch(() => {})
 
-  const publishedDate = post.published_at ? new Date(post.published_at) : new Date(post.created_at)
+  const publishedDate = postData.published_at ? new Date(postData.published_at) : new Date(postData.created_at)
 
   return (
     <>
@@ -103,14 +134,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
-            headline: post.title,
-            description: post.excerpt,
-            image: post.featured_image_url,
+            headline: postData.title,
+            description: postData.excerpt,
+            image: postData.featured_image_url,
             datePublished: publishedDate.toISOString(),
-            dateModified: new Date(post.updated_at).toISOString(),
+            dateModified: new Date(postData.updated_at).toISOString(),
             author: {
               '@type': 'Person',
-              name: post.author?.display_name || 'The Hockey Directory',
+              name: postData.author?.display_name || 'The Hockey Directory',
             },
             publisher: {
               '@type': 'Organization',
@@ -139,11 +170,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         {/* Featured Image */}
-        {post.featured_image_url && (
+        {postData.featured_image_url && (
           <div className="relative w-full h-[400px] md:h-[500px] bg-neutral-gray/10">
             <Image
-              src={post.featured_image_url}
-              alt={post.featured_image_alt || post.title}
+              src={postData.featured_image_url}
+              alt={postData.featured_image_alt || postData.title}
               fill
               className="object-cover"
               priority
@@ -155,38 +186,38 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <header className="mb-8">
             {/* Category Badge */}
-            {post.category && (
+            {postData.category && (
               <Link
-                href={`/blog/category/${post.category.slug}`}
+                href={`/blog/category/${postData.category.slug}`}
                 className="inline-block mb-4"
               >
                 <span
                   className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: post.category.color }}
+                  style={{ backgroundColor: postData.category.color }}
                 >
-                  {post.category.name}
+                  {postData.category.name}
                 </span>
               </Link>
             )}
 
             {/* Title */}
             <h1 className="text-4xl md:text-5xl font-bold text-puck-black mb-4">
-              {post.title}
+              {postData.title}
             </h1>
 
             {/* Excerpt */}
-            {post.excerpt && (
+            {postData.excerpt && (
               <p className="text-xl text-neutral-gray mb-6">
-                {post.excerpt}
+                {postData.excerpt}
               </p>
             )}
 
             {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-gray">
-              {post.author && (
+              {postData.author && (
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4" />
-                  <span>{post.author.display_name}</span>
+                  <span>{postData.author.display_name}</span>
                 </div>
               )}
               <div className="flex items-center gap-2">
@@ -199,10 +230,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   })}
                 </time>
               </div>
-              {post.read_time_minutes && (
+              {postData.read_time_minutes && (
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span>{post.read_time_minutes} min read</span>
+                  <span>{postData.read_time_minutes} min read</span>
                 </div>
               )}
             </div>
@@ -212,7 +243,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="prose prose-lg max-w-none mb-12">
             <div
               className="blog-content"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: postData.content }}
             />
           </div>
 
@@ -242,8 +273,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               Share this post
             </h3>
             <ShareButtons
-              url={`${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`}
-              title={post.title}
+              url={`${process.env.NEXT_PUBLIC_APP_URL}/blog/${postData.slug}`}
+              title={postData.title}
             />
           </div>
 

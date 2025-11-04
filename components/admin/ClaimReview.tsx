@@ -14,9 +14,9 @@ interface Claim {
   claimant_name: string
   claimant_email: string
   claimant_phone: string | null
-  verification_info: string
+  business_verification_info: string
   status: 'pending' | 'approved' | 'rejected'
-  submitted_at: string
+  created_at: string
   reviewed_at: string | null
   admin_notes: string | null
   advisors: {
@@ -178,7 +178,7 @@ export function ClaimReview({ claim, onUpdate }: ClaimReviewProps) {
           <div>
             <p className="text-sm font-semibold text-gray-700">Submitted</p>
             <p className="text-gray-900">
-              {new Date(claim.submitted_at).toLocaleDateString('en-US', {
+              {new Date(claim.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -204,7 +204,7 @@ export function ClaimReview({ claim, onUpdate }: ClaimReviewProps) {
             <p className="text-sm font-semibold text-gray-700 mb-2">
               Verification Information
             </p>
-            <p className="text-gray-900 whitespace-pre-line">{claim.verification_info}</p>
+            <p className="text-gray-900 whitespace-pre-line">{claim.business_verification_info}</p>
           </div>
         )}
 

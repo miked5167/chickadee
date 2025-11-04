@@ -83,7 +83,7 @@ export async function PATCH(
         .update({
           status: 'approved',
           reviewed_at: new Date().toISOString(),
-          reviewed_by_user_id: user.id,
+          reviewed_by: user.id,
           admin_notes: admin_notes || null,
         })
         .eq('id', claimId)
@@ -101,7 +101,6 @@ export async function PATCH(
         .from('advisors')
         .update({
           is_claimed: true,
-          claimed_at: new Date().toISOString(),
           // Note: claimed_by_user_id will be set when the claimant creates/links their account
         })
         .eq('id', claim.advisor_id)
@@ -137,7 +136,7 @@ export async function PATCH(
         .update({
           status: 'rejected',
           reviewed_at: new Date().toISOString(),
-          reviewed_by_user_id: user.id,
+          reviewed_by: user.id,
           admin_notes: admin_notes || null,
         })
         .eq('id', claimId)

@@ -1,0 +1,556 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e17]:
+        - heading "Search Hockey Advisors" [level=1] [ref=e18]
+        - paragraph [ref=e19]: Find verified hockey advisors to help guide your player's journey
+      - generic [ref=e21]:
+        - complementary [ref=e22]:
+          - button "Filters" [ref=e24]:
+            - img
+            - text: Filters
+        - generic [ref=e26]:
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - textbox "Search by name or keyword..." [ref=e30]
+              - img [ref=e31]
+            - button "Search" [ref=e33]
+          - paragraph [ref=e35]: Found 201 advisors
+          - generic [ref=e36]:
+            - link "369 Sports & Entertainment US" [ref=e37]:
+              - /url: /listings/369-sports-entertainment
+              - generic [ref=e41] [cursor=pointer]:
+                - generic [ref=e43]: 369 Sports & Entertainment
+                - generic [ref=e44]:
+                  - img [ref=e45]
+                  - generic [ref=e47]: US
+            - 'link "A7A Hockey New York, NY Advisor: Mikita Pryshyvalka" [ref=e48]':
+              - /url: /listings/a7a-hockey
+              - generic [ref=e49] [cursor=pointer]:
+                - generic [ref=e52]:
+                  - generic [ref=e54]: A7A Hockey
+                  - generic [ref=e55]:
+                    - img [ref=e56]
+                    - generic [ref=e58]: New York, NY
+                - paragraph [ref=e60]: "Advisor: Mikita Pryshyvalka"
+            - link "3G Sports CA" [ref=e61]:
+              - /url: /listings/3g-sports
+              - generic [ref=e65] [cursor=pointer]:
+                - generic [ref=e67]: 3G Sports
+                - generic [ref=e68]:
+                  - img [ref=e69]
+                  - generic [ref=e71]: CA
+            - 'link "Omega Hockey Lakeville, MN Advisor: Cory Hunt 4 years in business" [ref=e72]':
+              - /url: /listings/omega-hockey
+              - generic [ref=e73] [cursor=pointer]:
+                - generic [ref=e76]:
+                  - generic [ref=e78]: Omega Hockey
+                  - generic [ref=e79]:
+                    - img [ref=e80]
+                    - generic [ref=e82]: Lakeville, MN
+                - generic [ref=e83]:
+                  - paragraph [ref=e84]: "Advisor: Cory Hunt"
+                  - paragraph [ref=e85]: 4 years in business
+            - 'link "85 Sports Management Columbus, OH Advisor: Nick Shackford" [ref=e86]':
+              - /url: /listings/85-sports-management
+              - generic [ref=e87] [cursor=pointer]:
+                - generic [ref=e90]:
+                  - generic [ref=e92]: 85 Sports Management
+                  - generic [ref=e93]:
+                    - img [ref=e94]
+                    - generic [ref=e96]: Columbus, OH
+                - paragraph [ref=e98]: "Advisor: Nick Shackford"
+            - 'link "CAL Sports Management Winnipeg, MB Advisor: Matt Calvert" [ref=e99]':
+              - /url: /listings/cal-sports-management
+              - generic [ref=e100] [cursor=pointer]:
+                - generic [ref=e103]:
+                  - generic [ref=e105]: CAL Sports Management
+                  - generic [ref=e106]:
+                    - img [ref=e107]
+                    - generic [ref=e109]: Winnipeg, MB
+                - paragraph [ref=e111]: "Advisor: Matt Calvert"
+            - 'link "KAM Sports QC Advisor: Mathieu Curadeau" [ref=e112]':
+              - /url: /listings/kam-sports
+              - generic [ref=e113] [cursor=pointer]:
+                - generic [ref=e116]:
+                  - generic [ref=e118]: KAM Sports
+                  - generic [ref=e119]:
+                    - img [ref=e120]
+                    - generic [ref=e122]: QC
+                - paragraph [ref=e124]: "Advisor: Mathieu Curadeau"
+            - 'link "KB Advising QC Advisor: Karl Bégin" [ref=e125]':
+              - /url: /listings/kb-advising
+              - generic [ref=e126] [cursor=pointer]:
+                - generic [ref=e129]:
+                  - generic [ref=e131]: KB Advising
+                  - generic [ref=e132]:
+                    - img [ref=e133]
+                    - generic [ref=e135]: QC
+                - paragraph [ref=e137]: "Advisor: Karl Bégin"
+            - 'link "LDC Talent Calgary, AB Advisor: Lander Cook" [ref=e138]':
+              - /url: /listings/ldc-talent
+              - generic [ref=e139] [cursor=pointer]:
+                - generic [ref=e142]:
+                  - generic [ref=e144]: LDC Talent
+                  - generic [ref=e145]:
+                    - img [ref=e146]
+                    - generic [ref=e148]: Calgary, AB
+                - paragraph [ref=e150]: "Advisor: Lander Cook"
+            - 'link "Lora Athletes AB Advisor: Krista Kerth" [ref=e151]':
+              - /url: /listings/lora-athletes
+              - generic [ref=e152] [cursor=pointer]:
+                - generic [ref=e155]:
+                  - generic [ref=e157]: Lora Athletes
+                  - generic [ref=e158]:
+                    - img [ref=e159]
+                    - generic [ref=e161]: AB
+                - paragraph [ref=e163]: "Advisor: Krista Kerth"
+            - 'link "MB Hockey Stoneham, QC Advisor: Martin Bédard" [ref=e164]':
+              - /url: /listings/mb-hockey
+              - generic [ref=e165] [cursor=pointer]:
+                - generic [ref=e168]:
+                  - generic [ref=e170]: MB Hockey
+                  - generic [ref=e171]:
+                    - img [ref=e172]
+                    - generic [ref=e174]: Stoneham, QC
+                - paragraph [ref=e176]: "Advisor: Martin Bédard"
+            - 'link "MC Hockey Agency QC Advisor: Charles-William Gagne" [ref=e177]':
+              - /url: /listings/mc-hockey-agency
+              - generic [ref=e178] [cursor=pointer]:
+                - generic [ref=e181]:
+                  - generic [ref=e183]: MC Hockey Agency
+                  - generic [ref=e184]:
+                    - img [ref=e185]
+                    - generic [ref=e187]: QC
+                - paragraph [ref=e189]: "Advisor: Charles-William Gagne"
+            - 'link "Meridian Hockey ON Advisor: Jake Sweeney" [ref=e190]':
+              - /url: /listings/meridian-hockey
+              - generic [ref=e191] [cursor=pointer]:
+                - generic [ref=e194]:
+                  - generic [ref=e196]: Meridian Hockey
+                  - generic [ref=e197]:
+                    - img [ref=e198]
+                    - generic [ref=e200]: "ON"
+                - paragraph [ref=e202]: "Advisor: Jake Sweeney"
+            - link "Alpha Hockey Inc Steinbach, MB" [ref=e203]:
+              - /url: /listings/alpha-hockey-inc
+              - generic [ref=e207] [cursor=pointer]:
+                - generic [ref=e209]: Alpha Hockey Inc
+                - generic [ref=e210]:
+                  - img [ref=e211]
+                  - generic [ref=e213]: Steinbach, MB
+            - 'link "JRC Hockey Management NY Advisor: Bryan Jones" [ref=e214]':
+              - /url: /listings/jrc-hockey-management
+              - generic [ref=e215] [cursor=pointer]:
+                - generic [ref=e218]:
+                  - generic [ref=e220]: JRC Hockey Management
+                  - generic [ref=e221]:
+                    - img [ref=e222]
+                    - generic [ref=e224]: NY
+                - paragraph [ref=e226]: "Advisor: Bryan Jones"
+            - 'link "Moose Hockey Sports Management ON Advisor: Kelli O''Connor" [ref=e227]':
+              - /url: /listings/moose-hockey-sports-management
+              - generic [ref=e228] [cursor=pointer]:
+                - generic [ref=e231]:
+                  - generic [ref=e233]: Moose Hockey Sports Management
+                  - generic [ref=e234]:
+                    - img [ref=e235]
+                    - generic [ref=e237]: "ON"
+                - paragraph [ref=e239]: "Advisor: Kelli O'Connor"
+            - 'link "OCTANE Sports Management Orchard Lake, MI Advisor: Duane Tursi" [ref=e240]':
+              - /url: /listings/octane-sports-management
+              - generic [ref=e241] [cursor=pointer]:
+                - generic [ref=e244]:
+                  - generic [ref=e246]: OCTANE Sports Management
+                  - generic [ref=e247]:
+                    - img [ref=e248]
+                    - generic [ref=e250]: Orchard Lake, MI
+                - paragraph [ref=e252]: "Advisor: Duane Tursi"
+            - 'link "OT Sports Group New York, NY Advisor: Bobby Gauthier" [ref=e253]':
+              - /url: /listings/ot-sports-group
+              - generic [ref=e254] [cursor=pointer]:
+                - generic [ref=e257]:
+                  - generic [ref=e259]: OT Sports Group
+                  - generic [ref=e260]:
+                    - img [ref=e261]
+                    - generic [ref=e263]: New York, NY
+                - paragraph [ref=e265]: "Advisor: Bobby Gauthier"
+            - 'link "Oswin Sports Group ON Advisor: Scott Oswin" [ref=e266]':
+              - /url: /listings/oswin-sports-group
+              - generic [ref=e267] [cursor=pointer]:
+                - generic [ref=e270]:
+                  - generic [ref=e272]: Oswin Sports Group
+                  - generic [ref=e273]:
+                    - img [ref=e274]
+                    - generic [ref=e276]: "ON"
+                - paragraph [ref=e278]: "Advisor: Scott Oswin"
+            - 'link "3V Sports Management US Advisor: Riley Neumeier" [ref=e279]':
+              - /url: /listings/3v-sports-management
+              - generic [ref=e280] [cursor=pointer]:
+                - generic [ref=e283]:
+                  - generic [ref=e285]: 3V Sports Management
+                  - generic [ref=e286]:
+                    - img [ref=e287]
+                    - generic [ref=e289]: US
+                - paragraph [ref=e291]: "Advisor: Riley Neumeier"
+            - 'link "93 Hockey Services US Advisor: Cody Janzen" [ref=e292]':
+              - /url: /listings/93-hockey-services
+              - generic [ref=e293] [cursor=pointer]:
+                - generic [ref=e296]:
+                  - generic [ref=e298]: 93 Hockey Services
+                  - generic [ref=e299]:
+                    - img [ref=e300]
+                    - generic [ref=e302]: US
+                - paragraph [ref=e304]: "Advisor: Cody Janzen"
+            - 'link "98 Hockey Management US Advisor: Jolena Gillard" [ref=e305]':
+              - /url: /listings/98-hockey-management
+              - generic [ref=e306] [cursor=pointer]:
+                - generic [ref=e309]:
+                  - generic [ref=e311]: 98 Hockey Management
+                  - generic [ref=e312]:
+                    - img [ref=e313]
+                    - generic [ref=e315]: US
+                - paragraph [ref=e317]: "Advisor: Jolena Gillard"
+            - 'link "Advancement Hockey Advising CA Advisor: Braeden Pearl" [ref=e318]':
+              - /url: /listings/advancement-hockey-advising
+              - generic [ref=e319] [cursor=pointer]:
+                - generic [ref=e322]:
+                  - generic [ref=e324]: Advancement Hockey Advising
+                  - generic [ref=e325]:
+                    - img [ref=e326]
+                    - generic [ref=e328]: CA
+                - paragraph [ref=e330]: "Advisor: Braeden Pearl"
+            - 'link "HC Sports Management Pembroke, NH Advisor: Christopher Hills" [ref=e331]':
+              - /url: /listings/hc-sports-management
+              - generic [ref=e332] [cursor=pointer]:
+                - generic [ref=e335]:
+                  - generic [ref=e337]: HC Sports Management
+                  - generic [ref=e338]:
+                    - img [ref=e339]
+                    - generic [ref=e341]: Pembroke, NH
+                - paragraph [ref=e343]: "Advisor: Christopher Hills"
+            - 'link "Bishop Sports Burlington, ON Advisor: David Bishop" [ref=e344]':
+              - /url: /listings/bishop-sports
+              - generic [ref=e345] [cursor=pointer]:
+                - generic [ref=e348]:
+                  - generic [ref=e350]: Bishop Sports
+                  - generic [ref=e351]:
+                    - img [ref=e352]
+                    - generic [ref=e354]: Burlington, ON
+                - paragraph [ref=e356]: "Advisor: David Bishop"
+            - 'link "Cosentino Sports Management Nepean, ON Advisor: Michael Crawford" [ref=e357]':
+              - /url: /listings/cosentino-sports-management
+              - generic [ref=e358] [cursor=pointer]:
+                - generic [ref=e361]:
+                  - generic [ref=e363]: Cosentino Sports Management
+                  - generic [ref=e364]:
+                    - img [ref=e365]
+                    - generic [ref=e367]: Nepean, ON
+                - paragraph [ref=e369]: "Advisor: Michael Crawford"
+            - 'link "CUTTING EDGE MANAGEMENT Montreal, QC Advisor: Chad Levitt" [ref=e370]':
+              - /url: /listings/cutting-edge-management
+              - generic [ref=e371] [cursor=pointer]:
+                - generic [ref=e374]:
+                  - generic [ref=e376]: CUTTING EDGE MANAGEMENT
+                  - generic [ref=e377]:
+                    - img [ref=e378]
+                    - generic [ref=e380]: Montreal, QC
+                - paragraph [ref=e382]: "Advisor: Chad Levitt"
+            - 'link "Elite Hockey Advising Buffalo, NY Advisor: Mike Mankowski 1 year in business" [ref=e383]':
+              - /url: /listings/elite-hockey-advising
+              - generic [ref=e384] [cursor=pointer]:
+                - generic [ref=e387]:
+                  - generic [ref=e389]: Elite Hockey Advising
+                  - generic [ref=e390]:
+                    - img [ref=e391]
+                    - generic [ref=e393]: Buffalo, NY
+                - generic [ref=e394]:
+                  - paragraph [ref=e395]: "Advisor: Mike Mankowski"
+                  - paragraph [ref=e396]: 1 year in business
+            - 'link "Apogee Hockey Consulting US Advisor: Shannon Valerio" [ref=e397]':
+              - /url: /listings/apogee-hockey-consulting
+              - generic [ref=e398] [cursor=pointer]:
+                - generic [ref=e401]:
+                  - generic [ref=e403]: Apogee Hockey Consulting
+                  - generic [ref=e404]:
+                    - img [ref=e405]
+                    - generic [ref=e407]: US
+                - paragraph [ref=e409]: "Advisor: Shannon Valerio"
+            - 'link "Apollo Athletics US Advisor: Bayne Pettinger" [ref=e410]':
+              - /url: /listings/apollo-athletics
+              - generic [ref=e411] [cursor=pointer]:
+                - generic [ref=e414]:
+                  - generic [ref=e416]: Apollo Athletics
+                  - generic [ref=e417]:
+                    - img [ref=e418]
+                    - generic [ref=e420]: US
+                - paragraph [ref=e422]: "Advisor: Bayne Pettinger"
+          - generic [ref=e423]:
+            - button "Previous" [disabled]:
+              - img
+              - text: Previous
+            - generic [ref=e425]: Page 1 of 7
+            - button "Next" [ref=e426]:
+              - text: Next
+              - img
+  - contentinfo "Footer" [ref=e427]:
+    - heading "Footer" [level=2] [ref=e428]
+    - generic [ref=e429]:
+      - generic [ref=e430]:
+        - generic [ref=e431]:
+          - generic [ref=e432]:
+            - generic [ref=e434]: HD
+            - generic [ref=e435]: The Hockey Directory
+          - paragraph [ref=e436]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e437]:
+            - link "Twitter" [ref=e438]:
+              - /url: "#"
+              - generic [ref=e439]: Twitter
+              - img [ref=e440]
+            - link "Facebook" [ref=e442]:
+              - /url: "#"
+              - generic [ref=e443]: Facebook
+              - img [ref=e444]
+            - link "Instagram" [ref=e446]:
+              - /url: "#"
+              - generic [ref=e447]: Instagram
+              - img [ref=e448]
+            - link "LinkedIn" [ref=e451]:
+              - /url: "#"
+              - generic [ref=e452]: LinkedIn
+              - img [ref=e453]
+        - generic [ref=e457]:
+          - generic [ref=e458]:
+            - generic [ref=e459]:
+              - heading "Advisors" [level=3] [ref=e460]
+              - list [ref=e461]:
+                - listitem [ref=e462]:
+                  - link "Find Advisors" [ref=e463]:
+                    - /url: /listings
+                - listitem [ref=e464]:
+                  - link "Claim Your Listing" [ref=e465]:
+                    - /url: /claim
+                - listitem [ref=e466]:
+                  - link "Featured Advisors" [ref=e467]:
+                    - /url: /listings?featured=true
+            - generic [ref=e468]:
+              - heading "Resources" [level=3] [ref=e469]
+              - list [ref=e470]:
+                - listitem [ref=e471]:
+                  - link "Blog" [ref=e472]:
+                    - /url: /blog
+                - listitem [ref=e473]:
+                  - link "Player Development" [ref=e474]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e475]:
+                  - link "College Recruitment" [ref=e476]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e477]:
+                  - link "Parent Tips" [ref=e478]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e479]:
+            - generic [ref=e480]:
+              - heading "Company" [level=3] [ref=e481]
+              - list [ref=e482]:
+                - listitem [ref=e483]:
+                  - link "About Us" [ref=e484]:
+                    - /url: /about
+                - listitem [ref=e485]:
+                  - link "Contact" [ref=e486]:
+                    - /url: /contact
+                - listitem [ref=e487]:
+                  - link "Submit a Listing" [ref=e488]:
+                    - /url: /submit
+            - generic [ref=e489]:
+              - heading "Legal" [level=3] [ref=e490]
+              - list [ref=e491]:
+                - listitem [ref=e492]:
+                  - link "Privacy Policy" [ref=e493]:
+                    - /url: /privacy
+                - listitem [ref=e494]:
+                  - link "Terms of Service" [ref=e495]:
+                    - /url: /terms
+                - listitem [ref=e496]:
+                  - link "Cookie Policy" [ref=e497]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e499]: © 2025 The Hockey Directory. All rights reserved.
+  - generic [active]:
+    - generic [ref=e502]:
+      - generic [ref=e503]:
+        - navigation [ref=e505]:
+          - button "previous" [disabled] [ref=e506]:
+            - img "previous" [ref=e507]
+          - generic [ref=e509]:
+            - generic [ref=e510]: 1/
+            - text: "1"
+          - button "next" [disabled] [ref=e511]:
+            - img "next" [ref=e512]
+        - generic [ref=e515]:
+          - img [ref=e516]
+          - generic "Latest available version is detected (16.0.1)." [ref=e518]: Next.js 16.0.1
+          - generic [ref=e519]: Turbopack
+      - dialog "Build Error" [ref=e521]:
+        - generic [ref=e524]:
+          - generic [ref=e525]:
+            - generic [ref=e526]:
+              - generic [ref=e528]: Build Error
+              - generic [ref=e529]:
+                - button "Copy Error Info" [ref=e530] [cursor=pointer]:
+                  - img [ref=e531]
+                - button "No related documentation found" [disabled] [ref=e533]:
+                  - img [ref=e534]
+                - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e536]:
+                  - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                  - img [ref=e537]
+            - generic [ref=e549]: Ecmascript file had an error
+          - generic [ref=e551]:
+            - generic [ref=e553]:
+              - img [ref=e555]
+              - generic [ref=e559]: ./app/(public)/listings/[slug]/page.tsx (19:21)
+              - button "Open in editor" [ref=e560] [cursor=pointer]:
+                - img [ref=e562]
+            - generic [ref=e565]:
+              - generic [ref=e566]: Ecmascript file had an error
+              - generic [ref=e567]: 17 |
+              - generic [ref=e568]: 18 |
+              - generic [ref=e569]: // Lazy load LocationMap (contains Google Maps)
+              - text: ">"
+              - generic [ref=e570]: 19 |
+              - text: const LocationMap =
+              - generic [ref=e571]: dynamic(
+              - generic [ref=e572]: "|"
+              - text: ^^^^^^^^ >
+              - generic [ref=e573]: 20 |
+              - generic [ref=e574]: ()
+              - text: => import('@/components/listing/LocationMap').
+              - generic [ref=e575]: then(mod
+              - text: =>
+              - generic [ref=e576]: "({"
+              - text: "default:"
+              - generic [ref=e577]: mod
+              - text: .LocationMap
+              - generic [ref=e578]: "}))"
+              - text: ","
+              - generic [ref=e579]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e580]: 21 |
+              - generic [ref=e581]: "{"
+              - generic [ref=e582]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e583]: 22 |
+              - generic [ref=e584]: loading
+              - text: ":"
+              - generic [ref=e585]: ()
+              - text: =>
+              - generic [ref=e586]: (
+              - generic [ref=e587]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e588]: 23 |
+              - text: <Card>
+              - generic [ref=e589]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e590]: 24 |
+              - text: <CardHeader>
+              - generic [ref=e591]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e592]: 25 |
+              - text: <CardTitle>Location</CardTitle>
+              - generic [ref=e593]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e594]: 26 |
+              - text: </CardHeader>
+              - generic [ref=e595]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e596]: 27 |
+              - text: <CardContent>
+              - generic [ref=e597]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e598]: 28 |
+              - text: <div
+              - generic [ref=e599]: className
+              - text: =
+              - generic [ref=e600]: "\"w-full h-64 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center\""
+              - text: ">"
+              - generic [ref=e601]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e602]: 29 |
+              - text: <span
+              - generic [ref=e603]: className
+              - text: ="text-gray-500">Loading
+              - generic [ref=e604]: map
+              - text: ...</span>
+              - generic [ref=e605]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e606]: 30 |
+              - text: </div>
+              - generic [ref=e607]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e608]: 31 |
+              - text: </CardContent>
+              - generic [ref=e609]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e610]: 32 |
+              - text: </Card>
+              - generic [ref=e611]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e612]: 33 |
+              - generic [ref=e613]: )
+              - text: ","
+              - generic [ref=e614]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e615]: 34 |
+              - generic [ref=e616]: ssr
+              - text: ": false,"
+              - generic [ref=e617]: // Don't render on server (Google Maps requires window)
+              - generic [ref=e618]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e619]: 35 |
+              - generic [ref=e620]: "}"
+              - generic [ref=e621]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e622]: 36 |
+              - generic [ref=e623]: )
+              - generic [ref=e624]: "|"
+              - text: ^^
+              - generic [ref=e625]: 37 |
+              - generic [ref=e626]: 38 |
+              - generic [ref=e627]: // Incremental Static Regeneration - revalidate every hour
+              - generic [ref=e628]: 39 |
+              - text: export const
+              - generic [ref=e629]: revalidate
+              - text: = 3600
+              - generic [ref=e630]: "`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component."
+        - generic [ref=e631]: "1"
+        - generic [ref=e632]: "2"
+    - generic [ref=e637] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e638]:
+        - img [ref=e639]
+      - button "Open issues overlay" [ref=e645]:
+        - generic [ref=e646]:
+          - generic [ref=e647]: "0"
+          - generic [ref=e648]: "1"
+        - generic [ref=e649]: Issue
+  - alert [ref=e650]
+  - generic [ref=e654]:
+    - paragraph [ref=e656]:
+      - text: We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.
+      - link "Learn more" [ref=e657]:
+        - /url: /cookie-policy
+    - generic [ref=e658]:
+      - button "Decline" [ref=e659]
+      - button "Accept" [ref=e660]
+      - button "Dismiss cookie banner" [ref=e661]:
+        - img [ref=e662]
+```

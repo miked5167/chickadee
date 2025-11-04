@@ -1,0 +1,253 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - paragraph [ref=e19]: Loading blog posts...
+  - contentinfo "Footer" [ref=e20]:
+    - heading "Footer" [level=2] [ref=e21]
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e27]: HD
+            - generic [ref=e28]: The Hockey Directory
+          - paragraph [ref=e29]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e30]:
+            - link "Twitter" [ref=e31]:
+              - /url: "#"
+              - generic [ref=e32]: Twitter
+              - img [ref=e33]
+            - link "Facebook" [ref=e35]:
+              - /url: "#"
+              - generic [ref=e36]: Facebook
+              - img [ref=e37]
+            - link "Instagram" [ref=e39]:
+              - /url: "#"
+              - generic [ref=e40]: Instagram
+              - img [ref=e41]
+            - link "LinkedIn" [ref=e44]:
+              - /url: "#"
+              - generic [ref=e45]: LinkedIn
+              - img [ref=e46]
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - heading "Advisors" [level=3] [ref=e53]
+              - list [ref=e54]:
+                - listitem [ref=e55]:
+                  - link "Find Advisors" [ref=e56]:
+                    - /url: /listings
+                - listitem [ref=e57]:
+                  - link "Claim Your Listing" [ref=e58]:
+                    - /url: /claim
+                - listitem [ref=e59]:
+                  - link "Featured Advisors" [ref=e60]:
+                    - /url: /listings?featured=true
+            - generic [ref=e61]:
+              - heading "Resources" [level=3] [ref=e62]
+              - list [ref=e63]:
+                - listitem [ref=e64]:
+                  - link "Blog" [ref=e65]:
+                    - /url: /blog
+                - listitem [ref=e66]:
+                  - link "Player Development" [ref=e67]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e68]:
+                  - link "College Recruitment" [ref=e69]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e70]:
+                  - link "Parent Tips" [ref=e71]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - heading "Company" [level=3] [ref=e74]
+              - list [ref=e75]:
+                - listitem [ref=e76]:
+                  - link "About Us" [ref=e77]:
+                    - /url: /about
+                - listitem [ref=e78]:
+                  - link "Contact" [ref=e79]:
+                    - /url: /contact
+                - listitem [ref=e80]:
+                  - link "Submit a Listing" [ref=e81]:
+                    - /url: /submit
+            - generic [ref=e82]:
+              - heading "Legal" [level=3] [ref=e83]
+              - list [ref=e84]:
+                - listitem [ref=e85]:
+                  - link "Privacy Policy" [ref=e86]:
+                    - /url: /privacy
+                - listitem [ref=e87]:
+                  - link "Terms of Service" [ref=e88]:
+                    - /url: /terms
+                - listitem [ref=e89]:
+                  - link "Cookie Policy" [ref=e90]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e92]: © 2025 The Hockey Directory. All rights reserved.
+  - generic [active]:
+    - generic [ref=e95]:
+      - generic [ref=e96]:
+        - navigation [ref=e98]:
+          - button "previous" [disabled] [ref=e99]:
+            - img "previous" [ref=e100]
+          - generic [ref=e102]:
+            - generic [ref=e103]: 1/
+            - text: "1"
+          - button "next" [disabled] [ref=e104]:
+            - img "next" [ref=e105]
+        - generic [ref=e108]:
+          - img [ref=e109]
+          - generic "Latest available version is detected (16.0.1)." [ref=e111]: Next.js 16.0.1
+          - generic [ref=e112]: Turbopack
+      - dialog "Build Error" [ref=e114]:
+        - generic [ref=e117]:
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e121]: Build Error
+              - generic [ref=e122]:
+                - button "Copy Error Info" [ref=e123] [cursor=pointer]:
+                  - img [ref=e124]
+                - button "No related documentation found" [disabled] [ref=e126]:
+                  - img [ref=e127]
+                - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e129]:
+                  - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                  - img [ref=e130]
+            - generic [ref=e142]: Ecmascript file had an error
+          - generic [ref=e144]:
+            - generic [ref=e146]:
+              - img [ref=e148]
+              - generic [ref=e152]: ./app/(public)/listings/[slug]/page.tsx (19:21)
+              - button "Open in editor" [ref=e153] [cursor=pointer]:
+                - img [ref=e155]
+            - generic [ref=e158]:
+              - generic [ref=e159]: Ecmascript file had an error
+              - generic [ref=e160]: 17 |
+              - generic [ref=e161]: 18 |
+              - generic [ref=e162]: // Lazy load LocationMap (contains Google Maps)
+              - text: ">"
+              - generic [ref=e163]: 19 |
+              - text: const LocationMap =
+              - generic [ref=e164]: dynamic(
+              - generic [ref=e165]: "|"
+              - text: ^^^^^^^^ >
+              - generic [ref=e166]: 20 |
+              - generic [ref=e167]: ()
+              - text: => import('@/components/listing/LocationMap').
+              - generic [ref=e168]: then(mod
+              - text: =>
+              - generic [ref=e169]: "({"
+              - text: "default:"
+              - generic [ref=e170]: mod
+              - text: .LocationMap
+              - generic [ref=e171]: "}))"
+              - text: ","
+              - generic [ref=e172]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e173]: 21 |
+              - generic [ref=e174]: "{"
+              - generic [ref=e175]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e176]: 22 |
+              - generic [ref=e177]: loading
+              - text: ":"
+              - generic [ref=e178]: ()
+              - text: =>
+              - generic [ref=e179]: (
+              - generic [ref=e180]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e181]: 23 |
+              - text: <Card>
+              - generic [ref=e182]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e183]: 24 |
+              - text: <CardHeader>
+              - generic [ref=e184]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e185]: 25 |
+              - text: <CardTitle>Location</CardTitle>
+              - generic [ref=e186]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e187]: 26 |
+              - text: </CardHeader>
+              - generic [ref=e188]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e189]: 27 |
+              - text: <CardContent>
+              - generic [ref=e190]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e191]: 28 |
+              - text: <div
+              - generic [ref=e192]: className
+              - text: =
+              - generic [ref=e193]: "\"w-full h-64 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center\""
+              - text: ">"
+              - generic [ref=e194]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e195]: 29 |
+              - text: <span
+              - generic [ref=e196]: className
+              - text: ="text-gray-500">Loading
+              - generic [ref=e197]: map
+              - text: ...</span>
+              - generic [ref=e198]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e199]: 30 |
+              - text: </div>
+              - generic [ref=e200]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e201]: 31 |
+              - text: </CardContent>
+              - generic [ref=e202]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e203]: 32 |
+              - text: </Card>
+              - generic [ref=e204]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e205]: 33 |
+              - generic [ref=e206]: )
+              - text: ","
+              - generic [ref=e207]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e208]: 34 |
+              - generic [ref=e209]: ssr
+              - text: ": false,"
+              - generic [ref=e210]: // Don't render on server (Google Maps requires window)
+              - generic [ref=e211]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e212]: 35 |
+              - generic [ref=e213]: "}"
+              - generic [ref=e214]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e215]: 36 |
+              - generic [ref=e216]: )
+              - generic [ref=e217]: "|"
+              - text: ^^
+              - generic [ref=e218]: 37 |
+              - generic [ref=e219]: 38 |
+              - generic [ref=e220]: // Incremental Static Regeneration - revalidate every hour
+              - generic [ref=e221]: 39 |
+              - text: export const
+              - generic [ref=e222]: revalidate
+              - text: = 3600
+              - generic [ref=e223]: "`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component."
+        - generic [ref=e224]: "1"
+        - generic [ref=e225]: "2"
+    - generic [ref=e230] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e231]:
+        - img [ref=e232]
+      - button "Open issues overlay" [ref=e238]:
+        - generic [ref=e239]:
+          - generic [ref=e240]: "0"
+          - generic [ref=e241]: "1"
+        - generic [ref=e242]: Issue
+```

@@ -11,9 +11,9 @@ interface Claim {
   claimant_name: string
   claimant_email: string
   claimant_phone: string | null
-  verification_info: string
+  business_verification_info: string
   status: 'pending' | 'approved' | 'rejected'
-  submitted_at: string
+  created_at: string
   reviewed_at: string | null
   admin_notes: string | null
   advisors: {

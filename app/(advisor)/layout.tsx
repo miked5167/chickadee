@@ -1,5 +1,8 @@
 import { redirect } from 'next/navigation'
 import { getClaimedAdvisor } from '@/lib/supabase/auth'
+import { Sidebar } from '@/components/dashboard/Sidebar'
+import { getAdvisorNavigation } from '@/lib/navigation/advisor-nav'
+import { DashboardShell } from '@/components/dashboard/DashboardShell'
 
 export default async function AdvisorLayout({
   children,
@@ -12,11 +15,15 @@ export default async function AdvisorLayout({
     redirect('/auth/login?redirectTo=/dashboard')
   }
 
+  const navigation = getAdvisorNavigation(advisor.slug)
+
   return (
-    <div className="min-h-screen bg-ice-blue">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {children}
-      </div>
-    </div>
+    <DashboardShell
+      sections={navigation}
+      userName={advisor.name}
+      userRole="Advisor"
+    >
+      {children}
+    </DashboardShell>
   )
 }

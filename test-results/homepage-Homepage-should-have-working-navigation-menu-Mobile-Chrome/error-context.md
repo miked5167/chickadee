@@ -1,0 +1,270 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "Find Your Perfect Hockey Advisor" [level=1] [ref=e19]:
+            - text: Find Your Perfect
+            - text: Hockey Advisor
+          - paragraph [ref=e20]: Connect with verified hockey advisors who can guide your player's journey from youth leagues to the pros
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]:
+              - img [ref=e24]
+              - textbox "City, State, or ZIP" [ref=e26]
+            - button "Near Me" [ref=e27]:
+              - img
+              - text: Near Me
+            - button "Search Advisors" [ref=e28]:
+              - img
+              - text: Search Advisors
+          - generic [ref=e29]:
+            - paragraph [ref=e30]: "Popular searches:"
+            - generic [ref=e31]:
+              - button "Boston, MA" [ref=e32]
+              - button "Toronto, ON" [ref=e33]
+              - button "Minneapolis, MN" [ref=e34]
+              - button "Calgary, AB" [ref=e35]
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - img [ref=e40]
+          - paragraph [ref=e42]: 200+
+          - paragraph [ref=e43]: Verified Advisors
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - paragraph [ref=e47]: 100%
+          - paragraph [ref=e48]: Verified Profiles
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - paragraph [ref=e52]: 4.8/5
+          - paragraph [ref=e53]: Average Rating
+        - generic [ref=e54]:
+          - img [ref=e55]
+          - paragraph [ref=e57]: Free
+          - paragraph [ref=e58]: To Use
+      - generic [ref=e60]:
+        - generic [ref=e61]:
+          - heading "Featured Hockey Advisors" [level=2] [ref=e62]
+          - paragraph [ref=e63]: Discover top-rated hockey advisors across North America
+        - generic [ref=e64]:
+          - 'link "Dynasty Hockey Group Airdrie, AB Advisor: Blake Robson" [ref=e65] [cursor=pointer]':
+            - /url: /listings/dynasty-hockey-group
+            - generic [ref=e66]:
+              - generic [ref=e69]:
+                - generic [ref=e71]: Dynasty Hockey Group
+                - generic [ref=e72]:
+                  - img [ref=e73]
+                  - generic [ref=e75]: Airdrie, AB
+              - paragraph [ref=e77]: "Advisor: Blake Robson"
+          - 'link "Atlas Management Group Little Elm, TX Advisor: Ben Osborne" [ref=e78] [cursor=pointer]':
+            - /url: /listings/atlas-management-group
+            - generic [ref=e79]:
+              - generic [ref=e82]:
+                - generic [ref=e84]: Atlas Management Group
+                - generic [ref=e85]:
+                  - img [ref=e86]
+                  - generic [ref=e88]: Little Elm, TX
+              - paragraph [ref=e90]: "Advisor: Ben Osborne"
+          - 'link "Unlimited Sports Management Fort Lauderdale, FL Advisor: Mathieu Lacharite" [ref=e91] [cursor=pointer]':
+            - /url: /listings/unlimited-sports-management
+            - generic [ref=e92]:
+              - generic [ref=e95]:
+                - generic [ref=e97]: Unlimited Sports Management
+                - generic [ref=e98]:
+                  - img [ref=e99]
+                  - generic [ref=e101]: Fort Lauderdale, FL
+              - paragraph [ref=e103]: "Advisor: Mathieu Lacharite"
+          - 'link "Total Sports Management LLC Center Barnstead, NH Advisor: Casey Kesselring" [ref=e104] [cursor=pointer]':
+            - /url: /listings/total-sports-management-llc
+            - generic [ref=e105]:
+              - generic [ref=e108]:
+                - generic [ref=e110]: Total Sports Management LLC
+                - generic [ref=e111]:
+                  - img [ref=e112]
+                  - generic [ref=e114]: Center Barnstead, NH
+              - paragraph [ref=e116]: "Advisor: Casey Kesselring"
+          - 'link "JL Management US Advisor: Jesse Lichtenberg" [ref=e117] [cursor=pointer]':
+            - /url: /listings/jl-management
+            - generic [ref=e118]:
+              - generic [ref=e121]:
+                - generic [ref=e123]: JL Management
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - generic [ref=e127]: US
+              - paragraph [ref=e129]: "Advisor: Jesse Lichtenberg"
+          - 'link "Worldwide Sports Management Group Las Vegas, NV Advisor: Jeff Carlson 30 years in business" [ref=e130] [cursor=pointer]':
+            - /url: /listings/worldwide-sports-management-group
+            - generic [ref=e131]:
+              - generic [ref=e134]:
+                - generic [ref=e136]: Worldwide Sports Management Group
+                - generic [ref=e137]:
+                  - img [ref=e138]
+                  - generic [ref=e140]: Las Vegas, NV
+              - generic [ref=e141]:
+                - paragraph [ref=e142]: "Advisor: Jeff Carlson"
+                - paragraph [ref=e143]: 30 years in business
+        - link "View All Advisors" [ref=e145] [cursor=pointer]:
+          - /url: /listings
+      - generic [ref=e147]:
+        - generic [ref=e148]:
+          - heading "What Families Are Saying" [level=2] [ref=e149]
+          - paragraph [ref=e150]: Hear from hockey families who found the right guidance
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - img [ref=e154]
+              - img [ref=e156]
+              - img [ref=e158]
+              - img [ref=e160]
+              - img [ref=e162]
+            - img [ref=e164]
+            - paragraph [ref=e166]: "\"Finding the right advisor made all the difference in our son's journey to AAA hockey. The directory connected us with someone who truly understood the pathway.\""
+            - generic [ref=e167]:
+              - generic [ref=e168]: SM
+              - generic [ref=e169]:
+                - paragraph [ref=e170]: Sarah M.
+                - paragraph [ref=e171]: Hockey Parent, Toronto
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - img [ref=e174]
+              - img [ref=e176]
+              - img [ref=e178]
+              - img [ref=e180]
+              - img [ref=e182]
+            - img [ref=e184]
+            - paragraph [ref=e186]: "\"The advisor we found through this platform helped navigate the prep school process. Their expertise and connections were invaluable to our family.\""
+            - generic [ref=e187]:
+              - generic [ref=e188]: JR
+              - generic [ref=e189]:
+                - paragraph [ref=e190]: James R.
+                - paragraph [ref=e191]: Hockey Parent, Boston
+          - generic [ref=e192]:
+            - generic [ref=e193]:
+              - img [ref=e194]
+              - img [ref=e196]
+              - img [ref=e198]
+              - img [ref=e200]
+              - img [ref=e202]
+            - img [ref=e204]
+            - paragraph [ref=e206]: "\"As first-time hockey parents, we had no idea where to start. The directory helped us find an advisor who answered all our questions and set realistic expectations.\""
+            - generic [ref=e207]:
+              - generic [ref=e208]: MC
+              - generic [ref=e209]:
+                - paragraph [ref=e210]: Maria C.
+                - paragraph [ref=e211]: Hockey Parent, Chicago
+      - generic [ref=e213]:
+        - generic [ref=e214]:
+          - heading "How It Works" [level=2] [ref=e215]
+          - paragraph [ref=e216]: Finding the right hockey advisor is easy
+        - generic [ref=e217]:
+          - generic [ref=e218]:
+            - generic [ref=e219]: "1"
+            - heading "Search" [level=3] [ref=e220]
+            - paragraph [ref=e221]: Enter your location to find hockey advisors near you. Filter by specialty, rating, and more.
+          - generic [ref=e222]:
+            - generic [ref=e223]: "2"
+            - heading "Compare" [level=3] [ref=e224]
+            - paragraph [ref=e225]: Read reviews, check credentials, and compare services to find the perfect match for your needs.
+          - generic [ref=e226]:
+            - generic [ref=e227]: "3"
+            - heading "Connect" [level=3] [ref=e228]
+            - paragraph [ref=e229]: Contact advisors directly through phone, email, or website to start your hockey journey.
+      - generic [ref=e231]:
+        - heading "Are You a Hockey Advisor?" [level=2] [ref=e232]
+        - paragraph [ref=e233]: Join our directory and connect with players and families looking for expert guidance
+        - link "Claim Your Free Listing" [ref=e234] [cursor=pointer]:
+          - /url: /claim
+  - contentinfo "Footer" [ref=e235]:
+    - heading "Footer" [level=2] [ref=e236]
+    - generic [ref=e237]:
+      - generic [ref=e238]:
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - generic [ref=e242]: HD
+            - generic [ref=e243]: The Hockey Directory
+          - paragraph [ref=e244]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e245]:
+            - link "Twitter" [ref=e246] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e247]: Twitter
+              - img [ref=e248]
+            - link "Facebook" [ref=e250] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e251]: Facebook
+              - img [ref=e252]
+            - link "Instagram" [ref=e254] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e255]: Instagram
+              - img [ref=e256]
+            - link "LinkedIn" [ref=e259] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e260]: LinkedIn
+              - img [ref=e261]
+        - generic [ref=e265]:
+          - generic [ref=e266]:
+            - generic [ref=e267]:
+              - heading "Advisors" [level=3] [ref=e268]
+              - list [ref=e269]:
+                - listitem [ref=e270]:
+                  - link "Find Advisors" [ref=e271] [cursor=pointer]:
+                    - /url: /listings
+                - listitem [ref=e272]:
+                  - link "Claim Your Listing" [ref=e273] [cursor=pointer]:
+                    - /url: /claim
+                - listitem [ref=e274]:
+                  - link "Featured Advisors" [ref=e275] [cursor=pointer]:
+                    - /url: /listings?featured=true
+            - generic [ref=e276]:
+              - heading "Resources" [level=3] [ref=e277]
+              - list [ref=e278]:
+                - listitem [ref=e279]:
+                  - link "Blog" [ref=e280] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e281]:
+                  - link "Player Development" [ref=e282] [cursor=pointer]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e283]:
+                  - link "College Recruitment" [ref=e284] [cursor=pointer]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e285]:
+                  - link "Parent Tips" [ref=e286] [cursor=pointer]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e287]:
+            - generic [ref=e288]:
+              - heading "Company" [level=3] [ref=e289]
+              - list [ref=e290]:
+                - listitem [ref=e291]:
+                  - link "About Us" [ref=e292] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e293]:
+                  - link "Contact" [ref=e294] [cursor=pointer]:
+                    - /url: /contact
+                - listitem [ref=e295]:
+                  - link "Submit a Listing" [ref=e296] [cursor=pointer]:
+                    - /url: /submit
+            - generic [ref=e297]:
+              - heading "Legal" [level=3] [ref=e298]
+              - list [ref=e299]:
+                - listitem [ref=e300]:
+                  - link "Privacy Policy" [ref=e301] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e302]:
+                  - link "Terms of Service" [ref=e303] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e304]:
+                  - link "Cookie Policy" [ref=e305] [cursor=pointer]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e307]: © 2025 The Hockey Directory. All rights reserved.
+```

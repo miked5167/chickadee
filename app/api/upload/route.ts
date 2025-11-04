@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     // Get the file from the request
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const folder = formData.get('folder') as string || 'hockey-directory/blog';
 
     if (!file) {
       return NextResponse.json(
@@ -55,17 +56,35 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Determine transformations based on folder
+    const isLogo = folder.includes('logos') || folder.includes('advisors');
+    const transformations = isLogo
+      ? [
+          // Fit logo within 400x400 maintaining aspect ratio, with padding
+          { width: 400, height: 400, crop: 'pad', background: 'transparent', gravity: 'center' },
+          // Auto-optimize quality (uses AI to determine best quality/size ratio)
+          { quality: 'auto:best' },
+          // Auto-format (serves WebP to supported browsers, falls back to original format)
+          { fetch_format: 'auto' },
+          // Remove any unnecessary metadata
+          { flags: 'strip_profile' },
+          // Sharpen slightly for better clarity at small sizes
+          { effect: 'sharpen:80' },
+        ]
+      : [
+          { width: 1200, height: 1200, crop: 'limit' }, // Blog images
+          { quality: 'auto:good' },
+          { fetch_format: 'auto' },
+          { flags: 'strip_profile' },
+        ];
+
     // Upload to Cloudinary
     const uploadResult = await new Promise<any>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: 'hockey-directory/blog', // Organize uploads in a folder
+          folder: `hockey-directory/${folder}`,
           resource_type: 'auto',
-          transformation: [
-            { width: 1200, height: 1200, crop: 'limit' }, // Max dimensions
-            { quality: 'auto' }, // Automatic quality optimization
-            { fetch_format: 'auto' }, // Automatic format selection
-          ],
+          transformation: transformations,
         },
         (error, result) => {
           if (error) reject(error);

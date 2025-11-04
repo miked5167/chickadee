@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { hashIpAddress } from '@/lib/utils/security'
 import { sendLeadNotificationEmail, sendLeadConfirmationEmail } from '@/lib/utils/email'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Get request body
     const body = await request.json()
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     const { count } = await supabase
       .from('leads')
       .select('*', { count: 'exact', head: true })
-      .eq('ip_hash', ipHash)
+      .eq('ip_address', ipHash)
       .gte('created_at', oneHourAgo)
 
     if (count && count >= 5) {
@@ -81,12 +81,12 @@ export async function POST(request: NextRequest) {
         {
           advisor_id,
           parent_name,
-          email,
-          phone,
+          parent_email: email,
+          parent_phone: phone,
           child_age,
           message,
           status: 'new',
-          ip_hash: ipHash,
+          ip_address: ipHash,
           user_agent: userAgent,
           referrer,
         },

@@ -185,7 +185,7 @@ export default async function AdminBlogPage() {
                       {post.status === 'published' && (
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="text-hockey-blue hover:text-hockey-red"
+                          className="text-hockey-blue hover:text-red-line"
                           target="_blank"
                         >
                           View
@@ -193,7 +193,7 @@ export default async function AdminBlogPage() {
                       )}
                       <Link
                         href={`/admin/blog/${post.id}/edit`}
-                        className="text-hockey-blue hover:text-hockey-red"
+                        className="text-hockey-blue hover:text-red-line"
                       >
                         Edit
                       </Link>

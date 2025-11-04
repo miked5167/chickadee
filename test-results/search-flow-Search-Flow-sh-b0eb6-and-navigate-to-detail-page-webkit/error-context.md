@@ -1,0 +1,503 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD The Hockey Directory" [ref=e6]:
+          - /url: /
+          - generic [ref=e8]: HD
+          - generic [ref=e9]: The Hockey Directory
+        - generic [ref=e10]:
+          - link "Find Advisors" [ref=e11]:
+            - /url: /listings
+          - link "Blog" [ref=e12]:
+            - /url: /blog
+          - link "About" [ref=e13]:
+            - /url: /about
+        - generic [ref=e14]:
+          - link "Sign In" [ref=e15]:
+            - /url: /login
+          - link "Get Started" [ref=e16]:
+            - /url: /login
+  - main [ref=e17]:
+    - generic [ref=e19]:
+      - generic [ref=e21]:
+        - heading "Search Hockey Advisors" [level=1] [ref=e22]
+        - paragraph [ref=e23]: Find verified hockey advisors to help guide your player's journey
+      - generic [ref=e25]:
+        - complementary [ref=e26]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - generic [ref=e32]: Sort By
+              - combobox [ref=e34]:
+                - generic: Distance (closest first)
+                - img
+            - generic [ref=e35]:
+              - generic [ref=e37]: Country
+              - radiogroup [ref=e39]:
+                - generic [ref=e40]:
+                  - radio "Any Country" [checked] [ref=e41]:
+                    - img [ref=e42]
+                  - generic [ref=e44] [cursor=pointer]: Any Country
+                - generic [ref=e45]:
+                  - radio "United States 🇺🇸" [ref=e46]
+                  - generic [ref=e47] [cursor=pointer]: United States 🇺🇸
+                - generic [ref=e48]:
+                  - radio "Canada 🇨🇦" [ref=e49]
+                  - generic [ref=e50] [cursor=pointer]: Canada 🇨🇦
+            - generic [ref=e51]:
+              - generic [ref=e53]: Minimum Rating
+              - radiogroup [ref=e55]:
+                - generic [ref=e56]:
+                  - radio "Any Rating" [checked] [ref=e57]:
+                    - img [ref=e58]
+                  - generic [ref=e61] [cursor=pointer]: Any Rating
+                - generic [ref=e62]:
+                  - radio "4+ Stars" [ref=e63]
+                  - generic [ref=e64] [cursor=pointer]:
+                    - generic [ref=e65]:
+                      - img [ref=e66]
+                      - img [ref=e68]
+                      - img [ref=e70]
+                      - img [ref=e72]
+                    - generic [ref=e74]: 4+ Stars
+                - generic [ref=e75]:
+                  - radio "3+ Stars" [ref=e76]
+                  - generic [ref=e77] [cursor=pointer]:
+                    - generic [ref=e78]:
+                      - img [ref=e79]
+                      - img [ref=e81]
+                      - img [ref=e83]
+                    - generic [ref=e85]: 3+ Stars
+                - generic [ref=e86]:
+                  - radio "2+ Stars" [ref=e87]
+                  - generic [ref=e88] [cursor=pointer]:
+                    - generic [ref=e89]:
+                      - img [ref=e90]
+                      - img [ref=e92]
+                    - generic [ref=e94]: 2+ Stars
+            - generic [ref=e95]:
+              - generic [ref=e97]: Specialties
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - checkbox "Player Development" [ref=e101]
+                  - generic [ref=e102] [cursor=pointer]: Player Development
+                - generic [ref=e103]:
+                  - checkbox "College Recruiting" [ref=e104]
+                  - generic [ref=e105] [cursor=pointer]: College Recruiting
+                - generic [ref=e106]:
+                  - checkbox "Showcase Guidance" [ref=e107]
+                  - generic [ref=e108] [cursor=pointer]: Showcase Guidance
+                - generic [ref=e109]:
+                  - checkbox "AAA Team Placement" [ref=e110]
+                  - generic [ref=e111] [cursor=pointer]: AAA Team Placement
+                - generic [ref=e112]:
+                  - checkbox "Prep School Selection" [ref=e113]
+                  - generic [ref=e114] [cursor=pointer]: Prep School Selection
+                - generic [ref=e115]:
+                  - checkbox "Women's Hockey" [ref=e116]
+                  - generic [ref=e117] [cursor=pointer]: Women's Hockey
+                - generic [ref=e118]:
+                  - checkbox "Goalie Training" [ref=e119]
+                  - generic [ref=e120] [cursor=pointer]: Goalie Training
+                - generic [ref=e121]:
+                  - checkbox "Skill Development" [ref=e122]
+                  - generic [ref=e123] [cursor=pointer]: Skill Development
+                - generic [ref=e124]:
+                  - checkbox "Hockey IQ Training" [ref=e125]
+                  - generic [ref=e126] [cursor=pointer]: Hockey IQ Training
+                - generic [ref=e127]:
+                  - checkbox "Off-Ice Training" [ref=e128]
+                  - generic [ref=e129] [cursor=pointer]: Off-Ice Training
+                - generic [ref=e130]:
+                  - checkbox "Mental Performance" [ref=e131]
+                  - generic [ref=e132] [cursor=pointer]: Mental Performance
+                - generic [ref=e133]:
+                  - checkbox "NCAA Compliance" [ref=e134]
+                  - generic [ref=e135] [cursor=pointer]: NCAA Compliance
+            - button "Apply Filters" [ref=e137]
+        - generic [ref=e139]:
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - textbox "Search by name or keyword..." [ref=e143]
+              - img [ref=e144]
+            - button "Search" [ref=e146]
+          - paragraph [ref=e148]: Found 201 advisors
+          - generic [ref=e149]:
+            - link "369 Sports & Entertainment US" [ref=e150]:
+              - /url: /listings/369-sports-entertainment
+              - generic [ref=e154] [cursor=pointer]:
+                - generic [ref=e156]: 369 Sports & Entertainment
+                - generic [ref=e157]:
+                  - img [ref=e158]
+                  - generic [ref=e160]: US
+            - 'link "A7A Hockey New York, NY Advisor: Mikita Pryshyvalka" [ref=e161]':
+              - /url: /listings/a7a-hockey
+              - generic [ref=e162] [cursor=pointer]:
+                - generic [ref=e165]:
+                  - generic [ref=e167]: A7A Hockey
+                  - generic [ref=e168]:
+                    - img [ref=e169]
+                    - generic [ref=e171]: New York, NY
+                - paragraph [ref=e173]: "Advisor: Mikita Pryshyvalka"
+            - link "3G Sports CA" [ref=e174]:
+              - /url: /listings/3g-sports
+              - generic [ref=e178] [cursor=pointer]:
+                - generic [ref=e180]: 3G Sports
+                - generic [ref=e181]:
+                  - img [ref=e182]
+                  - generic [ref=e184]: CA
+            - 'link "Omega Hockey Lakeville, MN Advisor: Cory Hunt 4 years in business" [ref=e185]':
+              - /url: /listings/omega-hockey
+              - generic [ref=e186] [cursor=pointer]:
+                - generic [ref=e189]:
+                  - generic [ref=e191]: Omega Hockey
+                  - generic [ref=e192]:
+                    - img [ref=e193]
+                    - generic [ref=e195]: Lakeville, MN
+                - generic [ref=e196]:
+                  - paragraph [ref=e197]: "Advisor: Cory Hunt"
+                  - paragraph [ref=e198]: 4 years in business
+            - 'link "85 Sports Management Columbus, OH Advisor: Nick Shackford" [ref=e199]':
+              - /url: /listings/85-sports-management
+              - generic [ref=e200] [cursor=pointer]:
+                - generic [ref=e203]:
+                  - generic [ref=e205]: 85 Sports Management
+                  - generic [ref=e206]:
+                    - img [ref=e207]
+                    - generic [ref=e209]: Columbus, OH
+                - paragraph [ref=e211]: "Advisor: Nick Shackford"
+            - 'link "CAL Sports Management Winnipeg, MB Advisor: Matt Calvert" [ref=e212]':
+              - /url: /listings/cal-sports-management
+              - generic [ref=e213] [cursor=pointer]:
+                - generic [ref=e216]:
+                  - generic [ref=e218]: CAL Sports Management
+                  - generic [ref=e219]:
+                    - img [ref=e220]
+                    - generic [ref=e222]: Winnipeg, MB
+                - paragraph [ref=e224]: "Advisor: Matt Calvert"
+            - 'link "KAM Sports QC Advisor: Mathieu Curadeau" [ref=e225]':
+              - /url: /listings/kam-sports
+              - generic [ref=e226] [cursor=pointer]:
+                - generic [ref=e229]:
+                  - generic [ref=e231]: KAM Sports
+                  - generic [ref=e232]:
+                    - img [ref=e233]
+                    - generic [ref=e235]: QC
+                - paragraph [ref=e237]: "Advisor: Mathieu Curadeau"
+            - 'link "KB Advising QC Advisor: Karl Bégin" [ref=e238]':
+              - /url: /listings/kb-advising
+              - generic [ref=e239] [cursor=pointer]:
+                - generic [ref=e242]:
+                  - generic [ref=e244]: KB Advising
+                  - generic [ref=e245]:
+                    - img [ref=e246]
+                    - generic [ref=e248]: QC
+                - paragraph [ref=e250]: "Advisor: Karl Bégin"
+            - 'link "LDC Talent Calgary, AB Advisor: Lander Cook" [ref=e251]':
+              - /url: /listings/ldc-talent
+              - generic [ref=e252] [cursor=pointer]:
+                - generic [ref=e255]:
+                  - generic [ref=e257]: LDC Talent
+                  - generic [ref=e258]:
+                    - img [ref=e259]
+                    - generic [ref=e261]: Calgary, AB
+                - paragraph [ref=e263]: "Advisor: Lander Cook"
+            - 'link "Lora Athletes AB Advisor: Krista Kerth" [ref=e264]':
+              - /url: /listings/lora-athletes
+              - generic [ref=e265] [cursor=pointer]:
+                - generic [ref=e268]:
+                  - generic [ref=e270]: Lora Athletes
+                  - generic [ref=e271]:
+                    - img [ref=e272]
+                    - generic [ref=e274]: AB
+                - paragraph [ref=e276]: "Advisor: Krista Kerth"
+            - 'link "MB Hockey Stoneham, QC Advisor: Martin Bédard" [ref=e277]':
+              - /url: /listings/mb-hockey
+              - generic [ref=e278] [cursor=pointer]:
+                - generic [ref=e281]:
+                  - generic [ref=e283]: MB Hockey
+                  - generic [ref=e284]:
+                    - img [ref=e285]
+                    - generic [ref=e287]: Stoneham, QC
+                - paragraph [ref=e289]: "Advisor: Martin Bédard"
+            - 'link "MC Hockey Agency QC Advisor: Charles-William Gagne" [ref=e290]':
+              - /url: /listings/mc-hockey-agency
+              - generic [ref=e291] [cursor=pointer]:
+                - generic [ref=e294]:
+                  - generic [ref=e296]: MC Hockey Agency
+                  - generic [ref=e297]:
+                    - img [ref=e298]
+                    - generic [ref=e300]: QC
+                - paragraph [ref=e302]: "Advisor: Charles-William Gagne"
+            - 'link "Meridian Hockey ON Advisor: Jake Sweeney" [ref=e303]':
+              - /url: /listings/meridian-hockey
+              - generic [ref=e304] [cursor=pointer]:
+                - generic [ref=e307]:
+                  - generic [ref=e309]: Meridian Hockey
+                  - generic [ref=e310]:
+                    - img [ref=e311]
+                    - generic [ref=e313]: "ON"
+                - paragraph [ref=e315]: "Advisor: Jake Sweeney"
+            - link "Alpha Hockey Inc Steinbach, MB" [ref=e316]:
+              - /url: /listings/alpha-hockey-inc
+              - generic [ref=e320] [cursor=pointer]:
+                - generic [ref=e322]: Alpha Hockey Inc
+                - generic [ref=e323]:
+                  - img [ref=e324]
+                  - generic [ref=e326]: Steinbach, MB
+            - 'link "JRC Hockey Management NY Advisor: Bryan Jones" [ref=e327]':
+              - /url: /listings/jrc-hockey-management
+              - generic [ref=e328] [cursor=pointer]:
+                - generic [ref=e331]:
+                  - generic [ref=e333]: JRC Hockey Management
+                  - generic [ref=e334]:
+                    - img [ref=e335]
+                    - generic [ref=e337]: NY
+                - paragraph [ref=e339]: "Advisor: Bryan Jones"
+            - 'link "Moose Hockey Sports Management ON Advisor: Kelli O''Connor" [ref=e340]':
+              - /url: /listings/moose-hockey-sports-management
+              - generic [ref=e341] [cursor=pointer]:
+                - generic [ref=e344]:
+                  - generic [ref=e346]: Moose Hockey Sports Management
+                  - generic [ref=e347]:
+                    - img [ref=e348]
+                    - generic [ref=e350]: "ON"
+                - paragraph [ref=e352]: "Advisor: Kelli O'Connor"
+            - 'link "OCTANE Sports Management Orchard Lake, MI Advisor: Duane Tursi" [ref=e353]':
+              - /url: /listings/octane-sports-management
+              - generic [ref=e354] [cursor=pointer]:
+                - generic [ref=e357]:
+                  - generic [ref=e359]: OCTANE Sports Management
+                  - generic [ref=e360]:
+                    - img [ref=e361]
+                    - generic [ref=e363]: Orchard Lake, MI
+                - paragraph [ref=e365]: "Advisor: Duane Tursi"
+            - 'link "OT Sports Group New York, NY Advisor: Bobby Gauthier" [ref=e366]':
+              - /url: /listings/ot-sports-group
+              - generic [ref=e367] [cursor=pointer]:
+                - generic [ref=e370]:
+                  - generic [ref=e372]: OT Sports Group
+                  - generic [ref=e373]:
+                    - img [ref=e374]
+                    - generic [ref=e376]: New York, NY
+                - paragraph [ref=e378]: "Advisor: Bobby Gauthier"
+            - 'link "Oswin Sports Group ON Advisor: Scott Oswin" [ref=e379]':
+              - /url: /listings/oswin-sports-group
+              - generic [ref=e380] [cursor=pointer]:
+                - generic [ref=e383]:
+                  - generic [ref=e385]: Oswin Sports Group
+                  - generic [ref=e386]:
+                    - img [ref=e387]
+                    - generic [ref=e389]: "ON"
+                - paragraph [ref=e391]: "Advisor: Scott Oswin"
+            - 'link "3V Sports Management US Advisor: Riley Neumeier" [ref=e392]':
+              - /url: /listings/3v-sports-management
+              - generic [ref=e393] [cursor=pointer]:
+                - generic [ref=e396]:
+                  - generic [ref=e398]: 3V Sports Management
+                  - generic [ref=e399]:
+                    - img [ref=e400]
+                    - generic [ref=e402]: US
+                - paragraph [ref=e404]: "Advisor: Riley Neumeier"
+            - 'link "93 Hockey Services US Advisor: Cody Janzen" [ref=e405]':
+              - /url: /listings/93-hockey-services
+              - generic [ref=e406] [cursor=pointer]:
+                - generic [ref=e409]:
+                  - generic [ref=e411]: 93 Hockey Services
+                  - generic [ref=e412]:
+                    - img [ref=e413]
+                    - generic [ref=e415]: US
+                - paragraph [ref=e417]: "Advisor: Cody Janzen"
+            - 'link "98 Hockey Management US Advisor: Jolena Gillard" [ref=e418]':
+              - /url: /listings/98-hockey-management
+              - generic [ref=e419] [cursor=pointer]:
+                - generic [ref=e422]:
+                  - generic [ref=e424]: 98 Hockey Management
+                  - generic [ref=e425]:
+                    - img [ref=e426]
+                    - generic [ref=e428]: US
+                - paragraph [ref=e430]: "Advisor: Jolena Gillard"
+            - 'link "Advancement Hockey Advising CA Advisor: Braeden Pearl" [ref=e431]':
+              - /url: /listings/advancement-hockey-advising
+              - generic [ref=e432] [cursor=pointer]:
+                - generic [ref=e435]:
+                  - generic [ref=e437]: Advancement Hockey Advising
+                  - generic [ref=e438]:
+                    - img [ref=e439]
+                    - generic [ref=e441]: CA
+                - paragraph [ref=e443]: "Advisor: Braeden Pearl"
+            - 'link "HC Sports Management Pembroke, NH Advisor: Christopher Hills" [ref=e444]':
+              - /url: /listings/hc-sports-management
+              - generic [ref=e445] [cursor=pointer]:
+                - generic [ref=e448]:
+                  - generic [ref=e450]: HC Sports Management
+                  - generic [ref=e451]:
+                    - img [ref=e452]
+                    - generic [ref=e454]: Pembroke, NH
+                - paragraph [ref=e456]: "Advisor: Christopher Hills"
+            - 'link "Bishop Sports Burlington, ON Advisor: David Bishop" [ref=e457]':
+              - /url: /listings/bishop-sports
+              - generic [ref=e458] [cursor=pointer]:
+                - generic [ref=e461]:
+                  - generic [ref=e463]: Bishop Sports
+                  - generic [ref=e464]:
+                    - img [ref=e465]
+                    - generic [ref=e467]: Burlington, ON
+                - paragraph [ref=e469]: "Advisor: David Bishop"
+            - 'link "Cosentino Sports Management Nepean, ON Advisor: Michael Crawford" [ref=e470]':
+              - /url: /listings/cosentino-sports-management
+              - generic [ref=e471] [cursor=pointer]:
+                - generic [ref=e474]:
+                  - generic [ref=e476]: Cosentino Sports Management
+                  - generic [ref=e477]:
+                    - img [ref=e478]
+                    - generic [ref=e480]: Nepean, ON
+                - paragraph [ref=e482]: "Advisor: Michael Crawford"
+            - 'link "CUTTING EDGE MANAGEMENT Montreal, QC Advisor: Chad Levitt" [ref=e483]':
+              - /url: /listings/cutting-edge-management
+              - generic [ref=e484] [cursor=pointer]:
+                - generic [ref=e487]:
+                  - generic [ref=e489]: CUTTING EDGE MANAGEMENT
+                  - generic [ref=e490]:
+                    - img [ref=e491]
+                    - generic [ref=e493]: Montreal, QC
+                - paragraph [ref=e495]: "Advisor: Chad Levitt"
+            - 'link "Elite Hockey Advising Buffalo, NY Advisor: Mike Mankowski 1 year in business" [ref=e496]':
+              - /url: /listings/elite-hockey-advising
+              - generic [ref=e497] [cursor=pointer]:
+                - generic [ref=e500]:
+                  - generic [ref=e502]: Elite Hockey Advising
+                  - generic [ref=e503]:
+                    - img [ref=e504]
+                    - generic [ref=e506]: Buffalo, NY
+                - generic [ref=e507]:
+                  - paragraph [ref=e508]: "Advisor: Mike Mankowski"
+                  - paragraph [ref=e509]: 1 year in business
+            - 'link "Apogee Hockey Consulting US Advisor: Shannon Valerio" [ref=e510]':
+              - /url: /listings/apogee-hockey-consulting
+              - generic [ref=e511] [cursor=pointer]:
+                - generic [ref=e514]:
+                  - generic [ref=e516]: Apogee Hockey Consulting
+                  - generic [ref=e517]:
+                    - img [ref=e518]
+                    - generic [ref=e520]: US
+                - paragraph [ref=e522]: "Advisor: Shannon Valerio"
+            - 'link "Apollo Athletics US Advisor: Bayne Pettinger" [ref=e523]':
+              - /url: /listings/apollo-athletics
+              - generic [ref=e524] [cursor=pointer]:
+                - generic [ref=e527]:
+                  - generic [ref=e529]: Apollo Athletics
+                  - generic [ref=e530]:
+                    - img [ref=e531]
+                    - generic [ref=e533]: US
+                - paragraph [ref=e535]: "Advisor: Bayne Pettinger"
+          - generic [ref=e536]:
+            - button "Previous" [disabled]:
+              - img
+              - text: Previous
+            - generic [ref=e537]:
+              - button "1"
+              - button "2" [ref=e538]
+              - generic [ref=e539]: ...
+              - button "7" [ref=e540]
+            - button "Next" [ref=e541]:
+              - text: Next
+              - img
+  - contentinfo "Footer" [ref=e542]:
+    - heading "Footer" [level=2] [ref=e543]
+    - generic [ref=e544]:
+      - generic [ref=e545]:
+        - generic [ref=e546]:
+          - generic [ref=e547]:
+            - generic [ref=e549]: HD
+            - generic [ref=e550]: The Hockey Directory
+          - paragraph [ref=e551]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e552]:
+            - link "Twitter" [ref=e553]:
+              - /url: "#"
+              - generic [ref=e554]: Twitter
+              - img [ref=e555]
+            - link "Facebook" [ref=e557]:
+              - /url: "#"
+              - generic [ref=e558]: Facebook
+              - img [ref=e559]
+            - link "Instagram" [ref=e561]:
+              - /url: "#"
+              - generic [ref=e562]: Instagram
+              - img [ref=e563]
+            - link "LinkedIn" [ref=e566]:
+              - /url: "#"
+              - generic [ref=e567]: LinkedIn
+              - img [ref=e568]
+        - generic [ref=e572]:
+          - generic [ref=e573]:
+            - generic [ref=e574]:
+              - heading "Advisors" [level=3] [ref=e575]
+              - list [ref=e576]:
+                - listitem [ref=e577]:
+                  - link "Find Advisors" [ref=e578]:
+                    - /url: /listings
+                - listitem [ref=e579]:
+                  - link "Claim Your Listing" [ref=e580]:
+                    - /url: /claim
+                - listitem [ref=e581]:
+                  - link "Featured Advisors" [ref=e582]:
+                    - /url: /listings?featured=true
+            - generic [ref=e583]:
+              - heading "Resources" [level=3] [ref=e584]
+              - list [ref=e585]:
+                - listitem [ref=e586]:
+                  - link "Blog" [ref=e587]:
+                    - /url: /blog
+                - listitem [ref=e588]:
+                  - link "Player Development" [ref=e589]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e590]:
+                  - link "College Recruitment" [ref=e591]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e592]:
+                  - link "Parent Tips" [ref=e593]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e594]:
+            - generic [ref=e595]:
+              - heading "Company" [level=3] [ref=e596]
+              - list [ref=e597]:
+                - listitem [ref=e598]:
+                  - link "About Us" [ref=e599]:
+                    - /url: /about
+                - listitem [ref=e600]:
+                  - link "Contact" [ref=e601]:
+                    - /url: /contact
+                - listitem [ref=e602]:
+                  - link "Submit a Listing" [ref=e603]:
+                    - /url: /submit
+            - generic [ref=e604]:
+              - heading "Legal" [level=3] [ref=e605]
+              - list [ref=e606]:
+                - listitem [ref=e607]:
+                  - link "Privacy Policy" [ref=e608]:
+                    - /url: /privacy
+                - listitem [ref=e609]:
+                  - link "Terms of Service" [ref=e610]:
+                    - /url: /terms
+                - listitem [ref=e611]:
+                  - link "Cookie Policy" [ref=e612]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e614]: © 2025 The Hockey Directory. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e620] [cursor=pointer]:
+    - img [ref=e621]
+  - alert [ref=e626]
+  - generic [ref=e630]:
+    - paragraph [ref=e632]:
+      - text: We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.
+      - link "Learn more" [ref=e633]:
+        - /url: /cookie-policy
+    - generic [ref=e634]:
+      - button "Decline" [ref=e635]
+      - button "Accept" [ref=e636]
+      - button "Dismiss cookie banner" [ref=e637]:
+        - img [ref=e638]
+```

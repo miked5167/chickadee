@@ -34,11 +34,11 @@ export async function GET(request: NextRequest) {
         claimant_name,
         claimant_email,
         claimant_phone,
-        verification_info,
+        business_verification_info,
         status,
-        submitted_at,
+        created_at,
         reviewed_at,
-        reviewed_by_user_id,
+        reviewed_by,
         admin_notes,
         advisors!listing_claims_advisor_id_fkey (
           id,
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
           is_claimed
         )
       `, { count: 'exact' })
-      .order('submitted_at', { ascending: false })
+      .order('created_at', { ascending: false })
 
     // Filter by status
     if (status !== 'all') {

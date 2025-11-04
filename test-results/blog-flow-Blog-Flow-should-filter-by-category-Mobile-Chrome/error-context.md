@@ -1,0 +1,330 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Hockey Insights & Advice" [level=1] [ref=e20]
+          - paragraph [ref=e21]: Expert guidance for navigating the competitive hockey landscape
+        - link "Subscribe RSS" [ref=e23] [cursor=pointer]:
+          - /url: /api/blog/rss
+          - img [ref=e24]
+          - text: Subscribe RSS
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - link "Youth hockey players practicing on ice 🏒Player Development ⭐ Featured Post 10 Essential Skills Every Youth Hockey Player Should Master From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player's development journey. 1 min read 156 Read Full Article" [ref=e30] [cursor=pointer]:
+            - /url: /blog/10-essential-skills-youth-hockey
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - img "Youth hockey players practicing on ice" [ref=e33]
+                - generic [ref=e34]: 🏒Player Development
+              - generic [ref=e35]:
+                - generic [ref=e37]: ⭐ Featured Post
+                - heading "10 Essential Skills Every Youth Hockey Player Should Master" [level=2] [ref=e38]
+                - paragraph [ref=e39]: From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player's development journey.
+                - generic [ref=e41]:
+                  - generic [ref=e42]:
+                    - img [ref=e43]
+                    - generic [ref=e45]: 1 min read
+                  - generic [ref=e46]:
+                    - img [ref=e47]
+                    - generic [ref=e49]: "156"
+                - generic [ref=e51]:
+                  - text: Read Full Article
+                  - img [ref=e52]
+          - generic [ref=e54]:
+            - heading "Latest Posts" [level=2] [ref=e55]
+            - paragraph [ref=e56]: Showing 3 of 3 articles
+          - generic [ref=e57]:
+            - 'link "Youth hockey players practicing on ice 🏒Player Development 10 Essential Skills Every Youth Hockey Player Should Master From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player''s development journey. 1 min read 156 #Youth Hockey #Skill Development #Parents" [ref=e58] [cursor=pointer]':
+              - /url: /blog/10-essential-skills-youth-hockey
+              - generic [ref=e59]:
+                - img "Youth hockey players practicing on ice" [ref=e60]
+                - generic [ref=e61]: 🏒Player Development
+              - generic [ref=e62]:
+                - heading "10 Essential Skills Every Youth Hockey Player Should Master" [level=3] [ref=e63]
+                - paragraph [ref=e64]: From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player's development journey.
+                - generic [ref=e65]:
+                  - generic [ref=e67]:
+                    - img [ref=e68]
+                    - generic [ref=e70]: 1 min read
+                  - generic [ref=e71]:
+                    - img [ref=e72]
+                    - generic [ref=e74]: "156"
+                - generic [ref=e75]:
+                  - generic [ref=e76]: "#Youth Hockey"
+                  - generic [ref=e77]: "#Skill Development"
+                  - generic [ref=e78]: "#Parents"
+            - 'link "Hockey player in college game 🎓College Recruiting The College Hockey Recruitment Timeline: A Parent''s Guide Understanding when and how to start the recruitment process can make all the difference in your player''s college hockey journey. 1 min read 89 #College Hockey #Recruiting #Parents" [ref=e79] [cursor=pointer]':
+              - /url: /blog/college-hockey-recruitment-timeline
+              - generic [ref=e80]:
+                - img "Hockey player in college game" [ref=e81]
+                - generic [ref=e82]: 🎓College Recruiting
+              - generic [ref=e83]:
+                - 'heading "The College Hockey Recruitment Timeline: A Parent''s Guide" [level=3] [ref=e84]'
+                - paragraph [ref=e85]: Understanding when and how to start the recruitment process can make all the difference in your player's college hockey journey.
+                - generic [ref=e86]:
+                  - generic [ref=e88]:
+                    - img [ref=e89]
+                    - generic [ref=e91]: 1 min read
+                  - generic [ref=e92]:
+                    - img [ref=e93]
+                    - generic [ref=e95]: "89"
+                - generic [ref=e96]:
+                  - generic [ref=e97]: "#College Hockey"
+                  - generic [ref=e98]: "#Recruiting"
+                  - generic [ref=e99]: "#Parents"
+            - 'link "Athlete training in gym 💪Training & Fitness Off-Ice Training: Building Strength and Endurance A comprehensive guide to off-ice training programs that will improve your on-ice performance and reduce injury risk. 1 min read 67 #Skill Development #Training Tips #Fitness" [ref=e100] [cursor=pointer]':
+              - /url: /blog/off-ice-training-guide
+              - generic [ref=e101]:
+                - img "Athlete training in gym" [ref=e102]
+                - generic [ref=e103]: 💪Training & Fitness
+              - generic [ref=e104]:
+                - 'heading "Off-Ice Training: Building Strength and Endurance" [level=3] [ref=e105]'
+                - paragraph [ref=e106]: A comprehensive guide to off-ice training programs that will improve your on-ice performance and reduce injury risk.
+                - generic [ref=e107]:
+                  - generic [ref=e109]:
+                    - img [ref=e110]
+                    - generic [ref=e112]: 1 min read
+                  - generic [ref=e113]:
+                    - img [ref=e114]
+                    - generic [ref=e116]: "67"
+                - generic [ref=e117]:
+                  - generic [ref=e118]: "#Skill Development"
+                  - generic [ref=e119]: "#Training Tips"
+                  - generic [ref=e120]: "#Fitness"
+        - complementary [ref=e121]:
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - generic [ref=e125]: Search Articles
+              - generic [ref=e127]:
+                - generic [ref=e128]:
+                  - textbox "Search..." [ref=e129]
+                  - img [ref=e130]
+                - button "Go" [ref=e132]
+            - generic [ref=e133]:
+              - generic [ref=e135]: Categories
+              - navigation [ref=e137]:
+                - link "All Posts" [ref=e138] [cursor=pointer]:
+                  - /url: /blog
+                  - generic [ref=e140]: All Posts
+                - link "🏒 Player Development 1" [ref=e141] [cursor=pointer]:
+                  - /url: /blog?category=player-development
+                  - generic [ref=e142]:
+                    - generic [ref=e143]:
+                      - generic [ref=e144]: 🏒
+                      - text: Player Development
+                    - generic [ref=e145]: "1"
+                - link "🎓 College Recruiting 1" [ref=e146] [cursor=pointer]:
+                  - /url: /blog?category=college-recruiting
+                  - generic [ref=e147]:
+                    - generic [ref=e148]:
+                      - generic [ref=e149]: 🎓
+                      - text: College Recruiting
+                    - generic [ref=e150]: "1"
+                - link "💪 Training & Fitness 1" [ref=e151] [cursor=pointer]:
+                  - /url: /blog?category=training-fitness
+                  - generic [ref=e152]:
+                    - generic [ref=e153]:
+                      - generic [ref=e154]: 💪
+                      - text: Training & Fitness
+                    - generic [ref=e155]: "1"
+                - link "👨‍👩‍👧‍👦 Parents Guide 0" [ref=e156] [cursor=pointer]:
+                  - /url: /blog?category=parents-guide
+                  - generic [ref=e157]:
+                    - generic [ref=e158]:
+                      - generic [ref=e159]: 👨‍👩‍👧‍👦
+                      - text: Parents Guide
+                    - generic [ref=e160]: "0"
+                - link "🎓 College Recruitment 0" [ref=e161] [cursor=pointer]:
+                  - /url: /blog?category=college-recruitment
+                  - generic [ref=e162]:
+                    - generic [ref=e163]:
+                      - generic [ref=e164]: 🎓
+                      - text: College Recruitment
+                    - generic [ref=e165]: "0"
+                - link "💡 Advisor Spotlights 0" [ref=e166] [cursor=pointer]:
+                  - /url: /blog?category=advisor-spotlights
+                  - generic [ref=e167]:
+                    - generic [ref=e168]:
+                      - generic [ref=e169]: 💡
+                      - text: Advisor Spotlights
+                    - generic [ref=e170]: "0"
+                - link "⭐ Women's Hockey 0" [ref=e171] [cursor=pointer]:
+                  - /url: /blog?category=womens-hockey
+                  - generic [ref=e172]:
+                    - generic [ref=e173]:
+                      - generic [ref=e174]: ⭐
+                      - text: Women's Hockey
+                    - generic [ref=e175]: "0"
+                - link "👪 Parent Tips 0" [ref=e176] [cursor=pointer]:
+                  - /url: /blog?category=parent-tips
+                  - generic [ref=e177]:
+                    - generic [ref=e178]:
+                      - generic [ref=e179]: 👪
+                      - text: Parent Tips
+                    - generic [ref=e180]: "0"
+                - link "📰 Industry News 0" [ref=e181] [cursor=pointer]:
+                  - /url: /blog?category=industry-news
+                  - generic [ref=e182]:
+                    - generic [ref=e183]:
+                      - generic [ref=e184]: 📰
+                      - text: Industry News
+                    - generic [ref=e185]: "0"
+            - generic [ref=e186]:
+              - generic [ref=e188]: Popular Tags
+              - generic [ref=e190]:
+                - link "#Parents (2)" [ref=e191] [cursor=pointer]:
+                  - /url: /blog?tag=parents
+                  - text: "#Parents"
+                  - generic [ref=e192]: (2)
+                - link "#Skill Development (2)" [ref=e193] [cursor=pointer]:
+                  - /url: /blog?tag=skill-development
+                  - text: "#Skill Development"
+                  - generic [ref=e194]: (2)
+                - link "#Recruiting (1)" [ref=e195] [cursor=pointer]:
+                  - /url: /blog?tag=recruiting
+                  - text: "#Recruiting"
+                  - generic [ref=e196]: (1)
+                - link "#Youth Hockey (1)" [ref=e197] [cursor=pointer]:
+                  - /url: /blog?tag=youth-hockey
+                  - text: "#Youth Hockey"
+                  - generic [ref=e198]: (1)
+                - link "#Fitness (1)" [ref=e199] [cursor=pointer]:
+                  - /url: /blog?tag=fitness
+                  - text: "#Fitness"
+                  - generic [ref=e200]: (1)
+                - link "#Training Tips (1)" [ref=e201] [cursor=pointer]:
+                  - /url: /blog?tag=training-tips
+                  - text: "#Training Tips"
+                  - generic [ref=e202]: (1)
+                - link "#College Hockey (1)" [ref=e203] [cursor=pointer]:
+                  - /url: /blog?tag=college-hockey
+                  - text: "#College Hockey"
+                  - generic [ref=e204]: (1)
+            - generic [ref=e205]:
+              - generic [ref=e207]: Recent Posts
+              - generic [ref=e209]:
+                - link "10 Essential Skills Every Youth Hockey Player Should Master Oct 31, 2025" [ref=e210] [cursor=pointer]:
+                  - /url: /blog/10-essential-skills-youth-hockey
+                  - heading "10 Essential Skills Every Youth Hockey Player Should Master" [level=4] [ref=e211]
+                  - paragraph [ref=e212]: Oct 31, 2025
+                - 'link "The College Hockey Recruitment Timeline: A Parent''s Guide Oct 28, 2025" [ref=e213] [cursor=pointer]':
+                  - /url: /blog/college-hockey-recruitment-timeline
+                  - 'heading "The College Hockey Recruitment Timeline: A Parent''s Guide" [level=4] [ref=e214]'
+                  - paragraph [ref=e215]: Oct 28, 2025
+                - 'link "Off-Ice Training: Building Strength and Endurance Oct 26, 2025" [ref=e216] [cursor=pointer]':
+                  - /url: /blog/off-ice-training-guide
+                  - 'heading "Off-Ice Training: Building Strength and Endurance" [level=4] [ref=e217]'
+                  - paragraph [ref=e218]: Oct 26, 2025
+            - generic [ref=e220]:
+              - heading "Stay Updated" [level=3] [ref=e221]
+              - paragraph [ref=e222]: Get the latest hockey insights and advisor tips delivered to your inbox.
+              - link "Subscribe" [ref=e223] [cursor=pointer]:
+                - /url: "#newsletter"
+  - contentinfo "Footer" [ref=e224]:
+    - heading "Footer" [level=2] [ref=e225]
+    - generic [ref=e226]:
+      - generic [ref=e227]:
+        - generic [ref=e228]:
+          - generic [ref=e229]:
+            - generic [ref=e231]: HD
+            - generic [ref=e232]: The Hockey Directory
+          - paragraph [ref=e233]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e234]:
+            - link "Twitter" [ref=e235] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e236]: Twitter
+              - img [ref=e237]
+            - link "Facebook" [ref=e239] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e240]: Facebook
+              - img [ref=e241]
+            - link "Instagram" [ref=e243] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e244]: Instagram
+              - img [ref=e245]
+            - link "LinkedIn" [ref=e248] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e249]: LinkedIn
+              - img [ref=e250]
+        - generic [ref=e254]:
+          - generic [ref=e255]:
+            - generic [ref=e256]:
+              - heading "Advisors" [level=3] [ref=e257]
+              - list [ref=e258]:
+                - listitem [ref=e259]:
+                  - link "Find Advisors" [ref=e260] [cursor=pointer]:
+                    - /url: /listings
+                - listitem [ref=e261]:
+                  - link "Claim Your Listing" [ref=e262] [cursor=pointer]:
+                    - /url: /claim
+                - listitem [ref=e263]:
+                  - link "Featured Advisors" [ref=e264] [cursor=pointer]:
+                    - /url: /listings?featured=true
+            - generic [ref=e265]:
+              - heading "Resources" [level=3] [ref=e266]
+              - list [ref=e267]:
+                - listitem [ref=e268]:
+                  - link "Blog" [ref=e269] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e270]:
+                  - link "Player Development" [ref=e271] [cursor=pointer]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e272]:
+                  - link "College Recruitment" [ref=e273] [cursor=pointer]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e274]:
+                  - link "Parent Tips" [ref=e275] [cursor=pointer]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - heading "Company" [level=3] [ref=e278]
+              - list [ref=e279]:
+                - listitem [ref=e280]:
+                  - link "About Us" [ref=e281] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e282]:
+                  - link "Contact" [ref=e283] [cursor=pointer]:
+                    - /url: /contact
+                - listitem [ref=e284]:
+                  - link "Submit a Listing" [ref=e285] [cursor=pointer]:
+                    - /url: /submit
+            - generic [ref=e286]:
+              - heading "Legal" [level=3] [ref=e287]
+              - list [ref=e288]:
+                - listitem [ref=e289]:
+                  - link "Privacy Policy" [ref=e290] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e291]:
+                  - link "Terms of Service" [ref=e292] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e293]:
+                  - link "Cookie Policy" [ref=e294] [cursor=pointer]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e296]: © 2025 The Hockey Directory. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e302] [cursor=pointer]:
+    - img [ref=e303]
+  - alert [ref=e306]
+  - generic [ref=e310]:
+    - paragraph [ref=e312]:
+      - text: We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.
+      - link "Learn more" [ref=e313] [cursor=pointer]:
+        - /url: /cookie-policy
+    - generic [ref=e314]:
+      - button "Decline" [ref=e315]
+      - button "Accept" [ref=e316]
+      - button "Dismiss cookie banner" [ref=e317]:
+        - img [ref=e318]
+```

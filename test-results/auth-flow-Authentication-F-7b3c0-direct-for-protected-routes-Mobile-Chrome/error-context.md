@@ -1,0 +1,117 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - heading "404" [level=1] [ref=e16]
+      - heading "This page could not be found." [level=2] [ref=e18]
+  - contentinfo "Footer" [ref=e19]:
+    - heading "Footer" [level=2] [ref=e20]
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e26]: HD
+            - generic [ref=e27]: The Hockey Directory
+          - paragraph [ref=e28]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e29]:
+            - link "Twitter" [ref=e30] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e31]: Twitter
+              - img [ref=e32]
+            - link "Facebook" [ref=e34] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e35]: Facebook
+              - img [ref=e36]
+            - link "Instagram" [ref=e38] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e39]: Instagram
+              - img [ref=e40]
+            - link "LinkedIn" [ref=e43] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e44]: LinkedIn
+              - img [ref=e45]
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - heading "Advisors" [level=3] [ref=e52]
+              - list [ref=e53]:
+                - listitem [ref=e54]:
+                  - link "Find Advisors" [ref=e55] [cursor=pointer]:
+                    - /url: /listings
+                - listitem [ref=e56]:
+                  - link "Claim Your Listing" [ref=e57] [cursor=pointer]:
+                    - /url: /claim
+                - listitem [ref=e58]:
+                  - link "Featured Advisors" [ref=e59] [cursor=pointer]:
+                    - /url: /listings?featured=true
+            - generic [ref=e60]:
+              - heading "Resources" [level=3] [ref=e61]
+              - list [ref=e62]:
+                - listitem [ref=e63]:
+                  - link "Blog" [ref=e64] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e65]:
+                  - link "Player Development" [ref=e66] [cursor=pointer]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e67]:
+                  - link "College Recruitment" [ref=e68] [cursor=pointer]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e69]:
+                  - link "Parent Tips" [ref=e70] [cursor=pointer]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - heading "Company" [level=3] [ref=e73]
+              - list [ref=e74]:
+                - listitem [ref=e75]:
+                  - link "About Us" [ref=e76] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e77]:
+                  - link "Contact" [ref=e78] [cursor=pointer]:
+                    - /url: /contact
+                - listitem [ref=e79]:
+                  - link "Submit a Listing" [ref=e80] [cursor=pointer]:
+                    - /url: /submit
+            - generic [ref=e81]:
+              - heading "Legal" [level=3] [ref=e82]
+              - list [ref=e83]:
+                - listitem [ref=e84]:
+                  - link "Privacy Policy" [ref=e85] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e86]:
+                  - link "Terms of Service" [ref=e87] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e88]:
+                  - link "Cookie Policy" [ref=e89] [cursor=pointer]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e91]: © 2025 The Hockey Directory. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e97] [cursor=pointer]:
+    - generic [ref=e100]:
+      - text: Compiling
+      - generic [ref=e101]:
+        - generic [ref=e102]: .
+        - generic [ref=e103]: .
+        - generic [ref=e104]: .
+  - alert [ref=e105]
+  - generic [ref=e109]:
+    - paragraph [ref=e111]:
+      - text: We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.
+      - link "Learn more" [ref=e112] [cursor=pointer]:
+        - /url: /cookie-policy
+    - generic [ref=e113]:
+      - button "Decline" [ref=e114]
+      - button "Accept" [ref=e115]
+      - button "Dismiss cookie banner" [ref=e116]:
+        - img [ref=e117]
+```

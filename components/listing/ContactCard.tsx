@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { FaPhone, FaEnvelope, FaGlobe } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { SocialLinks } from './SocialLinks'
 
 interface ContactCardProps {
   advisorId: string
@@ -11,9 +12,25 @@ interface ContactCardProps {
   phone?: string | null
   email?: string | null
   websiteUrl?: string | null
+  linkedinUrl?: string | null
+  instagramUrl?: string | null
+  twitterUrl?: string | null
+  facebookUrl?: string | null
+  youtubeUrl?: string | null
 }
 
-export function ContactCard({ advisorId, advisorSlug, phone, email, websiteUrl }: ContactCardProps) {
+export function ContactCard({
+  advisorId,
+  advisorSlug,
+  phone,
+  email,
+  websiteUrl,
+  linkedinUrl,
+  instagramUrl,
+  twitterUrl,
+  facebookUrl,
+  youtubeUrl
+}: ContactCardProps) {
   const trackClick = async (clickType: 'phone' | 'email' | 'website') => {
     try {
       await fetch(`/api/advisors/${advisorId}/track-click`, {
@@ -87,6 +104,21 @@ export function ContactCard({ advisorId, advisorSlug, phone, email, websiteUrl }
             Contact Advisor
           </Button>
         </Link>
+
+        {/* Social Links */}
+        {(linkedinUrl || instagramUrl || twitterUrl || facebookUrl || youtubeUrl) && (
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Connect With Us</h3>
+            <SocialLinks
+              linkedin={linkedinUrl}
+              instagram={instagramUrl}
+              twitter={twitterUrl}
+              facebook={facebookUrl}
+              youtube={youtubeUrl}
+              size="sm"
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   )

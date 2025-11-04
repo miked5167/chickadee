@@ -189,7 +189,7 @@
 }
 
 .blog-content a {
-  @apply text-hockey-blue hover:text-hockey-red underline transition-colors;
+  @apply text-hockey-blue hover:text-red-line underline transition-colors;
 }
 
 .blog-content ul,

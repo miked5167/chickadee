@@ -1,0 +1,355 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Hockey Insights & Advice" [level=1] [ref=e20]
+          - paragraph [ref=e21]: Expert guidance for navigating the competitive hockey landscape
+        - link "Subscribe RSS" [ref=e23]:
+          - /url: /api/blog/rss
+          - img [ref=e24]
+          - text: Subscribe RSS
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - heading "Latest Posts" [level=2] [ref=e30]
+            - paragraph [ref=e31]: Showing 3 of 3 articles
+          - generic [ref=e32]:
+            - 'link "Youth hockey players practicing on ice 🏒Player Development 10 Essential Skills Every Youth Hockey Player Should Master From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player''s development journey. 1 min read 156 #Youth Hockey #Skill Development #Parents" [ref=e33]':
+              - /url: /blog/10-essential-skills-youth-hockey
+              - generic [ref=e34]:
+                - img "Youth hockey players practicing on ice" [ref=e35]
+                - generic [ref=e36]: 🏒Player Development
+              - generic [ref=e37]:
+                - heading "10 Essential Skills Every Youth Hockey Player Should Master" [level=3] [ref=e38]
+                - paragraph [ref=e39]: From skating fundamentals to game awareness, these ten core skills form the foundation of every great hockey player's development journey.
+                - generic [ref=e40]:
+                  - generic [ref=e42]:
+                    - img [ref=e43]
+                    - generic [ref=e45]: 1 min read
+                  - generic [ref=e46]:
+                    - img [ref=e47]
+                    - generic [ref=e49]: "156"
+                - generic [ref=e50]:
+                  - generic [ref=e51]: "#Youth Hockey"
+                  - generic [ref=e52]: "#Skill Development"
+                  - generic [ref=e53]: "#Parents"
+            - 'link "Hockey player in college game 🎓College Recruiting The College Hockey Recruitment Timeline: A Parent''s Guide Understanding when and how to start the recruitment process can make all the difference in your player''s college hockey journey. 1 min read 89 #College Hockey #Recruiting #Parents" [ref=e54]':
+              - /url: /blog/college-hockey-recruitment-timeline
+              - generic [ref=e55]:
+                - img "Hockey player in college game" [ref=e56]
+                - generic [ref=e57]: 🎓College Recruiting
+              - generic [ref=e58]:
+                - 'heading "The College Hockey Recruitment Timeline: A Parent''s Guide" [level=3] [ref=e59]'
+                - paragraph [ref=e60]: Understanding when and how to start the recruitment process can make all the difference in your player's college hockey journey.
+                - generic [ref=e61]:
+                  - generic [ref=e63]:
+                    - img [ref=e64]
+                    - generic [ref=e66]: 1 min read
+                  - generic [ref=e67]:
+                    - img [ref=e68]
+                    - generic [ref=e70]: "89"
+                - generic [ref=e71]:
+                  - generic [ref=e72]: "#College Hockey"
+                  - generic [ref=e73]: "#Recruiting"
+                  - generic [ref=e74]: "#Parents"
+            - 'link "Athlete training in gym 💪Training & Fitness Off-Ice Training: Building Strength and Endurance A comprehensive guide to off-ice training programs that will improve your on-ice performance and reduce injury risk. 1 min read 67 #Skill Development #Training Tips #Fitness" [ref=e75]':
+              - /url: /blog/off-ice-training-guide
+              - generic [ref=e76]:
+                - img "Athlete training in gym" [ref=e77]
+                - generic [ref=e78]: 💪Training & Fitness
+              - generic [ref=e79]:
+                - 'heading "Off-Ice Training: Building Strength and Endurance" [level=3] [ref=e80]'
+                - paragraph [ref=e81]: A comprehensive guide to off-ice training programs that will improve your on-ice performance and reduce injury risk.
+                - generic [ref=e82]:
+                  - generic [ref=e84]:
+                    - img [ref=e85]
+                    - generic [ref=e87]: 1 min read
+                  - generic [ref=e88]:
+                    - img [ref=e89]
+                    - generic [ref=e91]: "67"
+                - generic [ref=e92]:
+                  - generic [ref=e93]: "#Skill Development"
+                  - generic [ref=e94]: "#Training Tips"
+                  - generic [ref=e95]: "#Fitness"
+        - complementary [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - generic [ref=e100]: Search Articles
+              - generic [ref=e102]:
+                - generic [ref=e103]:
+                  - textbox "Search..." [ref=e104]
+                  - img [ref=e105]
+                - button "Go" [ref=e107]
+            - generic [ref=e108]:
+              - generic [ref=e110]: Categories
+              - navigation [ref=e112]:
+                - link "All Posts" [ref=e113]:
+                  - /url: /blog
+                  - generic [ref=e115]: All Posts
+            - generic [ref=e117]:
+              - heading "Stay Updated" [level=3] [ref=e118]
+              - paragraph [ref=e119]: Get the latest hockey insights and advisor tips delivered to your inbox.
+              - link "Subscribe" [ref=e120]:
+                - /url: "#newsletter"
+  - contentinfo "Footer" [ref=e121]:
+    - heading "Footer" [level=2] [ref=e122]
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e128]: HD
+            - generic [ref=e129]: The Hockey Directory
+          - paragraph [ref=e130]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e131]:
+            - link "Twitter" [ref=e132]:
+              - /url: "#"
+              - generic [ref=e133]: Twitter
+              - img [ref=e134]
+            - link "Facebook" [ref=e136]:
+              - /url: "#"
+              - generic [ref=e137]: Facebook
+              - img [ref=e138]
+            - link "Instagram" [ref=e140]:
+              - /url: "#"
+              - generic [ref=e141]: Instagram
+              - img [ref=e142]
+            - link "LinkedIn" [ref=e145]:
+              - /url: "#"
+              - generic [ref=e146]: LinkedIn
+              - img [ref=e147]
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - heading "Advisors" [level=3] [ref=e154]
+              - list [ref=e155]:
+                - listitem [ref=e156]:
+                  - link "Find Advisors" [ref=e157]:
+                    - /url: /listings
+                - listitem [ref=e158]:
+                  - link "Claim Your Listing" [ref=e159]:
+                    - /url: /claim
+                - listitem [ref=e160]:
+                  - link "Featured Advisors" [ref=e161]:
+                    - /url: /listings?featured=true
+            - generic [ref=e162]:
+              - heading "Resources" [level=3] [ref=e163]
+              - list [ref=e164]:
+                - listitem [ref=e165]:
+                  - link "Blog" [ref=e166]:
+                    - /url: /blog
+                - listitem [ref=e167]:
+                  - link "Player Development" [ref=e168]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e169]:
+                  - link "College Recruitment" [ref=e170]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e171]:
+                  - link "Parent Tips" [ref=e172]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - heading "Company" [level=3] [ref=e175]
+              - list [ref=e176]:
+                - listitem [ref=e177]:
+                  - link "About Us" [ref=e178]:
+                    - /url: /about
+                - listitem [ref=e179]:
+                  - link "Contact" [ref=e180]:
+                    - /url: /contact
+                - listitem [ref=e181]:
+                  - link "Submit a Listing" [ref=e182]:
+                    - /url: /submit
+            - generic [ref=e183]:
+              - heading "Legal" [level=3] [ref=e184]
+              - list [ref=e185]:
+                - listitem [ref=e186]:
+                  - link "Privacy Policy" [ref=e187]:
+                    - /url: /privacy
+                - listitem [ref=e188]:
+                  - link "Terms of Service" [ref=e189]:
+                    - /url: /terms
+                - listitem [ref=e190]:
+                  - link "Cookie Policy" [ref=e191]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e193]: © 2025 The Hockey Directory. All rights reserved.
+  - generic [active]:
+    - generic [ref=e196]:
+      - generic [ref=e197]:
+        - navigation [ref=e199]:
+          - button "previous" [disabled] [ref=e200]:
+            - img "previous" [ref=e201]
+          - generic [ref=e203]:
+            - generic [ref=e204]: 1/
+            - text: "1"
+          - button "next" [disabled] [ref=e205]:
+            - img "next" [ref=e206]
+        - generic [ref=e209]:
+          - img [ref=e210]
+          - generic "Latest available version is detected (16.0.1)." [ref=e212]: Next.js 16.0.1
+          - generic [ref=e213]: Turbopack
+      - dialog "Build Error" [ref=e215]:
+        - generic [ref=e218]:
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - generic [ref=e222]: Build Error
+              - generic [ref=e223]:
+                - button "Copy Error Info" [ref=e224] [cursor=pointer]:
+                  - img [ref=e225]
+                - button "No related documentation found" [disabled] [ref=e227]:
+                  - img [ref=e228]
+                - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e230]:
+                  - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                  - img [ref=e231]
+            - generic [ref=e243]: Ecmascript file had an error
+          - generic [ref=e245]:
+            - generic [ref=e247]:
+              - img [ref=e249]
+              - generic [ref=e253]: ./app/(public)/listings/[slug]/page.tsx (19:21)
+              - button "Open in editor" [ref=e254] [cursor=pointer]:
+                - img [ref=e256]
+            - generic [ref=e259]:
+              - generic [ref=e260]: Ecmascript file had an error
+              - generic [ref=e261]: 17 |
+              - generic [ref=e262]: 18 |
+              - generic [ref=e263]: // Lazy load LocationMap (contains Google Maps)
+              - text: ">"
+              - generic [ref=e264]: 19 |
+              - text: const LocationMap =
+              - generic [ref=e265]: dynamic(
+              - generic [ref=e266]: "|"
+              - text: ^^^^^^^^ >
+              - generic [ref=e267]: 20 |
+              - generic [ref=e268]: ()
+              - text: => import('@/components/listing/LocationMap').
+              - generic [ref=e269]: then(mod
+              - text: =>
+              - generic [ref=e270]: "({"
+              - text: "default:"
+              - generic [ref=e271]: mod
+              - text: .LocationMap
+              - generic [ref=e272]: "}))"
+              - text: ","
+              - generic [ref=e273]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e274]: 21 |
+              - generic [ref=e275]: "{"
+              - generic [ref=e276]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e277]: 22 |
+              - generic [ref=e278]: loading
+              - text: ":"
+              - generic [ref=e279]: ()
+              - text: =>
+              - generic [ref=e280]: (
+              - generic [ref=e281]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e282]: 23 |
+              - text: <Card>
+              - generic [ref=e283]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e284]: 24 |
+              - text: <CardHeader>
+              - generic [ref=e285]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e286]: 25 |
+              - text: <CardTitle>Location</CardTitle>
+              - generic [ref=e287]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e288]: 26 |
+              - text: </CardHeader>
+              - generic [ref=e289]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e290]: 27 |
+              - text: <CardContent>
+              - generic [ref=e291]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e292]: 28 |
+              - text: <div
+              - generic [ref=e293]: className
+              - text: =
+              - generic [ref=e294]: "\"w-full h-64 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center\""
+              - text: ">"
+              - generic [ref=e295]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e296]: 29 |
+              - text: <span
+              - generic [ref=e297]: className
+              - text: ="text-gray-500">Loading
+              - generic [ref=e298]: map
+              - text: ...</span>
+              - generic [ref=e299]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e300]: 30 |
+              - text: </div>
+              - generic [ref=e301]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e302]: 31 |
+              - text: </CardContent>
+              - generic [ref=e303]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e304]: 32 |
+              - text: </Card>
+              - generic [ref=e305]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e306]: 33 |
+              - generic [ref=e307]: )
+              - text: ","
+              - generic [ref=e308]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e309]: 34 |
+              - generic [ref=e310]: ssr
+              - text: ": false,"
+              - generic [ref=e311]: // Don't render on server (Google Maps requires window)
+              - generic [ref=e312]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e313]: 35 |
+              - generic [ref=e314]: "}"
+              - generic [ref=e315]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ >
+              - generic [ref=e316]: 36 |
+              - generic [ref=e317]: )
+              - generic [ref=e318]: "|"
+              - text: ^^
+              - generic [ref=e319]: 37 |
+              - generic [ref=e320]: 38 |
+              - generic [ref=e321]: // Incremental Static Regeneration - revalidate every hour
+              - generic [ref=e322]: 39 |
+              - text: export const
+              - generic [ref=e323]: revalidate
+              - text: = 3600
+              - generic [ref=e324]: "`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component."
+        - generic [ref=e325]: "1"
+        - generic [ref=e326]: "2"
+    - generic [ref=e331] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e332]:
+        - img [ref=e333]
+      - button "Open issues overlay" [ref=e339]:
+        - generic [ref=e340]:
+          - generic [ref=e341]: "0"
+          - generic [ref=e342]: "1"
+        - generic [ref=e343]: Issue
+  - alert [ref=e344]
+  - generic [ref=e348]:
+    - paragraph [ref=e350]:
+      - text: We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.
+      - link "Learn more" [ref=e351]:
+        - /url: /cookie-policy
+    - generic [ref=e352]:
+      - button "Decline" [ref=e353]
+      - button "Accept" [ref=e354]
+      - button "Dismiss cookie banner" [ref=e355]:
+        - img [ref=e356]
+```

@@ -1,20 +1,59 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { createClient } from '@/lib/supabase/server'
 import { FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactCard } from '@/components/listing/ContactCard'
-import { LocationMap } from '@/components/listing/LocationMap'
 import { StarRating } from '@/components/listing/StarRating'
 import { ReviewsList } from '@/components/listing/ReviewsList'
+import { SocialLinks } from '@/components/listing/SocialLinks'
+import { BusinessHours } from '@/components/listing/BusinessHours'
+import { TeamSection } from '@/components/listing/TeamSection'
 import { MessageSquarePlus, Building2 } from 'lucide-react'
 
-// Force dynamic rendering - don't try to statically generate at build time
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Lazy load LocationMap (contains Google Maps)
+const LocationMap = dynamic(
+  () => import('@/components/listing/LocationMap').then(mod => ({ default: mod.LocationMap })),
+  {
+    loading: () => (
+      <Card>
+        <CardHeader>
+          <CardTitle>Location</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="w-full h-64 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+            <span className="text-gray-500">Loading map...</span>
+          </div>
+        </CardContent>
+      </Card>
+    ),
+    ssr: false, // Don't render on server (Google Maps requires window)
+  }
+)
+
+// Incremental Static Regeneration - revalidate every hour
+export const revalidate = 3600
+
+// Pre-generate top 100 advisor pages at build time
+export async function generateStaticParams() {
+  const supabase = await createClient()
+
+  const { data: advisors } = await supabase
+    .from('advisors')
+    .select('slug')
+    .eq('is_published', true)
+    .order('average_rating', { ascending: false })
+    .order('review_count', { ascending: false })
+    .limit(100)
+
+  return advisors?.map((advisor) => ({
+    slug: advisor.slug,
+  })) || []
+}
 
 interface ListingPageProps {
   params: Promise<{
@@ -190,6 +229,11 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </Card>
             )}
 
+            {/* Team Section */}
+            {advisor.team_members && advisor.team_members.length > 0 && (
+              <TeamSection teamMembers={advisor.team_members} />
+            )}
+
             {/* Reviews Section */}
             <Card>
               <CardHeader>
@@ -222,7 +266,31 @@ export default async function ListingPage({ params }: ListingPageProps) {
               phone={advisor.phone}
               email={advisor.email}
               websiteUrl={advisor.website_url}
+              linkedinUrl={advisor.linkedin_url}
+              instagramUrl={advisor.instagram_url}
+              twitterUrl={advisor.twitter_url}
+              facebookUrl={advisor.facebook_url}
+              youtubeUrl={advisor.youtube_url}
             />
+
+            {/* Social Media Card */}
+            {(advisor.linkedin_url || advisor.instagram_url || advisor.twitter_url || advisor.facebook_url || advisor.youtube_url) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Follow Us</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <SocialLinks
+                    linkedin={advisor.linkedin_url}
+                    instagram={advisor.instagram_url}
+                    twitter={advisor.twitter_url}
+                    facebook={advisor.facebook_url}
+                    youtube={advisor.youtube_url}
+                    size="md"
+                  />
+                </CardContent>
+              </Card>
+            )}
 
             {/* Claim This Listing Card */}
             {!advisor.is_claimed && (
@@ -249,7 +317,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
               <CardHeader>
                 <CardTitle>Business Information</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm">
+              <CardContent className="space-y-4 text-sm">
                 {advisor.years_in_business && (
                   <div>
                     <span className="font-semibold">Years in Business:</span>{' '}
@@ -266,6 +334,11 @@ export default async function ListingPage({ params }: ListingPageProps) {
                   <div>
                     <span className="font-semibold">Price Range:</span>{' '}
                     <span className="text-gray-700">{advisor.price_range}</span>
+                  </div>
+                )}
+                {advisor.business_hours && (
+                  <div className="pt-2 border-t border-gray-200">
+                    <BusinessHours hours={advisor.business_hours} />
                   </div>
                 )}
               </CardContent>

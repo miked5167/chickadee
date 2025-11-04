@@ -1,0 +1,220 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD The Hockey Directory" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: HD
+          - generic [ref=e9]: The Hockey Directory
+        - generic [ref=e10]:
+          - link "Find Advisors" [ref=e11] [cursor=pointer]:
+            - /url: /listings
+          - link "Blog" [ref=e12] [cursor=pointer]:
+            - /url: /blog
+          - link "About" [ref=e13] [cursor=pointer]:
+            - /url: /about
+  - main [ref=e16]:
+    - generic [ref=e18]:
+      - generic [ref=e20]:
+        - heading "Search Hockey Advisors" [level=1] [ref=e21]
+        - paragraph [ref=e22]: Find verified hockey advisors to help guide your player's journey
+      - generic [ref=e24]:
+        - complementary [ref=e25]:
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - generic [ref=e31]: Sort By
+              - generic [ref=e32]:
+                - combobox [ref=e33]:
+                  - img
+                - combobox [ref=e34]
+            - generic [ref=e35]:
+              - generic [ref=e37]: Country
+              - radiogroup [ref=e39]:
+                - generic [ref=e40]:
+                  - radio "Any Country" [checked] [ref=e41]:
+                    - img [ref=e42]
+                  - radio [checked]
+                  - generic [ref=e44] [cursor=pointer]: Any Country
+                - generic [ref=e45]:
+                  - radio "United States 🇺🇸" [ref=e46]
+                  - radio
+                  - generic [ref=e47] [cursor=pointer]: United States 🇺🇸
+                - generic [ref=e48]:
+                  - radio "Canada 🇨🇦" [ref=e49]
+                  - radio
+                  - generic [ref=e50] [cursor=pointer]: Canada 🇨🇦
+            - generic [ref=e51]:
+              - generic [ref=e53]: Minimum Rating
+              - radiogroup [ref=e55]:
+                - generic [ref=e56]:
+                  - radio "Any Rating" [checked] [ref=e57]:
+                    - img [ref=e58]
+                  - radio [checked]
+                  - generic [ref=e61] [cursor=pointer]: Any Rating
+                - generic [ref=e62]:
+                  - radio "4+ Stars" [ref=e63]
+                  - radio
+                  - generic [ref=e64] [cursor=pointer]:
+                    - generic [ref=e65]:
+                      - img [ref=e66]
+                      - img [ref=e68]
+                      - img [ref=e70]
+                      - img [ref=e72]
+                    - generic [ref=e74]: 4+ Stars
+                - generic [ref=e75]:
+                  - radio "3+ Stars" [ref=e76]
+                  - radio
+                  - generic [ref=e77] [cursor=pointer]:
+                    - generic [ref=e78]:
+                      - img [ref=e79]
+                      - img [ref=e81]
+                      - img [ref=e83]
+                    - generic [ref=e85]: 3+ Stars
+                - generic [ref=e86]:
+                  - radio "2+ Stars" [ref=e87]
+                  - radio
+                  - generic [ref=e88] [cursor=pointer]:
+                    - generic [ref=e89]:
+                      - img [ref=e90]
+                      - img [ref=e92]
+                    - generic [ref=e94]: 2+ Stars
+            - generic [ref=e95]:
+              - generic [ref=e97]: Specialties
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - checkbox "Player Development" [ref=e101]
+                  - checkbox
+                  - generic [ref=e102] [cursor=pointer]: Player Development
+                - generic [ref=e103]:
+                  - checkbox "College Recruiting" [ref=e104]
+                  - checkbox
+                  - generic [ref=e105] [cursor=pointer]: College Recruiting
+                - generic [ref=e106]:
+                  - checkbox "Showcase Guidance" [ref=e107]
+                  - checkbox
+                  - generic [ref=e108] [cursor=pointer]: Showcase Guidance
+                - generic [ref=e109]:
+                  - checkbox "AAA Team Placement" [ref=e110]
+                  - checkbox
+                  - generic [ref=e111] [cursor=pointer]: AAA Team Placement
+                - generic [ref=e112]:
+                  - checkbox "Prep School Selection" [ref=e113]
+                  - checkbox
+                  - generic [ref=e114] [cursor=pointer]: Prep School Selection
+                - generic [ref=e115]:
+                  - checkbox "Women's Hockey" [ref=e116]
+                  - checkbox
+                  - generic [ref=e117] [cursor=pointer]: Women's Hockey
+                - generic [ref=e118]:
+                  - checkbox "Goalie Training" [ref=e119]
+                  - checkbox
+                  - generic [ref=e120] [cursor=pointer]: Goalie Training
+                - generic [ref=e121]:
+                  - checkbox "Skill Development" [ref=e122]
+                  - checkbox
+                  - generic [ref=e123] [cursor=pointer]: Skill Development
+                - generic [ref=e124]:
+                  - checkbox "Hockey IQ Training" [ref=e125]
+                  - checkbox
+                  - generic [ref=e126] [cursor=pointer]: Hockey IQ Training
+                - generic [ref=e127]:
+                  - checkbox "Off-Ice Training" [ref=e128]
+                  - checkbox
+                  - generic [ref=e129] [cursor=pointer]: Off-Ice Training
+                - generic [ref=e130]:
+                  - checkbox "Mental Performance" [ref=e131]
+                  - checkbox
+                  - generic [ref=e132] [cursor=pointer]: Mental Performance
+                - generic [ref=e133]:
+                  - checkbox "NCAA Compliance" [ref=e134]
+                  - checkbox
+                  - generic [ref=e135] [cursor=pointer]: NCAA Compliance
+            - button "Apply Filters" [ref=e137]
+        - paragraph [ref=e141]: Searching for advisors...
+  - contentinfo "Footer" [ref=e142]:
+    - heading "Footer" [level=2] [ref=e143]
+    - generic [ref=e144]:
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - generic [ref=e149]: HD
+            - generic [ref=e150]: The Hockey Directory
+          - paragraph [ref=e151]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e152]:
+            - link "Twitter" [ref=e153] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e154]: Twitter
+              - img [ref=e155]
+            - link "Facebook" [ref=e157] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e158]: Facebook
+              - img [ref=e159]
+            - link "Instagram" [ref=e161] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e162]: Instagram
+              - img [ref=e163]
+            - link "LinkedIn" [ref=e166] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e167]: LinkedIn
+              - img [ref=e168]
+        - generic [ref=e172]:
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - heading "Advisors" [level=3] [ref=e175]
+              - list [ref=e176]:
+                - listitem [ref=e177]:
+                  - link "Find Advisors" [ref=e178] [cursor=pointer]:
+                    - /url: /listings
+                - listitem [ref=e179]:
+                  - link "Claim Your Listing" [ref=e180] [cursor=pointer]:
+                    - /url: /claim
+                - listitem [ref=e181]:
+                  - link "Featured Advisors" [ref=e182] [cursor=pointer]:
+                    - /url: /listings?featured=true
+            - generic [ref=e183]:
+              - heading "Resources" [level=3] [ref=e184]
+              - list [ref=e185]:
+                - listitem [ref=e186]:
+                  - link "Blog" [ref=e187] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e188]:
+                  - link "Player Development" [ref=e189] [cursor=pointer]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e190]:
+                  - link "College Recruitment" [ref=e191] [cursor=pointer]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e192]:
+                  - link "Parent Tips" [ref=e193] [cursor=pointer]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - heading "Company" [level=3] [ref=e196]
+              - list [ref=e197]:
+                - listitem [ref=e198]:
+                  - link "About Us" [ref=e199] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e200]:
+                  - link "Contact" [ref=e201] [cursor=pointer]:
+                    - /url: /contact
+                - listitem [ref=e202]:
+                  - link "Submit a Listing" [ref=e203] [cursor=pointer]:
+                    - /url: /submit
+            - generic [ref=e204]:
+              - heading "Legal" [level=3] [ref=e205]
+              - list [ref=e206]:
+                - listitem [ref=e207]:
+                  - link "Privacy Policy" [ref=e208] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e209]:
+                  - link "Terms of Service" [ref=e210] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e211]:
+                  - link "Cookie Policy" [ref=e212] [cursor=pointer]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e214]: © 2025 The Hockey Directory. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e220] [cursor=pointer]:
+    - img [ref=e221]
+```

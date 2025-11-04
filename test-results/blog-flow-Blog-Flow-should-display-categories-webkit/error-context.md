@@ -1,0 +1,104 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD The Hockey Directory" [ref=e6]:
+          - /url: /
+          - generic [ref=e8]: HD
+          - generic [ref=e9]: The Hockey Directory
+        - generic [ref=e10]:
+          - link "Find Advisors" [ref=e11]:
+            - /url: /listings
+          - link "Blog" [ref=e12]:
+            - /url: /blog
+          - link "About" [ref=e13]:
+            - /url: /about
+  - main [ref=e16]:
+    - paragraph [ref=e22]: Loading blog posts...
+  - contentinfo "Footer" [ref=e23]:
+    - heading "Footer" [level=2] [ref=e24]
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e30]: HD
+            - generic [ref=e31]: The Hockey Directory
+          - paragraph [ref=e32]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e33]:
+            - link "Twitter" [ref=e34]:
+              - /url: "#"
+              - generic [ref=e35]: Twitter
+              - img [ref=e36]
+            - link "Facebook" [ref=e38]:
+              - /url: "#"
+              - generic [ref=e39]: Facebook
+              - img [ref=e40]
+            - link "Instagram" [ref=e42]:
+              - /url: "#"
+              - generic [ref=e43]: Instagram
+              - img [ref=e44]
+            - link "LinkedIn" [ref=e47]:
+              - /url: "#"
+              - generic [ref=e48]: LinkedIn
+              - img [ref=e49]
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - heading "Advisors" [level=3] [ref=e56]
+              - list [ref=e57]:
+                - listitem [ref=e58]:
+                  - link "Find Advisors" [ref=e59]:
+                    - /url: /listings
+                - listitem [ref=e60]:
+                  - link "Claim Your Listing" [ref=e61]:
+                    - /url: /claim
+                - listitem [ref=e62]:
+                  - link "Featured Advisors" [ref=e63]:
+                    - /url: /listings?featured=true
+            - generic [ref=e64]:
+              - heading "Resources" [level=3] [ref=e65]
+              - list [ref=e66]:
+                - listitem [ref=e67]:
+                  - link "Blog" [ref=e68]:
+                    - /url: /blog
+                - listitem [ref=e69]:
+                  - link "Player Development" [ref=e70]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e71]:
+                  - link "College Recruitment" [ref=e72]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e73]:
+                  - link "Parent Tips" [ref=e74]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - heading "Company" [level=3] [ref=e77]
+              - list [ref=e78]:
+                - listitem [ref=e79]:
+                  - link "About Us" [ref=e80]:
+                    - /url: /about
+                - listitem [ref=e81]:
+                  - link "Contact" [ref=e82]:
+                    - /url: /contact
+                - listitem [ref=e83]:
+                  - link "Submit a Listing" [ref=e84]:
+                    - /url: /submit
+            - generic [ref=e85]:
+              - heading "Legal" [level=3] [ref=e86]
+              - list [ref=e87]:
+                - listitem [ref=e88]:
+                  - link "Privacy Policy" [ref=e89]:
+                    - /url: /privacy
+                - listitem [ref=e90]:
+                  - link "Terms of Service" [ref=e91]:
+                    - /url: /terms
+                - listitem [ref=e92]:
+                  - link "Cookie Policy" [ref=e93]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e95]: © 2025 The Hockey Directory. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e101] [cursor=pointer]:
+    - img [ref=e102]
+```

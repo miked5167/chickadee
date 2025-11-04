@@ -62,11 +62,11 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
             </div>
 
             {advisor.logo_url && (
-              <div className="w-12 h-12 flex-shrink-0 rounded-md overflow-hidden bg-gray-100">
+              <div className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden bg-gray-100 p-2">
                 <img
                   src={advisor.logo_url}
                   alt={`${advisor.name} logo`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             )}

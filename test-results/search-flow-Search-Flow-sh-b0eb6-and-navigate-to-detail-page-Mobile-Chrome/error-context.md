@@ -1,0 +1,106 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Top" [ref=e3]:
+      - generic [ref=e4]:
+        - link "HD" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: HD
+        - button "Open main menu" [ref=e10]:
+          - generic [ref=e11]: Open main menu
+          - img [ref=e12]
+  - main [ref=e13]:
+    - generic [ref=e15]:
+      - generic [ref=e17]:
+        - heading "Search Hockey Advisors" [level=1] [ref=e18]
+        - paragraph [ref=e19]: Find verified hockey advisors to help guide your player's journey
+      - generic [ref=e21]:
+        - complementary [ref=e22]:
+          - button "Filters" [ref=e24]:
+            - img
+            - text: Filters
+        - paragraph [ref=e28]: Searching for advisors...
+  - contentinfo "Footer" [ref=e29]:
+    - heading "Footer" [level=2] [ref=e30]
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - generic [ref=e36]: HD
+            - generic [ref=e37]: The Hockey Directory
+          - paragraph [ref=e38]: Connecting hockey families with trusted advisors and development professionals across North America.
+          - generic [ref=e39]:
+            - link "Twitter" [ref=e40] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e41]: Twitter
+              - img [ref=e42]
+            - link "Facebook" [ref=e44] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e45]: Facebook
+              - img [ref=e46]
+            - link "Instagram" [ref=e48] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e49]: Instagram
+              - img [ref=e50]
+            - link "LinkedIn" [ref=e53] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e54]: LinkedIn
+              - img [ref=e55]
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - heading "Advisors" [level=3] [ref=e62]
+              - list [ref=e63]:
+                - listitem [ref=e64]:
+                  - link "Find Advisors" [ref=e65] [cursor=pointer]:
+                    - /url: /listings
+                - listitem [ref=e66]:
+                  - link "Claim Your Listing" [ref=e67] [cursor=pointer]:
+                    - /url: /claim
+                - listitem [ref=e68]:
+                  - link "Featured Advisors" [ref=e69] [cursor=pointer]:
+                    - /url: /listings?featured=true
+            - generic [ref=e70]:
+              - heading "Resources" [level=3] [ref=e71]
+              - list [ref=e72]:
+                - listitem [ref=e73]:
+                  - link "Blog" [ref=e74] [cursor=pointer]:
+                    - /url: /blog
+                - listitem [ref=e75]:
+                  - link "Player Development" [ref=e76] [cursor=pointer]:
+                    - /url: /blog/category/player-development
+                - listitem [ref=e77]:
+                  - link "College Recruitment" [ref=e78] [cursor=pointer]:
+                    - /url: /blog/category/college-recruitment
+                - listitem [ref=e79]:
+                  - link "Parent Tips" [ref=e80] [cursor=pointer]:
+                    - /url: /blog/category/parent-tips
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - heading "Company" [level=3] [ref=e83]
+              - list [ref=e84]:
+                - listitem [ref=e85]:
+                  - link "About Us" [ref=e86] [cursor=pointer]:
+                    - /url: /about
+                - listitem [ref=e87]:
+                  - link "Contact" [ref=e88] [cursor=pointer]:
+                    - /url: /contact
+                - listitem [ref=e89]:
+                  - link "Submit a Listing" [ref=e90] [cursor=pointer]:
+                    - /url: /submit
+            - generic [ref=e91]:
+              - heading "Legal" [level=3] [ref=e92]
+              - list [ref=e93]:
+                - listitem [ref=e94]:
+                  - link "Privacy Policy" [ref=e95] [cursor=pointer]:
+                    - /url: /privacy
+                - listitem [ref=e96]:
+                  - link "Terms of Service" [ref=e97] [cursor=pointer]:
+                    - /url: /terms
+                - listitem [ref=e98]:
+                  - link "Cookie Policy" [ref=e99] [cursor=pointer]:
+                    - /url: /cookie-policy
+      - paragraph [ref=e101]: © 2025 The Hockey Directory. All rights reserved.
+```

@@ -6,6 +6,25 @@ import { createClient } from '@/lib/supabase/server'
 import { Calendar, Clock, User, ArrowLeft } from 'lucide-react'
 import { ShareButtons } from '@/components/blog/ShareButtons'
 
+// Incremental Static Regeneration - revalidate every 10 minutes
+export const revalidate = 600
+
+// Pre-generate top 50 blog posts at build time
+export async function generateStaticParams() {
+  const supabase = await createClient()
+
+  const { data: posts } = await supabase
+    .from('blog_posts')
+    .select('slug')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(50)
+
+  return posts?.map((post) => ({
+    slug: post.slug,
+  })) || []
+}
+
 interface BlogPostPageProps {
   params: Promise<{
     slug: string
@@ -161,7 +180,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="container mx-auto px-4 py-4 max-w-4xl">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-hockey-blue hover:text-hockey-red transition-colors"
+              className="inline-flex items-center gap-2 text-hockey-blue hover:text-red-line transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Blog
@@ -303,7 +322,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </div>
                       )}
                       <div className="p-4">
-                        <h3 className="font-semibold text-puck-black mb-2 group-hover:text-hockey-red transition-colors line-clamp-2">
+                        <h3 className="font-semibold text-puck-black mb-2 group-hover:text-red-line transition-colors line-clamp-2">
                           {relatedPost.title}
                         </h3>
                         {relatedPost.excerpt && (

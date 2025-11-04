@@ -6,6 +6,14 @@ import { FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { ContactCard } from '@/components/listing/ContactCard'
 import { StarRating } from '@/components/listing/StarRating'
 import { ReviewsList } from '@/components/listing/ReviewsList'
@@ -13,7 +21,7 @@ import { SocialLinks } from '@/components/listing/SocialLinks'
 import { BusinessHours } from '@/components/listing/BusinessHours'
 import { TeamSection } from '@/components/listing/TeamSection'
 import { LocationMapWrapper } from '@/components/listing/LocationMapWrapper'
-import { MessageSquarePlus, Building2 } from 'lucide-react'
+import { MessageSquarePlus, Building2, Target, School, Trophy, LineChart, Users, Shield, Zap, Award, DollarSign, Clock } from 'lucide-react'
 
 // Incremental Static Regeneration - revalidate every hour
 export const revalidate = 3600
@@ -132,6 +140,37 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-3">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/listings">Advisors</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              {advisor.state && (
+                <>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href={`/listings?state=${advisor.state}`}>
+                      {advisor.state}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
+              <BreadcrumbItem>
+                <BreadcrumbPage>{advisor.name}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <div className="bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 py-8">
@@ -245,10 +284,48 @@ export default async function ListingPage({ params }: ListingPageProps) {
             {advisor.description && (
               <Card>
                 <CardHeader>
-                  <CardTitle>About</CardTitle>
+                  <CardTitle className="text-2xl">About {advisor.name}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 whitespace-pre-line">{advisor.description}</p>
+                <CardContent className="space-y-6">
+                  <div className="prose max-w-none">
+                    <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+                      {advisor.description}
+                    </p>
+                  </div>
+
+                  {/* Background Highlights */}
+                  {(advisor.years_in_business || advisor.certification_info) && (
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <Award className="w-5 h-5 text-blue-600" />
+                        Background Highlights
+                      </h3>
+                      <ul className="space-y-3">
+                        {advisor.years_in_business && (
+                          <li className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700">
+                              <strong>{advisor.years_in_business}+ years</strong> of professional experience
+                            </span>
+                          </li>
+                        )}
+                        {advisor.certification_info && (
+                          <li className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700">{advisor.certification_info}</span>
+                          </li>
+                        )}
+                        {totalReviews > 0 && (
+                          <li className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700">
+                              Trusted by families with <strong>{totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}</strong>
+                            </span>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -257,33 +334,40 @@ export default async function ListingPage({ params }: ListingPageProps) {
             {advisor.services_offered && advisor.services_offered.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Services Offered</CardTitle>
+                  <CardTitle className="text-2xl">Services Offered</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="list-disc list-inside space-y-2">
-                    {advisor.services_offered.map((service: string, index: number) => (
-                      <li key={index} className="text-gray-700">
-                        {service}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {advisor.services_offered.map((service: string, index: number) => {
+                      // Map services to appropriate icons
+                      const getServiceIcon = (serviceName: string) => {
+                        const lowerService = serviceName.toLowerCase()
+                        if (lowerService.includes('assessment') || lowerService.includes('evaluation')) return Target
+                        if (lowerService.includes('college') || lowerService.includes('ncaa') || lowerService.includes('placement')) return School
+                        if (lowerService.includes('showcase') || lowerService.includes('tournament')) return Trophy
+                        if (lowerService.includes('development') || lowerService.includes('training') || lowerService.includes('plan')) return LineChart
+                        if (lowerService.includes('recruiting') || lowerService.includes('recruitment')) return Users
+                        if (lowerService.includes('goalie') || lowerService.includes('defense')) return Shield
+                        if (lowerService.includes('skills') || lowerService.includes('performance')) return Zap
+                        return Award
+                      }
 
-            {/* Specialties */}
-            {advisor.specialties && advisor.specialties.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Specialties</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {advisor.specialties.map((specialty: string, index: number) => (
-                      <Badge key={index} variant="secondary">
-                        {specialty}
-                      </Badge>
-                    ))}
+                      const IconComponent = getServiceIcon(service)
+
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-start gap-3 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all"
+                        >
+                          <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <IconComponent className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div className="flex-1 pt-1">
+                            <p className="text-gray-900 font-medium">{service}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </CardContent>
               </Card>
@@ -378,35 +462,58 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </Card>
             )}
 
-            {/* Business Info */}
+            {/* Pricing & Business Info */}
             <Card>
               <CardHeader>
                 <CardTitle>Business Information</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm">
-                {advisor.years_in_business && (
-                  <div>
-                    <span className="font-semibold">Years in Business:</span>{' '}
-                    <span className="text-gray-700">{advisor.years_in_business}</span>
-                  </div>
-                )}
-                {advisor.certification_info && (
-                  <div>
-                    <span className="font-semibold">Certifications:</span>{' '}
-                    <span className="text-gray-700">{advisor.certification_info}</span>
-                  </div>
-                )}
+              <CardContent className="space-y-4">
+                {/* Pricing - Featured */}
                 {advisor.price_range && (
-                  <div>
-                    <span className="font-semibold">Price Range:</span>{' '}
-                    <span className="text-gray-700">{advisor.price_range}</span>
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                        <DollarSign className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-1">Pricing</h4>
+                        <p className="text-lg font-bold text-green-700">{advisor.price_range}</p>
+                        <p className="text-xs text-gray-600 mt-1">Contact for detailed pricing</p>
+                      </div>
+                    </div>
                   </div>
                 )}
-                {advisor.business_hours && (
-                  <div className="pt-2 border-t border-gray-200">
-                    <BusinessHours hours={advisor.business_hours} />
-                  </div>
-                )}
+
+                {/* Other Business Info */}
+                <div className="space-y-3 text-sm">
+                  {advisor.years_in_business && (
+                    <div className="flex items-start gap-2">
+                      <Award className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold text-gray-900">Years in Business:</span>{' '}
+                        <span className="text-gray-700">{advisor.years_in_business}+ years</span>
+                      </div>
+                    </div>
+                  )}
+                  {advisor.certification_info && (
+                    <div className="flex items-start gap-2">
+                      <Trophy className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <span className="font-semibold text-gray-900">Certifications:</span>{' '}
+                        <span className="text-gray-700">{advisor.certification_info}</span>
+                      </div>
+                    </div>
+                  )}
+                  {advisor.business_hours && (
+                    <div className="pt-3 border-t border-gray-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                        <span className="font-semibold text-gray-900">Business Hours</span>
+                      </div>
+                      <BusinessHours hours={advisor.business_hours} />
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 

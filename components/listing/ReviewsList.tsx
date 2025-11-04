@@ -5,7 +5,7 @@ import { StarRating } from './StarRating'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle, Loader2, MessageSquare } from 'lucide-react'
+import { CheckCircle, Loader2, MessageSquare, Star, Users } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 interface Review {
@@ -82,9 +82,35 @@ export function ReviewsList({ advisorId, initialReviews = [], totalCount = 0 }: 
 
   if (reviews.length === 0 && !loading) {
     return (
-      <Card className="p-8 text-center">
-        <p className="text-gray-600">No reviews yet. Be the first to share your experience!</p>
-      </Card>
+      <div className="space-y-4">
+        <Card className="p-12 text-center bg-gradient-to-br from-blue-50 to-white border-2 border-blue-100">
+          <div className="mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-amber-100 rounded-full mb-4">
+              <Star className="w-10 h-10 text-amber-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Be the First to Share Your Experience
+            </h3>
+            <p className="text-gray-700 mb-6 max-w-md mx-auto">
+              Help other hockey families by sharing your experience. Your review will help them make informed decisions about their hockey journey.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg p-6 mb-6 max-w-lg mx-auto border border-blue-200 shadow-sm">
+            <div className="flex items-start gap-3 text-left">
+              <Users className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-gray-900 mb-1">
+                  Trusted by the Hockey Community
+                </p>
+                <p className="text-sm text-gray-600">
+                  This advisor is actively serving hockey families. Be the first to help others by sharing your honest feedback.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
     )
   }
 

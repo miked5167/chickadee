@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Navigation } from 'lucide-react'
 
 interface LocationMapProps {
   latitude: number
@@ -137,22 +139,42 @@ export function LocationMap({ latitude, longitude, name }: LocationMapProps) {
     return null // Silently fail - map is optional
   }
 
+  const handleGetDirections = () => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Location</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Location & Service Area</CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGetDirections}
+            className="flex items-center gap-2"
+          >
+            <Navigation className="w-4 h-4" />
+            Get Directions
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div
           ref={containerRef}
-          className="w-full h-64 rounded-lg bg-gray-100 relative"
-          style={{ minHeight: '256px' }}
+          className="w-full h-96 rounded-lg bg-gray-100 relative mb-4"
+          style={{ minHeight: '384px' }}
         >
           {!mapLoaded && (
             <div className="absolute inset-0 flex items-center justify-center text-gray-500 pointer-events-none z-10">
               Loading map...
             </div>
           )}
+        </div>
+        <div className="text-sm text-gray-600 p-4 bg-blue-50 rounded-lg border border-blue-100">
+          <p className="font-medium text-gray-900 mb-1">Service Area</p>
+          <p>Serving families in the local area and surrounding regions. Contact for specific coverage details.</p>
         </div>
       </CardContent>
     </Card>

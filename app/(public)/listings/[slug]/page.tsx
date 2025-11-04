@@ -132,13 +132,13 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Section */}
-      <div className="bg-white border-b">
+      {/* Hero Section */}
+      <div className="bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex items-start gap-6">
+          <div className="flex flex-col md:flex-row items-start gap-6">
             {/* Logo */}
             {advisor.logo_url && (
-              <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 border">
+              <div className="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border-2 border-gray-200 shadow-md">
                 <img
                   src={advisor.logo_url}
                   alt={`${advisor.name} logo`}
@@ -148,34 +148,96 @@ export default async function ListingPage({ params }: ListingPageProps) {
             )}
 
             {/* Header Info */}
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <h1 className="text-3xl font-bold">{advisor.name}</h1>
+            <div className="flex-1 w-full">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
+                <h1 className="text-4xl font-bold text-gray-900">{advisor.name}</h1>
                 {advisor.is_verified && (
-                  <FaCheckCircle className="text-blue-600 text-2xl" title="Verified" />
+                  <Badge className="bg-amber-100 text-amber-900 border-amber-300">
+                    <FaCheckCircle className="w-4 h-4 mr-1" />
+                    Verified Professional
+                  </Badge>
                 )}
-              </div>
-
-              <div className="flex items-center gap-2 text-gray-600 mb-3">
-                <FaMapMarkerAlt />
-                <span>{location}</span>
               </div>
 
               {/* Rating */}
               {totalReviews > 0 && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 mb-3">
                   <StarRating rating={rating} showNumber={true} />
+                  <span className="text-lg font-semibold text-gray-900">{rating.toFixed(1)}</span>
                   <span className="text-gray-600">
                     ({totalReviews} {totalReviews === 1 ? 'review' : 'reviews'})
                   </span>
                 </div>
               )}
+
+              <div className="flex items-center gap-2 text-gray-600 mb-4">
+                <FaMapMarkerAlt className="text-blue-600" />
+                <span className="font-medium">{location}</span>
+              </div>
+
+              {/* Specialties */}
+              {advisor.specialties && advisor.specialties.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {advisor.specialties.slice(0, 5).map((specialty: string, index: number) => (
+                    <Badge key={index} variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1">
+                      {specialty}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3">
+                <Link href={`/listings/${advisor.slug}/contact`}>
+                  <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md">
+                    <MessageSquarePlus className="w-5 h-5 mr-2" />
+                    Contact This Advisor
+                  </Button>
+                </Link>
+                {advisor.website_url && (
+                  <a href={advisor.website_url} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" variant="outline" className="font-semibold">
+                      Visit Website
+                    </Button>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Statistics Bar */}
+        {(advisor.years_in_business || totalReviews > 0) && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 p-6 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100">
+            {advisor.years_in_business && (
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-1">{advisor.years_in_business}+</div>
+                <div className="text-sm text-gray-600 font-medium">Years Experience</div>
+              </div>
+            )}
+            {totalReviews > 0 && (
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-1">{totalReviews}</div>
+                <div className="text-sm text-gray-600 font-medium">{totalReviews === 1 ? 'Review' : 'Reviews'}</div>
+              </div>
+            )}
+            {rating > 0 && (
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-1">{rating.toFixed(1)}⭐</div>
+                <div className="text-sm text-gray-600 font-medium">Average Rating</div>
+              </div>
+            )}
+            {advisor.is_verified && (
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 mb-1">✓</div>
+                <div className="text-sm text-gray-600 font-medium">Verified Business</div>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
@@ -257,8 +319,9 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Contact Card */}
-            <ContactCard
+            <div className="sticky top-4 space-y-6">
+              {/* Contact Card */}
+              <ContactCard
               advisorId={advisor.id}
               advisorSlug={advisor.slug}
               phone={advisor.phone}
@@ -347,14 +410,15 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </CardContent>
             </Card>
 
-            {/* Location Map */}
-            {advisor.latitude && advisor.longitude && (
-              <LocationMapWrapper
-                latitude={advisor.latitude}
-                longitude={advisor.longitude}
-                name={advisor.name}
-              />
-            )}
+              {/* Location Map */}
+              {advisor.latitude && advisor.longitude && (
+                <LocationMapWrapper
+                  latitude={advisor.latitude}
+                  longitude={advisor.longitude}
+                  name={advisor.name}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

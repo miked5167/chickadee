@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { Calendar, Clock, User, ArrowLeft } from 'lucide-react'
 import { ShareButtons } from '@/components/blog/ShareButtons'
 
@@ -11,7 +11,8 @@ export const revalidate = 600
 
 // Pre-generate top 50 blog posts at build time
 export async function generateStaticParams() {
-  const supabase = await createClient()
+  // Use admin client for static generation (no cookies needed)
+  const supabase = createAdminClient()
 
   const { data: posts } = await supabase
     .from('blog_posts')

@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StarRating } from '@/components/listing/StarRating'
 import { Badge } from '@/components/ui/badge'
+import ReviewReplyDialog from '@/components/dashboard/ReviewReplyDialog'
 import {
   Loader2,
   ArrowLeft,
   Star,
   CheckCircle,
-  MessageSquare
+  MessageSquare,
+  Reply
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -23,6 +25,8 @@ interface Review {
   review_text: string
   is_verified: boolean
   created_at: string
+  advisor_reply: string | null
+  advisor_reply_at: string | null
   reviewer: {
     display_name: string | null
   } | null
@@ -37,6 +41,8 @@ export default function AdvisorReviewsPage() {
   const [averageRating, setAverageRating] = useState(0)
   const [ratingFilter, setRatingFilter] = useState<number | 'all'>('all')
   const [sortBy, setSortBy] = useState<'newest' | 'highest' | 'lowest'>('newest')
+  const [replyDialogOpen, setReplyDialogOpen] = useState(false)
+  const [replyingToReview, setReplyingToReview] = useState<Review | null>(null)
 
   useEffect(() => {
     fetchReviews()
@@ -100,6 +106,19 @@ export default function AdvisorReviewsPage() {
     return distribution
   }
 
+  const handleReply = (review: Review) => {
+    setReplyingToReview(review)
+    setReplyDialogOpen(true)
+  }
+
+  const handleReplyDialogClose = (shouldRefresh: boolean) => {
+    setReplyDialogOpen(false)
+    setReplyingToReview(null)
+    if (shouldRefresh) {
+      fetchReviews()
+    }
+  }
+
   if (loading && reviews.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -136,7 +155,7 @@ export default function AdvisorReviewsPage() {
               {/* Average Rating */}
               <div className="text-center">
                 <div className="text-5xl font-bold mb-2">{averageRating.toFixed(1)}</div>
-                <Star Rating rating={averageRating} size="lg" />
+                <StarRating rating={averageRating} showNumber={false} />
                 <p className="text-gray-600 mt-2">
                   Based on {total} {total === 1 ? 'review' : 'reviews'}
                 </p>
@@ -264,11 +283,57 @@ export default function AdvisorReviewsPage() {
 
                     {/* Review Text */}
                     <p className="text-gray-700 whitespace-pre-line">{review.review_text}</p>
+
+                    {/* Your Reply Section */}
+                    {review.advisor_reply ? (
+                      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-blue-600 text-white">Your Reply</Badge>
+                            {review.advisor_reply_at && (
+                              <span className="text-xs text-gray-600">
+                                {formatDistanceToNow(new Date(review.advisor_reply_at), { addSuffix: true })}
+                              </span>
+                            )}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleReply(review)}
+                          >
+                            Edit
+                          </Button>
+                        </div>
+                        <p className="text-gray-700 whitespace-pre-line">{review.advisor_reply}</p>
+                      </div>
+                    ) : (
+                      <div className="mt-4 pt-4 border-t border-gray-200">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleReply(review)}
+                        >
+                          <Reply className="w-4 h-4 mr-2" />
+                          Reply to Review
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
+        )}
+
+        {/* Reply Dialog */}
+        {replyingToReview && (
+          <ReviewReplyDialog
+            open={replyDialogOpen}
+            onClose={handleReplyDialogClose}
+            reviewId={replyingToReview.id}
+            reviewTitle={replyingToReview.title}
+            existingReply={replyingToReview.advisor_reply}
+          />
         )}
       </div>
     </div>

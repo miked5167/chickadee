@@ -4,11 +4,12 @@ import { sendClaimApprovalEmail, sendClaimRejectionEmail } from '@/lib/utils/ema
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
-    const claimId = params.id
+    const { id } = await params
+    const claimId = id
 
     // Check admin authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -41,6 +42,8 @@ export async function PATCH(
         claimant_name,
         claimant_email,
         status,
+        auth_user_id,
+        email_verified_at,
         advisors!listing_claims_advisor_id_fkey (
           id,
           name,
@@ -77,6 +80,21 @@ export async function PATCH(
         )
       }
 
+      // Check if email was verified and account was created
+      if (!claim.email_verified_at) {
+        return NextResponse.json(
+          { error: 'Cannot approve claim: Claimant has not verified their email address yet' },
+          { status: 400 }
+        )
+      }
+
+      if (!claim.auth_user_id) {
+        return NextResponse.json(
+          { error: 'Cannot approve claim: Claimant has not completed account setup yet' },
+          { status: 400 }
+        )
+      }
+
       // Update claim status
       const { error: updateClaimError } = await supabase
         .from('listing_claims')
@@ -96,12 +114,12 @@ export async function PATCH(
         )
       }
 
-      // Update advisor record
+      // Update advisor record with claimed status AND link to auth user
       const { error: updateAdvisorError } = await supabase
         .from('advisors')
         .update({
           is_claimed: true,
-          // Note: claimed_by_user_id will be set when the claimant creates/links their account
+          claimed_by_user_id: claim.auth_user_id, // FIX: Link the user account!
         })
         .eq('id', claim.advisor_id)
 

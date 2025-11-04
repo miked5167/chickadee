@@ -34,7 +34,7 @@ export function useAutoSave<T>({
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const previousDataRef = useRef<T>(data);
   const isSavingRef = useRef(false);
 

@@ -3,11 +3,12 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
-    const leadId = params.id
+    const { id } = await params
+    const leadId = id
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -35,7 +36,7 @@ export async function PATCH(
 
     // Get request body
     const body = await request.json()
-    const { status, advisor_notes } = body
+    const { status, advisor_notes, is_read } = body
 
     // Validate status if provided
     if (status && !['new', 'contacted', 'converted', 'closed'].includes(status)) {
@@ -71,11 +72,14 @@ export async function PATCH(
     const updateData: any = {}
     if (status) updateData.status = status
     if (advisor_notes !== undefined) updateData.advisor_notes = advisor_notes
+    if (is_read !== undefined) updateData.is_read = is_read
 
-    const { error: updateError } = await supabase
+    const { data: updatedLead, error: updateError } = await supabase
       .from('leads')
       .update(updateData)
       .eq('id', leadId)
+      .select()
+      .single()
 
     if (updateError) {
       console.error('Error updating lead:', updateError)
@@ -86,7 +90,11 @@ export async function PATCH(
     }
 
     return NextResponse.json(
-      { success: true, message: 'Lead updated successfully' },
+      {
+        success: true,
+        message: 'Lead updated successfully',
+        lead: updatedLead
+      },
       { status: 200 }
     )
   } catch (error) {

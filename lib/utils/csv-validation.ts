@@ -224,6 +224,8 @@ export function checkDuplicates(rows: AdvisorCsvRow[]): {
   const emailMap = new Map<string, number[]>()
 
   rows.forEach((row, index) => {
+    if (!row.email) return
+
     const email = row.email.toLowerCase()
     if (!emailMap.has(email)) {
       emailMap.set(email, [])

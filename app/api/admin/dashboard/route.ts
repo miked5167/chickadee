@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
 
     // Get recent activity (last 20 items)
     // Fetch recent leads
-    const { data: recentLeads } = await supabase
+    const { data: recentLeadsData } = await supabase
       .from('leads')
       .select(`
         id,
@@ -118,8 +118,16 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .limit(10)
 
+    // Transform leads data (Supabase returns advisors as array)
+    const recentLeads = recentLeadsData?.map((lead: any) => ({
+      ...lead,
+      advisors: Array.isArray(lead.advisors) && lead.advisors.length > 0
+        ? lead.advisors[0]
+        : lead.advisors
+    }))
+
     // Fetch recent reviews
-    const { data: recentReviews } = await supabase
+    const { data: recentReviewsData } = await supabase
       .from('reviews')
       .select(`
         id,
@@ -132,6 +140,17 @@ export async function GET(request: NextRequest) {
       `)
       .order('created_at', { ascending: false })
       .limit(10)
+
+    // Transform reviews data (Supabase returns advisors and users_public as arrays)
+    const recentReviews = recentReviewsData?.map((review: any) => ({
+      ...review,
+      advisors: Array.isArray(review.advisors) && review.advisors.length > 0
+        ? review.advisors[0]
+        : review.advisors,
+      users_public: Array.isArray(review.users_public) && review.users_public.length > 0
+        ? review.users_public[0]
+        : review.users_public
+    }))
 
     // Combine and sort activity
     const activity = [

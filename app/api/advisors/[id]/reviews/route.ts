@@ -3,11 +3,12 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
-    const advisorId = params.id
+    const { id } = await params
+    const advisorId = id
 
     // Get query parameters
     const searchParams = request.nextUrl.searchParams
@@ -55,6 +56,8 @@ export async function GET(
         review_text,
         is_verified,
         created_at,
+        advisor_reply,
+        advisor_reply_at,
         reviewer:users_public!reviews_reviewer_id_fkey (
           display_name
         )

@@ -3,13 +3,14 @@ import { createClient } from '@/lib/supabase/server'
 import { isAdmin } from '@/lib/supabase/auth'
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const supabase = await createClient()
 
     // Check admin access
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         *,
         category:blog_categories(id, name, slug, color)
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error) {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const { data: postTags } = await supabase
       .from('blog_post_tags')
       .select('tag_id, tag:blog_tags(id, name, slug)')
-      .eq('post_id', params.id)
+      .eq('post_id', id)
 
     const tags = postTags?.map(pt => pt.tag) || []
 
@@ -50,6 +51,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const supabase = await createClient()
 
     // Check admin access
@@ -80,7 +82,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const { data: post, error } = await supabase
       .from('blog_posts')
       .update(updateData)
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 
@@ -95,12 +97,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       await supabase
         .from('blog_post_tags')
         .delete()
-        .eq('post_id', params.id)
+        .eq('post_id', id)
 
       // Insert new tag associations
       if (Array.isArray(body.tag_ids) && body.tag_ids.length > 0) {
         const tagAssociations = body.tag_ids.map((tagId: string) => ({
-          post_id: params.id,
+          post_id: id,
           tag_id: tagId,
         }))
 
@@ -124,6 +126,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const supabase = await createClient()
 
     // Check admin access
@@ -136,7 +139,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const { error } = await supabase
       .from('blog_posts')
       .delete()
-      .eq('id', params.id)
+      .eq('id', id)
 
     if (error) {
       console.error('Error deleting blog post:', error)

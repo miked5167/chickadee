@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { BlogHero } from '@/components/blog/BlogHero'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogSidebar } from '@/components/blog/BlogSidebar'
 import { Button } from '@/components/ui/button'
 import { FaChevronLeft, FaChevronRight, FaRss } from 'react-icons/fa'
+import { Loader2 } from 'lucide-react'
 
 interface BlogPost {
   id: string
@@ -53,7 +54,7 @@ interface Tag {
   post_count: number
 }
 
-export default function BlogPage() {
+function BlogPageContent() {
   const searchParams = useSearchParams()
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null)
@@ -335,5 +336,20 @@ export default function BlogPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <span className="ml-3 text-gray-600">Loading blog...</span>
+        </div>
+      }
+    >
+      <BlogPageContent />
+    </Suspense>
   )
 }

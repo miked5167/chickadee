@@ -54,7 +54,7 @@ export function ClaimForm({ advisorId, advisorName, advisorSlug }: ClaimFormProp
       claimFormSchema.parse(formData)
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message)
+        setError(err.issues[0].message)
       } else {
         setError('Validation failed. Please check your inputs.')
       }
@@ -102,14 +102,24 @@ export function ClaimForm({ advisorId, advisorName, advisorSlug }: ClaimFormProp
       <Card className="p-8">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-2">Claim Submitted!</h3>
+          <h3 className="text-2xl font-bold mb-2">Check Your Email!</h3>
           <p className="text-gray-600 mb-4">
-            Thank you for submitting your claim for {advisorName}. We've sent a confirmation email to {claimantEmail}.
+            We've sent a verification email to <strong>{claimantEmail}</strong>
           </p>
-          <p className="text-gray-600 mb-4">
-            Our team will review your claim and respond within 2-3 business days.
-          </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-left">
+            <h4 className="font-semibold text-blue-900 mb-2">Next Steps:</h4>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-900">
+              <li>Check your email inbox (and spam folder)</li>
+              <li>Click the verification link</li>
+              <li>Create your account password</li>
+              <li>Wait for admin approval (usually 24-48 hours)</li>
+              <li>Access your dashboard once approved</li>
+            </ol>
+          </div>
           <p className="text-sm text-gray-500">
+            Verification link expires in 24 hours
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
             Redirecting you back to the listing...
           </p>
         </div>
@@ -195,14 +205,38 @@ export function ClaimForm({ advisorId, advisorName, advisorSlug }: ClaimFormProp
         </div>
 
         {/* Info Box */}
-        <div className="p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-semibold mb-2">What happens next?</h4>
-          <ul className="space-y-1 text-sm text-gray-700">
-            <li>✓ Your claim will be reviewed by our team</li>
-            <li>✓ We may contact you for additional verification</li>
-            <li>✓ Once approved, you'll receive dashboard access</li>
-            <li>✓ You can then manage your listing and view leads</li>
-          </ul>
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="font-semibold mb-3 text-blue-900">What happens next?</h4>
+          <div className="space-y-3 text-sm text-blue-900">
+            <div className="flex gap-2">
+              <span className="text-blue-600 font-bold">1.</span>
+              <div>
+                <strong>Verify Your Email</strong>
+                <p className="text-blue-800">We'll send you a verification link to confirm your email address</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-blue-600 font-bold">2.</span>
+              <div>
+                <strong>Create Your Password</strong>
+                <p className="text-blue-800">Set up a secure password for your dashboard account</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-blue-600 font-bold">3.</span>
+              <div>
+                <strong>Admin Review</strong>
+                <p className="text-blue-800">Our team will review your claim (usually 24-48 hours)</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-blue-600 font-bold">4.</span>
+              <div>
+                <strong>Dashboard Access</strong>
+                <p className="text-blue-800">Once approved, log in and manage your listing, view leads & analytics</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Submit Button */}

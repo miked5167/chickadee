@@ -1,11 +1,12 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://thehockeydirectory.com'
 
   try {
-    const supabase = await createClient()
+    // Use admin client for sitemap generation (no cookies needed)
+    const supabase = createAdminClient()
 
     // Fetch all published advisors
     const { data: advisors } = await supabase

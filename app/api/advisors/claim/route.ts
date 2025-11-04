@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { sendClaimConfirmationEmail } from '@/lib/utils/email'
+import { sendEmailVerificationEmail } from '@/lib/utils/email'
+import crypto from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
@@ -71,7 +72,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create claim request
+    // Generate secure verification token
+    const verificationToken = crypto.randomBytes(32).toString('hex')
+    const expiresAt = new Date()
+    expiresAt.setHours(expiresAt.getHours() + 24) // Token expires in 24 hours
+
+    // Create claim request with verification token
     const { data: claim, error: claimError } = await supabase
       .from('listing_claims')
       .insert([
@@ -80,9 +86,10 @@ export async function POST(request: NextRequest) {
           claimant_name,
           claimant_email,
           claimant_phone,
-          verification_info,
+          business_verification_info: verification_info,
           status: 'pending',
-          submitted_at: new Date().toISOString(),
+          verification_token: verificationToken,
+          verification_token_expires_at: expiresAt.toISOString(),
         },
       ])
       .select()
@@ -96,12 +103,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email to claimant
+    // Send email verification email to claimant
     try {
-      await sendClaimConfirmationEmail(claimant_email, claimant_name, advisor.name)
+      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`
+      await sendEmailVerificationEmail(claimant_email, claimant_name, advisor.name, verificationUrl)
     } catch (emailError) {
       // Log email errors but don't fail the request
-      console.error('Error sending claim confirmation email:', emailError)
+      console.error('Error sending verification email:', emailError)
+      // Note: In production, you might want to fail the request if email fails
+      // since the user needs the email to verify their account
     }
 
     return NextResponse.json(

@@ -47,6 +47,9 @@ interface AdvisorFormProps {
   initialData?: Partial<AdvisorFormData>
   advisorId?: string
   mode: 'create' | 'edit'
+  onSubmit?: (data: any) => Promise<void>
+  onCancel?: () => void
+  isSubmitting?: boolean
 }
 
 const PROVINCES = [

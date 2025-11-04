@@ -6,13 +6,14 @@ interface MetricCardProps {
   value: string | number
   icon: LucideIcon
   description?: string
+  iconColor?: string
   trend?: {
     value: number
     isPositive: boolean
   }
 }
 
-export function MetricCard({ title, value, icon: Icon, description, trend }: MetricCardProps) {
+export function MetricCard({ title, value, icon: Icon, description, iconColor = 'text-blue-600', trend }: MetricCardProps) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -37,7 +38,7 @@ export function MetricCard({ title, value, icon: Icon, description, trend }: Met
             )}
           </div>
           <div className="p-3 bg-blue-50 rounded-lg">
-            <Icon className="w-8 h-8 text-blue-600" />
+            <Icon className={`w-8 h-8 ${iconColor}`} />
           </div>
         </div>
       </CardContent>

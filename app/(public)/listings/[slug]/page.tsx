@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,34 +12,16 @@ import { ReviewsList } from '@/components/listing/ReviewsList'
 import { SocialLinks } from '@/components/listing/SocialLinks'
 import { BusinessHours } from '@/components/listing/BusinessHours'
 import { TeamSection } from '@/components/listing/TeamSection'
+import { LocationMapWrapper } from '@/components/listing/LocationMapWrapper'
 import { MessageSquarePlus, Building2 } from 'lucide-react'
-
-// Lazy load LocationMap (contains Google Maps)
-const LocationMap = dynamic(
-  () => import('@/components/listing/LocationMap').then(mod => ({ default: mod.LocationMap })),
-  {
-    loading: () => (
-      <Card>
-        <CardHeader>
-          <CardTitle>Location</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="w-full h-64 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
-            <span className="text-gray-500">Loading map...</span>
-          </div>
-        </CardContent>
-      </Card>
-    ),
-    ssr: false, // Don't render on server (Google Maps requires window)
-  }
-)
 
 // Incremental Static Regeneration - revalidate every hour
 export const revalidate = 3600
 
 // Pre-generate top 100 advisor pages at build time
 export async function generateStaticParams() {
-  const supabase = await createClient()
+  // Use admin client for static generation (no cookies needed)
+  const supabase = createAdminClient()
 
   const { data: advisors } = await supabase
     .from('advisors')
@@ -103,7 +84,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   }
 
   // Fetch initial reviews for the page (first 10, sorted by newest)
-  const { data: initialReviews, count: reviewCount } = await supabase
+  const { data: reviewsData, count: reviewCount } = await supabase
     .from('reviews')
     .select(`
       id,
@@ -112,6 +93,8 @@ export default async function ListingPage({ params }: ListingPageProps) {
       review_text,
       is_verified,
       created_at,
+      advisor_reply,
+      advisor_reply_at,
       reviewer:users_public!reviews_reviewer_id_fkey (
         display_name
       )
@@ -120,6 +103,21 @@ export default async function ListingPage({ params }: ListingPageProps) {
     .eq('is_published', true)
     .order('created_at', { ascending: false })
     .limit(10)
+
+  // Transform the data to match the Review type (Supabase returns reviewer as object, not array)
+  const initialReviews = reviewsData?.map((review: any) => ({
+    ...review,
+    reviewer: Array.isArray(review.reviewer) ? review.reviewer[0] : review.reviewer
+  }))
+
+  // Fetch team members
+  const { data: teamMembers } = await supabase
+    .from('advisor_team_members')
+    .select('*')
+    .eq('advisor_id', advisor.id)
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+    .order('created_at', { ascending: true })
 
   // Increment view count
   await supabase.from('listing_views').insert({
@@ -230,8 +228,8 @@ export default async function ListingPage({ params }: ListingPageProps) {
             )}
 
             {/* Team Section */}
-            {advisor.team_members && advisor.team_members.length > 0 && (
-              <TeamSection teamMembers={advisor.team_members} />
+            {teamMembers && teamMembers.length > 0 && (
+              <TeamSection teamMembers={teamMembers} />
             )}
 
             {/* Reviews Section */}
@@ -346,7 +344,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
             {/* Location Map */}
             {advisor.latitude && advisor.longitude && (
-              <LocationMap
+              <LocationMapWrapper
                 latitude={advisor.latitude}
                 longitude={advisor.longitude}
                 name={advisor.name}

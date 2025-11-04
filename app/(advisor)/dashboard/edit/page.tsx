@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import LogoUpload from '@/components/dashboard/LogoUpload'
 import {
   Loader2,
   ArrowLeft,
@@ -18,6 +19,7 @@ import {
 interface AdvisorProfile {
   id: string
   name: string
+  logo_url: string | null
   title: string | null
   bio: string | null
   email: string
@@ -195,6 +197,23 @@ export default function EditProfilePage() {
         )}
 
         <form onSubmit={handleSubmit}>
+          {/* Logo Upload */}
+          <div className="mb-6">
+            <LogoUpload
+              currentLogoUrl={profile.logo_url}
+              onUploadSuccess={(url) => {
+                setProfile({ ...profile, logo_url: url })
+                setSuccess(true)
+                setTimeout(() => setSuccess(false), 5000)
+              }}
+              onDeleteSuccess={() => {
+                setProfile({ ...profile, logo_url: null })
+                setSuccess(true)
+                setTimeout(() => setSuccess(false), 5000)
+              }}
+            />
+          </div>
+
           {/* Basic Information */}
           <Card className="mb-6">
             <CardHeader>

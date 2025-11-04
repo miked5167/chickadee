@@ -69,6 +69,7 @@ export default function NewAdvisorPage() {
         {/* Form */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <AdvisorForm
+            mode="create"
             onSubmit={handleSubmit}
             onCancel={() => router.push('/admin/listings')}
             isSubmitting={isSubmitting}

@@ -37,9 +37,10 @@ export function BusinessHours({ hours }: BusinessHoursProps) {
 
   // Add the last group
   if (currentGroup) {
+    const group: { days: string[]; hours: string } = currentGroup
     groupedHours.push({
-      days: formatDayRange(currentGroup.days),
-      hours: currentGroup.hours
+      days: formatDayRange(group.days),
+      hours: group.hours
     })
   }
 

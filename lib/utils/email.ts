@@ -524,3 +524,109 @@ ${APP_URL}
     return false
   }
 }
+
+/**
+ * Send email verification email to claimant
+ */
+export async function sendEmailVerificationEmail(
+  claimantEmail: string,
+  claimantName: string,
+  advisorName: string,
+  verificationUrl: string
+): Promise<boolean> {
+  try {
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 'your_resend_api_key') {
+      console.log('Resend API key not configured. Verification email skipped.')
+      console.log('Verification URL:', verificationUrl)
+      return false
+    }
+
+    const { error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: claimantEmail,
+      subject: `Verify your email to claim ${advisorName}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2 style="color: #0066CC;">Verify Your Email Address</h2>
+
+    <p>Hi ${claimantName},</p>
+
+    <p>Thank you for claiming <strong>${advisorName}</strong> on The Hockey Directory!</p>
+
+    <p>To complete your claim and create your advisor account, please verify your email address by clicking the button below:</p>
+
+    <div style="margin: 30px 0; text-align: center;">
+      <a href="${verificationUrl}"
+         style="display: inline-block; padding: 14px 28px; background-color: #0066CC; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;">
+        Verify Email Address
+      </a>
+    </div>
+
+    <p style="font-size: 14px; color: #666;">Or copy and paste this link into your browser:</p>
+    <p style="font-size: 14px; color: #0066CC; word-break: break-all;">${verificationUrl}</p>
+
+    <div style="background-color: #f9fafb; padding: 15px; border-left: 4px solid #0066CC; margin: 20px 0;">
+      <p style="margin: 0; font-size: 14px;"><strong>What happens next?</strong></p>
+      <ol style="margin: 10px 0 0; padding-left: 20px; font-size: 14px;">
+        <li>Click the verification link</li>
+        <li>Create a secure password for your account</li>
+        <li>Your claim will be reviewed (usually within 24-48 hours)</li>
+        <li>Once approved, you'll have full access to your dashboard</li>
+      </ol>
+    </div>
+
+    <p style="font-size: 14px; color: #666;"><strong>Note:</strong> This verification link expires in 24 hours.</p>
+
+    <p>If you didn't request this, you can safely ignore this email.</p>
+
+    <p>Best regards,<br>The Hockey Directory Team</p>
+
+    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <p style="font-size: 12px; color: #666;">
+      <a href="${APP_URL}">Visit The Hockey Directory</a>
+    </p>
+  </div>
+</body>
+</html>
+      `,
+      text: `
+Hi ${claimantName},
+
+Thank you for claiming ${advisorName} on The Hockey Directory!
+
+To complete your claim and create your advisor account, please verify your email address by clicking the link below:
+
+${verificationUrl}
+
+What happens next?
+1. Click the verification link
+2. Create a secure password for your account
+3. Your claim will be reviewed (usually within 24-48 hours)
+4. Once approved, you'll have full access to your dashboard
+
+Note: This verification link expires in 24 hours.
+
+If you didn't request this, you can safely ignore this email.
+
+Best regards,
+The Hockey Directory Team
+
+${APP_URL}
+      `,
+    })
+
+    if (error) {
+      console.error('Error sending verification email:', error)
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error('Error in sendEmailVerificationEmail:', error)
+    return false
+  }
+}

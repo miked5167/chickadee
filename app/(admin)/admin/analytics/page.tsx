@@ -199,8 +199,7 @@ export default function AnalyticsPage() {
               title="Total Clicks"
               value={data.totalClicks.toLocaleString()}
               icon={MousePointerClick}
-              trend={data.clicksLast30Days > 0 ? 'up' : 'neutral'}
-              trendText={`${data.clicksLast30Days} in last ${dateRange} days`}
+              description={`${data.clicksLast30Days} in last ${dateRange} days`}
             />
             <MetricCard
               title="Website Clicks"
@@ -261,8 +260,7 @@ export default function AnalyticsPage() {
               title="Total Profile Views"
               value={data.totalViews.toLocaleString()}
               icon={Eye}
-              trend={data.viewsLast30Days > 0 ? 'up' : 'neutral'}
-              trendText={`${data.viewsLast30Days} in last ${dateRange} days`}
+              description={`${data.viewsLast30Days} in last ${dateRange} days`}
             />
             <MetricCard
               title="Avg Views Per Day"
@@ -340,8 +338,7 @@ export default function AnalyticsPage() {
               title="Total Leads"
               value={data.totalLeads.toLocaleString()}
               icon={Users}
-              trend={data.leadsLast30Days > 0 ? 'up' : 'neutral'}
-              trendText={`${data.leadsLast30Days} in last ${dateRange} days`}
+              description={`${data.leadsLast30Days} in last ${dateRange} days`}
             />
             <MetricCard
               title="Conversion Rate"
@@ -432,8 +429,7 @@ export default function AnalyticsPage() {
               title="Total Reviews"
               value={data.totalReviews.toLocaleString()}
               icon={Star}
-              trend={data.reviewsLast30Days > 0 ? 'up' : 'neutral'}
-              trendText={`${data.reviewsLast30Days} in last ${dateRange} days`}
+              description={`${data.reviewsLast30Days} in last ${dateRange} days`}
             />
             <MetricCard
               title="Average Rating"

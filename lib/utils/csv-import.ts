@@ -119,20 +119,28 @@ export async function importAdvisorsFromCsv(
     const supabase = createAdminClient()
 
     // Check for existing emails in database
-    const emails = validation.validRows.map((row) => row.email.toLowerCase())
+    const emails = validation.validRows
+      .map((row) => row.email?.toLowerCase())
+      .filter((email): email is string => email !== undefined)
+
     const { data: existingAdvisors } = await supabase
       .from('advisors')
       .select('email')
       .in('email', emails)
 
     const existingEmails = new Set(
-      existingAdvisors?.map((a) => a.email.toLowerCase()) || []
+      existingAdvisors?.map((a) => a.email?.toLowerCase()).filter((e): e is string => e !== undefined) || []
     )
 
     // Prepare advisors for insert
     const advisorsToInsert = []
 
     for (const row of validation.validRows) {
+      if (!row.email) {
+        errors.push(`Row missing email: ${row.name}`)
+        continue
+      }
+
       const email = row.email.toLowerCase()
 
       if (existingEmails.has(email)) {

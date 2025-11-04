@@ -14,9 +14,15 @@ import {
   User,
   Calendar,
   MessageSquare,
-  Download
+  Download,
+  Eye,
+  EyeOff,
+  Edit,
+  Save,
+  X
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Lead {
   id: string
@@ -28,6 +34,7 @@ interface Lead {
   status: 'new' | 'contacted' | 'converted' | 'closed'
   created_at: string
   advisor_notes: string | null
+  is_read: boolean
 }
 
 export default function AdvisorLeadsPage() {
@@ -39,6 +46,8 @@ export default function AdvisorLeadsPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'contacted' | 'converted' | 'closed'>('all')
   const [expandedLead, setExpandedLead] = useState<string | null>(null)
   const [updatingLead, setUpdatingLead] = useState<string | null>(null)
+  const [editingNotes, setEditingNotes] = useState<string | null>(null)
+  const [notesText, setNotesText] = useState('')
 
   useEffect(() => {
     fetchLeads()
@@ -96,6 +105,66 @@ export default function AdvisorLeadsPage() {
       alert('Failed to update lead status')
     } finally {
       setUpdatingLead(null)
+    }
+  }
+
+  const toggleReadStatus = async (leadId: string, currentStatus: boolean) => {
+    try {
+      const response = await fetch(`/api/advisor/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ is_read: !currentStatus }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update lead')
+      }
+
+      // Update local state
+      setLeads(leads.map(lead =>
+        lead.id === leadId ? { ...lead, is_read: !currentStatus } : lead
+      ))
+    } catch (err) {
+      console.error('Error updating lead:', err)
+      alert('Failed to update read status')
+    }
+  }
+
+  const startEditingNotes = (leadId: string, currentNotes: string | null) => {
+    setEditingNotes(leadId)
+    setNotesText(currentNotes || '')
+  }
+
+  const cancelEditingNotes = () => {
+    setEditingNotes(null)
+    setNotesText('')
+  }
+
+  const saveNotes = async (leadId: string) => {
+    try {
+      const response = await fetch(`/api/advisor/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ advisor_notes: notesText }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save notes')
+      }
+
+      // Update local state
+      setLeads(leads.map(lead =>
+        lead.id === leadId ? { ...lead, advisor_notes: notesText } : lead
+      ))
+      setEditingNotes(null)
+      setNotesText('')
+    } catch (err) {
+      console.error('Error saving notes:', err)
+      alert('Failed to save notes')
     }
   }
 

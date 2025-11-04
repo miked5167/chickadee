@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { StarRating } from './StarRating'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { CheckCircle, Loader2, MessageSquare } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 interface Review {
@@ -14,6 +15,8 @@ interface Review {
   review_text: string
   is_verified: boolean
   created_at: string
+  advisor_reply: string | null
+  advisor_reply_at: string | null
   reviewer: {
     display_name: string | null
   } | null
@@ -149,6 +152,22 @@ export function ReviewsList({ advisorId, initialReviews = [], totalCount = 0 }: 
 
             {/* Review Text */}
             <p className="text-gray-700 whitespace-pre-line">{review.review_text}</p>
+
+            {/* Advisor Reply */}
+            {review.advisor_reply && (
+              <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <div className="flex items-center gap-2 mb-2">
+                  <MessageSquare className="w-4 h-4 text-blue-600" />
+                  <span className="font-semibold text-blue-900">Response from Advisor</span>
+                  {review.advisor_reply_at && (
+                    <span className="text-xs text-gray-600">
+                      • {formatDistanceToNow(new Date(review.advisor_reply_at), { addSuffix: true })}
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-800 whitespace-pre-line">{review.advisor_reply}</p>
+              </div>
+            )}
           </Card>
         ))}
       </div>

@@ -7,18 +7,19 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 
 interface ClaimPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: ClaimPageProps): Promise<Metadata> {
+  const { slug } = await params
   const supabase = await createClient()
 
   const { data: advisor } = await supabase
     .from('advisors')
     .select('name')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('is_published', true)
     .single()
 
@@ -35,13 +36,14 @@ export async function generateMetadata({ params }: ClaimPageProps): Promise<Meta
 }
 
 export default async function ClaimPage({ params }: ClaimPageProps) {
+  const { slug } = await params
   const supabase = await createClient()
 
   // Fetch advisor data
   const { data: advisor, error } = await supabase
     .from('advisors')
     .select('id, name, slug, city, state, logo_url, is_claimed')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('is_published', true)
     .single()
 

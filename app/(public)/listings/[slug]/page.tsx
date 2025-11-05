@@ -427,7 +427,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-700 mb-4 font-medium">
-                    Claim this listing to manage your profile, respond to reviews, and view leads.
+                    Claim this listing to manage and update your business profile.
                   </p>
                   <Link href={`/claim/${advisor.slug}`}>
                     <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 text-base shadow-md hover:shadow-lg transition-all">

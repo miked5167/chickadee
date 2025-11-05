@@ -75,9 +75,9 @@ export async function GET(request: NextRequest) {
       .select(`
         id,
         rating,
-        title,
+        review_title,
         created_at,
-        reviewer:users_public!reviews_reviewer_id_fkey (
+        reviewer:users_public!reviews_user_id_fkey (
           display_name
         )
       `)
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
       ...(recentReviews || []).map((review: any) => ({
         type: 'review' as const,
         id: review.id,
-        description: `New ${review.rating}-star review${review.title ? `: ${review.title}` : ''}`,
+        description: `New ${review.rating}-star review${review.review_title ? `: ${review.review_title}` : ''}`,
         date: review.created_at,
         reviewer: review.reviewer?.display_name || 'Anonymous',
       })),

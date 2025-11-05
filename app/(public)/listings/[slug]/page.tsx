@@ -104,7 +104,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
       created_at,
       advisor_reply,
       advisor_reply_at,
-      reviewer:users_public!reviews_reviewer_id_fkey (
+      reviewer:users_public!reviews_user_id_fkey (
         display_name
       )
     `, { count: 'exact' })

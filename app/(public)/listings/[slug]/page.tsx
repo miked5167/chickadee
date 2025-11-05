@@ -76,6 +76,44 @@ export async function generateMetadata({ params }: ListingPageProps): Promise<Me
   }
 }
 
+// Helper function to transform business hours from nested object to simple string format
+function transformBusinessHours(hours: any): Record<string, string> | null {
+  if (!hours || typeof hours !== 'object') return null
+
+  const transformed: Record<string, string> = {}
+  const daysMap: Record<string, string> = {
+    'monday': 'Monday',
+    'tuesday': 'Tuesday',
+    'wednesday': 'Wednesday',
+    'thursday': 'Thursday',
+    'friday': 'Friday',
+    'saturday': 'Saturday',
+    'sunday': 'Sunday'
+  }
+
+  for (const [day, dayLower] of Object.entries(daysMap)) {
+    const dayData = hours[day.toLowerCase()]
+    if (!dayData) continue
+
+    if (dayData.closed === true) {
+      transformed[dayLower] = 'Closed'
+    } else if (dayData.open && dayData.close) {
+      // Convert "08:00" to "8 AM"
+      const formatTime = (time: string) => {
+        const [hours, minutes] = time.split(':')
+        const hour = parseInt(hours)
+        const ampm = hour >= 12 ? 'PM' : 'AM'
+        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+        return `${displayHour} ${ampm}`
+      }
+
+      transformed[dayLower] = `${formatTime(dayData.open)} to ${formatTime(dayData.close)}`
+    }
+  }
+
+  return Object.keys(transformed).length > 0 ? transformed : null
+}
+
 export default async function ListingPage({ params }: ListingPageProps) {
   const { slug } = await params
   const supabase = await createClient()
@@ -95,29 +133,31 @@ export default async function ListingPage({ params }: ListingPageProps) {
   // Fetch initial reviews for the page (first 10, sorted by newest)
   const { data: reviewsData, count: reviewCount } = await supabase
     .from('reviews')
-    .select(`
-      id,
-      rating,
-      review_title,
-      review_text,
-      is_verified,
-      created_at,
-      advisor_reply,
-      advisor_reply_at,
-      reviewer:users_public!reviews_user_id_fkey (
-        display_name
-      )
-    `, { count: 'exact' })
+    .select('*', { count: 'exact' })
     .eq('advisor_id', advisor.id)
     .eq('is_published', true)
     .order('created_at', { ascending: false })
     .limit(10)
 
-  // Transform the data to match the Review type (Supabase returns reviewer as object, not array)
+  // Fetch reviewer display names separately (since reviews.user_id -> auth.users, not users_public)
+  const userIds = reviewsData?.map(r => r.user_id).filter(Boolean) || []
+  const { data: usersData } = userIds.length > 0
+    ? await supabase
+        .from('users_public')
+        .select('id, display_name')
+        .in('id', userIds)
+    : { data: [] }
+
+  // Create a map of user_id to display_name
+  const usersMap = new Map(usersData?.map(u => [u.id, u.display_name]) || [])
+
+  // Transform the data to match the Review type
   const initialReviews = reviewsData?.map((review: any) => ({
     ...review,
     title: review.review_title, // Map review_title to title for component compatibility
-    reviewer: Array.isArray(review.reviewer) ? review.reviewer[0] : review.reviewer
+    reviewer: {
+      display_name: usersMap.get(review.user_id) || null
+    }
   }))
 
   // Fetch team members
@@ -174,9 +214,9 @@ export default async function ListingPage({ params }: ListingPageProps) {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-start gap-6">
+      <div className="bg-gradient-to-r from-blue-50 via-white to-blue-50 border-b shadow-sm">
+        <div className="container mx-auto px-4 pt-12 pb-8">
+          <div className="flex flex-col md:flex-row items-start gap-6 relative">
             {/* Logo */}
             {advisor.logo_url && (
               <div className="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border-2 border-gray-200 shadow-md">
@@ -239,38 +279,90 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 )}
               </div>
             </div>
+
+            {/* Decorative Hockey Logo - Right Side */}
+            <div className="hidden lg:flex items-center justify-center w-48 flex-shrink-0">
+              <div className="relative w-48 h-48">
+                {/* Glowing background effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-20 blur-3xl"></div>
+
+                {/* Main logo circle background */}
+                <div className="relative w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 rounded-full shadow-2xl flex items-center justify-center border-4 border-blue-300">
+                  <svg
+                    viewBox="0 0 200 200"
+                    className="w-36 h-36"
+                  >
+                    {/* Hockey puck - more solid and visible */}
+                    <g>
+                      {/* Puck shadow/depth */}
+                      <ellipse cx="100" cy="105" rx="65" ry="20" fill="#1e3a8a" opacity="0.6" />
+                      {/* Puck body */}
+                      <ellipse cx="100" cy="100" rx="65" ry="20" fill="#334155" />
+                      <rect x="35" y="80" width="130" height="40" fill="#1e293b" />
+                      {/* Puck top */}
+                      <ellipse cx="100" cy="80" rx="65" ry="20" fill="#475569" />
+                      {/* Puck highlight */}
+                      <ellipse cx="100" cy="82" rx="50" ry="12" fill="#64748b" opacity="0.5" />
+                    </g>
+
+                    {/* Crossed hockey sticks - white and more visible */}
+                    <g>
+                      {/* Left stick */}
+                      <g transform="rotate(-35 100 100)">
+                        <rect x="88" y="10" width="10" height="110" rx="5" fill="#ffffff" opacity="0.9" />
+                        <ellipse cx="93" cy="118" rx="18" ry="25" fill="#ffffff" opacity="0.9" />
+                        <rect x="88" y="12" width="10" height="25" rx="5" fill="#e2e8f0" opacity="0.7" />
+                      </g>
+
+                      {/* Right stick */}
+                      <g transform="rotate(35 100 100)">
+                        <rect x="102" y="10" width="10" height="110" rx="5" fill="#ffffff" opacity="0.9" />
+                        <ellipse cx="107" cy="118" rx="18" ry="25" fill="#ffffff" opacity="0.9" />
+                        <rect x="102" y="12" width="10" height="25" rx="5" fill="#e2e8f0" opacity="0.7" />
+                      </g>
+                    </g>
+
+                    {/* Star accent */}
+                    <circle cx="100" cy="40" r="8" fill="#fbbf24" opacity="0.8" />
+                    <path d="M 100 34 L 102 38 L 106 38 L 103 41 L 104 45 L 100 43 L 96 45 L 97 41 L 94 38 L 98 38 Z" fill="#fef3c7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-8 pb-8">
         {/* Statistics Bar */}
         {(advisor.years_in_business || totalReviews > 0) && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 p-6 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100">
-            {advisor.years_in_business && (
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-1">{advisor.years_in_business}+</div>
-                <div className="text-sm text-gray-600 font-medium">Years Experience</div>
-              </div>
-            )}
-            {totalReviews > 0 && (
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-1">{totalReviews}</div>
-                <div className="text-sm text-gray-600 font-medium">{totalReviews === 1 ? 'Review' : 'Reviews'}</div>
-              </div>
-            )}
-            {rating > 0 && (
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-1">{rating.toFixed(1)}⭐</div>
-                <div className="text-sm text-gray-600 font-medium">Average Rating</div>
-              </div>
-            )}
-            {advisor.is_verified && (
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-1">✓</div>
-                <div className="text-sm text-gray-600 font-medium">Verified Business</div>
-              </div>
-            )}
+          <div className="flex justify-center mb-8">
+            <div className="inline-grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100 shadow-sm">
+              {advisor.years_in_business && (
+                <div className="text-center px-4">
+                  <div className="text-3xl font-bold text-blue-600 mb-1">{advisor.years_in_business}+</div>
+                  <div className="text-sm text-gray-600 font-medium">Years Experience</div>
+                </div>
+              )}
+              {totalReviews > 0 && (
+                <div className="text-center px-4">
+                  <div className="text-3xl font-bold text-blue-600 mb-1">{totalReviews}</div>
+                  <div className="text-sm text-gray-600 font-medium">{totalReviews === 1 ? 'Review' : 'Reviews'}</div>
+                </div>
+              )}
+              {rating > 0 && (
+                <div className="text-center px-4">
+                  <div className="text-3xl font-bold text-blue-600 mb-1">{rating.toFixed(1)}⭐</div>
+                  <div className="text-sm text-gray-600 font-medium">Average Rating</div>
+                </div>
+              )}
+              {advisor.is_verified && (
+                <div className="text-center px-4">
+                  <div className="text-3xl font-bold text-green-600 mb-1">✓</div>
+                  <div className="text-sm text-gray-600 font-medium">Verified Business</div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -482,13 +574,13 @@ export default async function ListingPage({ params }: ListingPageProps) {
                       </div>
                     </div>
                   )}
-                  {advisor.business_hours && (
+                  {advisor.business_hours && transformBusinessHours(advisor.business_hours) && (
                     <div className="pt-3 border-t border-gray-200">
                       <div className="flex items-center gap-2 mb-2">
                         <Clock className="w-4 h-4 text-blue-600" />
                         <span className="font-semibold text-gray-900">Business Hours</span>
                       </div>
-                      <BusinessHours hours={advisor.business_hours} />
+                      <BusinessHours hours={transformBusinessHours(advisor.business_hours)!} />
                     </div>
                   )}
                 </div>

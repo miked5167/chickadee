@@ -1,7 +1,5 @@
 'use client'
 
-import { Clock } from 'lucide-react'
-
 interface BusinessHoursProps {
   hours: Record<string, string>
 }
@@ -45,21 +43,15 @@ export function BusinessHours({ hours }: BusinessHoursProps) {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-3">
-        <Clock className="w-4 h-4 text-gray-600" />
-        <span className="font-semibold text-sm">Hours of Operation</span>
-      </div>
-      <div className="space-y-1">
-        {groupedHours.map((group, index) => (
-          <div key={index} className="flex justify-between text-sm">
-            <span className="text-gray-700">{group.days}:</span>
-            <span className={`font-medium ${group.hours.toLowerCase() === 'closed' ? 'text-gray-400' : 'text-gray-900'}`}>
-              {group.hours}
-            </span>
-          </div>
-        ))}
-      </div>
+    <div className="space-y-1">
+      {groupedHours.map((group, index) => (
+        <div key={index} className="flex justify-between text-sm">
+          <span className="text-gray-700">{group.days}:</span>
+          <span className={`font-medium ${group.hours.toLowerCase() === 'closed' ? 'text-gray-400' : 'text-gray-900'}`}>
+            {group.hours}
+          </span>
+        </div>
+      ))}
     </div>
   )
 }

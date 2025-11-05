@@ -46,22 +46,10 @@ export async function GET(
         orderAscending = false
     }
 
-    // Fetch reviews with reviewer information
+    // Fetch reviews
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
-      .select(`
-        id,
-        rating,
-        review_title,
-        review_text,
-        is_verified,
-        created_at,
-        advisor_reply,
-        advisor_reply_at,
-        reviewer:users_public!reviews_user_id_fkey (
-          display_name
-        )
-      `)
+      .select('*')
       .eq('advisor_id', advisorId)
       .eq('is_published', true)
       .order(orderColumn, { ascending: orderAscending })
@@ -75,6 +63,18 @@ export async function GET(
         { status: 500 }
       )
     }
+
+    // Fetch reviewer display names separately (since reviews.user_id -> auth.users, not users_public)
+    const userIds = reviews?.map((r: any) => r.user_id).filter(Boolean) || []
+    const { data: usersData } = userIds.length > 0
+      ? await supabase
+          .from('users_public')
+          .select('id, display_name')
+          .in('id', userIds)
+      : { data: [] }
+
+    // Create a map of user_id to display_name
+    const usersMap = new Map(usersData?.map((u: any) => [u.id, u.display_name]) || [])
 
     // Get total count
     const { count, error: countError } = await supabase
@@ -91,10 +91,13 @@ export async function GET(
       )
     }
 
-    // Map review_title to title for component compatibility
+    // Map review_title to title and add reviewer info
     const mappedReviews = reviews?.map((review: any) => ({
       ...review,
-      title: review.review_title
+      title: review.review_title,
+      reviewer: {
+        display_name: usersMap.get(review.user_id) || null
+      }
     })) || []
 
     return NextResponse.json(

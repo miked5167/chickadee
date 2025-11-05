@@ -52,7 +52,7 @@ export async function GET(
       .select(`
         id,
         rating,
-        title,
+        review_title,
         review_text,
         is_verified,
         created_at,
@@ -91,9 +91,15 @@ export async function GET(
       )
     }
 
+    // Map review_title to title for component compatibility
+    const mappedReviews = reviews?.map((review: any) => ({
+      ...review,
+      title: review.review_title
+    })) || []
+
     return NextResponse.json(
       {
-        reviews: reviews || [],
+        reviews: mappedReviews,
         total: count || 0,
         page,
         limit,

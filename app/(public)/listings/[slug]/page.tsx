@@ -98,7 +98,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
     .select(`
       id,
       rating,
-      title,
+      review_title,
       review_text,
       is_verified,
       created_at,
@@ -116,6 +116,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   // Transform the data to match the Review type (Supabase returns reviewer as object, not array)
   const initialReviews = reviewsData?.map((review: any) => ({
     ...review,
+    title: review.review_title, // Map review_title to title for component compatibility
     reviewer: Array.isArray(review.reviewer) ? review.reviewer[0] : review.reviewer
   }))
 

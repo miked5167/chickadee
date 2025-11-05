@@ -12,7 +12,7 @@ export default async function AdvisorLayout({
   const advisor = await getClaimedAdvisor()
 
   if (!advisor) {
-    redirect('/auth/login?redirectTo=/dashboard')
+    redirect('/login?returnTo=/dashboard')
   }
 
   const navigation = getAdvisorNavigation(advisor.slug)

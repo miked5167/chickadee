@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Loader2, CheckCircle, MessageSquarePlus } from 'lucide-react'
 import { z } from 'zod'
@@ -135,16 +136,16 @@ export function ContactModal({
     }
   }
 
-  const defaultTrigger = (
-    <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md">
-      <MessageSquarePlus className="w-5 h-5 mr-2" />
-      Contact This Advisor
-    </Button>
-  )
-
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      {trigger || defaultTrigger}
+      <DialogTrigger asChild>
+        {trigger || (
+          <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md">
+            <MessageSquarePlus className="w-5 h-5 mr-2" />
+            Contact This Advisor
+          </Button>
+        )}
+      </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {success ? (
           // Success State

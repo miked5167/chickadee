@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -43,6 +43,7 @@ export function ContactModal({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange
 }: ContactModalProps) {
+  const formId = useId()
   const [internalOpen, setInternalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -138,9 +139,9 @@ export function ContactModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild suppressHydrationWarning>
         {trigger || (
-          <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md">
+          <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md" suppressHydrationWarning>
             <MessageSquarePlus className="w-5 h-5 mr-2" />
             Contact This Advisor
           </Button>
@@ -189,9 +190,9 @@ export function ContactModal({
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Parent Name */}
               <div>
-                <Label htmlFor="modal-parentName">Your Name *</Label>
+                <Label htmlFor={`${formId}-parentName`}>Your Name *</Label>
                 <Input
-                  id="modal-parentName"
+                  id={`${formId}-parentName`}
                   type="text"
                   value={parentName}
                   onChange={(e) => setParentName(e.target.value)}
@@ -203,9 +204,9 @@ export function ContactModal({
 
               {/* Email */}
               <div>
-                <Label htmlFor="modal-email">Email Address *</Label>
+                <Label htmlFor={`${formId}-email`}>Email Address *</Label>
                 <Input
-                  id="modal-email"
+                  id={`${formId}-email`}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -218,9 +219,9 @@ export function ContactModal({
               {/* Phone and Child Age in a row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="modal-phone">Phone Number (Optional)</Label>
+                  <Label htmlFor={`${formId}-phone`}>Phone Number (Optional)</Label>
                   <Input
-                    id="modal-phone"
+                    id={`${formId}-phone`}
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -230,9 +231,9 @@ export function ContactModal({
                 </div>
 
                 <div>
-                  <Label htmlFor="modal-childAge">Player Age (Optional)</Label>
+                  <Label htmlFor={`${formId}-childAge`}>Player Age (Optional)</Label>
                   <Input
-                    id="modal-childAge"
+                    id={`${formId}-childAge`}
                     type="number"
                     min="1"
                     max="25"
@@ -246,9 +247,9 @@ export function ContactModal({
 
               {/* Message */}
               <div>
-                <Label htmlFor="modal-message">Message *</Label>
+                <Label htmlFor={`${formId}-message`}>Message *</Label>
                 <textarea
-                  id="modal-message"
+                  id={`${formId}-message`}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell the advisor about your hockey goals and what you're looking for..."
@@ -267,13 +268,13 @@ export function ContactModal({
               <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
-                  id="modal-terms"
+                  id={`${formId}-terms`}
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
                   disabled={loading}
                   className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-600"
                 />
-                <Label htmlFor="modal-terms" className="text-sm">
+                <Label htmlFor={`${formId}-terms`} className="text-sm">
                   I agree to the{' '}
                   <a href="/terms" target="_blank" className="text-blue-600 hover:underline">
                     Terms of Service

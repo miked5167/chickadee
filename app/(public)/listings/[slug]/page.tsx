@@ -414,25 +414,6 @@ export default async function ListingPage({ params }: ListingPageProps) {
               youtubeUrl={advisor.youtube_url}
             />
 
-            {/* Social Media Card */}
-            {(advisor.linkedin_url || advisor.instagram_url || advisor.twitter_url || advisor.facebook_url || advisor.youtube_url) && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Follow Us</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <SocialLinks
-                    linkedin={advisor.linkedin_url}
-                    instagram={advisor.instagram_url}
-                    twitter={advisor.twitter_url}
-                    facebook={advisor.facebook_url}
-                    youtube={advisor.youtube_url}
-                    size="md"
-                  />
-                </CardContent>
-              </Card>
-            )}
-
             {/* Claim This Listing Card */}
             {!advisor.is_claimed && (
               <Card className="border-2 border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-lg">

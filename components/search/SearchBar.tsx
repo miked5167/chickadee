@@ -9,6 +9,7 @@ import { useLocation } from '@/lib/hooks/use-location'
 export function SearchBar() {
   const router = useRouter()
   const [locationInput, setLocationInput] = useState('')
+  const [isGeocoding, setIsGeocoding] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState<{
     name: string
     lat: number
@@ -205,8 +206,74 @@ export function SearchBar() {
     }
   }
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // If we have a location input but no selected location, geocode it first
+    if (locationInput && !selectedLocation && window.google?.maps?.Geocoder) {
+      setIsGeocoding(true)
+      try {
+        const geocoder = new google.maps.Geocoder()
+
+        // Try geocoding with original input first
+        let geocodeQuery = locationInput
+
+        // If it looks like just a ZIP code (5 digits), add ", USA" to help geocoding
+        if (/^\d{5}$/.test(locationInput.trim())) {
+          geocodeQuery = `${locationInput}, USA`
+        }
+
+        const result = await new Promise<google.maps.GeocoderResult | null>((resolve) => {
+          geocoder.geocode({ address: geocodeQuery }, (results, status) => {
+            console.log('Geocoding result:', { query: geocodeQuery, status, results })
+            if (status === 'OK' && results && results[0]) {
+              resolve(results[0])
+            } else {
+              console.warn('Geocoding failed:', status)
+              resolve(null)
+            }
+          })
+        })
+
+        if (result) {
+          const location = result.geometry.location
+          let country = ''
+          let state = ''
+
+          for (const component of result.address_components) {
+            if (component.types.includes('country')) {
+              country = component.short_name
+            }
+            if (component.types.includes('administrative_area_level_1')) {
+              state = component.short_name
+            }
+          }
+
+          console.log('Geocoded location:', {
+            address: result.formatted_address,
+            lat: location.lat(),
+            lng: location.lng(),
+            country,
+            state
+          })
+
+          const params = new URLSearchParams()
+          params.set('location', result.formatted_address)
+          params.set('lat', location.lat().toString())
+          params.set('lng', location.lng().toString())
+          if (country) params.set('country', country)
+          if (state) params.set('state', state)
+
+          setIsGeocoding(false)
+          router.push(`/listings?${params.toString()}`)
+          return
+        }
+      } catch (error) {
+        console.error('Error geocoding location:', error)
+        setIsGeocoding(false)
+      }
+      setIsGeocoding(false)
+    }
 
     // Build search URL with query parameters
     const params = new URLSearchParams()
@@ -241,7 +308,7 @@ export function SearchBar() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="City, State, or ZIP"
+            placeholder="City, State/Province, or ZIP/Postal Code"
             value={locationInput}
             onChange={(e) => setLocationInput(e.target.value)}
             className="flex-1 outline-none text-gray-700 placeholder-gray-400"
@@ -273,10 +340,11 @@ export function SearchBar() {
         {/* Search Button */}
         <Button
           type="submit"
+          disabled={isGeocoding}
           className="md:w-auto px-8 py-6 text-lg font-semibold"
         >
           <FaSearch className="mr-2" />
-          Search Advisors
+          {isGeocoding ? 'Finding Location...' : 'Search Advisors'}
         </Button>
       </div>
 

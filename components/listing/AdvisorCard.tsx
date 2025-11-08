@@ -17,6 +17,7 @@ interface AdvisorCardProps {
     average_rating: number | null
     review_count: number
     is_verified: boolean
+    is_featured?: boolean
     logo_url: string | null
     years_in_business: number | null
     hasCoordinates?: boolean
@@ -35,7 +36,16 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
 
   return (
     <Link href={`/listings/${advisor.slug}`}>
-      <Card className="h-full hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer">
+      <Card className={`h-full hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer relative ${
+        advisor.is_featured ? 'border-2 border-goal-gold shadow-md' : ''
+      }`}>
+        {advisor.is_featured && (
+          <div className="absolute top-3 right-3 z-10">
+            <Badge className="bg-goal-gold text-gray-900 border-none font-semibold px-2 py-0.5 text-xs">
+              ⭐ Featured
+            </Badge>
+          </div>
+        )}
         <CardHeader>
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
@@ -94,27 +104,28 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
           )}
         </CardHeader>
 
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-3 flex flex-col">
           {/* Description */}
           {advisor.description && (
             <p className="text-sm text-gray-600 line-clamp-2">{advisor.description}</p>
           )}
 
-          {/* Specialties */}
-          {advisor.specialties && advisor.specialties.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {advisor.specialties.slice(0, 3).map((specialty, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {specialty}
-                </Badge>
-              ))}
-              {advisor.specialties.length > 3 && (
-                <Badge variant="outline" className="text-xs">
-                  +{advisor.specialties.length - 3} more
-                </Badge>
-              )}
-            </div>
-          )}
+          {/* Specialties - always render container for consistent height */}
+          <div className="flex flex-wrap gap-2 min-h-[32px] flex-1">
+            {advisor.specialties && advisor.specialties.length > 0 && (
+              <>
+                {advisor.specialties.map((specialty, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="bg-blue-50 text-blue-800 border border-blue-200 hover:bg-blue-100 hover:border-blue-300 transition-all text-xs font-medium px-3 py-1 h-fit"
+                  >
+                    {specialty}
+                  </Badge>
+                ))}
+              </>
+            )}
+          </div>
 
           {/* Years in business */}
           {advisor.years_in_business && advisor.years_in_business > 0 && (

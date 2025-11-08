@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { FiMenu, FiX } from 'react-icons/fi'
 import { useAuth } from '@/lib/hooks/use-auth'
@@ -19,16 +20,18 @@ export function Header() {
   return (
     <header className="bg-white border-b border-border sticky top-0 z-50">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-28 sm:h-32 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg">
-                <span className="text-white text-xl font-bold">HD</span>
-              </div>
-              <span className="text-xl font-bold text-puck-black hidden sm:block">
-                The Hockey Directory
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/hockey-directory-logo-v6.png"
+                alt="The Hockey Directory"
+                width={600}
+                height={150}
+                priority
+                className="h-24 w-auto sm:h-28"
+              />
             </Link>
           </div>
 

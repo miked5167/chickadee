@@ -33,8 +33,7 @@ export async function GET(request: NextRequest) {
       .from('reviews')
       .select(`
         *,
-        advisors!inner(name, slug),
-        users_public(display_name)
+        advisors!inner(name, slug)
       `, { count: 'exact' })
       .order('created_at', { ascending: false })
 

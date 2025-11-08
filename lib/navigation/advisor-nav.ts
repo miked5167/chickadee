@@ -42,7 +42,7 @@ export const getAdvisorNavigation = (advisorSlug?: string): NavSection[] => {
       items: [
         {
           label: 'View Public Profile',
-          href: `/advisors/${advisorSlug}`,
+          href: `/listings/${advisorSlug}`,
           icon: 'ExternalLink',
           external: true,
         },

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FiTwitter, FiFacebook, FiInstagram, FiLinkedin } from 'react-icons/fi'
 
 export function Footer() {
@@ -9,6 +10,15 @@ export function Footer() {
       { name: 'Find Advisors', href: '/listings' },
       { name: 'Claim Your Listing', href: '/claim' },
       { name: 'Featured Advisors', href: '/listings?featured=true' },
+      { name: 'Top Rated Advisors', href: '/listings?sort=rating' },
+    ],
+    locations: [
+      { name: 'Toronto Hockey Advisors', href: '/listings?city=Toronto' },
+      { name: 'Boston Hockey Advisors', href: '/listings?city=Boston' },
+      { name: 'Vancouver Hockey Advisors', href: '/listings?city=Vancouver' },
+      { name: 'Minneapolis Hockey Advisors', href: '/listings?city=Minneapolis' },
+      { name: 'Chicago Hockey Advisors', href: '/listings?city=Chicago' },
+      { name: 'Detroit Hockey Advisors', href: '/listings?city=Detroit' },
     ],
     resources: [
       { name: 'Blog', href: '/blog' },
@@ -59,14 +69,15 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             {/* Logo and Description */}
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg">
-                <span className="text-white text-xl font-bold">HD</span>
-              </div>
-              <span className="text-xl font-bold text-white">
-                The Hockey Directory
-              </span>
-            </div>
+            <Link href="/" className="inline-block">
+              <Image
+                src="/hockey-directory-logo-v6.png"
+                alt="The Hockey Directory"
+                width={600}
+                height={150}
+                className="h-24 w-auto sm:h-28"
+              />
+            </Link>
             <p className="text-sm text-gray-400">
               Connecting hockey families with trusted advisors and development professionals across North America.
             </p>
@@ -85,70 +96,81 @@ export function Footer() {
               ))}
             </div>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Advisors</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  {navigation.advisors.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-white">Resources</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  {navigation.resources.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 md:grid-cols-3">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Advisors</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                {navigation.advisors.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-white">Company</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  {navigation.company.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-white">Legal</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  {navigation.legal.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">Top Locations</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                {navigation.locations.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">Resources</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                {navigation.resources.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-12 md:mt-0">
+              <h3 className="text-sm font-semibold text-white">Company</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                {navigation.company.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-12 md:mt-0">
+              <h3 className="text-sm font-semibold text-white">Legal</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                {navigation.legal.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

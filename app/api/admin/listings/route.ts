@@ -165,6 +165,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || ''
     const claimed = searchParams.get('claimed') || 'all'
     const published = searchParams.get('published') || 'all'
+    const featured = searchParams.get('featured') || 'all'
     const subscription = searchParams.get('subscription') || 'all'
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
@@ -183,7 +184,9 @@ export async function GET(request: NextRequest) {
 
     // Apply search filter
     if (search) {
-      query = query.or(`name.ilike.%${search}%,city.ilike.%${search}%,state.ilike.%${search}%`)
+      // Escape special characters and build proper filter
+      const searchTerm = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
+      query = query.or(`name.ilike.*${searchTerm}*,city.ilike.*${searchTerm}*,state.ilike.*${searchTerm}*`)
     }
 
     // Apply claimed filter
@@ -194,6 +197,11 @@ export async function GET(request: NextRequest) {
     // Apply published filter
     if (published !== 'all') {
       query = query.eq('is_published', published === 'true')
+    }
+
+    // Apply featured filter
+    if (featured !== 'all') {
+      query = query.eq('is_featured', featured === 'true')
     }
 
     // Apply subscription filter

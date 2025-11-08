@@ -51,6 +51,7 @@ export default function ManageListingsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [claimedFilter, setClaimedFilter] = useState<'all' | 'true' | 'false'>('all')
   const [publishedFilter, setPublishedFilter] = useState<'all' | 'true' | 'false'>('all')
+  const [featuredFilter, setFeaturedFilter] = useState<'all' | 'true' | 'false'>('all')
   const [subscriptionFilter, setSubscriptionFilter] = useState<'all' | 'expiring' | 'expired'>('all')
   const [qualityFilter, setQualityFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all')
   const [provinceFilter, setProvinceFilter] = useState<string>('all')
@@ -80,7 +81,7 @@ export default function ManageListingsPage() {
 
   useEffect(() => {
     fetchAdvisors()
-  }, [searchTerm, claimedFilter, publishedFilter, subscriptionFilter, qualityFilter, provinceFilter, ratingFilter, page])
+  }, [searchTerm, claimedFilter, publishedFilter, featuredFilter, subscriptionFilter, qualityFilter, provinceFilter, ratingFilter, page])
 
   const fetchAdvisors = async () => {
     setLoading(true)
@@ -91,6 +92,7 @@ export default function ManageListingsPage() {
         search: searchTerm,
         claimed: claimedFilter,
         published: publishedFilter,
+        featured: featuredFilter,
         subscription: subscriptionFilter,
         page: page.toString(),
         limit: '50'
@@ -296,9 +298,12 @@ export default function ManageListingsPage() {
         <Card className="mb-6">
           <CardContent className="p-6">
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 {/* Search */}
                 <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Search
+                  </label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
@@ -313,12 +318,15 @@ export default function ManageListingsPage() {
 
                 {/* Claimed Filter */}
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Claimed
+                  </label>
                   <select
                     value={claimedFilter}
                     onChange={(e) => setClaimedFilter(e.target.value as any)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="all">All (Claimed)</option>
+                    <option value="all">All</option>
                     <option value="true">Claimed</option>
                     <option value="false">Unclaimed</option>
                   </select>
@@ -326,25 +334,47 @@ export default function ManageListingsPage() {
 
                 {/* Published Filter */}
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Published
+                  </label>
                   <select
                     value={publishedFilter}
                     onChange={(e) => setPublishedFilter(e.target.value as any)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="all">All (Published)</option>
+                    <option value="all">All</option>
                     <option value="true">Published</option>
                     <option value="false">Unpublished</option>
                   </select>
                 </div>
 
+                {/* Featured Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Featured
+                  </label>
+                  <select
+                    value={featuredFilter}
+                    onChange={(e) => setFeaturedFilter(e.target.value as any)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="all">All</option>
+                    <option value="true">Featured</option>
+                    <option value="false">Not Featured</option>
+                  </select>
+                </div>
+
                 {/* Subscription Filter */}
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Subscription
+                  </label>
                   <select
                     value={subscriptionFilter}
                     onChange={(e) => setSubscriptionFilter(e.target.value as any)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="all">All (Subscription)</option>
+                    <option value="all">All</option>
                     <option value="expiring">Expiring Soon</option>
                     <option value="expired">Expired</option>
                   </select>
@@ -436,6 +466,7 @@ export default function ManageListingsPage() {
                         setProvinceFilter('all')
                         setClaimedFilter('all')
                         setPublishedFilter('all')
+                        setFeaturedFilter('all')
                         setSubscriptionFilter('all')
                         setSearchTerm('')
                       }}

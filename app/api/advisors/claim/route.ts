@@ -3,6 +3,10 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { sendEmailVerificationEmail } from '@/lib/utils/email'
 import crypto from 'crypto'
 
+// Mark as dynamic to prevent static generation issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     console.log('[CLAIM] Starting claim request...')

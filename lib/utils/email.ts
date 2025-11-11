@@ -1,7 +1,14 @@
 import { Resend } from 'resend'
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization of Resend to avoid build-time errors
+let resendInstance: Resend | null = null
+
+function getResend(): Resend {
+  if (!resendInstance) {
+    resendInstance = new Resend(process.env.RESEND_API_KEY)
+  }
+  return resendInstance
+}
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@thehockeydirectory.com'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
@@ -32,7 +39,7 @@ export async function sendLeadNotificationEmail(data: LeadNotificationData): Pro
     const emailHtml = generateLeadNotificationHTML(data)
     const emailText = generateLeadNotificationText(data)
 
-    const { data: emailData, error } = await resend.emails.send({
+    const { data: emailData, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: data.advisorEmail,
       subject: `New Lead: ${data.parentName} is interested in your services`,
@@ -213,7 +220,7 @@ export async function sendLeadConfirmationEmail(
       return false
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: parentEmail,
       subject: `Your message to ${advisorName} has been sent`,
@@ -285,7 +292,7 @@ export async function sendClaimConfirmationEmail(
       return false
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: claimantEmail,
       subject: `Your claim for ${advisorName} has been received`,
@@ -366,7 +373,7 @@ export async function sendClaimApprovalEmail(
       return false
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: claimantEmail,
       subject: `Your claim for ${advisorName} has been approved!`,
@@ -458,7 +465,7 @@ export async function sendClaimRejectionEmail(
       return false
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: claimantEmail,
       subject: `Update on your claim for ${advisorName}`,
@@ -541,7 +548,7 @@ export async function sendEmailVerificationEmail(
       return false
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: claimantEmail,
       subject: `Verify your email to claim ${advisorName}`,

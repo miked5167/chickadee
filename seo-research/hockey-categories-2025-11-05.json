@@ -1,0 +1,1046 @@
+{
+  "date": "2025-11-05",
+  "totalCategories": 13,
+  "categories": [
+    {
+      "name": "Hockey Equipment",
+      "description": "Hockey sticks, skates, protective gear",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Affiliate links",
+        "Product reviews",
+        "Equipment guides",
+        "Amazon Associates"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey sticks",
+          "searchVolume": 62700,
+          "searchVolumeUS": 40500,
+          "searchVolumeCA": 22200,
+          "competition": null,
+          "competitionUS": "MEDIUM",
+          "competitionCA": "MEDIUM",
+          "cpc": 0.78,
+          "cpcUS": 1.04,
+          "cpcCA": 0.52,
+          "category": "Hockey Equipment"
+        },
+        {
+          "keyword": "hockey skates",
+          "searchVolume": 26200,
+          "searchVolumeUS": 18100,
+          "searchVolumeCA": 8100,
+          "competition": null,
+          "competitionUS": "HIGH",
+          "competitionCA": "HIGH",
+          "cpc": 0.78,
+          "cpcUS": 1.17,
+          "cpcCA": 0.39,
+          "category": "Hockey Equipment"
+        },
+        {
+          "keyword": "hockey equipment",
+          "searchVolume": 21700,
+          "searchVolumeUS": 18100,
+          "searchVolumeCA": 3600,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "HIGH",
+          "cpc": 1.4200000000000002,
+          "cpcUS": 2.22,
+          "cpcCA": 0.62,
+          "category": "Hockey Equipment"
+        },
+        {
+          "keyword": "hockey helmet",
+          "searchVolume": 18000,
+          "searchVolumeUS": 9900,
+          "searchVolumeCA": 8100,
+          "competition": null,
+          "competitionUS": "HIGH",
+          "competitionCA": "HIGH",
+          "cpc": 0.845,
+          "cpcUS": 1.28,
+          "cpcCA": 0.41,
+          "category": "Hockey Equipment"
+        },
+        {
+          "keyword": "hockey gear",
+          "searchVolume": 8500,
+          "searchVolumeUS": 6600,
+          "searchVolumeCA": 1900,
+          "competition": null,
+          "competitionUS": "HIGH",
+          "competitionCA": "HIGH",
+          "cpc": 1.405,
+          "cpcUS": 2.21,
+          "cpcCA": 0.6,
+          "category": "Hockey Equipment"
+        },
+        {
+          "keyword": "best hockey stick",
+          "searchVolume": 2300,
+          "searchVolumeUS": 1300,
+          "searchVolumeCA": 1000,
+          "competition": null,
+          "competitionUS": "HIGH",
+          "competitionCA": "HIGH",
+          "cpc": 0.7050000000000001,
+          "cpcUS": 1.05,
+          "cpcCA": 0.36,
+          "category": "Hockey Equipment"
+        }
+      ],
+      "totalVolume": 139400,
+      "avgCPC": 0.9891666666666667,
+      "opportunity": "🟡 GOOD - Strong search volume"
+    },
+    {
+      "name": "Hockey Arenas & Rinks",
+      "description": "Ice rinks, training facilities",
+      "monetizationPotential": "MEDIUM",
+      "monetizationMethods": [
+        "Advertising",
+        "Facility partnerships",
+        "Ice time booking referrals"
+      ],
+      "keywords": [
+        {
+          "keyword": "ice rink near me",
+          "searchVolume": 67100,
+          "searchVolumeUS": 60500,
+          "searchVolumeCA": 6600,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.5549999999999999,
+          "cpcUS": 0.5,
+          "cpcCA": 0.61,
+          "category": "Hockey Arenas & Rinks"
+        },
+        {
+          "keyword": "public skating",
+          "searchVolume": 16500,
+          "searchVolumeUS": 6600,
+          "searchVolumeCA": 9900,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.9299999999999999,
+          "cpcUS": 0.87,
+          "cpcCA": 0.99,
+          "category": "Hockey Arenas & Rinks"
+        },
+        {
+          "keyword": "hockey rink near me",
+          "searchVolume": 11700,
+          "searchVolumeUS": 8100,
+          "searchVolumeCA": 3600,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.53,
+          "cpcUS": 0.83,
+          "cpcCA": 0.23,
+          "category": "Hockey Arenas & Rinks"
+        },
+        {
+          "keyword": "hockey arena",
+          "searchVolume": 8000,
+          "searchVolumeUS": 3600,
+          "searchVolumeCA": 4400,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.455,
+          "cpcUS": 0.94,
+          "cpcCA": 1.97,
+          "category": "Hockey Arenas & Rinks"
+        },
+        {
+          "keyword": "stick and puck",
+          "searchVolume": 5800,
+          "searchVolumeUS": 2900,
+          "searchVolumeCA": 2900,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.96,
+          "cpcUS": 3.62,
+          "cpcCA": 0.3,
+          "category": "Hockey Arenas & Rinks"
+        }
+      ],
+      "totalVolume": 109100,
+      "avgCPC": 1.0859999999999999,
+      "opportunity": "🟡 GOOD - Strong search volume"
+    },
+    {
+      "name": "Hockey Leagues",
+      "description": "Youth leagues, adult leagues, recreational leagues",
+      "monetizationPotential": "MEDIUM",
+      "monetizationMethods": [
+        "Listing fees",
+        "League software partnerships",
+        "Team registration"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey league",
+          "searchVolume": 3900,
+          "searchVolumeUS": 2900,
+          "searchVolumeCA": 1000,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.785,
+          "cpcUS": 1.29,
+          "cpcCA": 0.28,
+          "category": "Hockey Leagues"
+        },
+        {
+          "keyword": "beer league hockey",
+          "searchVolume": 2900,
+          "searchVolumeUS": 1900,
+          "searchVolumeCA": 1000,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 3.0149999999999997,
+          "cpcUS": 4.02,
+          "cpcCA": 2.01,
+          "category": "Hockey Leagues"
+        },
+        {
+          "keyword": "adult hockey league",
+          "searchVolume": 910,
+          "searchVolumeUS": 590,
+          "searchVolumeCA": 320,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.1300000000000001,
+          "cpcUS": 0.04,
+          "cpcCA": 2.22,
+          "category": "Hockey Leagues"
+        },
+        {
+          "keyword": "youth hockey league",
+          "searchVolume": 350,
+          "searchVolumeUS": 320,
+          "searchVolumeCA": 30,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.005,
+          "cpcUS": 0.01,
+          "cpcCA": 0,
+          "category": "Hockey Leagues"
+        },
+        {
+          "keyword": "rec hockey league",
+          "searchVolume": 140,
+          "searchVolumeUS": 70,
+          "searchVolumeCA": 70,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.365,
+          "cpcUS": 0.73,
+          "cpcCA": 0,
+          "category": "Hockey Leagues"
+        }
+      ],
+      "totalVolume": 8200,
+      "avgCPC": 1.06,
+      "opportunity": "🟡 GOOD - Strong search volume"
+    },
+    {
+      "name": "Hockey Camps",
+      "description": "Summer camps, day camps, overnight camps",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Listing fees",
+        "Featured placements",
+        "Registration referrals",
+        "Lead generation"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey camp",
+          "searchVolume": 2900,
+          "searchVolumeUS": 1600,
+          "searchVolumeCA": 1300,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.21,
+          "cpcUS": 1.27,
+          "cpcCA": 1.15,
+          "category": "Hockey Camps"
+        },
+        {
+          "keyword": "summer hockey camp",
+          "searchVolume": 1600,
+          "searchVolumeUS": 880,
+          "searchVolumeCA": 720,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.2650000000000001,
+          "cpcUS": 1.79,
+          "cpcCA": 0.74,
+          "category": "Hockey Camps"
+        },
+        {
+          "keyword": "youth hockey camp",
+          "searchVolume": 220,
+          "searchVolumeUS": 210,
+          "searchVolumeCA": 10,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.275,
+          "cpcUS": 0,
+          "cpcCA": 2.55,
+          "category": "Hockey Camps"
+        },
+        {
+          "keyword": "overnight hockey camp",
+          "searchVolume": 190,
+          "searchVolumeUS": 140,
+          "searchVolumeCA": 50,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.43,
+          "cpcUS": 0,
+          "cpcCA": 0.86,
+          "category": "Hockey Camps"
+        },
+        {
+          "keyword": "hockey day camp",
+          "searchVolume": 30,
+          "searchVolumeUS": 20,
+          "searchVolumeCA": 10,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "MEDIUM",
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Camps"
+        }
+      ],
+      "totalVolume": 4940,
+      "avgCPC": 0.836,
+      "opportunity": "🟡 GOOD - Strong search volume"
+    },
+    {
+      "name": "Hockey Analytics & Stats",
+      "description": "Player stats, team stats, analytics tools",
+      "monetizationPotential": "LOW",
+      "monetizationMethods": [
+        "Subscription services",
+        "Data partnerships"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey stats",
+          "searchVolume": 1900,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 1900,
+          "competition": null,
+          "competitionUS": 0,
+          "competitionCA": "LOW",
+          "cpc": 1,
+          "cpcUS": 0,
+          "cpcCA": 2,
+          "category": "Hockey Analytics & Stats"
+        },
+        {
+          "keyword": "hockey statistics",
+          "searchVolume": 1900,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 1900,
+          "competition": null,
+          "competitionUS": 0,
+          "competitionCA": "LOW",
+          "cpc": 1,
+          "cpcUS": 0,
+          "cpcCA": 2,
+          "category": "Hockey Analytics & Stats"
+        },
+        {
+          "keyword": "hockey player stats",
+          "searchVolume": 210,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 210,
+          "competition": null,
+          "competitionUS": 0,
+          "competitionCA": "LOW",
+          "cpc": 0.005,
+          "cpcUS": 0,
+          "cpcCA": 0.01,
+          "category": "Hockey Analytics & Stats"
+        },
+        {
+          "keyword": "hockey analytics",
+          "searchVolume": 140,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 140,
+          "competition": null,
+          "competitionUS": 0,
+          "competitionCA": "LOW",
+          "cpc": 1.185,
+          "cpcUS": 0,
+          "cpcCA": 2.37,
+          "category": "Hockey Analytics & Stats"
+        }
+      ],
+      "totalVolume": 4150,
+      "avgCPC": 0.7975,
+      "opportunity": "🟡 GOOD - Strong search volume"
+    },
+    {
+      "name": "Hockey Coaching",
+      "description": "Private coaches, coaching certifications",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Coach listings",
+        "Booking fees",
+        "Certification courses"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey coach",
+          "searchVolume": 1880,
+          "searchVolumeUS": 1000,
+          "searchVolumeCA": 880,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.66,
+          "cpcUS": 0,
+          "cpcCA": 1.32,
+          "category": "Hockey Coaching"
+        },
+        {
+          "keyword": "goalie coach",
+          "searchVolume": 310,
+          "searchVolumeUS": 170,
+          "searchVolumeCA": 140,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.575,
+          "cpcUS": 0,
+          "cpcCA": 3.15,
+          "category": "Hockey Coaching"
+        },
+        {
+          "keyword": "hockey coach near me",
+          "searchVolume": 180,
+          "searchVolumeUS": 170,
+          "searchVolumeCA": 10,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "MEDIUM",
+          "cpc": 15.395,
+          "cpcUS": 27.45,
+          "cpcCA": 3.34,
+          "category": "Hockey Coaching"
+        },
+        {
+          "keyword": "hockey coaching certification",
+          "searchVolume": 110,
+          "searchVolumeUS": 40,
+          "searchVolumeCA": 70,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 2.455,
+          "cpcUS": 2.98,
+          "cpcCA": 1.93,
+          "category": "Hockey Coaching"
+        },
+        {
+          "keyword": "private hockey coach",
+          "searchVolume": 50,
+          "searchVolumeUS": 30,
+          "searchVolumeCA": 20,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 1.535,
+          "cpcUS": 3.07,
+          "cpcCA": 0,
+          "category": "Hockey Coaching"
+        }
+      ],
+      "totalVolume": 2530,
+      "avgCPC": 4.324,
+      "opportunity": "🟡 GOOD - High commercial value"
+    },
+    {
+      "name": "Hockey Tryouts",
+      "description": "Team tryouts, tryout preparation",
+      "monetizationPotential": "MEDIUM",
+      "monetizationMethods": [
+        "Tryout calendar ads",
+        "Preparation program affiliates"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey tryouts",
+          "searchVolume": 340,
+          "searchVolumeUS": 170,
+          "searchVolumeCA": 170,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.415,
+          "cpcUS": 0,
+          "cpcCA": 0.83,
+          "category": "Hockey Tryouts"
+        },
+        {
+          "keyword": "aaa hockey tryouts",
+          "searchVolume": 50,
+          "searchVolumeUS": 30,
+          "searchVolumeCA": 20,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Tryouts"
+        },
+        {
+          "keyword": "hockey tryout tips",
+          "searchVolume": 30,
+          "searchVolumeUS": 20,
+          "searchVolumeCA": 10,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.02,
+          "cpcUS": 0,
+          "cpcCA": 0.04,
+          "category": "Hockey Tryouts"
+        },
+        {
+          "keyword": "hockey team tryouts",
+          "searchVolume": 20,
+          "searchVolumeUS": 10,
+          "searchVolumeCA": 10,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Tryouts"
+        }
+      ],
+      "totalVolume": 440,
+      "avgCPC": 0.10875,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Player Profiles",
+      "description": "Player resumes, recruiting profiles",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Profile creation fees",
+        "Premium features",
+        "Video hosting",
+        "Resume templates"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey player profile",
+          "searchVolume": 80,
+          "searchVolumeUS": 30,
+          "searchVolumeCA": 50,
+          "competition": null,
+          "competitionUS": "LOW",
+          "competitionCA": "LOW",
+          "cpc": 0.085,
+          "cpcUS": 0.17,
+          "cpcCA": 0,
+          "category": "Hockey Player Profiles"
+        },
+        {
+          "keyword": "hockey resume",
+          "searchVolume": 40,
+          "searchVolumeUS": 20,
+          "searchVolumeCA": 20,
+          "competition": null,
+          "competitionUS": "MEDIUM",
+          "competitionCA": "LOW",
+          "cpc": 1.92,
+          "cpcUS": 3.84,
+          "cpcCA": 0,
+          "category": "Hockey Player Profiles"
+        },
+        {
+          "keyword": "hockey recruiting profile",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Player Profiles"
+        },
+        {
+          "keyword": "hockey player website",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Player Profiles"
+        }
+      ],
+      "totalVolume": 120,
+      "avgCPC": 0.50125,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Scholarships",
+      "description": "College scholarships, financial aid",
+      "monetizationPotential": "LOW",
+      "monetizationMethods": [
+        "Recruiting service partnerships",
+        "Information products"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey scholarships",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Scholarships"
+        },
+        {
+          "keyword": "college hockey scholarships",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Scholarships"
+        },
+        {
+          "keyword": "hockey scholarship opportunities",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Scholarships"
+        },
+        {
+          "keyword": "ncaa hockey scholarships",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Scholarships"
+        }
+      ],
+      "totalVolume": 0,
+      "avgCPC": 0,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Recruiting",
+      "description": "College recruiting, recruiting services",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Service referrals",
+        "Profile creation fees",
+        "Video services"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey recruiting",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Recruiting"
+        },
+        {
+          "keyword": "college hockey recruiting",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Recruiting"
+        },
+        {
+          "keyword": "hockey recruiting services",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Recruiting"
+        },
+        {
+          "keyword": "hockey recruiting videos",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Recruiting"
+        }
+      ],
+      "totalVolume": 0,
+      "avgCPC": 0,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Apparel",
+      "description": "Jerseys, hoodies, team gear",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Affiliate links",
+        "Custom gear partnerships",
+        "Team store platform"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey jerseys",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Apparel"
+        },
+        {
+          "keyword": "hockey apparel",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Apparel"
+        },
+        {
+          "keyword": "custom hockey jerseys",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Apparel"
+        },
+        {
+          "keyword": "hockey team apparel",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Apparel"
+        }
+      ],
+      "totalVolume": 0,
+      "avgCPC": 0,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Events",
+      "description": "Showcases, combines, special events",
+      "monetizationPotential": "MEDIUM",
+      "monetizationMethods": [
+        "Event listings",
+        "Registration fees",
+        "Sponsorships"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey showcase",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Events"
+        },
+        {
+          "keyword": "hockey combine",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Events"
+        },
+        {
+          "keyword": "hockey events",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Events"
+        },
+        {
+          "keyword": "hockey prospect camp",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": 0,
+          "competitionUS": 0,
+          "competitionCA": 0,
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Events"
+        }
+      ],
+      "totalVolume": 0,
+      "avgCPC": 0,
+      "opportunity": "⚪ MODERATE - Consider as secondary"
+    },
+    {
+      "name": "Hockey Stores & Retail",
+      "description": "Local hockey stores, pro shops, equipment retailers",
+      "monetizationPotential": "HIGH",
+      "monetizationMethods": [
+        "Store directory listings",
+        "Featured store placements",
+        "Affiliate partnerships with online retailers",
+        "Click-to-call/directions revenue",
+        "Local advertising"
+      ],
+      "keywords": [
+        {
+          "keyword": "hockey store near me",
+          "searchVolume": 22200,
+          "searchVolumeUS": 22200,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 0.94,
+          "cpcUS": 0.94,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey shop near me",
+          "searchVolume": 22200,
+          "searchVolumeUS": 22200,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 0.94,
+          "cpcUS": 0.94,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey store",
+          "searchVolume": 12100,
+          "searchVolumeUS": 12100,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.73,
+          "cpcUS": 1.73,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey equipment store",
+          "searchVolume": 4400,
+          "searchVolumeUS": 4400,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.46,
+          "cpcUS": 1.46,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey gear store",
+          "searchVolume": 4400,
+          "searchVolumeUS": 4400,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.46,
+          "cpcUS": 1.46,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey shop",
+          "searchVolume": 3600,
+          "searchVolumeUS": 3600,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.36,
+          "cpcUS": 1.36,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey pro shop",
+          "searchVolume": 880,
+          "searchVolumeUS": 880,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.6,
+          "cpcUS": 1.6,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "where to buy hockey equipment",
+          "searchVolume": 70,
+          "searchVolumeUS": 70,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.66,
+          "cpcUS": 1.66,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "hockey retailers",
+          "searchVolume": 40,
+          "searchVolumeUS": 40,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 1.88,
+          "cpcUS": 1.88,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        },
+        {
+          "keyword": "local hockey store",
+          "searchVolume": 0,
+          "searchVolumeUS": 0,
+          "searchVolumeCA": 0,
+          "competition": "LOW",
+          "competitionUS": "LOW",
+          "competitionCA": "UNKNOWN",
+          "cpc": 0,
+          "cpcUS": 0,
+          "cpcCA": 0,
+          "category": "Hockey Stores & Retail"
+        }
+      ],
+      "totalVolume": 69890,
+      "avgCPC": 1.3030000000000002,
+      "opportunity": "🟢 EXCELLENT - High volume & local intent"
+    }
+  ],
+  "summary": {
+    "totalSearchVolume": 338770,
+    "highMonetizationCategories": 6,
+    "topCategories": [
+      "Hockey Equipment",
+      "Hockey Arenas & Rinks",
+      "Hockey Stores & Retail",
+      "Hockey Leagues",
+      "Hockey Camps"
+    ]
+  }
+}

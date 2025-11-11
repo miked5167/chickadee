@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { sendEmailVerificationEmail } from '@/lib/utils/email'
 import crypto from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    console.log('[CLAIM] Starting claim request...')
+    const supabase = createAdminClient()
 
     // Get request body
     const body = await request.json()
+    console.log('[CLAIM] Request body:', { ...body, verification_info: body.verification_info?.substring(0, 50) + '...' })
     const { advisor_id, claimant_name, claimant_email, claimant_phone, verification_info } = body
 
     // Validation
     if (!advisor_id || !claimant_name || !claimant_email || !verification_info) {
+      console.error('[CLAIM] Missing required fields:', { advisor_id: !!advisor_id, claimant_name: !!claimant_name, claimant_email: !!claimant_email, verification_info: !!verification_info })
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -36,13 +39,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify advisor exists and is published
+    console.log('[CLAIM] Looking up advisor:', advisor_id)
     const { data: advisor, error: advisorError } = await supabase
       .from('advisors')
       .select('id, name, is_claimed, is_published')
       .eq('id', advisor_id)
       .single()
 
+    if (advisorError) {
+      console.error('[CLAIM] Advisor lookup error:', advisorError)
+    }
+    console.log('[CLAIM] Advisor found:', advisor)
+
     if (advisorError || !advisor || !advisor.is_published) {
+      console.error('[CLAIM] Advisor validation failed:', { advisorError: !!advisorError, advisor: !!advisor, is_published: advisor?.is_published })
       return NextResponse.json(
         { error: 'Advisor not found' },
         { status: 404 }
@@ -78,6 +88,7 @@ export async function POST(request: NextRequest) {
     expiresAt.setHours(expiresAt.getHours() + 24) // Token expires in 24 hours
 
     // Create claim request with verification token
+    console.log('[CLAIM] Creating claim in database...')
     const { data: claim, error: claimError } = await supabase
       .from('listing_claims')
       .insert([
@@ -96,12 +107,15 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (claimError) {
-      console.error('Error creating claim:', claimError)
+      console.error('[CLAIM] Error creating claim:', claimError)
+      console.error('[CLAIM] Claim error details:', JSON.stringify(claimError, null, 2))
       return NextResponse.json(
-        { error: 'Failed to submit claim request' },
+        { error: `Failed to submit claim request: ${claimError.message || claimError.code}` },
         { status: 500 }
       )
     }
+
+    console.log('[CLAIM] Claim created successfully:', claim?.id)
 
     // Send email verification email to claimant
     try {
@@ -114,12 +128,14 @@ export async function POST(request: NextRequest) {
       // since the user needs the email to verify their account
     }
 
+    console.log('[CLAIM] Request completed successfully')
     return NextResponse.json(
       { success: true, claimId: claim.id },
       { status: 201 }
     )
   } catch (error) {
-    console.error('Error in POST /api/advisors/claim:', error)
+    console.error('[CLAIM] Unexpected error in POST /api/advisors/claim:', error)
+    console.error('[CLAIM] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

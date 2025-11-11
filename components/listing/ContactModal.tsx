@@ -21,7 +21,7 @@ const contactFormSchema = z.object({
   parentName: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().optional(),
-  childAge: z.string().optional(),
+  eliteProspectsLink: z.string().optional(),
   message: z.string().min(50, 'Message must be at least 50 characters').max(1000, 'Message is too long'),
   agreedToTerms: z.boolean().refine(val => val === true, 'You must agree to the terms'),
 })
@@ -53,7 +53,7 @@ export function ContactModal({
   const [parentName, setParentName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [childAge, setChildAge] = useState('')
+  const [eliteProspectsLink, setEliteProspectsLink] = useState('')
   const [message, setMessage] = useState('')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
@@ -65,7 +65,7 @@ export function ContactModal({
     setParentName('')
     setEmail('')
     setPhone('')
-    setChildAge('')
+    setEliteProspectsLink('')
     setMessage('')
     setAgreedToTerms(false)
     setError(null)
@@ -91,7 +91,7 @@ export function ContactModal({
         parentName,
         email,
         phone,
-        childAge,
+        eliteProspectsLink,
         message,
         agreedToTerms,
       }
@@ -118,7 +118,7 @@ export function ContactModal({
           parent_name: parentName,
           email,
           phone: phone || null,
-          child_age: childAge ? parseInt(childAge) : null,
+          elite_prospects_link: eliteProspectsLink || null,
           message,
         }),
       })
@@ -150,22 +150,19 @@ export function ContactModal({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {success ? (
           // Success State
-          <div className="py-8">
+          <div className="py-10">
             <div className="text-center">
               <div className="mb-6 flex items-center justify-center">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center shadow-lg">
                   <CheckCircle className="w-12 h-12 text-green-600" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-3 text-gray-900">Message Sent Successfully!</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                Thank you for contacting {advisorName}. They will get back to you shortly, typically within 24-48 hours.
+              <p className="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
+                Thank you for contacting <span className="font-semibold text-gray-900">{advisorName}</span>. They will get back to you shortly, typically within 24-48 hours.
               </p>
-              <div className="flex gap-3 justify-center">
-                <Button onClick={resetForm} variant="outline">
-                  Send Another Message
-                </Button>
-                <Button onClick={() => setOpen(false)}>
+              <div className="flex justify-center">
+                <Button onClick={() => setOpen(false)} className="bg-blue-600 hover:bg-blue-700 px-8">
                   Close
                 </Button>
               </div>
@@ -177,20 +174,32 @@ export function ContactModal({
             <DialogHeader>
               <DialogTitle className="text-2xl">Contact {advisorName}</DialogTitle>
               <DialogDescription>
-                Send a message to discuss your hockey development needs. Response typically within 24-48 hours.
+                Send a message to discuss your hockey development needs.
               </DialogDescription>
             </DialogHeader>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
-                {error}
+              <div className="p-4 bg-red-50 border-l-4 border-l-red-500 border border-red-200 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold text-red-800 mb-1">Error</h3>
+                    <p className="text-sm text-red-700">{error}</p>
+                  </div>
+                </div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Parent Name */}
               <div>
-                <Label htmlFor={`${formId}-parentName`}>Your Name *</Label>
+                <Label htmlFor={`${formId}-parentName`} className="text-sm font-medium">
+                  Your Name <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id={`${formId}-parentName`}
                   type="text"
@@ -199,12 +208,15 @@ export function ContactModal({
                   placeholder="Enter your name"
                   required
                   disabled={loading}
+                  className="mt-1.5"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <Label htmlFor={`${formId}-email`}>Email Address *</Label>
+                <Label htmlFor={`${formId}-email`} className="text-sm font-medium">
+                  Email Address <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id={`${formId}-email`}
                   type="email"
@@ -213,13 +225,16 @@ export function ContactModal({
                   placeholder="your.email@example.com"
                   required
                   disabled={loading}
+                  className="mt-1.5"
                 />
               </div>
 
-              {/* Phone and Child Age in a row */}
+              {/* Phone and Elite Prospects Link in a row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor={`${formId}-phone`}>Phone Number (Optional)</Label>
+                  <Label htmlFor={`${formId}-phone`} className="text-sm font-medium">
+                    Phone Number <span className="text-gray-400 text-xs">(Optional)</span>
+                  </Label>
                   <Input
                     id={`${formId}-phone`}
                     type="tel"
@@ -227,27 +242,31 @@ export function ContactModal({
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(555) 123-4567"
                     disabled={loading}
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor={`${formId}-childAge`}>Player Age (Optional)</Label>
+                  <Label htmlFor={`${formId}-eliteProspectsLink`} className="text-sm font-medium">
+                    Elite Prospects Link <span className="text-gray-400 text-xs">(Optional)</span>
+                  </Label>
                   <Input
-                    id={`${formId}-childAge`}
-                    type="number"
-                    min="1"
-                    max="25"
-                    value={childAge}
-                    onChange={(e) => setChildAge(e.target.value)}
-                    placeholder="Age"
+                    id={`${formId}-eliteProspectsLink`}
+                    type="url"
+                    value={eliteProspectsLink}
+                    onChange={(e) => setEliteProspectsLink(e.target.value)}
+                    placeholder="https://www.eliteprospects.com/..."
                     disabled={loading}
+                    className="mt-1.5"
                   />
                 </div>
               </div>
 
               {/* Message */}
               <div>
-                <Label htmlFor={`${formId}-message`}>Message *</Label>
+                <Label htmlFor={`${formId}-message`} className="text-sm font-medium">
+                  Message <span className="text-red-500">*</span>
+                </Label>
                 <textarea
                   id={`${formId}-message`}
                   value={message}
@@ -256,45 +275,67 @@ export function ContactModal({
                   required
                   rows={5}
                   disabled={loading}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50 resize-none"
+                  className="w-full mt-1.5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent disabled:opacity-50 disabled:bg-gray-50 resize-none transition-colors"
                 />
-                <p className={`text-sm mt-1 ${message.length < 50 ? 'text-gray-500' : 'text-green-600'}`}>
-                  {message.length} / 50 characters minimum
-                  {message.length >= 50 && ' ✓'}
-                </p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className={`text-xs font-medium transition-colors ${
+                    message.length === 0 ? 'text-gray-400' :
+                    message.length < 50 ? 'text-amber-600' :
+                    'text-green-600'
+                  }`}>
+                    {message.length < 50 ? (
+                      <>
+                        <span className="font-semibold">{50 - message.length}</span> characters needed
+                      </>
+                    ) : (
+                      <>
+                        ✓ Minimum reached ({message.length} characters)
+                      </>
+                    )}
+                  </p>
+                  {message.length > 0 && message.length < 50 && (
+                    <span className="text-xs text-amber-600">
+                      50 character minimum
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Terms Agreement */}
-              <div className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  id={`${formId}-terms`}
-                  checked={agreedToTerms}
-                  onChange={(e) => setAgreedToTerms(e.target.checked)}
-                  disabled={loading}
-                  className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-600"
-                />
-                <Label htmlFor={`${formId}-terms`} className="text-sm">
-                  I agree to the{' '}
-                  <a href="/terms" target="_blank" className="text-blue-600 hover:underline">
-                    Terms of Service
-                  </a>{' '}
-                  and understand that my contact information will be shared with this advisor.
-                </Label>
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <input
+                      type="checkbox"
+                      id={`${formId}-terms`}
+                      checked={agreedToTerms}
+                      onChange={(e) => setAgreedToTerms(e.target.checked)}
+                      disabled={loading}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 cursor-pointer disabled:cursor-not-allowed"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label htmlFor={`${formId}-terms`} className="text-sm text-gray-700 leading-relaxed cursor-pointer block">
+                      I agree to the <a href="/terms" target="_blank" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">Terms of Service</a> and understand that my contact information will be shared with this advisor.
+                    </Label>
+                  </div>
+                </div>
               </div>
 
-              <DialogFooter className="gap-2 sm:gap-0">
+              <DialogFooter className="gap-3 sm:gap-3 pt-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setOpen(false)}
                   disabled={loading}
+                  className="flex-1 sm:flex-initial"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={loading || !parentName || !email || !message || message.length < 50 || !agreedToTerms}
+                  className="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>

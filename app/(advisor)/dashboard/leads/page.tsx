@@ -43,6 +43,13 @@ export default function AdvisorLeadsPage() {
   const [error, setError] = useState<string | null>(null)
   const [leads, setLeads] = useState<Lead[]>([])
   const [total, setTotal] = useState(0)
+  const [statusCounts, setStatusCounts] = useState<Record<string, number>>({
+    all: 0,
+    new: 0,
+    contacted: 0,
+    converted: 0,
+    closed: 0
+  })
   const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'contacted' | 'converted' | 'closed'>('all')
   const [expandedLead, setExpandedLead] = useState<string | null>(null)
   const [updatingLead, setUpdatingLead] = useState<string | null>(null)
@@ -72,6 +79,9 @@ export default function AdvisorLeadsPage() {
       const data = await response.json()
       setLeads(data.leads)
       setTotal(data.total)
+      if (data.statusCounts) {
+        setStatusCounts(data.statusCounts)
+      }
     } catch (err) {
       console.error('Error fetching leads:', err)
       setError('Failed to load leads. Please try again.')
@@ -251,9 +261,13 @@ export default function AdvisorLeadsPage() {
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
-              {statusFilter === status && total > 0 && (
-                <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">
-                  {total}
+              {statusCounts[status] > 0 && (
+                <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+                  statusFilter === status
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {statusCounts[status]}
                 </span>
               )}
             </button>

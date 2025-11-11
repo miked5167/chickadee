@@ -61,6 +61,36 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Get counts for all statuses
+    const { count: allCount } = await supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('advisor_id', advisor.id)
+
+    const { count: newCount } = await supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('advisor_id', advisor.id)
+      .eq('status', 'new')
+
+    const { count: contactedCount } = await supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('advisor_id', advisor.id)
+      .eq('status', 'contacted')
+
+    const { count: convertedCount } = await supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('advisor_id', advisor.id)
+      .eq('status', 'converted')
+
+    const { count: closedCount } = await supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('advisor_id', advisor.id)
+      .eq('status', 'closed')
+
     return NextResponse.json(
       {
         leads: leads || [],
@@ -68,6 +98,13 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         totalPages: Math.ceil((count || 0) / limit),
+        statusCounts: {
+          all: allCount || 0,
+          new: newCount || 0,
+          contacted: contactedCount || 0,
+          converted: convertedCount || 0,
+          closed: closedCount || 0,
+        },
       },
       { status: 200 }
     )

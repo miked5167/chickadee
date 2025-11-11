@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     // Get request body
     const body = await request.json()
-    const { advisor_id, parent_name, email, phone, child_age, message } = body
+    const { advisor_id, parent_name, email, phone, elite_prospects_link, message } = body
 
     // Validation
     if (!advisor_id || !parent_name || !email || !message) {
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
           parent_name,
           parent_email: email,
           parent_phone: phone,
-          child_age,
+          elite_prospects_link,
           message,
           status: 'new',
           ip_address: ipHash,
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
         parentName: parent_name,
         parentEmail: email,
         parentPhone: phone,
-        childAge: child_age,
+        eliteProspectsLink: elite_prospects_link,
         message,
         leadId: lead.id,
       })

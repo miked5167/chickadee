@@ -1,0 +1,437 @@
+[
+  {
+    "timestamp": "2025-11-05T13:39:34.037Z",
+    "url": "http://localhost:3000",
+    "name": "homepage",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 95,
+      "accessibility": 96,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 693.9655000000002,
+      "cls": 0.002520883082138243,
+      "tbt": 93,
+      "fcp": 359.9885,
+      "si": 2081.4345397115585
+    },
+    "opportunities": [
+      {
+        "id": "server-response-time",
+        "title": "Reduce initial server response time",
+        "overallSavingsMs": 2753.978
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 80
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 20
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:39:52.262Z",
+    "url": "http://localhost:3000",
+    "name": "homepage",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 52,
+      "accessibility": 96,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 11836.581,
+      "cls": null,
+      "tbt": 975.9999999999991,
+      "fcp": 1126.1085,
+      "si": 3700.653754390872
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 3960
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 1800
+      },
+      {
+        "id": "uses-rel-preconnect",
+        "title": "Preconnect to required origins",
+        "overallSavingsMs": 330.186
+      },
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 236.043
+      },
+      {
+        "id": "legacy-javascript",
+        "title": "Avoid serving legacy JavaScript to modern browsers",
+        "overallSavingsMs": 170
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:40:11.778Z",
+    "url": "http://localhost:3000/listings",
+    "name": "listings",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 70,
+      "accessibility": 95,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 1825.9430000000002,
+      "cls": 0.0010313243993657223,
+      "tbt": 468.4999999999998,
+      "fcp": 277.698,
+      "si": 1494.9743040264912
+    },
+    "opportunities": [
+      {
+        "id": "server-response-time",
+        "title": "Reduce initial server response time",
+        "overallSavingsMs": 756.478
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 340
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 210
+      },
+      {
+        "id": "legacy-javascript",
+        "title": "Avoid serving legacy JavaScript to modern browsers",
+        "overallSavingsMs": 10
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:40:29.512Z",
+    "url": "http://localhost:3000/listings",
+    "name": "listings",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 47,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 9740.819999999998,
+      "cls": null,
+      "tbt": 2313.818000000001,
+      "fcp": 944.364,
+      "si": 1678.6153954806757
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 2890
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 1480
+      },
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 73.86100000000002
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:40:47.382Z",
+    "url": "http://localhost:3000/listings/369-sports-entertainment",
+    "name": "listing-detail",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 89,
+      "accessibility": 98,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 1847.748,
+      "cls": 0.0009858254518691225,
+      "tbt": 126,
+      "fcp": 303.91599999999994,
+      "si": 1258.5903731664846
+    },
+    "opportunities": [
+      {
+        "id": "server-response-time",
+        "title": "Reduce initial server response time",
+        "overallSavingsMs": 1498.789
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 560
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 270
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:41:04.858Z",
+    "url": "http://localhost:3000/listings/369-sports-entertainment",
+    "name": "listing-detail",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 52,
+      "accessibility": 98,
+      "bestPractices": 100,
+      "seo": 91
+    },
+    "coreWebVitals": {
+      "lcp": 9750.518000000002,
+      "cls": null,
+      "tbt": 1122,
+      "fcp": 937.5060000000001,
+      "si": 1761.9664679994876
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 4270
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 1840
+      },
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 460.6350000000001
+      },
+      {
+        "id": "legacy-javascript",
+        "title": "Avoid serving legacy JavaScript to modern browsers",
+        "overallSavingsMs": 130
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:41:23.550Z",
+    "url": "http://localhost:3000/blog",
+    "name": "blog",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 79,
+      "accessibility": 96,
+      "bestPractices": 100,
+      "seo": 83
+    },
+    "coreWebVitals": {
+      "lcp": 1974.288,
+      "cls": 0.21847466246918817,
+      "tbt": 76,
+      "fcp": 290.096,
+      "si": 1308.621946696369
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 710
+      },
+      {
+        "id": "server-response-time",
+        "title": "Reduce initial server response time",
+        "overallSavingsMs": 577.6949999999999
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 230
+      },
+      {
+        "id": "uses-responsive-images",
+        "title": "Properly size images",
+        "overallSavingsMs": 120
+      },
+      {
+        "id": "uses-text-compression",
+        "title": "Enable text compression",
+        "overallSavingsMs": 40
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:41:40.412Z",
+    "url": "http://localhost:3000/blog",
+    "name": "blog",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 31,
+      "accessibility": 96,
+      "bestPractices": 100,
+      "seo": 83
+    },
+    "coreWebVitals": {
+      "lcp": 10665.02,
+      "cls": 0.42323117716796416,
+      "tbt": 1342,
+      "fcp": 935.3040000000001,
+      "si": 1809.3244982397687
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 4190
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 1920
+      },
+      {
+        "id": "uses-responsive-images",
+        "title": "Properly size images",
+        "overallSavingsMs": 110
+      },
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 0.2219999999999942
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:41:50.593Z",
+    "url": "http://localhost:3000/blog/understanding-hockey-advisor-services",
+    "name": "blog-article",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 0,
+      "accessibility": 0,
+      "bestPractices": 0,
+      "seo": 0
+    },
+    "coreWebVitals": {
+      "lcp": null,
+      "cls": null,
+      "tbt": null,
+      "fcp": null,
+      "si": null
+    },
+    "opportunities": []
+  },
+  {
+    "timestamp": "2025-11-05T13:42:00.078Z",
+    "url": "http://localhost:3000/blog/understanding-hockey-advisor-services",
+    "name": "blog-article",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 0,
+      "accessibility": 0,
+      "bestPractices": 0,
+      "seo": 0
+    },
+    "coreWebVitals": {
+      "lcp": null,
+      "cls": null,
+      "tbt": null,
+      "fcp": null,
+      "si": null
+    },
+    "opportunities": []
+  },
+  {
+    "timestamp": "2025-11-05T13:42:15.624Z",
+    "url": "http://localhost:3000/demo/dashboard",
+    "name": "demo-dashboard",
+    "formFactor": "desktop",
+    "scores": {
+      "performance": 96,
+      "accessibility": 98,
+      "bestPractices": 100,
+      "seo": 82
+    },
+    "coreWebVitals": {
+      "lcp": 1404.2495,
+      "cls": 0.0009858254518691225,
+      "tbt": 61,
+      "fcp": 288.83299999999997,
+      "si": 682.9312115830242
+    },
+    "opportunities": [
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 495.1569999999999
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 340
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 160
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-05T13:42:30.813Z",
+    "url": "http://localhost:3000/demo/dashboard",
+    "name": "demo-dashboard",
+    "formFactor": "mobile",
+    "scores": {
+      "performance": 62,
+      "accessibility": 98,
+      "bestPractices": 100,
+      "seo": 82
+    },
+    "coreWebVitals": {
+      "lcp": 7095.977999999998,
+      "cls": null,
+      "tbt": 581.7555,
+      "fcp": 927.489,
+      "si": 1046.2798559998657
+    },
+    "opportunities": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "overallSavingsMs": 1960
+      },
+      {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "overallSavingsMs": 1200
+      },
+      {
+        "id": "server-response-time",
+        "title": "Initial server response time was short",
+        "overallSavingsMs": 35.98000000000002
+      }
+    ]
+  }
+]

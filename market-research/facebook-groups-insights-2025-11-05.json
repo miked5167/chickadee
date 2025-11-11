@@ -1,0 +1,251 @@
+{
+  "date": "2025-11-05",
+  "totalPosts": 100,
+  "postsWithText": 83,
+  "categoryBreakdown": {
+    "Hockey Camps": 6,
+    "Hockey Coaching": 24,
+    "Hockey Training": 22,
+    "Hockey Tournaments": 15,
+    "Hockey Equipment": 8,
+    "Hockey Leagues": 47,
+    "Hockey Prep Schools": 5,
+    "Hockey Scholarships": 8,
+    "Hockey Arenas/Rinks": 8,
+    "Hockey Fees/Costs": 14,
+    "Geographic Locations": 15,
+    "Parent Concerns": 19
+  },
+  "opportunities": [
+    {
+      "need": "Coach Matching",
+      "evidence": 24,
+      "solution": "Coach profiles with specialties, availability, pricing"
+    },
+    {
+      "need": "Comparison Tools",
+      "evidence": 16,
+      "solution": "Side-by-side comparison of camps, coaches, programs"
+    },
+    {
+      "need": "Price Transparency",
+      "evidence": 14,
+      "solution": "Show pricing info for camps, coaching, leagues"
+    },
+    {
+      "need": "Camp Discovery",
+      "evidence": 6,
+      "solution": "Comprehensive camp directory with filters (age, level, location)"
+    },
+    {
+      "need": "Quality Validation",
+      "evidence": 5,
+      "solution": "Reviews, ratings, verified listings"
+    },
+    {
+      "need": "Local Search",
+      "evidence": 0,
+      "solution": "Strong geographic filters and \"near me\" functionality"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "feature": "Price Transparency",
+      "rationale": "14 posts about fees/costs. Parents desperately want pricing info upfront.",
+      "implementation": "Require camps/coaches to display pricing ranges, payment plans, and hidden fees."
+    },
+    {
+      "priority": "HIGH",
+      "feature": "Reviews & Trust Signals",
+      "rationale": "10 posts seeking validation. Parents fear \"money grabs.\"",
+      "implementation": "Verified reviews, ratings, \"parent feedback\" sections, badge for established providers."
+    },
+    {
+      "priority": "HIGH",
+      "feature": "Geographic Discovery",
+      "rationale": "8 posts searching for local options.",
+      "implementation": "Map view, \"near me\" search, distance filters, multi-city search."
+    },
+    {
+      "priority": "MEDIUM",
+      "feature": "Camp Comparison Tool",
+      "rationale": "6 camp-related posts. Parents need to compare multiple options.",
+      "implementation": "Side-by-side comparison: price, dates, age groups, overnight vs day, skill level."
+    },
+    {
+      "priority": "MEDIUM",
+      "feature": "Coach Profiles & Specialties",
+      "rationale": "24 coaching posts. Parents want specific expertise (goalie, skills, etc.).",
+      "implementation": "Coach bios, certifications, specialties, availability calendar, booking."
+    },
+    {
+      "priority": "LOW",
+      "feature": "Community Q&A Section",
+      "rationale": "29 questions asked in groups. Build engagement on your platform.",
+      "implementation": "Forum or Q&A feature where parents can ask and answer hockey-related questions."
+    }
+  ],
+  "topPostsByCategory": {
+    "Hockey Leagues": [
+      {
+        "text": "I have a 2010 goalie who’s looking to go away to pre school of a stronger team where he can billet outside of out home state. I don’t even know where to begin. We have looked online at a few prep schools, but I also don’t want to pay 60k+ a year for him to play “house”",
+        "likes": 10,
+        "comments": 44,
+        "engagement": 142
+      },
+      {
+        "text": "A kid on a weak Triple A team might actually develop worse than one on a good Double A program. But families stay because to leave would mean admitting the dream isn’t real. They crave the title, not the development. I once had a father come to me asking to sponsor his son’s team. They were terrible, one of those teams that couldn’t break out of their own zone without turning it over. #hockey #NHL #hockeylife #hockeyplayer #hockeyparents",
+        "likes": 30,
+        "comments": 12,
+        "engagement": 66
+      },
+      {
+        "text": "I'm wondering what to do about my son. He plays 13U AA. He's a solid player, has a great shot, great hands, great IQ for his age but the one thing he lacks is swiftness and explosive speed. Skates well but he's definitely a step behind most players. He doesn't get a lot of time and space ever because of that and when he gets the puck if he doesn't have a clean look he's always dishing it off to someone else because he's accosted by opponents. One thing I encourage with him is working out and doing extra strength and conditioning on his own time but he doesn't seem to have the drive to do that. I bring it up all the time but I don't want to force it. I know it won't happen overnight, or maybe not even at all, but I do know that with strength and conditioning comes stronger and faster players generally. He's doing okay this year and has 10 points through 13 games (4g 6a). I guess my biggest question here is how do I push him to work on things off ice on his own without forcing it because I don't want to push him away from something he loves? Thanks in advance to any advice!",
+        "likes": 2,
+        "comments": 15,
+        "engagement": 47
+      },
+      {
+        "text": "Not happy with my son’s hockey academy that he attends. There is not enough games, too much down time . We are  not getting what we were told. Hes playing that is not the issue. Just curious if there are other teams 2008 looking for players or if pretty much there all the same.",
+        "likes": 2,
+        "comments": 13,
+        "engagement": 41
+      },
+      {
+        "text": "My 2015 son would love to travel to Canada and play in a tournament next summer. He’s not elite by any means, just loves to play hockey and is fairly good at it. Are there ever teams looking for an extra skater for just a weekend tournament? Or are there any individual sign up options? Toronto area would be ideal but willing to go anywhere there’s an opportunity.",
+        "likes": 1,
+        "comments": 6,
+        "engagement": 19
+      }
+    ],
+    "Hockey Coaching": [
+      {
+        "text": "When looking to change clubs, what is the best time to start reaching out to coaches? I know they are not supposed to reach out until after state and obviously now is way too early.\n\nEdit: I know there's no rules about when I can reach out. This would be for fall. Just thinking there might be a golden time to get on their radar",
+        "likes": 1,
+        "comments": 7,
+        "engagement": 22
+      },
+      {
+        "text": "Just got to Sweden for U14/U15 and I noticed all the trainers have their sons in the same team the coach. It seems all the best player kids are kids of coaches , ex players etc. is this something found over the whole hockey world or just in Scandinavia ? \nIn Germany it was not , in Austria it was not .\nIt would be very difficult to macht this insight and personal attention without almost generational talent . I would love to hear your views .!",
+        "likes": 2,
+        "comments": 5,
+        "engagement": 17
+      },
+      {
+        "text": "I am looking for a video service that would take video and create scouting videos. There are some programs like TPE and HudlInstat that do this for teams but I am looking for something for the individual as a way to save time. The videos would ideally be accessible for YouTube and used to send out to coaches/scouts, but also be used on the back end for film study session. Thank you for any ideas.",
+        "likes": 3,
+        "comments": 4,
+        "engagement": 15
+      },
+      {
+        "text": "Can anyone recommend a film review coach? \n2009 T1. We are in Michigan if that makes a difference. Thanks.",
+        "likes": 1,
+        "comments": 3,
+        "engagement": 10
+      },
+      {
+        "text": "If anyone in Michigan looking to finish a great competitive season...The 2011 OJG Gold team, playing independant and at the Yzerman Level, is looking to fill 1 Defense and 1 Forward positions. Must be in District 3. We are led by Coach Rod Heid and Coach Lou Tallerico who just won the U18 State title with their OJG U18 Team!! We have 4 more tournaments scheduled as well as some competitive showcases. If you are interested in coming out for a skate to meet the team and coaches, please contact Jason Hanley at 734-239-3755 or jhanley33@gmail.com",
+        "likes": 2,
+        "comments": 2,
+        "engagement": 8
+      }
+    ],
+    "Hockey Training": [
+      {
+        "text": "A kid on a weak Triple A team might actually develop worse than one on a good Double A program. But families stay because to leave would mean admitting the dream isn’t real. They crave the title, not the development. I once had a father come to me asking to sponsor his son’s team. They were terrible, one of those teams that couldn’t break out of their own zone without turning it over. #hockey #NHL #hockeylife #hockeyplayer #hockeyparents",
+        "likes": 30,
+        "comments": 12,
+        "engagement": 66
+      },
+      {
+        "text": "reminder: all the rides, the practices, the chaos, are not just about hockey. you’re raising a good person. someone who learns teamwork, grit, and how to show up, it’s shaping them in the best way.",
+        "likes": 11,
+        "comments": 2,
+        "engagement": 17
+      },
+      {
+        "text": "My U11AAA son plays center and is struggling to get points this season. His goals against record is excellent, but his line is not getting a lot of shots off. He's on a new team and his linemates have been changing pretty regularly, so that is part of the problem. They haven't built much chemistry yet. Should I be putting him in some additional development to help with this? Or just give it time? If so, what type of camp/clinic would be best to help with this?",
+        "likes": 0,
+        "comments": 3,
+        "engagement": 9
+      },
+      {
+        "text": "Hi everyone! My name is Michael Rubin and I’m a NCAA Division I Hockey player for Sacred Heart University. I recently started working with Marathon Athlete Development, a “big brother/sister” mentorship program that connects Division I athletes to youth athletes via weekly video calls. When I was growing up I wish I had someone to talk to that’s not a parent or a coach who is an expert in my sport. With Marathon Athlete Development, our accomplished Division I athletes work with young athletes to help them chase their dreams in athletics.\n\nI’m offering free consultation calls for any parents that are interested! Just fill out this form on our website: ",
+        "likes": 5,
+        "comments": 0,
+        "engagement": 5
+      },
+      {
+        "text": "Pathway Series – Select Invitational \n\nGet ready to compete, showcase, and be seen. We’re excited to confirm the Sioux City Musketeers (USHL) will be attending the Mosaic Pathway Series — a premier event built for elite AAA players ready to advance to the next level.\n\nThis is your opportunity to gain top-tier exposure, experience professional-level development, and connect directly with junior programs like the Musketeers of the USHL.\n\nMake your mark, elevate your game, and take the next step in your hockey journey.\n\nSpots are limited — learn more and inquire today at:\n\n🔗 [mosaicsportsco.com/pathway-series](https://mosaicsportsco.com/pathway-series)",
+        "likes": 3,
+        "comments": 0,
+        "engagement": 3
+      }
+    ],
+    "Parent Concerns": [
+      {
+        "text": "A kid on a weak Triple A team might actually develop worse than one on a good Double A program. But families stay because to leave would mean admitting the dream isn’t real. They crave the title, not the development. I once had a father come to me asking to sponsor his son’s team. They were terrible, one of those teams that couldn’t break out of their own zone without turning it over. #hockey #NHL #hockeylife #hockeyplayer #hockeyparents",
+        "likes": 30,
+        "comments": 12,
+        "engagement": 66
+      },
+      {
+        "text": "2026 Battery Spring/Summer Teams\n\nAccepting applications until January 1st.\n\nOur summer hockey teams are an important part of the Battery model, we compete at the top events in the summer against the very best from across the United States. We have teams in both the AAA and AA/A divisions for all birth years (2018 - 2010). We take our selection process very seriously and we make sure that each team is competitive and well-balanced at the appropriate level. Each team is assigned a professional coach that has been picked by our staff to represent the team and program.\n\nhttps://www.batteryhockeyteams.com/program/2026-spring-summer-travel/5304",
+        "likes": 7,
+        "comments": 0,
+        "engagement": 7
+      },
+      {
+        "text": "Hi everyone! My name is Michael Rubin and I’m a NCAA Division I Hockey player for Sacred Heart University. I recently started working with Marathon Athlete Development, a “big brother/sister” mentorship program that connects Division I athletes to youth athletes via weekly video calls. When I was growing up I wish I had someone to talk to that’s not a parent or a coach who is an expert in my sport. With Marathon Athlete Development, our accomplished Division I athletes work with young athletes to help them chase their dreams in athletics.\n\nI’m offering free consultation calls for any parents that are interested! Just fill out this form on our website: ",
+        "likes": 5,
+        "comments": 0,
+        "engagement": 5
+      },
+      {
+        "text": "If I got $10 every time our kids said “67,” our hockey season would be fully funded. 😂\nGuess we can skip the fundraising — but for real, I’d really appreciate everyone’s opinion.\n\nIt’s my first time coaching, even though I’ve played hockey my whole life. We’ve got a group of 2015's coming together for the first time for our school team, and I put together this drill called “67 – Hands Factory.”\n\nI wanted to start with something fun that builds puck control, range of motion, and confidence with the puck.\n\n👇\nHere’s how the drill works:\n • Players form a circle around the faceoff dot, like numbers on a clock.\n • Everyone has a black puck, except the player at 6 o’clock, who’s activated by the coach’s pass — they get a weighted puck.\n • That player skates straight through the center (the Hands Factory), showing off their best stickhandling move from 6 to 12 o’clock.\n • Once they hit 12 o’clock, they merge into the outer lane and start looping clockwise around the circle, weaving outside one player, inside the next.\n • They complete a lap and a half around the circle and finish back at 6 o’clock, where they started.\n • When the coach blows the whistle, the player at 7 o’clock becomes the chaser — their goal is to catch the puck carrier before they finish their loop.\n • After each rep, everyone rotates one spot clockwise so every kid eventually becomes both the puck carrier and the chaser.\n • Every three reps, the group switches directions (clockwise ↔ counterclockwise).\n • Goal: give every kid 10 total reps — five each way.\n\nProgressions:\n • Once the group’s smooth, add mohawks to the weaving part for stronger edgework and balance.\n • Emphasize body positioning, soft hands, and head-up control through the traffic.\n • The chaser learns realistic backchecking angles while the puck carrier works on puck protection and pace control.\n\nWould love some feedback — does this seem like a solid intro drill for a new group, or anything you’d tweak to make it better?",
+        "likes": 2,
+        "comments": 0,
+        "engagement": 2
+      },
+      {
+        "text": "You don’t get the glory. \n\nYou get the grind.\n\nYou’re not the captain.\n\nYou’re not the one getting tagged in highlight clips.\n\nYou’re the one taping your stick in silence while the first liners bask in the spotlight.\n\nBut here’s the thing.\n\nWhen the pressure hits…\n\nThey’ll need you.\n\nYou’re the one busting your ass in practice so someone else can look like a star.\n\nThe one logging garbage-time shifts like they’re gold.\n\nThe one who hears “just stay ready” like it’s a challenge.\n\nAnd you don’t complain. \n\nYou work.\n\nBecause you know games aren’t won by stats alone.\n\nThey’re won by sweat. \n\nBy grit. \n\nBy the players who show up when no one else wants to.\n\nAsk the Dodgers.\n\nGame 7. \n\nTwo outs. \n\nWorld Series slipping away.\n\nNumber 9 hitter walks up and saves the whole season.\n\nNot the golden boy.\n\nNot the MVP.\n\nJust a guy who was ready.\n\nMaybe that’s you.\n\nThat’s what role players do.\n\nYou stay ready. \n\nYou play hard. \n\nYou don’t wait for permission, you wait for your shot.\n\nAnd when it comes?\n\nYou don’t just take it.\n\nYou bury it.\n\nSo yeah, keep grinding.\n\nKeep being the reason your team stays in it.\n\nEven if no one’s clapping.\n\nAnd never underestimate your value. \n\nBecause someday, that puck’s going to find you in the most important moment.\n\nAnd when it does?\n\nMake ’em remember your name.",
+        "likes": 1,
+        "comments": 0,
+        "engagement": 1
+      }
+    ],
+    "Hockey Tournaments": [
+      {
+        "text": "My 2015 son would love to travel to Canada and play in a tournament next summer. He’s not elite by any means, just loves to play hockey and is fairly good at it. Are there ever teams looking for an extra skater for just a weekend tournament? Or are there any individual sign up options? Toronto area would be ideal but willing to go anywhere there’s an opportunity.",
+        "likes": 1,
+        "comments": 6,
+        "engagement": 19
+      },
+      {
+        "text": "If anyone in Michigan looking to finish a great competitive season...The 2011 OJG Gold team, playing independant and at the Yzerman Level, is looking to fill 1 Defense and 1 Forward positions. Must be in District 3. We are led by Coach Rod Heid and Coach Lou Tallerico who just won the U18 State title with their OJG U18 Team!! We have 4 more tournaments scheduled as well as some competitive showcases. If you are interested in coming out for a skate to meet the team and coaches, please contact Jason Hanley at 734-239-3755 or jhanley33@gmail.com",
+        "likes": 2,
+        "comments": 2,
+        "engagement": 8
+      },
+      {
+        "text": "2026 Battery Spring/Summer Teams\n\nAccepting applications until January 1st.\n\nOur summer hockey teams are an important part of the Battery model, we compete at the top events in the summer against the very best from across the United States. We have teams in both the AAA and AA/A divisions for all birth years (2018 - 2010). We take our selection process very seriously and we make sure that each team is competitive and well-balanced at the appropriate level. Each team is assigned a professional coach that has been picked by our staff to represent the team and program.\n\nhttps://www.batteryhockeyteams.com/program/2026-spring-summer-travel/5304",
+        "likes": 7,
+        "comments": 0,
+        "engagement": 7
+      },
+      {
+        "text": "Pathway Series – Select Invitational \n\nGet ready to compete, showcase, and be seen. We’re excited to confirm the Sioux City Musketeers (USHL) will be attending the Mosaic Pathway Series — a premier event built for elite AAA players ready to advance to the next level.\n\nThis is your opportunity to gain top-tier exposure, experience professional-level development, and connect directly with junior programs like the Musketeers of the USHL.\n\nMake your mark, elevate your game, and take the next step in your hockey journey.\n\nSpots are limited — learn more and inquire today at:\n\n🔗 [mosaicsportsco.com/pathway-series](https://mosaicsportsco.com/pathway-series)",
+        "likes": 3,
+        "comments": 0,
+        "engagement": 3
+      },
+      {
+        "text": "Pathway Series – Select Invitational\n\nGet ready to compete, showcase, and be seen. We’re thrilled to announce the Saskatoon Blades (WHL) will be attending the Mosaic Pathway Series — a premier event designed for elite AAA players ready to take the next step in their hockey journey.\n\nExperience top-tier exposure, professional-level development, and direct recruiting opportunities with WHL programs like the Blades. This is your chance to make an impression and open doors to your future in junior hockey.\n\nSpots are limited — learn more and inquire at:\n\n[mosaicsportsco.com/pathway-series](https://mosaicsportsco.com/pathway-series)",
+        "likes": 3,
+        "comments": 0,
+        "engagement": 3
+      }
+    ]
+  }
+}

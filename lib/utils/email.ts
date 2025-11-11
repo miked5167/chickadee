@@ -12,7 +12,7 @@ interface LeadNotificationData {
   parentName: string
   parentEmail: string
   parentPhone?: string
-  childAge?: number
+  eliteProspectsLink?: string
   message: string
   leadId: string
 }
@@ -109,10 +109,10 @@ function generateLeadNotificationHTML(data: LeadNotificationData): string {
                     </p>
                     ` : ''}
 
-                    ${data.childAge ? `
+                    ${data.eliteProspectsLink ? `
                     <p style="margin: 8px 0;">
-                      <strong style="color: #374151;">Child's Age:</strong><br />
-                      <span style="color: #6b7280;">${data.childAge} years old</span>
+                      <strong style="color: #374151;">Elite Prospects Link:</strong><br />
+                      <a href="${data.eliteProspectsLink}" style="color: #0066CC; text-decoration: none;" target="_blank">${data.eliteProspectsLink}</a>
                     </p>
                     ` : ''}
                   </td>
@@ -181,7 +181,7 @@ CONTACT INFORMATION:
 Parent Name: ${data.parentName}
 Email: ${data.parentEmail}
 ${data.parentPhone ? `Phone: ${data.parentPhone}` : ''}
-${data.childAge ? `Child's Age: ${data.childAge} years old` : ''}
+${data.eliteProspectsLink ? `Elite Prospects Link: ${data.eliteProspectsLink}` : ''}
 
 MESSAGE:
 --------

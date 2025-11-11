@@ -1,0 +1,214 @@
+{
+  "date": "2025-11-05",
+  "totalCities": 8,
+  "cities": [
+    {
+      "city": "Toronto",
+      "state": "Ontario",
+      "country": "Canada",
+      "keywords": [
+        {
+          "keyword": "Toronto hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Toronto",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Vancouver",
+      "state": "British Columbia",
+      "country": "Canada",
+      "keywords": [
+        {
+          "keyword": "Vancouver hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Vancouver",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Montreal",
+      "state": "Quebec",
+      "country": "Canada",
+      "keywords": [
+        {
+          "keyword": "Montreal hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Montreal",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Boston",
+      "state": "Massachusetts",
+      "country": "USA",
+      "keywords": [
+        {
+          "keyword": "Boston hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Boston",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Chicago",
+      "state": "Illinois",
+      "country": "USA",
+      "keywords": [
+        {
+          "keyword": "Chicago hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Chicago",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Detroit",
+      "state": "Michigan",
+      "country": "USA",
+      "keywords": [
+        {
+          "keyword": "Detroit hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Detroit",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "Minneapolis",
+      "state": "Minnesota",
+      "country": "USA",
+      "keywords": [
+        {
+          "keyword": "Minneapolis hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach Minneapolis",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    },
+    {
+      "city": "New York",
+      "state": "New York",
+      "country": "USA",
+      "keywords": [
+        {
+          "keyword": "New York hockey training",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        },
+        {
+          "keyword": "power skating coach New York",
+          "organicCount": 0,
+          "localPackCount": 0,
+          "directories": 0,
+          "businesses": 0,
+          "articles": 0
+        }
+      ],
+      "competitionLevel": "LOW",
+      "opportunityScore": 10
+    }
+  ],
+  "summary": {
+    "lowCompetitionCities": 8,
+    "mediumCompetitionCities": 0,
+    "highCompetitionCities": 0,
+    "avgDirectoriesPerCity": 0,
+    "avgBusinessesPerCity": 0,
+    "citiesWithLocalPack": 0
+  }
+}

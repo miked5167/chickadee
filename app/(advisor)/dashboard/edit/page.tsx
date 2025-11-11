@@ -4,51 +4,29 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent } from '@/components/ui/card'
 import LogoUpload from '@/components/dashboard/LogoUpload'
+import {
+  BasicInformationSection,
+  ContactInformationSection,
+  SocialMediaSection,
+  LocationSection,
+  BusinessDetailsSection,
+  AvailabilityPricingSection,
+  ServicesExpertiseSection,
+  TeamMembersSection
+} from '@/components/profile'
+import type { AdvisorFormData } from '@/types/advisor'
 import {
   Loader2,
   ArrowLeft,
   Save,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Eye,
+  ExternalLink
 } from 'lucide-react'
-
-interface AdvisorProfile {
-  id: string
-  name: string
-  logo_url: string | null
-  title: string | null
-  bio: string | null
-  email: string
-  phone: string | null
-  website_url: string | null
-  street_address: string | null
-  city: string
-  province: string
-  postal_code: string | null
-  services_offered: string[] | null
-  credentials: string[] | null
-  experience_years: number | null
-  specializations: string[] | null
-  age_groups_served: string[] | null
-  availability_status: string
-  consultation_fee: number | null
-}
-
-const PROVINCES = [
-  'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
-  'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
-  'Prince Edward Island', 'Quebec', 'Saskatchewan'
-]
-
-const AVAILABILITY_OPTIONS = [
-  { value: 'available', label: 'Available' },
-  { value: 'limited', label: 'Limited Availability' },
-  { value: 'not_accepting', label: 'Not Accepting New Clients' }
-]
 
 export default function EditProfilePage() {
   const router = useRouter()
@@ -56,11 +34,36 @@ export default function EditProfilePage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const [profile, setProfile] = useState<AdvisorProfile | null>(null)
+  const [formData, setFormData] = useState<Partial<AdvisorFormData>>({})
+  const [originalData, setOriginalData] = useState<Partial<AdvisorFormData>>({})
+  const [slug, setSlug] = useState<string | null>(null)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+  const [autoSaving, setAutoSaving] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [activeTab, setActiveTab] = useState<string>('basic')
 
   useEffect(() => {
     fetchProfile()
   }, [])
+
+  // Track unsaved changes
+  useEffect(() => {
+    if (Object.keys(originalData).length === 0) return
+    const changed = JSON.stringify(formData) !== JSON.stringify(originalData)
+    setHasUnsavedChanges(changed)
+  }, [formData, originalData])
+
+  // Auto-save effect (every 30 seconds if unsaved changes)
+  useEffect(() => {
+    if (!hasUnsavedChanges || autoSaving || saving) return
+
+    const timer = setTimeout(async () => {
+      await handleAutoSave()
+    }, 30000) // 30 seconds
+
+    return () => clearTimeout(timer)
+  }, [hasUnsavedChanges, autoSaving, saving])
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -79,7 +82,9 @@ export default function EditProfilePage() {
       }
 
       const data = await response.json()
-      setProfile(data.advisor)
+      setFormData(data.advisor)
+      setOriginalData(data.advisor)
+      setSlug(data.advisor.slug)
     } catch (err) {
       console.error('Error fetching profile:', err)
       setError('Failed to load profile. Please try again.')
@@ -88,13 +93,10 @@ export default function EditProfilePage() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!profile) return
+  const handleAutoSave = async () => {
+    if (!formData || saving) return
 
-    setSaving(true)
-    setError(null)
-    setSuccess(false)
+    setAutoSaving(true)
 
     try {
       const response = await fetch('/api/advisor/profile', {
@@ -102,7 +104,100 @@ export default function EditProfilePage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(profile),
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to auto-save')
+      }
+
+      const data = await response.json()
+      setFormData(data.advisor)
+      setOriginalData(data.advisor)
+      setHasUnsavedChanges(false)
+      setLastSaved(new Date())
+    } catch (err) {
+      console.error('Auto-save error:', err)
+      // Silent failure for auto-save
+    } finally {
+      setAutoSaving(false)
+    }
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {}
+
+    // Only validate business name as truly required
+    if (!formData.name || formData.name.trim().length < 2) {
+      newErrors.name = 'Business name is required (minimum 2 characters)'
+    }
+
+    // Optional validations - only check format/length if field has content
+    if (formData.description) {
+      const descLength = formData.description.length
+      if (descLength > 0 && descLength < 50) {
+        newErrors.description = 'Description should be at least 50 characters (or leave empty)'
+      }
+      if (descLength > 2000) {
+        newErrors.description = 'Description must not exceed 2000 characters'
+      }
+    }
+
+    setErrors(newErrors)
+
+    // Navigate to first tab with errors
+    if (Object.keys(newErrors).length > 0) {
+      const errorFields = Object.keys(newErrors)
+      const fieldToTab: Record<string, string> = {
+        name: 'basic',
+        description: 'basic',
+        years_in_business: 'basic',
+        email: 'contact',
+        phone: 'contact',
+        website_url: 'contact',
+        city: 'location',
+        state: 'location',
+        service_area: 'location',
+        consultation_format: 'business',
+        engagement_types: 'business',
+        payment_methods: 'business',
+        response_time: 'business',
+        accepting_clients: 'availability',
+        price_range: 'availability',
+        services_offered: 'expertise',
+        specializations: 'expertise',
+        age_groups_served: 'expertise',
+        credentials: 'expertise',
+        team_members: 'team',
+        instagram_url: 'social',
+        facebook_url: 'social',
+        twitter_url: 'social',
+        linkedin_url: 'social',
+        tiktok_url: 'social',
+        youtube_url: 'social'
+      }
+
+      const targetTab = fieldToTab[errorFields[0]] || 'basic'
+      setActiveTab(targetTab)
+    }
+
+    return Object.keys(newErrors).length === 0
+  }
+
+  const saveProfile = async (): Promise<boolean> => {
+    if (!formData) return false
+
+    setSaving(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/advisor/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       })
 
       if (!response.ok) {
@@ -111,32 +206,132 @@ export default function EditProfilePage() {
       }
 
       const data = await response.json()
-      setProfile(data.advisor)
+      setFormData(data.advisor)
+      setOriginalData(data.advisor)
       setSuccess(true)
-
-      // Scroll to top to show success message
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setHasUnsavedChanges(false)
+      setLastSaved(new Date())
 
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(false), 5000)
+
+      return true
     } catch (err) {
       console.error('Error updating profile:', err)
       setError(err instanceof Error ? err.message : 'Failed to update profile')
       window.scrollTo({ top: 0, behavior: 'smooth' })
+      return false
     } finally {
       setSaving(false)
     }
   }
 
-  const updateField = (field: keyof AdvisorProfile, value: any) => {
-    if (!profile) return
-    setProfile({ ...profile, [field]: value })
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!validateForm()) {
+      setError('Please fix the validation errors below')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      setTimeout(() => setError(null), 5000)
+      return
+    }
+
+    await saveProfile()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const updateArrayField = (field: keyof AdvisorProfile, value: string) => {
-    if (!profile) return
-    const array = value.split(',').map(item => item.trim()).filter(Boolean)
-    setProfile({ ...profile, [field]: array.length > 0 ? array : null })
+  const handleFieldChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+
+    // Clear error for this field if it exists
+    if (errors[field]) {
+      const newErrors = { ...errors }
+      delete newErrors[field]
+      setErrors(newErrors)
+    }
+  }
+
+  const formatLastSaved = () => {
+    if (!lastSaved) return null
+    const now = new Date()
+    const diffMs = now.getTime() - lastSaved.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+
+    if (diffMins < 1) return 'Last saved just now'
+    if (diffMins === 1) return 'Last saved 1 minute ago'
+    if (diffMins < 60) return `Last saved ${diffMins} minutes ago`
+
+    return `Last saved at ${lastSaved.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`
+  }
+
+  const calculateProfileCompletion = () => {
+    if (!formData) return { percentage: 0, missing: [] }
+
+    const requiredFields = [
+      { field: 'name', label: 'Business name' },
+      { field: 'email', label: 'Email' },
+      { field: 'city', label: 'City' },
+      { field: 'state', label: 'Province/State' },
+      { field: 'years_in_business', label: 'Years of experience' },
+      { field: 'service_area', label: 'Service area' },
+      { field: 'accepting_clients', label: 'Client acceptance status' },
+    ]
+
+    const optionalHighValueFields = [
+      { field: 'logo_url', label: 'Logo' },
+      { field: 'description', label: 'Description' },
+      { field: 'phone', label: 'Phone number' },
+      { field: 'website_url', label: 'Website URL' },
+      { field: 'instagram_url', label: 'Social media links' },
+      { field: 'team_members', label: 'Team members' },
+      { field: 'typical_engagement_range', label: 'Typical engagement range' },
+      { field: 'pricing_structure', label: 'Pricing structure' },
+      { field: 'pricing_details', label: 'Pricing details' },
+    ]
+
+    const allFields = [...requiredFields, ...optionalHighValueFields]
+    let filledCount = 0
+    const missing: string[] = []
+
+    requiredFields.forEach(({ field, label }) => {
+      const value = formData[field as keyof typeof formData]
+      if (value && (typeof value !== 'string' || value.trim() !== '')) {
+        filledCount++
+      } else {
+        missing.push(label)
+      }
+    })
+
+    optionalHighValueFields.forEach(({ field, label }) => {
+      const value = formData[field as keyof typeof formData]
+      if (field === 'team_members' || field === 'pricing_structure') {
+        // Array fields - check if array has values
+        if (value && Array.isArray(value) && value.length > 0) {
+          filledCount++
+        } else {
+          missing.push(label)
+        }
+      } else if (field === 'instagram_url') {
+        // Check if ANY social media link is filled
+        if (formData.instagram_url || formData.facebook_url || formData.twitter_url ||
+            formData.linkedin_url || formData.tiktok_url || formData.youtube_url) {
+          filledCount++
+        } else {
+          missing.push(label)
+        }
+      } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
+        filledCount++
+      } else if (field !== 'instagram_url') { // Don't double-count social media
+        missing.push(label)
+      }
+    })
+
+    const percentage = Math.round((filledCount / allFields.length) * 100)
+
+    return {
+      percentage,
+      missing: missing.slice(0, 5) // Only show first 5 missing items
+    }
   }
 
   if (loading) {
@@ -148,7 +343,7 @@ export default function EditProfilePage() {
     )
   }
 
-  if (!profile) {
+  if (!formData || !formData.id) {
     return (
       <div className="container mx-auto py-12 px-4">
         <Card>
@@ -165,19 +360,101 @@ export default function EditProfilePage() {
     )
   }
 
+  const completion = calculateProfileCompletion()
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
+      {/* Sticky Top Navigation Bar */}
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="flex items-center justify-between py-4">
+            <Link href="/dashboard">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </Link>
+
+            <div className="flex items-center gap-3">
+              {/* Auto-save status */}
+              <div className="text-sm text-gray-500">
+                {autoSaving ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    Saving...
+                  </span>
+                ) : lastSaved ? (
+                  <span>{formatLastSaved()}</span>
+                ) : null}
+              </div>
+
+              {slug && (
+                <Link href={`/listings/${slug}`} target="_blank">
+                  <Button variant="outline" size="sm">
+                    <Eye className="w-4 h-4 mr-2" />
+                    Preview Profile
+                    <ExternalLink className="w-3 h-3 ml-2" />
+                  </Button>
+                </Link>
+              )}
+
+              <Button
+                type="button"
+                size="sm"
+                disabled={saving}
+                onClick={() => {
+                  const form = document.querySelector('form') as HTMLFormElement
+                  form?.requestSubmit()
+                }}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto py-8 px-4 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/dashboard">
-            <Button variant="outline" size="sm" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </Link>
           <h1 className="text-3xl font-bold">Edit Your Profile</h1>
           <p className="text-gray-600 mt-1">Update your listing information</p>
+        </div>
+
+        {/* Profile Completion Indicator */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Profile Completion:</span>
+            <span className="text-sm font-bold text-blue-600">{completion.percentage}%</span>
+          </div>
+          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-3">
+            <div
+              className="h-full bg-green-500 transition-all duration-300"
+              style={{ width: `${completion.percentage}%` }}
+            />
+          </div>
+          {completion.missing.length > 0 && (
+            <div className="text-sm text-gray-600">
+              <span className="font-medium">Missing: </span>
+              {completion.missing.map((item, idx) => (
+                <span key={idx}>
+                  <span className="text-red-600">• </span>
+                  {item}
+                  {idx < completion.missing.length - 1 ? ' ' : ''}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Success Message */}
@@ -196,306 +473,130 @@ export default function EditProfilePage() {
           </div>
         )}
 
+        {/* Unsaved Changes Warning */}
+        {hasUnsavedChanges && !autoSaving && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600" />
+            <span className="text-amber-800">You have unsaved changes</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           {/* Logo Upload */}
           <div className="mb-6">
             <LogoUpload
-              currentLogoUrl={profile.logo_url}
+              currentLogoUrl={formData.logo_url || null}
               onUploadSuccess={(url) => {
-                setProfile({ ...profile, logo_url: url })
+                setFormData({ ...formData, logo_url: url })
                 setSuccess(true)
                 setTimeout(() => setSuccess(false), 5000)
               }}
               onDeleteSuccess={() => {
-                setProfile({ ...profile, logo_url: null })
+                setFormData({ ...formData, logo_url: null })
                 setSuccess(true)
                 setTimeout(() => setSuccess(false), 5000)
               }}
             />
           </div>
 
-          {/* Basic Information */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name <span className="text-red-600">*</span>
-                </label>
-                <Input
-                  type="text"
-                  value={profile.name}
-                  onChange={(e) => updateField('name', e.target.value)}
-                  required
-                />
-              </div>
+          {/* Tabbed Sections */}
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-6">
+              <TabsTrigger value="basic">Basic Info</TabsTrigger>
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+              <TabsTrigger value="location">Location</TabsTrigger>
+              <TabsTrigger value="business">Business</TabsTrigger>
+              <TabsTrigger value="availability">Availability</TabsTrigger>
+              <TabsTrigger value="expertise">Expertise</TabsTrigger>
+              <TabsTrigger value="team">Team</TabsTrigger>
+              <TabsTrigger value="social">Social</TabsTrigger>
+            </TabsList>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Professional Title
-                </label>
-                <Input
-                  type="text"
-                  value={profile.title || ''}
-                  onChange={(e) => updateField('title', e.target.value)}
-                  placeholder="e.g., Certified Hockey Advisor"
-                />
-              </div>
+            <TabsContent value="basic">
+              <BasicInformationSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
-                </label>
-                <Textarea
-                  value={profile.bio || ''}
-                  onChange={(e) => updateField('bio', e.target.value)}
-                  rows={6}
-                  placeholder="Tell families about your background and approach..."
-                />
-              </div>
+            <TabsContent value="contact">
+              <ContactInformationSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Years of Experience
-                </label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={profile.experience_years || ''}
-                  onChange={(e) => updateField('experience_years', e.target.value ? parseInt(e.target.value) : null)}
-                  placeholder="0"
-                />
-              </div>
-            </CardContent>
-          </Card>
+            <TabsContent value="location">
+              <LocationSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-          {/* Contact Information */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Contact Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email <span className="text-red-600">*</span>
-                </label>
-                <Input
-                  type="email"
-                  value={profile.email}
-                  onChange={(e) => updateField('email', e.target.value)}
-                  required
-                />
-              </div>
+            <TabsContent value="business">
+              <BusinessDetailsSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone
-                </label>
-                <Input
-                  type="tel"
-                  value={profile.phone || ''}
-                  onChange={(e) => updateField('phone', e.target.value)}
-                  placeholder="(555) 123-4567"
-                />
-              </div>
+            <TabsContent value="availability">
+              <AvailabilityPricingSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Website URL
-                </label>
-                <Input
-                  type="url"
-                  value={profile.website_url || ''}
-                  onChange={(e) => updateField('website_url', e.target.value)}
-                  placeholder="https://yourwebsite.com"
-                />
-              </div>
-            </CardContent>
-          </Card>
+            <TabsContent value="expertise">
+              <ServicesExpertiseSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-          {/* Location */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Location</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Street Address
-                </label>
-                <Input
-                  type="text"
-                  value={profile.street_address || ''}
-                  onChange={(e) => updateField('street_address', e.target.value)}
-                  placeholder="123 Main St"
-                />
-              </div>
+            <TabsContent value="team">
+              <TeamMembersSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City <span className="text-red-600">*</span>
-                  </label>
-                  <Input
-                    type="text"
-                    value={profile.city}
-                    onChange={(e) => updateField('city', e.target.value)}
-                    required
-                  />
-                </div>
+            <TabsContent value="social">
+              <SocialMediaSection
+                data={formData}
+                onChange={handleFieldChange}
+                errors={errors}
+                mode="advisor"
+              />
+            </TabsContent>
+          </Tabs>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Province <span className="text-red-600">*</span>
-                  </label>
-                  <select
-                    value={profile.province}
-                    onChange={(e) => updateField('province', e.target.value)}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    {PROVINCES.map((prov) => (
-                      <option key={prov} value={prov}>
-                        {prov}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Postal Code
-                  </label>
-                  <Input
-                    type="text"
-                    value={profile.postal_code || ''}
-                    onChange={(e) => updateField('postal_code', e.target.value)}
-                    placeholder="A1A 1A1"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Services & Expertise */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Services & Expertise</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Services Offered
-                </label>
-                <Input
-                  type="text"
-                  value={profile.services_offered?.join(', ') || ''}
-                  onChange={(e) => updateArrayField('services_offered', e.target.value)}
-                  placeholder="Pathway Planning, Team Selection, College Recruiting (comma separated)"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate multiple services with commas</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Credentials
-                </label>
-                <Input
-                  type="text"
-                  value={profile.credentials?.join(', ') || ''}
-                  onChange={(e) => updateArrayField('credentials', e.target.value)}
-                  placeholder="NCCP Level 3, Hockey Canada Certified (comma separated)"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate multiple credentials with commas</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Specializations
-                </label>
-                <Input
-                  type="text"
-                  value={profile.specializations?.join(', ') || ''}
-                  onChange={(e) => updateArrayField('specializations', e.target.value)}
-                  placeholder="AAA Hockey, College Recruitment, Skills Development (comma separated)"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate multiple specializations with commas</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Age Groups Served
-                </label>
-                <Input
-                  type="text"
-                  value={profile.age_groups_served?.join(', ') || ''}
-                  onChange={(e) => updateArrayField('age_groups_served', e.target.value)}
-                  placeholder="U13, U15, U18, Junior (comma separated)"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate multiple age groups with commas</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Availability & Pricing */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Availability & Pricing</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Availability Status
-                </label>
-                <select
-                  value={profile.availability_status}
-                  onChange={(e) => updateField('availability_status', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {AVAILABILITY_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Consultation Fee (CAD)
-                </label>
-                <Input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={profile.consultation_fee || ''}
-                  onChange={(e) => updateField('consultation_fee', e.target.value ? parseFloat(e.target.value) : null)}
-                  placeholder="150.00"
-                />
-                <p className="text-sm text-gray-500 mt-1">Leave blank if you offer free consultations</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 justify-end">
-            <Link href="/dashboard">
-              <Button type="button" variant="outline" disabled={saving}>
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" disabled={saving}>
+          {/* Bottom Save Button */}
+          <div className="mt-8 flex justify-end">
+            <Button type="submit" size="lg" disabled={saving}>
               {saving ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Saving Changes...
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
+                  <Save className="w-5 h-5 mr-2" />
+                  Save All Changes
                 </>
               )}
             </Button>

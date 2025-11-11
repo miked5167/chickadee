@@ -1,0 +1,540 @@
+{
+  "date": "2025-11-05",
+  "targetKeywords": [
+    "hockey advisor",
+    "hockey recruiting services",
+    "hockey agent directory",
+    "youth hockey advisor"
+  ],
+  "totalCompetitors": 56,
+  "competitors": [
+    {
+      "domain": "ckmsports.com",
+      "appearances": 4,
+      "keywords": [
+        "hockey advisor",
+        "hockey recruiting services",
+        "youth hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 11.5,
+      "bestPosition": 5
+    },
+    {
+      "domain": "ahadvising.com",
+      "appearances": 3,
+      "keywords": [
+        "hockey advisor",
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 5,
+      "bestPosition": 1
+    },
+    {
+      "domain": "usahockey.com",
+      "appearances": 3,
+      "keywords": [
+        "hockey recruiting services",
+        "hockey recruiting services",
+        "hockey agent directory"
+      ],
+      "avgPosition": 19,
+      "bestPosition": 18
+    },
+    {
+      "domain": "trailblazerhockeyadvisors.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 3,
+      "bestPosition": 2
+    },
+    {
+      "domain": "johnsonprohockey.com.app.crossbar.org",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 5,
+      "bestPosition": 5
+    },
+    {
+      "domain": "proambitions.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 5.5,
+      "bestPosition": 2
+    },
+    {
+      "domain": "reddit.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 6.5,
+      "bestPosition": 3
+    },
+    {
+      "domain": "hcsportsmanagement.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 6.5,
+      "bestPosition": 1
+    },
+    {
+      "domain": "o2kmanagement.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 7,
+      "bestPosition": 7
+    },
+    {
+      "domain": "iehockey.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 9,
+      "bestPosition": 4
+    },
+    {
+      "domain": "maphockey.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 9,
+      "bestPosition": 8
+    },
+    {
+      "domain": "ncsasports.org",
+      "appearances": 2,
+      "keywords": [
+        "hockey recruiting services",
+        "hockey recruiting services"
+      ],
+      "avgPosition": 9,
+      "bestPosition": 2
+    },
+    {
+      "domain": "smwwagency.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey agent directory",
+        "hockey agent directory"
+      ],
+      "avgPosition": 10.5,
+      "bestPosition": 9
+    },
+    {
+      "domain": "eliteprospects.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey agent directory",
+        "hockey agent directory"
+      ],
+      "avgPosition": 11,
+      "bestPosition": 3
+    },
+    {
+      "domain": "fchadvising.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "hockey recruiting services"
+      ],
+      "avgPosition": 12.5,
+      "bestPosition": 12
+    },
+    {
+      "domain": "premierhockeymanagement.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey agent directory",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 15.5,
+      "bestPosition": 15
+    },
+    {
+      "domain": "topdrafthockey.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 16,
+      "bestPosition": 12
+    },
+    {
+      "domain": "4sportshockey.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey agent directory",
+        "hockey agent directory"
+      ],
+      "avgPosition": 17,
+      "bestPosition": 14
+    },
+    {
+      "domain": "townshendhockey.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 18,
+      "bestPosition": 16
+    },
+    {
+      "domain": "tsathleticconsulting.substack.com",
+      "appearances": 2,
+      "keywords": [
+        "hockey advisor",
+        "youth hockey advisor"
+      ],
+      "avgPosition": 18,
+      "bestPosition": 18
+    },
+    {
+      "domain": "collegepipe.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 1,
+      "bestPosition": 1
+    },
+    {
+      "domain": "puckpedia.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 1,
+      "bestPosition": 1
+    },
+    {
+      "domain": "nhlpa.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 2,
+      "bestPosition": 2
+    },
+    {
+      "domain": "nsr-inc.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 3,
+      "bestPosition": 3
+    },
+    {
+      "domain": "your-college-hockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 4,
+      "bestPosition": 4
+    },
+    {
+      "domain": "phpa.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 4,
+      "bestPosition": 4
+    },
+    {
+      "domain": "sports-agent-directory.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 5,
+      "bestPosition": 5
+    },
+    {
+      "domain": "tbchockeyadvisors.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey advisor"
+      ],
+      "avgPosition": 6,
+      "bestPosition": 6
+    },
+    {
+      "domain": "playcollegefieldhockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 6,
+      "bestPosition": 6
+    },
+    {
+      "domain": "caa.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 6,
+      "bestPosition": 6
+    },
+    {
+      "domain": "hawkeyehockeyservices.com",
+      "appearances": 1,
+      "keywords": [
+        "youth hockey advisor"
+      ],
+      "avgPosition": 6,
+      "bestPosition": 6
+    },
+    {
+      "domain": "womenscollegehockeyrecruiting.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 7,
+      "bestPosition": 7
+    },
+    {
+      "domain": "quartexxmanagement.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 7,
+      "bestPosition": 7
+    },
+    {
+      "domain": "nexlevelhockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey advisor"
+      ],
+      "avgPosition": 8,
+      "bestPosition": 8
+    },
+    {
+      "domain": "productiverecruit.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 8,
+      "bestPosition": 8
+    },
+    {
+      "domain": "octagon.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 8,
+      "bestPosition": 8
+    },
+    {
+      "domain": "nfhca.org",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 9,
+      "bestPosition": 9
+    },
+    {
+      "domain": "keystonesports.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 10,
+      "bestPosition": 10
+    },
+    {
+      "domain": "teamwass.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 10,
+      "bestPosition": 10
+    },
+    {
+      "domain": "sportsrecruits.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 11,
+      "bestPosition": 11
+    },
+    {
+      "domain": "phphockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 11,
+      "bestPosition": 11
+    },
+    {
+      "domain": "jdmsports.com",
+      "appearances": 1,
+      "keywords": [
+        "youth hockey advisor"
+      ],
+      "avgPosition": 11,
+      "bestPosition": 11
+    },
+    {
+      "domain": "tcoyohockey.org",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 13,
+      "bestPosition": 13
+    },
+    {
+      "domain": "globalhockey.net",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 13,
+      "bestPosition": 13
+    },
+    {
+      "domain": "facebook.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey advisor"
+      ],
+      "avgPosition": 14,
+      "bestPosition": 14
+    },
+    {
+      "domain": "fieldlevel.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 14,
+      "bestPosition": 14
+    },
+    {
+      "domain": "apx-hockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey advisor"
+      ],
+      "avgPosition": 15,
+      "bestPosition": 15
+    },
+    {
+      "domain": "gatewayfieldhockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 15,
+      "bestPosition": 15
+    },
+    {
+      "domain": "buckleysports.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 15,
+      "bestPosition": 15
+    },
+    {
+      "domain": "collegehockeyfamilyadvisor.com",
+      "appearances": 1,
+      "keywords": [
+        "youth hockey advisor"
+      ],
+      "avgPosition": 16,
+      "bestPosition": 16
+    },
+    {
+      "domain": "paragonsportsconsulting.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey advisor"
+      ],
+      "avgPosition": 17,
+      "bestPosition": 17
+    },
+    {
+      "domain": "stealthfieldhockey.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 17,
+      "bestPosition": 17
+    },
+    {
+      "domain": "testing123jb.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey agent directory"
+      ],
+      "avgPosition": 17,
+      "bestPosition": 17
+    },
+    {
+      "domain": "rrihockeyagency.com",
+      "appearances": 1,
+      "keywords": [
+        "youth hockey advisor"
+      ],
+      "avgPosition": 17,
+      "bestPosition": 17
+    },
+    {
+      "domain": "hnibonline.com",
+      "appearances": 1,
+      "keywords": [
+        "hockey recruiting services"
+      ],
+      "avgPosition": 18,
+      "bestPosition": 18
+    },
+    {
+      "domain": "hamptonhockey.com",
+      "appearances": 1,
+      "keywords": [
+        "youth hockey advisor"
+      ],
+      "avgPosition": 19,
+      "bestPosition": 19
+    }
+  ]
+}

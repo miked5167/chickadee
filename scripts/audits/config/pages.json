@@ -1,0 +1,44 @@
+[
+  {
+    "name": "homepage",
+    "url": "http://localhost:3000",
+    "description": "Main landing page with hero, search, and featured advisors",
+    "tier": 1,
+    "priority": "critical"
+  },
+  {
+    "name": "listings",
+    "url": "http://localhost:3000/listings",
+    "description": "Search and filter page for all advisors",
+    "tier": 1,
+    "priority": "critical"
+  },
+  {
+    "name": "listing-detail",
+    "url": "http://localhost:3000/listings/369-sports-entertainment",
+    "description": "Individual advisor profile with full details",
+    "tier": 1,
+    "priority": "critical"
+  },
+  {
+    "name": "blog",
+    "url": "http://localhost:3000/blog",
+    "description": "Blog homepage with article listings",
+    "tier": 2,
+    "priority": "important"
+  },
+  {
+    "name": "blog-article",
+    "url": "http://localhost:3000/blog/understanding-hockey-advisor-services",
+    "description": "Sample blog article page",
+    "tier": 2,
+    "priority": "important"
+  },
+  {
+    "name": "demo-dashboard",
+    "url": "http://localhost:3000/demo/dashboard",
+    "description": "Demo advisor dashboard showcase",
+    "tier": 2,
+    "priority": "important"
+  }
+]

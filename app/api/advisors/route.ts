@@ -1,7 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getEngagementRangeNumericValue } from '@/lib/constants/profile-fields'
 
 export const dynamic = 'force-dynamic'
+
+// Helper function to detect if search text is a state/province name and convert to abbreviation
+function getStateAbbreviation(searchText: string): string | null {
+  const normalized = searchText.toLowerCase().trim()
+
+  const usStates: Record<string, string> = {
+    'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR',
+    'california': 'CA', 'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE',
+    'florida': 'FL', 'georgia': 'GA', 'hawaii': 'HI', 'idaho': 'ID',
+    'illinois': 'IL', 'indiana': 'IN', 'iowa': 'IA', 'kansas': 'KS',
+    'kentucky': 'KY', 'louisiana': 'LA', 'maine': 'ME', 'maryland': 'MD',
+    'massachusetts': 'MA', 'michigan': 'MI', 'minnesota': 'MN', 'mississippi': 'MS',
+    'missouri': 'MO', 'montana': 'MT', 'nebraska': 'NE', 'nevada': 'NV',
+    'new hampshire': 'NH', 'new jersey': 'NJ', 'new mexico': 'NM', 'new york': 'NY',
+    'north carolina': 'NC', 'north dakota': 'ND', 'ohio': 'OH', 'oklahoma': 'OK',
+    'oregon': 'OR', 'pennsylvania': 'PA', 'rhode island': 'RI', 'south carolina': 'SC',
+    'south dakota': 'SD', 'tennessee': 'TN', 'texas': 'TX', 'utah': 'UT',
+    'vermont': 'VT', 'virginia': 'VA', 'washington': 'WA', 'west virginia': 'WV',
+    'wisconsin': 'WI', 'wyoming': 'WY',
+  }
+
+  const canadianProvinces: Record<string, string> = {
+    'alberta': 'AB', 'british columbia': 'BC', 'manitoba': 'MB',
+    'new brunswick': 'NB', 'newfoundland and labrador': 'NL', 'newfoundland': 'NL',
+    'northwest territories': 'NT', 'nova scotia': 'NS', 'nunavut': 'NU',
+    'ontario': 'ON', 'prince edward island': 'PE', 'pei': 'PE',
+    'quebec': 'QC', 'québec': 'QC',
+    'saskatchewan': 'SK', 'yukon': 'YT',
+  }
+
+  // Check US states
+  if (usStates[normalized]) {
+    return usStates[normalized]
+  }
+
+  // Check Canadian provinces
+  if (canadianProvinces[normalized]) {
+    return canadianProvinces[normalized]
+  }
+
+  return null
+}
 
 /**
  * GET /api/advisors
@@ -15,7 +58,10 @@ export const dynamic = 'force-dynamic'
  * - minRating: number (minimum average rating 1-5)
  * - country: string (filter by country: "US" or "CA")
  * - state: string (state/province for priority sorting: "ON", "QC", "MA", "NY", etc.)
- * - sort: "distance" | "rating" | "reviews" | "name" | "recent"
+ * - featured: string ("true" to show only featured advisors)
+ * - priceRange: string[] (comma-separated price ranges)
+ * - pricingStructure: string[] (comma-separated pricing structures)
+ * - sort: "distance" | "rating" | "reviews" | "price-low" | "price-high" | "name" | "recent"
  * - page: number (default: 1)
  * - limit: number (default: 30, max: 100)
  * - search: string (text search on name/description)
@@ -34,13 +80,29 @@ export async function GET(request: NextRequest) {
     const minRating = searchParams.get('minRating') ? parseFloat(searchParams.get('minRating')!) : null
     const country = searchParams.get('country') // "US" or "CA"
     const searchState = searchParams.get('state') // "ON", "QC", "MA", "NY", etc.
+    const featured = searchParams.get('featured') === 'true'
     const sort = (searchParams.get('sort') || 'distance') as string
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1
     const limit = Math.min(
       searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 30,
       100
     )
-    const searchText = searchParams.get('search')
+    let searchText = searchParams.get('search')
+    const priceRangeParam = searchParams.get('priceRange')
+    const priceRanges = priceRangeParam ? priceRangeParam.split(',').map(r => r.trim()) : null
+    const pricingStructureParam = searchParams.get('pricingStructure')
+    const pricingStructures = pricingStructureParam ? pricingStructureParam.split(',').map(s => s.trim()) : null
+
+    // Check if search text is a state/province name
+    let detectedState: string | null = null
+    if (searchText && searchText.trim().length > 0) {
+      const stateAbbr = getStateAbbreviation(searchText)
+      if (stateAbbr) {
+        detectedState = stateAbbr
+        // Clear searchText so it's treated as a state filter, not a text search
+        searchText = null
+      }
+    }
 
     const supabase = await createClient()
 
@@ -74,14 +136,37 @@ export async function GET(request: NextRequest) {
       query = query.eq('country', country)
     }
 
+    // State/Province filtering
+    // Use explicit state parameter OR detected state from search text
+    const effectiveState = searchState || detectedState
+    if (effectiveState) {
+      query = query.eq('state', effectiveState)
+    }
+
+    // Featured filtering
+    if (featured) {
+      query = query.eq('is_featured', true)
+    }
+
     // Rating filtering
     if (minRating !== null && minRating > 0) {
       query = query.gte('average_rating', minRating)
     }
 
-    // Text search on name and description
+    // Text search on name, description, city, and state
     if (searchText && searchText.trim().length > 0) {
-      query = query.or(`name.ilike.%${searchText}%,description.ilike.%${searchText}%`)
+      query = query.or(`name.ilike.%${searchText}%,description.ilike.%${searchText}%,city.ilike.%${searchText}%,state.ilike.%${searchText}%`)
+    }
+
+    // Price range filtering
+    if (priceRanges && priceRanges.length > 0) {
+      query = query.in('typical_engagement_range', priceRanges)
+    }
+
+    // Pricing structure filtering
+    if (pricingStructures && pricingStructures.length > 0) {
+      // Use overlaps operator for array contains
+      query = query.overlaps('pricing_structure', pricingStructures)
     }
 
     // Execute query
@@ -149,6 +234,36 @@ export async function GET(request: NextRequest) {
     // Sorting
     let sortedAdvisors = [...advisorsWithDistance]
 
+    // If there's a text search, add relevance scoring and sort by relevance first
+    if (searchText && searchText.trim().length > 0) {
+      const searchLower = searchText.toLowerCase().trim()
+
+      sortedAdvisors = sortedAdvisors.map(advisor => ({
+        ...advisor,
+        relevanceScore: (() => {
+          const nameLower = (advisor.name || '').toLowerCase()
+          const cityLower = (advisor.city || '').toLowerCase()
+          const descLower = (advisor.description || '').toLowerCase()
+
+          // Higher score = more relevant
+          if (nameLower.startsWith(searchLower)) return 100 // Name starts with search
+          if (nameLower.includes(searchLower)) return 80    // Name contains search
+          if (cityLower.startsWith(searchLower)) return 60  // City starts with search
+          if (cityLower.includes(searchLower)) return 40    // City contains search
+          if (descLower.includes(searchLower)) return 20    // Description contains search
+          return 0
+        })()
+      }))
+
+      // Sort by relevance, then by rating
+      sortedAdvisors.sort((a, b) => {
+        if (a.relevanceScore !== b.relevanceScore) {
+          return b.relevanceScore - a.relevanceScore // Higher relevance first
+        }
+        return (b.average_rating || 0) - (a.average_rating || 0) // Then by rating
+      })
+    }
+
     switch (sort) {
       case 'distance':
         if (lat !== null && lng !== null) {
@@ -200,6 +315,30 @@ export async function GET(request: NextRequest) {
           const countA = a.review_count || 0
           const countB = b.review_count || 0
           return countB - countA // Most reviews first
+        })
+        break
+
+      case 'price-low':
+        sortedAdvisors.sort((a, b) => {
+          const priceA = getEngagementRangeNumericValue(a.typical_engagement_range)
+          const priceB = getEngagementRangeNumericValue(b.typical_engagement_range)
+          // Handle nulls - put them at the end
+          if (priceA === null && priceB === null) return 0
+          if (priceA === null) return 1
+          if (priceB === null) return -1
+          return priceA - priceB // Lowest first
+        })
+        break
+
+      case 'price-high':
+        sortedAdvisors.sort((a, b) => {
+          const priceA = getEngagementRangeNumericValue(a.typical_engagement_range)
+          const priceB = getEngagementRangeNumericValue(b.typical_engagement_range)
+          // Handle nulls - put them at the end
+          if (priceA === null && priceB === null) return 0
+          if (priceA === null) return 1
+          if (priceB === null) return -1
+          return priceB - priceA // Highest first
         })
         break
 
@@ -284,9 +423,11 @@ export async function GET(request: NextRequest) {
         specialties,
         minRating,
         country,
-        state: searchState,
+        state: effectiveState, // Returns the actual state filter applied (from param or detected from search)
         sort,
         search: searchText,
+        priceRanges,
+        pricingStructures,
       },
     })
   } catch (error) {

@@ -15,28 +15,19 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { FaFilter, FaTimes, FaStar } from 'react-icons/fa'
+import { DollarSign } from 'lucide-react'
 import { DISTANCE_RADIUS_OPTIONS } from '@/lib/utils/distance'
+import { TYPICAL_ENGAGEMENT_RANGES, PRICING_STRUCTURE_OPTIONS, ALL_SPECIALIZATIONS } from '@/lib/constants/profile-fields'
 
-// Common hockey advisor specialties
-const SPECIALTIES = [
-  'Player Development',
-  'College Recruiting',
-  'Showcase Guidance',
-  'AAA Team Placement',
-  'Prep School Selection',
-  'Women\'s Hockey',
-  'Goalie Training',
-  'Skill Development',
-  'Hockey IQ Training',
-  'Off-Ice Training',
-  'Mental Performance',
-  'NCAA Compliance',
-]
+// Use the same specializations that advisors can select in their dashboard
+const SPECIALTIES = ALL_SPECIALIZATIONS
 
 const SORT_OPTIONS = [
   { value: 'distance', label: 'Distance (closest first)' },
   { value: 'rating', label: 'Rating (highest first)' },
   { value: 'reviews', label: 'Most Reviewed' },
+  { value: 'price-low', label: 'Price (low to high)' },
+  { value: 'price-high', label: 'Price (high to low)' },
   { value: 'name', label: 'Name (A-Z)' },
   { value: 'recent', label: 'Recently Added' },
 ]
@@ -78,6 +69,16 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     return searchParams.get('country') || ''
   })
 
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>(() => {
+    const priceRangeParam = searchParams.get('priceRange')
+    return priceRangeParam ? priceRangeParam.split(',').map(s => s.trim()) : []
+  })
+
+  const [selectedPricingStructures, setSelectedPricingStructures] = useState<string[]>(() => {
+    const pricingStructureParam = searchParams.get('pricingStructure')
+    return pricingStructureParam ? pricingStructureParam.split(',').map(s => s.trim()) : []
+  })
+
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   // Track if there are any active filters
@@ -85,7 +86,9 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     selectedSpecialties.length > 0 ||
     selectedRating !== '' ||
     selectedRadius !== '50' ||
-    selectedCountry !== ''
+    selectedCountry !== '' ||
+    selectedPriceRanges.length > 0 ||
+    selectedPricingStructures.length > 0
 
   // Apply filters
   const applyFilters = () => {
@@ -97,12 +100,14 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     const lng = searchParams.get('lng')
     const search = searchParams.get('search')
     const state = searchParams.get('state')
+    const featured = searchParams.get('featured')
 
     if (location) params.set('location', location)
     if (lat) params.set('lat', lat)
     if (lng) params.set('lng', lng)
     if (search) params.set('search', search)
     if (state) params.set('state', state)
+    if (featured) params.set('featured', featured)
 
     // Add filter params
     if (selectedRadius) params.set('radius', selectedRadius)
@@ -112,6 +117,12 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     if (selectedRating) params.set('minRating', selectedRating)
     if (selectedCountry) params.set('country', selectedCountry)
     if (selectedSort) params.set('sort', selectedSort)
+    if (selectedPriceRanges.length > 0) {
+      params.set('priceRange', selectedPriceRanges.join(','))
+    }
+    if (selectedPricingStructures.length > 0) {
+      params.set('pricingStructure', selectedPricingStructures.join(','))
+    }
 
     // Reset to page 1 when filters change
     params.set('page', '1')
@@ -127,6 +138,8 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     setSelectedRating('')
     setSelectedCountry('')
     setSelectedSort('distance')
+    setSelectedPriceRanges([])
+    setSelectedPricingStructures([])
 
     const params = new URLSearchParams()
     const location = searchParams.get('location')
@@ -134,12 +147,14 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     const lng = searchParams.get('lng')
     const search = searchParams.get('search')
     const state = searchParams.get('state')
+    const featured = searchParams.get('featured')
 
     if (location) params.set('location', location)
     if (lat) params.set('lat', lat)
     if (lng) params.set('lng', lng)
     if (search) params.set('search', search)
     if (state) params.set('state', state)
+    if (featured) params.set('featured', featured)
     params.set('page', '1')
 
     router.push(`/listings?${params.toString()}`)
@@ -153,6 +168,28 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
         return prev.filter(s => s !== specialty)
       } else {
         return [...prev, specialty]
+      }
+    })
+  }
+
+  // Toggle price range selection
+  const togglePriceRange = (range: string) => {
+    setSelectedPriceRanges(prev => {
+      if (prev.includes(range)) {
+        return prev.filter(r => r !== range)
+      } else {
+        return [...prev, range]
+      }
+    })
+  }
+
+  // Toggle pricing structure selection
+  const togglePricingStructure = (structure: string) => {
+    setSelectedPricingStructures(prev => {
+      if (prev.includes(structure)) {
+        return prev.filter(s => s !== structure)
+      } else {
+        return [...prev, structure]
       }
     })
   }
@@ -254,21 +291,21 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
               <CardContent>
                 <RadioGroup value={selectedCountry} onValueChange={setSelectedCountry}>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="" id="country-any" />
-                    <Label htmlFor="country-any" className="cursor-pointer">
-                      Any Country
+                    <RadioGroupItem value="CA" id="country-ca" />
+                    <Label htmlFor="country-ca" className="cursor-pointer">
+                      Canada
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="US" id="country-us" />
                     <Label htmlFor="country-us" className="cursor-pointer">
-                      United States 🇺🇸
+                      United States
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="CA" id="country-ca" />
-                    <Label htmlFor="country-ca" className="cursor-pointer">
-                      Canada 🇨🇦
+                    <RadioGroupItem value="" id="country-any" />
+                    <Label htmlFor="country-any" className="cursor-pointer">
+                      Any Country
                     </Label>
                   </div>
                 </RadioGroup>
@@ -327,6 +364,74 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
                         className="text-sm cursor-pointer"
                       >
                         {specialty}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Price Range Filter */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <DollarSign className="w-4 h-4" />
+                  Price Range
+                  {selectedPriceRanges.length > 0 && (
+                    <span className="ml-2 text-sm font-normal text-gray-500">
+                      ({selectedPriceRanges.length})
+                    </span>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {TYPICAL_ENGAGEMENT_RANGES.filter(range => range.value !== 'varies').map(range => (
+                    <div key={range.value} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`price-range-${range.value}`}
+                        checked={selectedPriceRanges.includes(range.value)}
+                        onCheckedChange={() => togglePriceRange(range.value)}
+                      />
+                      <Label
+                        htmlFor={`price-range-${range.value}`}
+                        className="text-sm cursor-pointer"
+                      >
+                        {range.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pricing Structure Filter */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <DollarSign className="w-4 h-4" />
+                  Pricing Options
+                  {selectedPricingStructures.length > 0 && (
+                    <span className="ml-2 text-sm font-normal text-gray-500">
+                      ({selectedPricingStructures.length})
+                    </span>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {PRICING_STRUCTURE_OPTIONS.map(option => (
+                    <div key={option.value} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`pricing-structure-${option.value}`}
+                        checked={selectedPricingStructures.includes(option.value)}
+                        onCheckedChange={() => togglePricingStructure(option.value)}
+                      />
+                      <Label
+                        htmlFor={`pricing-structure-${option.value}`}
+                        className="text-sm cursor-pointer"
+                      >
+                        {option.label}
                       </Label>
                     </div>
                   ))}

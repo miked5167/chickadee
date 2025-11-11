@@ -1,0 +1,62 @@
+{
+  "date": "2025-11-05",
+  "citiesAnalyzed": 8,
+  "results": [
+    {
+      "city": "Toronto",
+      "state": "Ontario",
+      "keyword": "hockey advisor Toronto",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Vancouver",
+      "state": "British Columbia",
+      "keyword": "hockey advisor Vancouver",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Montreal",
+      "state": "Quebec",
+      "keyword": "hockey advisor Montreal",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Boston",
+      "state": "Massachusetts",
+      "keyword": "hockey advisor Boston",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Chicago",
+      "state": "Illinois",
+      "keyword": "hockey advisor Chicago",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Detroit",
+      "state": "Michigan",
+      "keyword": "hockey advisor Detroit",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "Minneapolis",
+      "state": "Minnesota",
+      "keyword": "hockey advisor Minneapolis",
+      "organicResults": [],
+      "localResults": []
+    },
+    {
+      "city": "New York",
+      "state": "New York",
+      "keyword": "hockey advisor New York",
+      "organicResults": [],
+      "localResults": []
+    }
+  ]
+}

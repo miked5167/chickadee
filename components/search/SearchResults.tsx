@@ -7,6 +7,7 @@ import { Pagination } from '@/components/search/Pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FaSearch, FaTimes, FaStar, FaMapMarkerAlt } from 'react-icons/fa'
+import { getEngagementRangeLabel, getPricingStructureLabel } from '@/lib/constants/profile-fields'
 
 interface Advisor {
   id: string
@@ -49,6 +50,9 @@ interface SearchResultsProps {
     sort?: string
     page?: string
     search?: string
+    featured?: string
+    priceRange?: string
+    pricingStructure?: string
   }
 }
 
@@ -80,6 +84,9 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
         if (searchParams.sort) params.set('sort', searchParams.sort)
         if (searchParams.page) params.set('page', searchParams.page)
         if (searchParams.search) params.set('search', searchParams.search)
+        if (searchParams.featured) params.set('featured', searchParams.featured)
+        if (searchParams.priceRange) params.set('priceRange', searchParams.priceRange)
+        if (searchParams.pricingStructure) params.set('pricingStructure', searchParams.pricingStructure)
 
         const response = await fetch(`/api/advisors?${params.toString()}`)
 
@@ -107,18 +114,50 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
     setSearchInput(searchParams.search || '')
   }, [searchParams.search])
 
-  // Handle text search submission
-  const handleSearch = (e: React.FormEvent) => {
+  // Load Google Maps script for geocoding search terms
+  useEffect(() => {
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+    if (!apiKey) return
+
+    // Check if Google Maps script is already loaded
+    if (window.google && window.google.maps && window.google.maps.places) {
+      return
+    }
+
+    // Check if script is already being loaded
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]')
+    if (existingScript) {
+      return // Script is already loading
+    }
+
+    // Load Google Maps script
+    const script = document.createElement('script')
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=Function.prototype`
+    script.async = true
+    script.defer = true
+    script.onerror = () => {
+      console.error('Failed to load Google Maps script')
+    }
+    document.head.appendChild(script)
+  }, [])
+
+  // Handle text search submission - use as keyword search (no geocoding)
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
+    const trimmedInput = searchInput.trim()
+
     const params = new URLSearchParams(window.location.search)
 
-    if (searchInput.trim()) {
-      params.set('search', searchInput.trim())
-    } else {
+    if (!trimmedInput) {
       params.delete('search')
+      params.set('page', '1')
+      router.push(`/listings?${params.toString()}`)
+      return
     }
-    params.set('page', '1') // Reset to page 1
 
+    // Use as keyword search without geocoding
+    params.set('search', trimmedInput)
+    params.set('page', '1')
     router.push(`/listings?${params.toString()}`)
   }
 
@@ -134,6 +173,22 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
       } else {
         params.delete('specialty')
       }
+    } else if (filterKey === 'priceRange' && filterValue) {
+      // Remove specific price range from comma-separated list
+      const priceRanges = params.get('priceRange')?.split(',').filter(r => r.trim() !== filterValue) || []
+      if (priceRanges.length > 0) {
+        params.set('priceRange', priceRanges.join(','))
+      } else {
+        params.delete('priceRange')
+      }
+    } else if (filterKey === 'pricingStructure' && filterValue) {
+      // Remove specific pricing structure from comma-separated list
+      const pricingStructures = params.get('pricingStructure')?.split(',').filter(s => s.trim() !== filterValue) || []
+      if (pricingStructures.length > 0) {
+        params.set('pricingStructure', pricingStructures.join(','))
+      } else {
+        params.delete('pricingStructure')
+      }
     } else {
       params.delete(filterKey)
     }
@@ -148,6 +203,10 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
 
     if (searchParams.search) {
       filters.push({ key: 'search', label: `Search: "${searchParams.search}"` })
+    }
+
+    if (searchParams.featured === 'true') {
+      filters.push({ key: 'featured', label: 'Featured Advisors' })
     }
 
     if (searchParams.specialty) {
@@ -169,6 +228,20 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
     if (searchParams.country) {
       const countryLabel = searchParams.country === 'US' ? 'United States' : 'Canada'
       filters.push({ key: 'country', label: countryLabel })
+    }
+
+    if (searchParams.priceRange) {
+      const priceRanges = searchParams.priceRange.split(',').map(r => r.trim())
+      priceRanges.forEach(range => {
+        filters.push({ key: 'priceRange', label: getEngagementRangeLabel(range), value: range })
+      })
+    }
+
+    if (searchParams.pricingStructure) {
+      const pricingStructures = searchParams.pricingStructure.split(',').map(s => s.trim())
+      pricingStructures.forEach(structure => {
+        filters.push({ key: 'pricingStructure', label: getPricingStructureLabel(structure), value: structure })
+      })
     }
 
     return filters

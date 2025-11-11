@@ -1,0 +1,85 @@
+{
+  "date": "2025-11-06",
+  "totalProcessed": 9,
+  "successful": 9,
+  "failed": 0,
+  "costs": {
+    "firecrawl": 0.007,
+    "claude": 0.18,
+    "total": 0.187
+  },
+  "results": [
+    {
+      "id": "f8ddc156-2201-4dc7-bad8-d2aa834a818f",
+      "name": "Victorious Hockey Company",
+      "success": true,
+      "description": "Victorious Hockey Company: The Elite Hockey Advisor for Aspiring Players\nVictorious Hockey Company is the premier hockey advisory firm, dedicated to guiding players, coaches, and families on their hockey journey. With decades of specialized expertise in player development, NCAA recruiting, and professional hockey transitions, their proven team of hockey experts helps players reach their full potential. Victorious Hockey provides comprehensive services, including personalized career planning, skills training, and access to their extensive network of college and pro scouts. Whether you're an aspiring youth player or an NCAA prospect, Victorious Hockey is your trusted partner for unlocking your hockey dreams.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "c2cdce39-8cd7-44d3-94ad-0b037349ab28",
+      "name": "Visionary Sports",
+      "success": true,
+      "description": "Visionary Sports: Guiding Hockey Players to the Next Level. As dedicated hockey advisors, Visionary Sports specializes in helping aspiring athletes achieve their professional dreams. With a proven track record of player development and NCAA/junior hockey recruiting, their expert team provides comprehensive career guidance tailored to each player's unique journey. From evaluating talent to creating customized training plans, Visionary Sports ensures clients are well-prepared to take their hockey careers to new heights. Whether you're a youth player seeking to play at the collegiate level or a junior standout aiming for the pros, Visionary Sports is your trusted partner in navigating the competitive world of hockey.",
+      "firecrawlCost": 0,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "9eafa7ca-f9f1-41fc-84b0-bce327082b32",
+      "name": "Wingman Hockey Group",
+      "success": true,
+      "description": "Wingman Hockey Group: Your Premier Boutique Hockey Agency on the Prairies. As expert hockey advisors, Wingman specializes in guiding aspiring players through every stage of their hockey journey. With proven expertise in analytics, player development, and contract negotiation, the team at Wingman is dedicated to securing exceptional opportunities for their clients in the NCAA, junior leagues, and professional ranks. Leveraging cutting-edge technology and data-driven research, Wingman provides comprehensive, personalized support to help players reach their full potential and make their hockey dreams a reality.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "721a117f-58a1-49c5-82f3-ba9f9204e39c",
+      "name": "Wolfe Hockey Development",
+      "success": true,
+      "description": "Wolfe Hockey Development: The Premier Hockey Advisory and Player Consulting Experts\nWolfe Hockey Development is the go-to destination for aspiring hockey players seeking unparalleled guidance and resources to take their game to the next level. As dedicated hockey advisors and consultants, the team specializes in tailored player development, comprehensive career planning, and proven NCAA and professional hockey recruitment strategies. With decades of experience navigating the complex hockey journey, Wolfe Hockey provides personalized, results-driven support to help young athletes achieve their dreams of playing at the highest levels. From skills training and tactical coaching to mentorship and recruitment assistance, clients can expect a truly comprehensive experience designed to unlock their fullest potential on and off the ice.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "f4f2d093-3058-4d3e-84f1-a37d52804b6a",
+      "name": "Women's College Hockey Recruiting",
+      "success": true,
+      "description": "Women's College Hockey Recruiting is the expert advisory team dedicated to guiding aspiring hockey players on their journey to the next level. With proven expertise in player development, NCAA recruiting, and junior hockey, they work closely with athletes and families to reach their full potential and secure coveted roster spots at top college programs. Their specialized, comprehensive approach ensures each client maximizes their hockey career opportunities and achieves their dreams of competing at the highest collegiate and professional levels.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "f66ca2d3-0900-46db-b4a5-727f4fdba025",
+      "name": "Worldwide Sports Management Group",
+      "success": true,
+      "description": "Worldwide Sports Management Group: Your Elite Hockey Advisor Elevating Player Development and Careers Since 1995\n\nWorldwide Sports Management Group is the premier hockey advisory firm dedicated to guiding aspiring players on their journey to the next level. As expert hockey talent evaluators and career strategists, we partner with athletes, organizations, and leagues at every stage to bridge communication gaps and unlock unprecedented success. Our specialized approach has propelled countless players to achieve their NCAA and professional hockey dreams through comprehensive training, personalized career planning, and proven player representation.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "d588becc-4bf7-45b7-b8e4-105dc1288bab",
+      "name": "Yarema Hockey",
+      "success": true,
+      "description": "Yarema Hockey: The Proven Hockey Advisor for Aspiring Players. As expert hockey recruiters and talent evaluators, Yarema Hockey provides specialized, comprehensive guidance to help players reach the next level of their hockey journey - whether that's NCAA, junior, or professional hockey. With a proven track record in player development and college recruiting, their dedicated team offers unparalleled career coaching, training program design, and individualized talent assessment to position clients for long-term success. Yarema Hockey is the trusted partner for youth, junior, and NCAA hockey players seeking to maximize their potential and achieve their hockey dreams.",
+      "firecrawlCost": 0,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "fb9b9a27-7e27-4725-b6f0-b1e21225fd39",
+      "name": "Zenith Hockey Management",
+      "success": true,
+      "description": "Zenith Hockey Management: Elevating Hockey Dreams with Expert Representation and Unparalleled Guidance. As a specialized hockey advisory firm, we empower aspiring players to reach their full potential through personalized player development, NCAA recruiting support, and proven pathways to professional hockey. Our seasoned team of hockey experts leverages years of on-ice and off-ice experience to provide a comprehensive suite of services, from video analysis and mentorship to draft preparation and career planning. Trust Zenith to be your dedicated partner in navigating the competitive hockey landscape and unlocking your journey to the next level.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    },
+    {
+      "id": "6af7d183-91d2-468d-8ccd-122c26203a26",
+      "name": "Zero Klub Hockey",
+      "success": true,
+      "description": "Zero Klub Hockey and Advisory Group are expert hockey advisors dedicated to guiding aspiring players on their journey to the next level. Leveraging decades of experience in player development, NCAA recruiting, and professional scouting, their specialized training and comprehensive services help youth, junior, and college-bound athletes maximize their potential. From enhancing skating and technical skills to optimizing NCAA and pro prospects, Zero Klub's proven approach empowers clients to elevate their game and reach their hockey dreams.",
+      "firecrawlCost": 0.001,
+      "claudeCost": 0.02
+    }
+  ]
+}

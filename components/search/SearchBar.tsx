@@ -5,9 +5,16 @@ import { useRouter } from 'next/navigation'
 import { FaSearch, FaMapMarkerAlt, FaCrosshairs, FaTimes } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { useLocation } from '@/lib/hooks/use-location'
+import {
+  reverseGeocode as osmReverseGeocode,
+  getCachedLocation,
+  cacheLocation,
+  clearCachedLocation
+} from '@/lib/utils/geocoding'
 
 export function SearchBar() {
   const router = useRouter()
+  const [searchInput, setSearchInput] = useState('')
   const [locationInput, setLocationInput] = useState('')
   const [isGeocoding, setIsGeocoding] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -31,6 +38,21 @@ export function SearchBar() {
     permissionDenied,
     clearLocation: clearGeoLocation,
   } = useLocation()
+
+  // Check for cached location on mount
+  useEffect(() => {
+    const cached = getCachedLocation()
+    if (cached) {
+      setLocationInput(cached.formatted)
+      setSelectedLocation({
+        name: cached.formatted,
+        lat: cached.latitude,
+        lng: cached.longitude,
+        country: cached.country,
+        state: cached.state,
+      })
+    }
+  }, [])
 
   // Initialize Google Places Autocomplete
   useEffect(() => {
@@ -122,29 +144,44 @@ export function SearchBar() {
   // When geolocation succeeds, reverse geocode and set location
   useEffect(() => {
     if (latitude && longitude) {
-      reverseGeocode(latitude, longitude).then((result) => {
+      osmReverseGeocode(latitude, longitude).then((result) => {
         if (result) {
-          const locationName = result.city && result.state
-            ? `${result.city}, ${result.state}`
-            : result.formattedAddress || 'Your Location'
-
-          setSelectedLocation({
-            name: locationName,
+          const locationData = {
+            name: result.formatted,
             lat: latitude,
             lng: longitude,
-            country: result.country || '',
-            state: result.state || '',
-          })
-          setLocationInput(locationName)
+            country: result.country,
+            state: result.state,
+          }
+
+          setSelectedLocation(locationData)
+          setLocationInput(result.formatted)
+
+          // Cache the location for 30 minutes
+          cacheLocation(result)
         }
       })
     }
-  }, [latitude, longitude, reverseGeocode])
+  }, [latitude, longitude])
 
   const handleClearLocation = () => {
     setLocationInput('')
     setSelectedLocation(null)
     clearGeoLocation()
+    clearCachedLocation()
+  }
+
+  const handleClearSearch = () => {
+    setSearchInput('')
+  }
+
+  const handleLocationInputChange = (value: string) => {
+    setLocationInput(value)
+    // Clear selected location and cache when user manually types
+    if (selectedLocation) {
+      setSelectedLocation(null)
+      clearCachedLocation()
+    }
   }
 
   // Handle popular search click - geocode the location and navigate
@@ -278,6 +315,11 @@ export function SearchBar() {
     // Build search URL with query parameters
     const params = new URLSearchParams()
 
+    // Add search/keyword parameter if provided
+    if (searchInput) {
+      params.set('search', searchInput)
+    }
+
     if (selectedLocation) {
       params.set('location', selectedLocation.name)
       params.set('lat', selectedLocation.lat.toString())
@@ -302,46 +344,69 @@ export function SearchBar() {
   return (
     <form onSubmit={handleSearch} className="w-full max-w-4xl mx-auto">
       <div className="flex flex-col md:flex-row gap-3 bg-white rounded-lg shadow-lg p-2">
-        {/* Location Input */}
+        {/* Search/Name Input */}
         <div className="flex-1 flex items-center gap-2 px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
-          <FaMapMarkerAlt className="text-gray-400" />
+          <FaSearch className="text-gray-400" />
           <input
-            ref={inputRef}
             type="text"
-            placeholder="City, State/Province, or ZIP/Postal Code"
-            value={locationInput}
-            onChange={(e) => setLocationInput(e.target.value)}
+            placeholder="Search advisors or agencies"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="flex-1 outline-none text-gray-700 placeholder-gray-400"
+            aria-label="Search for advisors or agencies"
           />
-          {locationInput && (
+          {searchInput && (
             <button
               type="button"
-              onClick={handleClearLocation}
+              onClick={handleClearSearch}
               className="text-gray-400 hover:text-gray-600"
-              aria-label="Clear location"
+              aria-label="Clear search"
             >
               <FaTimes />
             </button>
           )}
         </div>
 
-        {/* Near Me Button */}
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleNearMe}
-          disabled={geoLoading}
-          className="md:w-auto whitespace-nowrap bg-white hover:bg-gray-50 text-gray-700 border-gray-300 px-8 py-6 text-lg font-semibold"
-        >
-          <FaCrosshairs className="mr-2" />
-          {geoLoading ? 'Locating...' : 'Near Me'}
-        </Button>
+        {/* Location Input */}
+        <div className="flex-1 flex items-center gap-2 px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200 relative">
+          <FaMapMarkerAlt className="text-gray-400" />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Toronto, ON or postal code"
+            value={locationInput}
+            onChange={(e) => handleLocationInputChange(e.target.value)}
+            className="flex-1 outline-none text-gray-700 placeholder-gray-400 pr-10"
+            aria-label="Enter your location or use current location"
+          />
+          {locationInput && (
+            <button
+              type="button"
+              onClick={handleClearLocation}
+              className="text-gray-400 hover:text-gray-600 mr-1"
+              aria-label="Clear location"
+            >
+              <FaTimes />
+            </button>
+          )}
+          {/* Geolocation Button */}
+          <button
+            type="button"
+            onClick={handleNearMe}
+            disabled={geoLoading}
+            className="p-2 rounded hover:bg-blue-50 transition-colors disabled:opacity-50"
+            aria-label="Use my current location"
+            title="Use my current location"
+          >
+            <FaCrosshairs className={`text-blue-600 ${geoLoading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
 
         {/* Search Button */}
         <Button
           type="submit"
           disabled={isGeocoding}
-          className="md:w-auto px-8 py-6 text-lg font-semibold"
+          className="md:w-auto whitespace-nowrap px-10 py-6 text-lg font-semibold"
         >
           <FaSearch className="mr-2" />
           {isGeocoding ? 'Finding Location...' : 'Search Advisors'}
@@ -378,18 +443,19 @@ export function SearchBar() {
         </div>
       )}
 
-      {/* Popular Searches */}
+      {/* Popular Locations */}
       <div className="mt-4 text-center">
-        <p className="text-sm text-gray-300 mb-2">Popular searches:</p>
+        <p className="text-sm text-gray-300 mb-2">Popular locations:</p>
         <div className="flex flex-wrap justify-center gap-2">
-          {['Boston, MA', 'Toronto, ON', 'Minneapolis, MN', 'Calgary, AB'].map((search) => (
+          {['Boston, MA', 'Toronto, ON', 'Minneapolis, MN', 'Calgary, AB'].map((location) => (
             <button
-              key={search}
+              key={location}
               type="button"
-              onClick={() => handlePopularSearch(search)}
+              onClick={() => handlePopularSearch(location)}
               className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors"
+              aria-label={`Search advisors in ${location}`}
             >
-              {search}
+              {location}
             </button>
           ))}
         </div>

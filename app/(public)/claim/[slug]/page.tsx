@@ -121,11 +121,13 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
       {/* Advisor Header */}
       <div className="flex items-center gap-4 mb-8">
         {advisor.logo_url && (
-          <img
-            src={advisor.logo_url}
-            alt={`${advisor.name} logo`}
-            className="w-16 h-16 rounded-lg object-cover"
-          />
+          <div className="w-16 h-16 rounded-lg bg-white border border-gray-200 flex items-center justify-center p-1">
+            <img
+              src={advisor.logo_url}
+              alt={`${advisor.name} logo`}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
         )}
         <div>
           <h1 className="text-3xl font-bold">{advisor.name}</h1>

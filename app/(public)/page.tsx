@@ -4,9 +4,11 @@ import { FeaturedListings } from '@/components/listing/FeaturedListings'
 import { FaCheckCircle, FaUsers, FaShieldAlt, FaStar } from 'react-icons/fa'
 
 export const metadata: Metadata = {
-  title: 'The Hockey Directory - Find Top Hockey Advisors Near You',
+  title: 'Best Hockey Advisors Directory 2025 | 200+ Verified Advisors',
   description:
-    'Connect with verified hockey advisors across North America. Expert guidance for player development, recruiting, college hockey, and career advancement.',
+    'Find the best hockey advisors near you. Compare 200+ verified hockey advisors, agents, and consultants. Free advisor matching. Start your hockey career today!',
+  keywords:
+    'hockey advisor, hockey agent, hockey consultant, hockey recruiting, hockey family advisor, youth hockey advisor, junior hockey advisor, NCAA hockey recruiting',
 }
 
 export default function HomePage() {
@@ -25,13 +27,15 @@ export default function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              Find Your Perfect
-              <br />
-              <span className="text-goal-gold">Hockey Advisor</span>
+              Find the Best <span className="text-goal-gold">Hockey Advisors</span> for Your Career
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            <h2 className="text-2xl md:text-3xl text-blue-100 mb-8 font-semibold">
+              Compare 200+ Verified Hockey Advisors, Agents & Consultants
+            </h2>
+            <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
               Connect with verified hockey advisors who can guide your player's journey from youth
-              leagues to the pros
+              leagues to the pros. Get expert guidance for player development, recruiting, and career
+              advancement.
             </p>
           </div>
 
@@ -133,6 +137,54 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ProfessionalService',
+            name: 'The Hockey Directory',
+            description:
+              'Leading directory of verified hockey advisors, agents, and consultants across North America',
+            url: 'https://hockeydirectory.com',
+            areaServed: ['United States', 'Canada'],
+            hasOfferCatalog: {
+              '@type': 'OfferCatalog',
+              name: 'Hockey Advisor Services',
+              itemListElement: [
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: 'Hockey Career Advising',
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: 'Junior Hockey Recruiting',
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: 'NCAA Hockey Recruiting',
+                  },
+                },
+              ],
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.8',
+              reviewCount: '200',
+            },
+          }),
+        }}
+      />
     </div>
   )
 }

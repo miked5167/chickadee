@@ -5,7 +5,7 @@ import { StarRating } from './StarRating'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle, Loader2, MessageSquare, Star, Users } from 'lucide-react'
+import { CheckCircle, Loader2, MessageSquare, Star } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 interface Review {
@@ -96,19 +96,6 @@ export function ReviewsList({ advisorId, initialReviews = [], totalCount = 0 }: 
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-6 mb-6 max-w-lg mx-auto border border-blue-200 shadow-sm">
-            <div className="flex items-start gap-3 text-left">
-              <Users className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-sm font-medium text-gray-900 mb-1">
-                  Trusted by the Hockey Community
-                </p>
-                <p className="text-sm text-gray-600">
-                  This advisor is actively serving hockey families. Be the first to help others by sharing your honest feedback.
-                </p>
-              </div>
-            </div>
-          </div>
         </Card>
       </div>
     )

@@ -1,0 +1,27 @@
+{
+  "date": "2025-11-05",
+  "domain": "neutralzone.com",
+  "totalKeywords": 2,
+  "rankings": [
+    {
+      "keyword": "NCAA hockey recruiting",
+      "position": 3,
+      "searchVolume": 110,
+      "cpc": 3.39,
+      "url": "https://neutralzone.com/ncaa-commitments/"
+    },
+    {
+      "keyword": "hockey recruiting",
+      "position": 22,
+      "searchVolume": 90,
+      "cpc": 4.42,
+      "url": "https://neutralzone.com/ncaa-commitments/"
+    }
+  ],
+  "metrics": {
+    "averagePosition": 12.5,
+    "top3Count": 1,
+    "top10Count": 1,
+    "totalSearchVolume": 200
+  }
+}

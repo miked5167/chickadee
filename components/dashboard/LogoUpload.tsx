@@ -134,7 +134,7 @@ export default function LogoUpload({
       <CardContent className="space-y-4">
         {/* Preview */}
         <div className="flex justify-center">
-          <div className="relative w-48 h-48 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
+          <div className="relative w-[200px] h-[200px] border-2 border-dashed border-[#d1d5db] rounded-lg flex items-center justify-center bg-[#f9fafb] overflow-hidden">
             {previewUrl ? (
               <Image
                 src={previewUrl}
@@ -171,7 +171,6 @@ export default function LogoUpload({
         <div className="flex gap-3">
           <Button
             type="button"
-            variant="outline"
             onClick={handleUploadClick}
             disabled={uploading || deleting}
             className="flex-1"
@@ -184,7 +183,7 @@ export default function LogoUpload({
             ) : (
               <>
                 <Upload className="w-4 h-4 mr-2" />
-                {previewUrl ? 'Replace Logo' : 'Upload Logo'}
+                Choose File
               </>
             )}
           </Button>
@@ -192,19 +191,20 @@ export default function LogoUpload({
           {previewUrl && (
             <Button
               type="button"
-              variant="destructive"
+              variant="outline"
               onClick={handleDelete}
               disabled={uploading || deleting}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
             >
               {deleting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Deleting...
+                  Removing...
                 </>
               ) : (
                 <>
                   <X className="w-4 h-4 mr-2" />
-                  Delete
+                  Remove Logo
                 </>
               )}
             </Button>

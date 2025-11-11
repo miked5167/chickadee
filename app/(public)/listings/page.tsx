@@ -18,9 +18,13 @@ interface ListingsPageProps {
     specialty?: string
     minRating?: string
     country?: string
+    state?: string
     sort?: string
     page?: string
     search?: string
+    featured?: string
+    priceRange?: string
+    pricingStructure?: string
   }>
 }
 
@@ -28,7 +32,9 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
   const params = await searchParams
 
   // Build dynamic title based on search
-  const pageTitle = params.location
+  const pageTitle = params.search
+    ? `Hockey Advisors matching "${params.search}"`
+    : params.location
     ? `Hockey Advisors near ${params.location}`
     : 'Search Hockey Advisors'
 

@@ -1,0 +1,1801 @@
+[
+  {
+    "id": 1,
+    "name": "Buckeye Travel Hockey League",
+    "abbreviation": "BTHL",
+    "location": "Ohio River Valley",
+    "url": "https://myhockeyrankings.com/league-info?l=1"
+  },
+  {
+    "id": 3,
+    "name": "Central States Developmental Hockey League",
+    "abbreviation": "CSDHL",
+    "location": "Chicago, Midwest",
+    "url": "https://myhockeyrankings.com/league-info?l=3"
+  },
+  {
+    "id": 4,
+    "name": "Northern International Hockey League",
+    "abbreviation": "NIntHL",
+    "location": "Northern Michigan",
+    "url": "https://myhockeyrankings.com/league-info?l=4"
+  },
+  {
+    "id": 5,
+    "name": "Midwest Superior Girls Hockey",
+    "abbreviation": "MSGH",
+    "location": "Chicago",
+    "url": "https://myhockeyrankings.com/league-info?l=5"
+  },
+  {
+    "id": 6,
+    "name": "Missouri Amateur Ice Hockey Association",
+    "abbreviation": "MoAm",
+    "location": "St. Louis",
+    "url": "https://myhockeyrankings.com/league-info?l=6"
+  },
+  {
+    "id": 7,
+    "name": "Cleveland Suburban Hockey League",
+    "abbreviation": "CSHL",
+    "location": "Cleveland",
+    "url": "https://myhockeyrankings.com/league-info?l=7"
+  },
+  {
+    "id": 8,
+    "name": "Little Caesars Amateur Hockey League",
+    "abbreviation": "LCAHL",
+    "location": "Michigan",
+    "url": "https://myhockeyrankings.com/league-info?l=8"
+  },
+  {
+    "id": 9,
+    "name": "Pittsburgh Amateur Hockey League",
+    "abbreviation": "PAHL",
+    "location": "Pittsburgh",
+    "url": "https://myhockeyrankings.com/league-info?l=9"
+  },
+  {
+    "id": 10,
+    "name": "Tier 1 Elite Hockey League",
+    "abbreviation": "T1EHL",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=10"
+  },
+  {
+    "id": 11,
+    "name": "Midwest Hockey League",
+    "abbreviation": "MwHL",
+    "location": "IA, KS, NE",
+    "url": "https://myhockeyrankings.com/league-info?l=11"
+  },
+  {
+    "id": 13,
+    "name": "Wisconsin Amateur Hockey Association",
+    "abbreviation": "WAHA",
+    "location": "Wisconsin",
+    "url": "https://myhockeyrankings.com/league-info?l=13"
+  },
+  {
+    "id": 20,
+    "name": "North American T1ER Hockey League",
+    "abbreviation": "NAT1HL",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=20"
+  },
+  {
+    "id": 107,
+    "name": "Atlantic Youth Hockey League",
+    "abbreviation": "AYHL",
+    "location": "Mid-Atlantic",
+    "url": "https://myhockeyrankings.com/league-info?l=107"
+  },
+  {
+    "id": 108,
+    "name": "Long Island Amateur Hockey League",
+    "abbreviation": "LIAHL",
+    "location": "Long Island",
+    "url": "https://myhockeyrankings.com/league-info?l=108"
+  },
+  {
+    "id": 109,
+    "name": "Eastern Hockey Federation",
+    "abbreviation": "EHF",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=109"
+  },
+  {
+    "id": 116,
+    "name": "Southern Youth Travel Hockey League",
+    "abbreviation": "SYTHL",
+    "location": "South Central US",
+    "url": "https://myhockeyrankings.com/league-info?l=116"
+  },
+  {
+    "id": 122,
+    "name": "Southern California Amateur Hockey Association",
+    "abbreviation": "SCAHA",
+    "location": "Southern California",
+    "url": "https://myhockeyrankings.com/league-info?l=122"
+  },
+  {
+    "id": 123,
+    "name": "Northern California Youth Hockey Association",
+    "abbreviation": "NORCAL",
+    "location": "Northern California",
+    "url": "https://myhockeyrankings.com/league-info?l=123"
+  },
+  {
+    "id": 125,
+    "name": "Western New York Amateur Hockey League",
+    "abbreviation": "WNYAHL",
+    "location": "Western NY",
+    "url": "https://myhockeyrankings.com/league-info?l=125"
+  },
+  {
+    "id": 126,
+    "name": "Chesapeake Bay Hockey League",
+    "abbreviation": "CBHL",
+    "location": "Washington DC",
+    "url": "https://myhockeyrankings.com/league-info?l=126"
+  },
+  {
+    "id": 127,
+    "name": "Delaware Valley Hockey League",
+    "abbreviation": "DVHL",
+    "location": "Philadelphia",
+    "url": "https://myhockeyrankings.com/league-info?l=127"
+  },
+  {
+    "id": 128,
+    "name": "Connecticut Hockey Conference",
+    "abbreviation": "CHC",
+    "location": "Connecticut",
+    "url": "https://myhockeyrankings.com/league-info?l=128"
+  },
+  {
+    "id": 129,
+    "name": "New Jersey Youth Hockey League",
+    "abbreviation": "NJYHL",
+    "location": "New Jersey",
+    "url": "https://myhockeyrankings.com/league-info?l=129"
+  },
+  {
+    "id": 131,
+    "name": "Vermont State Amateur Hockey Association",
+    "abbreviation": "VSAHA",
+    "location": "Vermont",
+    "url": "https://myhockeyrankings.com/league-info?l=131"
+  },
+  {
+    "id": 132,
+    "name": "New Hampshire Amateur Hockey Association",
+    "abbreviation": "NHAHA",
+    "location": "New Hampshire",
+    "url": "https://myhockeyrankings.com/league-info?l=132"
+  },
+  {
+    "id": 134,
+    "name": "Alaska State Hockey Association",
+    "abbreviation": "ASHA",
+    "location": "Alaska",
+    "url": "https://myhockeyrankings.com/league-info?l=134"
+  },
+  {
+    "id": 135,
+    "name": "Pacific Northwest Amateur Hockey Association",
+    "abbreviation": "PNAHA",
+    "location": "Pacific Northwest",
+    "url": "https://myhockeyrankings.com/league-info?l=135"
+  },
+  {
+    "id": 136,
+    "name": "Maine Amateur Hockey Association",
+    "abbreviation": "MEAHA",
+    "location": "Maine",
+    "url": "https://myhockeyrankings.com/league-info?l=136"
+  },
+  {
+    "id": 137,
+    "name": "Carolinas Hockey League",
+    "abbreviation": "CHL",
+    "location": "Carolinas",
+    "url": "https://myhockeyrankings.com/league-info?l=137"
+  },
+  {
+    "id": 138,
+    "name": "Hudson Valley Hockey League",
+    "abbreviation": "HVHL",
+    "location": "Southern New York",
+    "url": "https://myhockeyrankings.com/league-info?l=138"
+  },
+  {
+    "id": 141,
+    "name": "Valley Hockey League",
+    "abbreviation": "VHL",
+    "location": "NE Massachusetts",
+    "url": "https://myhockeyrankings.com/league-info?l=141"
+  },
+  {
+    "id": 146,
+    "name": "Greater Springfield League",
+    "abbreviation": "GSL",
+    "location": "Western MA, CT",
+    "url": "https://myhockeyrankings.com/league-info?l=146"
+  },
+  {
+    "id": 149,
+    "name": "South Shore Conference",
+    "abbreviation": "SSC",
+    "location": "Southeastern Massachusetts",
+    "url": "https://myhockeyrankings.com/league-info?l=149"
+  },
+  {
+    "id": 151,
+    "name": "Treasure State League",
+    "abbreviation": "TSL",
+    "location": "Montana",
+    "url": "https://myhockeyrankings.com/league-info?l=151"
+  },
+  {
+    "id": 152,
+    "name": "Wyoming Amateur Hockey League",
+    "abbreviation": "WAHL",
+    "location": "Wyoming",
+    "url": "https://myhockeyrankings.com/league-info?l=152"
+  },
+  {
+    "id": 154,
+    "name": "Idaho Amateur Hockey Association",
+    "abbreviation": "IAHA",
+    "location": "Idaho",
+    "url": "https://myhockeyrankings.com/league-info?l=154"
+  },
+  {
+    "id": 156,
+    "name": "Land of Enchantment Amateur Hockey Association",
+    "abbreviation": "LOEAHA",
+    "location": "New Mexico",
+    "url": "https://myhockeyrankings.com/league-info?l=156"
+  },
+  {
+    "id": 157,
+    "name": "California Amateur Hockey Association",
+    "abbreviation": "CAHA",
+    "location": "California",
+    "url": "https://myhockeyrankings.com/league-info?l=157"
+  },
+  {
+    "id": 159,
+    "name": "Statewide Florida Hockey League",
+    "abbreviation": "SFHL",
+    "location": "Florida",
+    "url": "https://myhockeyrankings.com/league-info?l=159"
+  },
+  {
+    "id": 161,
+    "name": "North Dakota Amateur Hockey Association",
+    "abbreviation": "NDAHA",
+    "location": "North Dakota",
+    "url": "https://myhockeyrankings.com/league-info?l=161"
+  },
+  {
+    "id": 162,
+    "name": "South Dakota Amateur Hockey Association",
+    "abbreviation": "SDAHA",
+    "location": "South Dakota",
+    "url": "https://myhockeyrankings.com/league-info?l=162"
+  },
+  {
+    "id": 167,
+    "name": "Premier Hockey League",
+    "abbreviation": "PHL",
+    "location": "Massachusetts",
+    "url": "https://myhockeyrankings.com/league-info?l=167"
+  },
+  {
+    "id": 173,
+    "name": "Texas Hockey League",
+    "abbreviation": "THL",
+    "location": "Texas",
+    "url": "https://myhockeyrankings.com/league-info?l=173"
+  },
+  {
+    "id": 178,
+    "name": "Central New York",
+    "abbreviation": "CNY",
+    "location": "Central NY",
+    "url": "https://myhockeyrankings.com/league-info?l=178"
+  },
+  {
+    "id": 181,
+    "name": "MN - District 1",
+    "abbreviation": "MN01",
+    "location": "Twin Cities Metro Area",
+    "url": "https://myhockeyrankings.com/league-info?l=181"
+  },
+  {
+    "id": 182,
+    "name": "MN - District 2",
+    "abbreviation": "MN02",
+    "location": "Twin Cities NE Suburbs",
+    "url": "https://myhockeyrankings.com/league-info?l=182"
+  },
+  {
+    "id": 183,
+    "name": "MN - District 3",
+    "abbreviation": "MN03",
+    "location": "Twin Cities NW Suburbs",
+    "url": "https://myhockeyrankings.com/league-info?l=183"
+  },
+  {
+    "id": 184,
+    "name": "MN - District 4",
+    "abbreviation": "MN04",
+    "location": "Southwestern Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=184"
+  },
+  {
+    "id": 185,
+    "name": "MN - District 5",
+    "abbreviation": "MN05",
+    "location": "Near Western Central Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=185"
+  },
+  {
+    "id": 186,
+    "name": "MN - District 6",
+    "abbreviation": "MN06",
+    "location": "Twin Cities SW Suburbs",
+    "url": "https://myhockeyrankings.com/league-info?l=186"
+  },
+  {
+    "id": 188,
+    "name": "MN - District 8",
+    "abbreviation": "MN08",
+    "location": "Twin Cities SE Suburbs",
+    "url": "https://myhockeyrankings.com/league-info?l=188"
+  },
+  {
+    "id": 189,
+    "name": "MN - District 9",
+    "abbreviation": "MN09",
+    "location": "Southeastern Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=189"
+  },
+  {
+    "id": 190,
+    "name": "MN - District 10",
+    "abbreviation": "MN10",
+    "location": "Near East Central Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=190"
+  },
+  {
+    "id": 191,
+    "name": "MN - District 11",
+    "abbreviation": "MN11",
+    "location": "Northeastern Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=191"
+  },
+  {
+    "id": 192,
+    "name": "MN - District 12",
+    "abbreviation": "MN12",
+    "location": "Minnesota Iron Range",
+    "url": "https://myhockeyrankings.com/league-info?l=192"
+  },
+  {
+    "id": 195,
+    "name": "MN - District 15",
+    "abbreviation": "MN15",
+    "location": "Far West Central Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=195"
+  },
+  {
+    "id": 196,
+    "name": "MN - District 16",
+    "abbreviation": "MN16",
+    "location": "Northwest Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=196"
+  },
+  {
+    "id": 197,
+    "name": "Upper Midwest High School Elite Hockey League",
+    "abbreviation": "UMHSEHL",
+    "location": "Minnesota & area",
+    "url": "https://myhockeyrankings.com/league-info?l=197"
+  },
+  {
+    "id": 203,
+    "name": "Greater Toronto Hockey League",
+    "abbreviation": "GTHL",
+    "location": "Toronto",
+    "url": "https://myhockeyrankings.com/league-info?l=203"
+  },
+  {
+    "id": 204,
+    "name": "Minor Hockey Alliance of Ontario",
+    "abbreviation": "MHAO",
+    "location": "Southwestern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=204"
+  },
+  {
+    "id": 206,
+    "name": "Hockey Eastern Ontario",
+    "abbreviation": "HEO",
+    "location": "Eastern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=206"
+  },
+  {
+    "id": 207,
+    "name": "Ontario Minor Hockey Association",
+    "abbreviation": "OMHA",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=207"
+  },
+  {
+    "id": 208,
+    "name": "Northern Ontario Hockey Association",
+    "abbreviation": "NOHA",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=208"
+  },
+  {
+    "id": 209,
+    "name": "Pacific Coast Amateur Hockey Association",
+    "abbreviation": "PCAHA",
+    "location": "British Columbia",
+    "url": "https://myhockeyrankings.com/league-info?l=209"
+  },
+  {
+    "id": 210,
+    "name": "Winnipeg Minor Hockey Association",
+    "abbreviation": "WMHA",
+    "location": "SE Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=210"
+  },
+  {
+    "id": 212,
+    "name": "Okanagan Mainline Amateur Hockey Association",
+    "abbreviation": "OMAHA",
+    "location": "South Central BC",
+    "url": "https://myhockeyrankings.com/league-info?l=212"
+  },
+  {
+    "id": 214,
+    "name": "Vancouver Island Hockey League",
+    "abbreviation": "VIHL",
+    "location": "Vancouver Island, BC",
+    "url": "https://myhockeyrankings.com/league-info?l=214"
+  },
+  {
+    "id": 215,
+    "name": "East Kootenay League",
+    "abbreviation": "EKL",
+    "location": "Southeastern BC",
+    "url": "https://myhockeyrankings.com/league-info?l=215"
+  },
+  {
+    "id": 216,
+    "name": "North Central District BC Hockey",
+    "abbreviation": "NCD",
+    "location": "North Central BC",
+    "url": "https://myhockeyrankings.com/league-info?l=216"
+  },
+  {
+    "id": 217,
+    "name": "Hockey Northwestern Ontario",
+    "abbreviation": "HNO",
+    "location": "Northwestern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=217"
+  },
+  {
+    "id": 221,
+    "name": "British Columbia Elite Hockey League",
+    "abbreviation": "BCEHL",
+    "location": "British Columbia",
+    "url": "https://myhockeyrankings.com/league-info?l=221"
+  },
+  {
+    "id": 222,
+    "name": "Newfoundland U18 Major Hockey League",
+    "abbreviation": "NLMMHL",
+    "location": "Newfoundland",
+    "url": "https://myhockeyrankings.com/league-info?l=222"
+  },
+  {
+    "id": 223,
+    "name": "NB/PEI Major U18 Hockey League",
+    "abbreviation": "NBPEI",
+    "location": "New Brunswick & PEI",
+    "url": "https://myhockeyrankings.com/league-info?l=223"
+  },
+  {
+    "id": 224,
+    "name": "Nova Scotia U18 Major Hockey League",
+    "abbreviation": "NSU18MHL",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=224"
+  },
+  {
+    "id": 225,
+    "name": "Quebec Midget AAA Hockey League",
+    "abbreviation": "LDHMAAA",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=225"
+  },
+  {
+    "id": 226,
+    "name": "Manitoba AAA Midget Hockey League",
+    "abbreviation": "MMHL",
+    "location": "Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=226"
+  },
+  {
+    "id": 227,
+    "name": "Saskatchewan Midget AAA Hockey League",
+    "abbreviation": "SMAAAHL",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=227"
+  },
+  {
+    "id": 230,
+    "name": "North Eastern Ontario Hockey Association",
+    "abbreviation": "NEOHA",
+    "location": "North East Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=230"
+  },
+  {
+    "id": 231,
+    "name": "Nipissing District Hockey League",
+    "abbreviation": "NDHL-N",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=231"
+  },
+  {
+    "id": 232,
+    "name": "Nickel District Minor Hockey League",
+    "abbreviation": "NDMHL",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=232"
+  },
+  {
+    "id": 233,
+    "name": "Lakeshore Hockey League",
+    "abbreviation": "LHL",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=233"
+  },
+  {
+    "id": 234,
+    "name": "Bluewater Hockey League",
+    "abbreviation": "Bluewater",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=234"
+  },
+  {
+    "id": 240,
+    "name": "Ligue Hockey Elite Richelieu",
+    "abbreviation": "LHER",
+    "location": "South Central Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=240"
+  },
+  {
+    "id": 251,
+    "name": "Edmonton Federation Hockey League",
+    "abbreviation": "EFHL",
+    "location": "Edmonton",
+    "url": "https://myhockeyrankings.com/league-info?l=251"
+  },
+  {
+    "id": 252,
+    "name": "Hockey Calgary",
+    "abbreviation": "HC",
+    "location": "Calgary",
+    "url": "https://myhockeyrankings.com/league-info?l=252"
+  },
+  {
+    "id": 257,
+    "name": "Mississauga Hockey League",
+    "abbreviation": "MHL",
+    "location": "Mississauga",
+    "url": "https://myhockeyrankings.com/league-info?l=257"
+  },
+  {
+    "id": 258,
+    "name": "Central Minor Hockey Federation",
+    "abbreviation": "CMHF",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=258"
+  },
+  {
+    "id": 259,
+    "name": "Thunder Bay Minor Hockey Association",
+    "abbreviation": "TBMHA",
+    "location": "Northwest Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=259"
+  },
+  {
+    "id": 261,
+    "name": "All Peace Hockey League",
+    "abbreviation": "APHL",
+    "location": "Northern AB & BC",
+    "url": "https://myhockeyrankings.com/league-info?l=261"
+  },
+  {
+    "id": 262,
+    "name": "Northern Ontario AAA Hockey League",
+    "abbreviation": "NOHLAAA",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=262"
+  },
+  {
+    "id": 263,
+    "name": "Great North Midget League",
+    "abbreviation": "GNML",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=263"
+  },
+  {
+    "id": 264,
+    "name": "North Shore Minor Hockey League",
+    "abbreviation": "NSMHL-LHMC",
+    "location": "Northern New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=264"
+  },
+  {
+    "id": 265,
+    "name": "Southern New Brunswick Minor Hockey League",
+    "abbreviation": "SNBMHL",
+    "location": "Southern New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=265"
+  },
+  {
+    "id": 266,
+    "name": "New Brunswick Central Bantam Hockey League",
+    "abbreviation": "NBCBHL",
+    "location": "Central New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=266"
+  },
+  {
+    "id": 267,
+    "name": "New Brunswick Central Peewee Hockey League",
+    "abbreviation": "NBCPHL",
+    "location": "Central New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=267"
+  },
+  {
+    "id": 268,
+    "name": "New Brunswick Central Midget Hockey League",
+    "abbreviation": "NBCMHL",
+    "location": "Central New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=268"
+  },
+  {
+    "id": 269,
+    "name": "District 1 & 2 Minor Hockey League",
+    "abbreviation": "NBD1&2",
+    "location": "Western New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=269"
+  },
+  {
+    "id": 271,
+    "name": "Canadian Sport School Hockey League",
+    "abbreviation": "CSSHL",
+    "location": "Western Canada",
+    "url": "https://myhockeyrankings.com/league-info?l=271"
+  },
+  {
+    "id": 272,
+    "name": "Upper Ottawa Valley Minor Hockey League",
+    "abbreviation": "UOVMHL",
+    "location": "Eastern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=272"
+  },
+  {
+    "id": 273,
+    "name": "Upper Canada Minor Hockey League",
+    "abbreviation": "UCMHL",
+    "location": "Eastern Canada",
+    "url": "https://myhockeyrankings.com/league-info?l=273"
+  },
+  {
+    "id": 274,
+    "name": "Western Ontario Athletic Association",
+    "abbreviation": "WOAA",
+    "location": "Western Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=274"
+  },
+  {
+    "id": 275,
+    "name": "Brampton Intra-City League",
+    "abbreviation": "BICL",
+    "location": "Toronto Northwestern Suburbs",
+    "url": "https://myhockeyrankings.com/league-info?l=275"
+  },
+  {
+    "id": 502,
+    "name": "New England Girls Hockey League",
+    "abbreviation": "NEGHL",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=502"
+  },
+  {
+    "id": 503,
+    "name": "Ontario Women's Hockey League - Southern",
+    "abbreviation": "OWHL-S",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=503"
+  },
+  {
+    "id": 504,
+    "name": "Mid-Atlantic Womens Hockey Association",
+    "abbreviation": "MAWHA",
+    "location": "Mid-Atlantic States",
+    "url": "https://myhockeyrankings.com/league-info?l=504"
+  },
+  {
+    "id": 506,
+    "name": "Ontario Women's Hockey League - Eastern",
+    "abbreviation": "OWHL-E",
+    "location": "Ottawa Area",
+    "url": "https://myhockeyrankings.com/league-info?l=506"
+  },
+  {
+    "id": 507,
+    "name": "Junior Womens Hockey League",
+    "abbreviation": "JWHL",
+    "location": "USA & Canada",
+    "url": "https://myhockeyrankings.com/league-info?l=507"
+  },
+  {
+    "id": 513,
+    "name": "Great Lakes Girls Hockey League",
+    "abbreviation": "GLGHL",
+    "location": "New York",
+    "url": "https://myhockeyrankings.com/league-info?l=513"
+  },
+  {
+    "id": 518,
+    "name": "Wisconsin Elite Hockey League",
+    "abbreviation": "WEHL",
+    "location": "Wisconsin",
+    "url": "https://myhockeyrankings.com/league-info?l=518"
+  },
+  {
+    "id": 519,
+    "name": "New England Fall Prep Hockey League",
+    "abbreviation": "NEFPHL",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=519"
+  },
+  {
+    "id": 520,
+    "name": "Ligue Hockey Grand-Montreal",
+    "abbreviation": "LHGM",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=520"
+  },
+  {
+    "id": 521,
+    "name": "Hockey Abitibi-Temiscamingue",
+    "abbreviation": "Abitibi",
+    "location": "NW Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=521"
+  },
+  {
+    "id": 522,
+    "name": "Hockey Estrie",
+    "abbreviation": "Estrie",
+    "location": "Southeast Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=522"
+  },
+  {
+    "id": 524,
+    "name": "Ligue Interregionale Hockey Feminin",
+    "abbreviation": "LIHF",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=524"
+  },
+  {
+    "id": 529,
+    "name": "Alberta Female Hockey League",
+    "abbreviation": "AFHL",
+    "location": "Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=529"
+  },
+  {
+    "id": 530,
+    "name": "Saskatchewan Female Midget AAA Hockey League",
+    "abbreviation": "SFMAAAHL",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=530"
+  },
+  {
+    "id": 533,
+    "name": "Manitoba Female Midget Hockey League",
+    "abbreviation": "MFHL",
+    "location": "Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=533"
+  },
+  {
+    "id": 537,
+    "name": "Colorado Amateur Hockey Association",
+    "abbreviation": "CAHA-CO",
+    "location": "Colorado",
+    "url": "https://myhockeyrankings.com/league-info?l=537"
+  },
+  {
+    "id": 538,
+    "name": "Northern New York State Hockey League",
+    "abbreviation": "NNYSHL",
+    "location": "Upstate New York",
+    "url": "https://myhockeyrankings.com/league-info?l=538"
+  },
+  {
+    "id": 539,
+    "name": "Eastern Junior Elite Prospects League",
+    "abbreviation": "EJEPL",
+    "location": "Eastern US",
+    "url": "https://myhockeyrankings.com/league-info?l=539"
+  },
+  {
+    "id": 540,
+    "name": "Middlesex Yankee Conference Girls Hockey League",
+    "abbreviation": "MYCGL",
+    "location": "Massachusetts",
+    "url": "https://myhockeyrankings.com/league-info?l=540"
+  },
+  {
+    "id": 542,
+    "name": "Shamrock Hockey League",
+    "abbreviation": "SHL-CA",
+    "location": "Southwest Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=542"
+  },
+  {
+    "id": 543,
+    "name": "Connecticut Girls Hockey League",
+    "abbreviation": "CGHL-CT",
+    "location": "Connecticut",
+    "url": "https://myhockeyrankings.com/league-info?l=543"
+  },
+  {
+    "id": 545,
+    "name": "Saskatchewan AA Hockey League",
+    "abbreviation": "SAAHL",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=545"
+  },
+  {
+    "id": 546,
+    "name": "Central Alberta Hockey League",
+    "abbreviation": "CAHL",
+    "location": "Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=546"
+  },
+  {
+    "id": 547,
+    "name": "Ottawa B Hockey League",
+    "abbreviation": "OBMHL",
+    "location": "Ottawa",
+    "url": "https://myhockeyrankings.com/league-info?l=547"
+  },
+  {
+    "id": 548,
+    "name": "Michigan Girls Hockey League",
+    "abbreviation": "MGHL",
+    "location": "Michigan",
+    "url": "https://myhockeyrankings.com/league-info?l=548"
+  },
+  {
+    "id": 549,
+    "name": "Oakville MD League",
+    "abbreviation": "OMDL",
+    "location": "Oakville, Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=549"
+  },
+  {
+    "id": 550,
+    "name": "Western Ontario Girls Hockey League",
+    "abbreviation": "WOGHL",
+    "location": "Western Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=550"
+  },
+  {
+    "id": 552,
+    "name": "West Kootenay Minor Hockey Association",
+    "abbreviation": "WKMHA",
+    "location": "SE BC",
+    "url": "https://myhockeyrankings.com/league-info?l=552"
+  },
+  {
+    "id": 553,
+    "name": "Soo Peewee Hockey League",
+    "abbreviation": "SPWHL",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=553"
+  },
+  {
+    "id": 554,
+    "name": "North West District BC",
+    "abbreviation": "NWD",
+    "location": "Northwestern BC",
+    "url": "https://myhockeyrankings.com/league-info?l=554"
+  },
+  {
+    "id": 555,
+    "name": "Hockey PEI",
+    "abbreviation": "HPEI",
+    "location": "Prince Edward Island",
+    "url": "https://myhockeyrankings.com/league-info?l=555"
+  },
+  {
+    "id": 556,
+    "name": "Scotia Minor Hockey League",
+    "abbreviation": "SMHL",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=556"
+  },
+  {
+    "id": 558,
+    "name": "Cape Breton Hockey Federation",
+    "abbreviation": "CBHF",
+    "location": "Eastern Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=558"
+  },
+  {
+    "id": 559,
+    "name": "Ligue de Hockey d'Excellence du Quebec",
+    "abbreviation": "LHEQ",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=559"
+  },
+  {
+    "id": 560,
+    "name": "Rocky Mountain Female Hockey League",
+    "abbreviation": "RMFHL",
+    "location": "Southern Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=560"
+  },
+  {
+    "id": 562,
+    "name": "New Brunswick Peewee AAA Hockey League",
+    "abbreviation": "NBPAAA",
+    "location": "New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=562"
+  },
+  {
+    "id": 565,
+    "name": "Arizona Youth Hockey League",
+    "abbreviation": "AZYHL",
+    "location": "Arizona",
+    "url": "https://myhockeyrankings.com/league-info?l=565"
+  },
+  {
+    "id": 566,
+    "name": "East Coast Elite League",
+    "abbreviation": "ECEL",
+    "location": "Eastern US",
+    "url": "https://myhockeyrankings.com/league-info?l=566"
+  },
+  {
+    "id": 567,
+    "name": "Elite 9 Hockey League",
+    "abbreviation": "E9HL",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=567"
+  },
+  {
+    "id": 569,
+    "name": "Sault Major Hockey Association",
+    "abbreviation": "Soo",
+    "location": "Northern Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=569"
+  },
+  {
+    "id": 571,
+    "name": "Saskatchewan Female Hockey League",
+    "abbreviation": "SaskFHL",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=571"
+  },
+  {
+    "id": 572,
+    "name": "Victoria Durham Minor Hockey League",
+    "abbreviation": "VDMHL",
+    "location": "East Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=572"
+  },
+  {
+    "id": 573,
+    "name": "Southern Counties Minor Hockey League",
+    "abbreviation": "SCMHL",
+    "location": "South Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=573"
+  },
+  {
+    "id": 574,
+    "name": "Muskoka Parry Sound Hockey League",
+    "abbreviation": "MPSHL",
+    "location": "North-Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=574"
+  },
+  {
+    "id": 575,
+    "name": "Colorado Girls Hockey League",
+    "abbreviation": "CGHL-CO",
+    "location": "Colorado",
+    "url": "https://myhockeyrankings.com/league-info?l=575"
+  },
+  {
+    "id": 576,
+    "name": "Hockey Regina",
+    "abbreviation": "HR",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=576"
+  },
+  {
+    "id": 578,
+    "name": "Colorado Prep Hockey League",
+    "abbreviation": "CPHL",
+    "location": "Colorado",
+    "url": "https://myhockeyrankings.com/league-info?l=578"
+  },
+  {
+    "id": 580,
+    "name": "Metropolitan Hockey League",
+    "abbreviation": "Metro",
+    "location": "Pacific Northwest",
+    "url": "https://myhockeyrankings.com/league-info?l=580"
+  },
+  {
+    "id": 581,
+    "name": "New Brunswick Bantam AAA Hockey League",
+    "abbreviation": "NBBAAA",
+    "location": "New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=581"
+  },
+  {
+    "id": 582,
+    "name": "Eastman Minor Hockey Association",
+    "abbreviation": "Eastman",
+    "location": "Southeastern Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=582"
+  },
+  {
+    "id": 583,
+    "name": "Pembina Valley Minor Hockey Association",
+    "abbreviation": "PVMHA",
+    "location": "Southern Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=583"
+  },
+  {
+    "id": 584,
+    "name": "Superior North Minor Hockey Association",
+    "abbreviation": "SNMHA",
+    "location": "Northwest Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=584"
+  },
+  {
+    "id": 586,
+    "name": "Minnesota High Performance Tier 1 League",
+    "abbreviation": "MNHP",
+    "location": "Minnesota",
+    "url": "https://myhockeyrankings.com/league-info?l=586"
+  },
+  {
+    "id": 587,
+    "name": "Interlake Minor Hockey",
+    "abbreviation": "IMH",
+    "location": "Interlake MB",
+    "url": "https://myhockeyrankings.com/league-info?l=587"
+  },
+  {
+    "id": 588,
+    "name": "Northwest Hockey League",
+    "abbreviation": "NWHL",
+    "location": "Chicago Area",
+    "url": "https://myhockeyrankings.com/league-info?l=588"
+  },
+  {
+    "id": 589,
+    "name": "Don Johnson Hockey League",
+    "abbreviation": "DJHL",
+    "location": "Newfoundland",
+    "url": "https://myhockeyrankings.com/league-info?l=589"
+  },
+  {
+    "id": 590,
+    "name": "North Eastern Alberta Hockey League",
+    "abbreviation": "NEAHL",
+    "location": "North Eastern Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=590"
+  },
+  {
+    "id": 593,
+    "name": "Midwest Prep Hockey League",
+    "abbreviation": "MPHL",
+    "location": "US & Canada",
+    "url": "https://myhockeyrankings.com/league-info?l=593"
+  },
+  {
+    "id": 594,
+    "name": "Ligue de Hockey Regionale de l'Outaouais",
+    "abbreviation": "LHRO",
+    "location": "Southwest Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=594"
+  },
+  {
+    "id": 595,
+    "name": "Hockey Mauricie",
+    "abbreviation": "Mauricie",
+    "location": "North Central Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=595"
+  },
+  {
+    "id": 596,
+    "name": "Ligue de Hockey 3L",
+    "abbreviation": "LH3L",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=596"
+  },
+  {
+    "id": 597,
+    "name": "Eastern Ontario Minor Hockey League",
+    "abbreviation": "EOMHL",
+    "location": "East Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=597"
+  },
+  {
+    "id": 598,
+    "name": "Mid-Ontario Minor Hockey League",
+    "abbreviation": "MOMHL",
+    "location": "Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=598"
+  },
+  {
+    "id": 599,
+    "name": "Niagara District Hockey League",
+    "abbreviation": "NDHL",
+    "location": "South Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=599"
+  },
+  {
+    "id": 600,
+    "name": "Tri-County Minor Hockey League",
+    "abbreviation": "TCMHL",
+    "location": "Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=600"
+  },
+  {
+    "id": 601,
+    "name": "York Simcoe Minor Hockey League",
+    "abbreviation": "YSMHL",
+    "location": "Central Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=601"
+  },
+  {
+    "id": 602,
+    "name": "Reseau du Sport Etudiant du Quebec",
+    "abbreviation": "RSEQ",
+    "location": "Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=602"
+  },
+  {
+    "id": 604,
+    "name": "Hockey Saguenay Lac Saint Jean",
+    "abbreviation": "SLJ",
+    "location": "North Central Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=604"
+  },
+  {
+    "id": 605,
+    "name": "East Central Alberta Female Hockey League",
+    "abbreviation": "ECAFHL",
+    "location": "East Central Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=605"
+  },
+  {
+    "id": 606,
+    "name": "Central Upper Peninsula Hockey League",
+    "abbreviation": "CUP",
+    "location": "Michigan UP",
+    "url": "https://myhockeyrankings.com/league-info?l=606"
+  },
+  {
+    "id": 608,
+    "name": "Hockey Bas St Laurent",
+    "abbreviation": "BSL",
+    "location": "Eastern Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=608"
+  },
+  {
+    "id": 609,
+    "name": "Hockey Montreal",
+    "abbreviation": "MON",
+    "location": "Montreal",
+    "url": "https://myhockeyrankings.com/league-info?l=609"
+  },
+  {
+    "id": 611,
+    "name": "Ligue Hockey Quebec Chaudeiere Appalaches",
+    "abbreviation": "LHQCA",
+    "location": "Central Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=611"
+  },
+  {
+    "id": 613,
+    "name": "Western Colorado Hockey League",
+    "abbreviation": "WCHL",
+    "location": "Western Colorado",
+    "url": "https://myhockeyrankings.com/league-info?l=613"
+  },
+  {
+    "id": 614,
+    "name": "Beast Series",
+    "abbreviation": "BEAST",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=614"
+  },
+  {
+    "id": 615,
+    "name": "Major Hockey League",
+    "abbreviation": "MHL-SK",
+    "location": "Eastern Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=615"
+  },
+  {
+    "id": 616,
+    "name": "Mainline Minor Hockey League",
+    "abbreviation": "Mainline",
+    "location": "South Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=616"
+  },
+  {
+    "id": 617,
+    "name": "South West Recreational Hockey League",
+    "abbreviation": "SWRHL",
+    "location": "Southwest Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=617"
+  },
+  {
+    "id": 618,
+    "name": "Saskatoon Minor Hockey Association",
+    "abbreviation": "SMHA",
+    "location": "Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=618"
+  },
+  {
+    "id": 619,
+    "name": "Parkissimo Hockey League",
+    "abbreviation": "Parkissimo",
+    "location": "Western Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=619"
+  },
+  {
+    "id": 620,
+    "name": "CIS Ontario Athletic Association",
+    "abbreviation": "CISAA",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=620"
+  },
+  {
+    "id": 621,
+    "name": "Moose Mountain Hockey League",
+    "abbreviation": "MMMHL",
+    "location": "SE Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=621"
+  },
+  {
+    "id": 622,
+    "name": "Hi-Way 14 Hockey League",
+    "abbreviation": "HW14",
+    "location": "Western Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=622"
+  },
+  {
+    "id": 623,
+    "name": "South East Minor Hockey League",
+    "abbreviation": "SEMHL",
+    "location": "SE Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=623"
+  },
+  {
+    "id": 624,
+    "name": "Central Plains Minor Hockey Association",
+    "abbreviation": "CPMHA",
+    "location": "Central Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=624"
+  },
+  {
+    "id": 625,
+    "name": "Norman Regional Minor Hockey Association",
+    "abbreviation": "Norman",
+    "location": "Northern Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=625"
+  },
+  {
+    "id": 626,
+    "name": "Female Hockey Newfoundland & Labrador",
+    "abbreviation": "FHNL",
+    "location": "Newfoundland & Labrador",
+    "url": "https://myhockeyrankings.com/league-info?l=626"
+  },
+  {
+    "id": 627,
+    "name": "North East Minor Hockey League",
+    "abbreviation": "NEMHL",
+    "location": "NE Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=627"
+  },
+  {
+    "id": 629,
+    "name": "Nova Scotia Female Hockey League",
+    "abbreviation": "NSFHL",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=629"
+  },
+  {
+    "id": 630,
+    "name": "Newfoundland AAA Hockey League",
+    "abbreviation": "NLAAAHL",
+    "location": "Newfoundland",
+    "url": "https://myhockeyrankings.com/league-info?l=630"
+  },
+  {
+    "id": 631,
+    "name": "NorthEast Pack",
+    "abbreviation": "NEPack",
+    "location": "Northeast US",
+    "url": "https://myhockeyrankings.com/league-info?l=631"
+  },
+  {
+    "id": 634,
+    "name": "National Girls Hockey League",
+    "abbreviation": "NGHL",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=634"
+  },
+  {
+    "id": 635,
+    "name": "Empire Amateur Hockey Conference",
+    "abbreviation": "EAHC",
+    "location": "Western NY",
+    "url": "https://myhockeyrankings.com/league-info?l=635"
+  },
+  {
+    "id": 636,
+    "name": "Snowbelt Hockey League",
+    "abbreviation": "Snowbelt",
+    "location": "Upstate NY",
+    "url": "https://myhockeyrankings.com/league-info?l=636"
+  },
+  {
+    "id": 637,
+    "name": "Multiple Orgizational House League",
+    "abbreviation": "MOHL",
+    "location": "Western NY",
+    "url": "https://myhockeyrankings.com/league-info?l=637"
+  },
+  {
+    "id": 638,
+    "name": "Lanark Carleton Minor Hockey League",
+    "abbreviation": "LCMHL",
+    "location": "Ottawa Area",
+    "url": "https://myhockeyrankings.com/league-info?l=638"
+  },
+  {
+    "id": 639,
+    "name": "Gloucester Hockey Association",
+    "abbreviation": "GHA",
+    "location": "Ottawa Area",
+    "url": "https://myhockeyrankings.com/league-info?l=639"
+  },
+  {
+    "id": 640,
+    "name": "Bytown Minor Hockey League",
+    "abbreviation": "BMHL",
+    "location": "Ottawa",
+    "url": "https://myhockeyrankings.com/league-info?l=640"
+  },
+  {
+    "id": 641,
+    "name": "Nova Scotia U15 AAA Hockey League",
+    "abbreviation": "NSU15MHL",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=641"
+  },
+  {
+    "id": 642,
+    "name": "Adray Community Hockey League",
+    "abbreviation": "Adray",
+    "location": "Michigan",
+    "url": "https://myhockeyrankings.com/league-info?l=642"
+  },
+  {
+    "id": 643,
+    "name": "North York Hockey League",
+    "abbreviation": "NYHL",
+    "location": "Toronto",
+    "url": "https://myhockeyrankings.com/league-info?l=643"
+  },
+  {
+    "id": 644,
+    "name": "Alberta Elite Hockey League",
+    "abbreviation": "AEHL",
+    "location": "Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=644"
+  },
+  {
+    "id": 647,
+    "name": "Michigan Amateur Hockey Association",
+    "abbreviation": "MAHA",
+    "location": "Michigan",
+    "url": "https://myhockeyrankings.com/league-info?l=647"
+  },
+  {
+    "id": 648,
+    "name": "South Coast Hockey League",
+    "abbreviation": "SCHL",
+    "location": "RI and southern MA",
+    "url": "https://myhockeyrankings.com/league-info?l=648"
+  },
+  {
+    "id": 649,
+    "name": "Western Girls Hockey League",
+    "abbreviation": "WGHL",
+    "location": "US Mountain West",
+    "url": "https://myhockeyrankings.com/league-info?l=649"
+  },
+  {
+    "id": 650,
+    "name": "United Tier 1 Hockey League",
+    "abbreviation": "UT1HL",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=650"
+  },
+  {
+    "id": 655,
+    "name": "Winnipeg AAA Hockey",
+    "abbreviation": "WAAAH",
+    "location": "Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=655"
+  },
+  {
+    "id": 656,
+    "name": "Utah Amateur Hockey League",
+    "abbreviation": "UAHL",
+    "location": "Utah",
+    "url": "https://myhockeyrankings.com/league-info?l=656"
+  },
+  {
+    "id": 657,
+    "name": "Prep Hockey Conference",
+    "abbreviation": "PHC",
+    "location": "National",
+    "url": "https://myhockeyrankings.com/league-info?l=657"
+  },
+  {
+    "id": 658,
+    "name": "Atlantic Hockey Federation",
+    "abbreviation": "AHF",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=658"
+  },
+  {
+    "id": 659,
+    "name": "Rockies Hockey League",
+    "abbreviation": "RHL",
+    "location": "Western Alberta",
+    "url": "https://myhockeyrankings.com/league-info?l=659"
+  },
+  {
+    "id": 696,
+    "name": "Pacific Girls Hockey League",
+    "abbreviation": "PGHL",
+    "location": "Western US",
+    "url": "https://myhockeyrankings.com/league-info?l=696"
+  },
+  {
+    "id": 724,
+    "name": "Ontario Women's Hockey Association",
+    "abbreviation": "OWHA",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=724"
+  },
+  {
+    "id": 727,
+    "name": "North Shore Youth Hockey League",
+    "abbreviation": "NSYHL",
+    "location": "Illinois",
+    "url": "https://myhockeyrankings.com/league-info?l=727"
+  },
+  {
+    "id": 730,
+    "name": "Atlantic Girls Hockey Federation",
+    "abbreviation": "AGHF",
+    "location": "Mid-Atlantic",
+    "url": "https://myhockeyrankings.com/league-info?l=730"
+  },
+  {
+    "id": 731,
+    "name": "Tier 1 Hockey Federation",
+    "abbreviation": "THF",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=731"
+  },
+  {
+    "id": 732,
+    "name": "Metro Columbus Hockey League",
+    "abbreviation": "MCHL",
+    "location": "Columbus",
+    "url": "https://myhockeyrankings.com/league-info?l=732"
+  },
+  {
+    "id": 768,
+    "name": "Power Prep Hockey League",
+    "abbreviation": "PPHL",
+    "location": "New England/Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=768"
+  },
+  {
+    "id": 769,
+    "name": "Two Nations Prep Hockey League",
+    "abbreviation": "TNPHL",
+    "location": "US + Canada",
+    "url": "https://myhockeyrankings.com/league-info?l=769"
+  },
+  {
+    "id": 770,
+    "name": "Capital Corridor Hockey League",
+    "abbreviation": "CCHL",
+    "location": "Washington DC Area",
+    "url": "https://myhockeyrankings.com/league-info?l=770"
+  },
+  {
+    "id": 771,
+    "name": "Southeastern Showcase League",
+    "abbreviation": "SESCL",
+    "location": "Southeast",
+    "url": "https://myhockeyrankings.com/league-info?l=771"
+  },
+  {
+    "id": 772,
+    "name": "Maritime Major Girls Hockey League",
+    "abbreviation": "MMGHL",
+    "location": "Atlantic Provinces",
+    "url": "https://myhockeyrankings.com/league-info?l=772"
+  },
+  {
+    "id": 773,
+    "name": "Mountain Valley Hockey League",
+    "abbreviation": "MVHL",
+    "location": "New England",
+    "url": "https://myhockeyrankings.com/league-info?l=773"
+  },
+  {
+    "id": 775,
+    "name": "Ligue Chaudiere Rive-Sud Etchemin",
+    "abbreviation": "LCRSE",
+    "location": "SE Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=775"
+  },
+  {
+    "id": 776,
+    "name": "Interligue Quebec City",
+    "abbreviation": "QBC",
+    "location": "Quebec City",
+    "url": "https://myhockeyrankings.com/league-info?l=776"
+  },
+  {
+    "id": 777,
+    "name": "Ligue de Hockey Mineur BC Rive-Nord",
+    "abbreviation": "Rive-Nord",
+    "location": "Central Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=777"
+  },
+  {
+    "id": 778,
+    "name": "New Brunswick District 3",
+    "abbreviation": "NBD3",
+    "location": "Central New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=778"
+  },
+  {
+    "id": 779,
+    "name": "STEP League",
+    "abbreviation": "STEP",
+    "location": "NW Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=779"
+  },
+  {
+    "id": 780,
+    "name": "Sask Valley Minor Hockey League",
+    "abbreviation": "SVMHL",
+    "location": "North Central Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=780"
+  },
+  {
+    "id": 781,
+    "name": "Southwest Saskatchewan Hockey League",
+    "abbreviation": "SSHL",
+    "location": "SW Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=781"
+  },
+  {
+    "id": 782,
+    "name": "East Central Minor Hockey League",
+    "abbreviation": "ECMHL",
+    "location": "Central Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=782"
+  },
+  {
+    "id": 783,
+    "name": "OMHA AAA Hockey",
+    "abbreviation": "OMHA-AAA",
+    "location": "Ontario",
+    "url": "https://myhockeyrankings.com/league-info?l=783"
+  },
+  {
+    "id": 784,
+    "name": "Frontier Girls Hockey League",
+    "abbreviation": "FGHL",
+    "location": "Pacific Northwest",
+    "url": "https://myhockeyrankings.com/league-info?l=784"
+  },
+  {
+    "id": 785,
+    "name": "Rocky Mountain Hockey Federation",
+    "abbreviation": "RMHF",
+    "location": "Denver",
+    "url": "https://myhockeyrankings.com/league-info?l=785"
+  },
+  {
+    "id": 786,
+    "name": "North American Prospects Hockey League",
+    "abbreviation": "NAPHL",
+    "location": "US Nationwide",
+    "url": "https://myhockeyrankings.com/league-info?l=786"
+  },
+  {
+    "id": 787,
+    "name": "New York East Section",
+    "abbreviation": "NYE",
+    "location": "Southeastern New York",
+    "url": "https://myhockeyrankings.com/league-info?l=787"
+  },
+  {
+    "id": 788,
+    "name": "Southern Girls Hockey League",
+    "abbreviation": "SGHL",
+    "location": "Southeast US",
+    "url": "https://myhockeyrankings.com/league-info?l=788"
+  },
+  {
+    "id": 789,
+    "name": "Rural Manitoba Female Hockey League",
+    "abbreviation": "RMFHL-MB",
+    "location": "Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=789"
+  },
+  {
+    "id": 791,
+    "name": "Hockey Cote-Nord",
+    "abbreviation": "CTN",
+    "location": "Northeastern Quebec",
+    "url": "https://myhockeyrankings.com/league-info?l=791"
+  },
+  {
+    "id": 792,
+    "name": "Moose Jaw Minor Hockey League",
+    "abbreviation": "MJMHL",
+    "location": "South Central Sask",
+    "url": "https://myhockeyrankings.com/league-info?l=792"
+  },
+  {
+    "id": 793,
+    "name": "Atlantic Coast Hockey Conference",
+    "abbreviation": "ACHC",
+    "location": "Carolinas",
+    "url": "https://myhockeyrankings.com/league-info?l=793"
+  },
+  {
+    "id": 794,
+    "name": "Nova Scotia U16 AAA Hockey League",
+    "abbreviation": "NSU16HL",
+    "location": "Nova Scotia",
+    "url": "https://myhockeyrankings.com/league-info?l=794"
+  },
+  {
+    "id": 795,
+    "name": "Northwest Amateur Hockey League",
+    "abbreviation": "NWAHL",
+    "location": "Pacific Northwest",
+    "url": "https://myhockeyrankings.com/league-info?l=795"
+  },
+  {
+    "id": 796,
+    "name": "New Brunswick Female AAA Hockey League",
+    "abbreviation": "NBFAAAHL",
+    "location": "New Brunswick",
+    "url": "https://myhockeyrankings.com/league-info?l=796"
+  },
+  {
+    "id": 798,
+    "name": "Hockey Brandon",
+    "abbreviation": "Brandon",
+    "location": "Western Manitoba",
+    "url": "https://myhockeyrankings.com/league-info?l=798"
+  },
+  {
+    "id": 799,
+    "name": "Wood Buffalo Hockey League",
+    "abbreviation": "WBHL",
+    "location": "Fort McMurray",
+    "url": "https://myhockeyrankings.com/league-info?l=799"
+  },
+  {
+    "id": 800,
+    "name": "Colorado Recreational Hockey League",
+    "abbreviation": "CRHL",
+    "location": "Colorado",
+    "url": "https://myhockeyrankings.com/league-info?l=800"
+  },
+  {
+    "id": 801,
+    "name": "Tri-City Hockey League",
+    "abbreviation": "TCHL",
+    "location": "Northern Saskatchewan",
+    "url": "https://myhockeyrankings.com/league-info?l=801"
+  },
+  {
+    "id": 802,
+    "name": "Central Girls Hockey League",
+    "abbreviation": "CGHL-CE",
+    "location": "Central US",
+    "url": "https://myhockeyrankings.com/league-info?l=802"
+  },
+  {
+    "id": 803,
+    "name": "Statewide Florida Girls Hockey League",
+    "abbreviation": "SFGHL",
+    "location": "Florida",
+    "url": "https://myhockeyrankings.com/league-info?l=803"
+  },
+  {
+    "id": 804,
+    "name": "i90 Alliance",
+    "abbreviation": "i90",
+    "location": "Amherst",
+    "url": "https://myhockeyrankings.com/league-info?l=804"
+  },
+  {
+    "id": 805,
+    "name": "Mid-Atlantic Hockey Alliance",
+    "abbreviation": "MAHA-AT",
+    "location": "Mid-Atlantic",
+    "url": "https://myhockeyrankings.com/league-info?l=805"
+  },
+  {
+    "id": 806,
+    "name": "Bay State Hockey League",
+    "abbreviation": "BSHL",
+    "location": "Eastern Massachusetts",
+    "url": "https://myhockeyrankings.com/league-info?l=806"
+  },
+  {
+    "id": 807,
+    "name": "Winnipeg AA Hockey",
+    "abbreviation": "WAAH",
+    "location": "Winnipeg",
+    "url": "https://myhockeyrankings.com/league-info?l=807"
+  },
+  {
+    "id": 808,
+    "name": "Jr Golden Knights House League",
+    "abbreviation": "JGKHL",
+    "location": "Las Vegas",
+    "url": "https://myhockeyrankings.com/league-info?l=808"
+  }
+]

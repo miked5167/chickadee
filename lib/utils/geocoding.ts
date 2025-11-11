@@ -1,153 +1,177 @@
 /**
- * Geocoding utility using Google Maps Geocoding API
- * Converts addresses to latitude/longitude coordinates for PostGIS
+ * Geocoding utilities for location services
+ * Uses OpenStreetMap Nominatim API (free, no API key required)
  */
 
-export interface GeocodingResult {
+export interface GeocodedLocation {
+  city: string
+  state: string
+  country: string
+  formatted: string
   latitude: number
   longitude: number
-  formattedAddress: string
-  success: boolean
-  error?: string
 }
 
+export interface CachedLocation extends GeocodedLocation {
+  timestamp: number
+}
+
+const CACHE_KEY = 'detectedLocation'
+const CACHE_DURATION = 30 * 60 * 1000 // 30 minutes in milliseconds
+
 /**
- * Geocode an address using Google Maps Geocoding API
+ * Reverse geocode coordinates to city/state format
+ * Uses OpenStreetMap Nominatim API
  */
-export async function geocodeAddress(
-  address: string,
-  city: string,
-  state: string,
-  zipCode?: string,
-  country: string = 'US'
-): Promise<GeocodingResult> {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-
-  if (!apiKey) {
-    return {
-      latitude: 0,
-      longitude: 0,
-      formattedAddress: '',
-      success: false,
-      error: 'Google Maps API key not configured',
-    }
-  }
-
-  // Build full address string
-  const fullAddress = [address, city, state, zipCode, country]
-    .filter(Boolean)
-    .join(', ')
-
+export async function reverseGeocode(
+  latitude: number,
+  longitude: number
+): Promise<GeocodedLocation | null> {
   try {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-        fullAddress
-      )}&key=${apiKey}`
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+      {
+        headers: {
+          'User-Agent': 'HockeyDirectory/1.0', // Nominatim requires a user agent
+        },
+      }
     )
 
     if (!response.ok) {
-      throw new Error(`Geocoding API error: ${response.status}`)
+      console.error('Reverse geocoding failed:', response.status)
+      return null
     }
 
     const data = await response.json()
 
-    if (data.status === 'OK' && data.results && data.results.length > 0) {
-      const result = data.results[0]
-      return {
-        latitude: result.geometry.location.lat,
-        longitude: result.geometry.location.lng,
-        formattedAddress: result.formatted_address,
-        success: true,
-      }
-    } else if (data.status === 'ZERO_RESULTS') {
-      return {
-        latitude: 0,
-        longitude: 0,
-        formattedAddress: '',
-        success: false,
-        error: 'Address not found',
-      }
-    } else {
-      return {
-        latitude: 0,
-        longitude: 0,
-        formattedAddress: '',
-        success: false,
-        error: `Geocoding failed: ${data.status}`,
-      }
+    // Extract city, state, and country from response
+    const address = data.address || {}
+
+    // Try to get city name (various possible fields)
+    const city =
+      address.city ||
+      address.town ||
+      address.village ||
+      address.municipality ||
+      address.county ||
+      'Unknown'
+
+    // Get state/province
+    const state = address.state || address.province || ''
+
+    // Get country code
+    const country = address.country_code?.toUpperCase() || ''
+
+    // Format as "City, State" or "City, Province"
+    let formatted = city
+    if (state) {
+      // For US/Canada, use state abbreviations if possible
+      const stateAbbr = getStateAbbreviation(state, country)
+      formatted = `${city}, ${stateAbbr || state}`
+    } else if (country) {
+      formatted = `${city}, ${country}`
+    }
+
+    return {
+      city,
+      state: state || '',
+      country,
+      formatted,
+      latitude,
+      longitude,
     }
   } catch (error) {
-    console.error('Geocoding error:', error)
-    return {
-      latitude: 0,
-      longitude: 0,
-      formattedAddress: '',
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown geocoding error',
-    }
+    console.error('Error reverse geocoding:', error)
+    return null
   }
 }
 
 /**
- * Batch geocode multiple addresses with rate limiting
- * Google Maps API has a rate limit, so we add delays between requests
+ * Get cached location from sessionStorage
+ * Returns null if not cached or expired
  */
-export async function batchGeocode(
-  addresses: Array<{
-    id: string
-    address: string
-    city: string
-    state: string
-    zipCode?: string
-    country?: string
-  }>,
-  delayMs: number = 200
-): Promise<
-  Array<{
-    id: string
-    result: GeocodingResult
-  }>
-> {
-  const results: Array<{ id: string; result: GeocodingResult }> = []
+export function getCachedLocation(): CachedLocation | null {
+  try {
+    const cached = sessionStorage.getItem(CACHE_KEY)
+    if (!cached) return null
 
-  for (const addr of addresses) {
-    const result = await geocodeAddress(
-      addr.address,
-      addr.city,
-      addr.state,
-      addr.zipCode,
-      addr.country || 'US'
-    )
+    const location: CachedLocation = JSON.parse(cached)
 
-    results.push({ id: addr.id, result })
-
-    // Add delay to respect API rate limits
-    if (delayMs > 0) {
-      await new Promise((resolve) => setTimeout(resolve, delayMs))
+    // Check if expired (older than 30 minutes)
+    if (Date.now() - location.timestamp > CACHE_DURATION) {
+      sessionStorage.removeItem(CACHE_KEY)
+      return null
     }
+
+    return location
+  } catch (error) {
+    console.error('Error reading cached location:', error)
+    return null
+  }
+}
+
+/**
+ * Cache location in sessionStorage
+ */
+export function cacheLocation(location: GeocodedLocation): void {
+  try {
+    const cached: CachedLocation = {
+      ...location,
+      timestamp: Date.now(),
+    }
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cached))
+  } catch (error) {
+    console.error('Error caching location:', error)
+  }
+}
+
+/**
+ * Clear cached location
+ */
+export function clearCachedLocation(): void {
+  try {
+    sessionStorage.removeItem(CACHE_KEY)
+  } catch (error) {
+    console.error('Error clearing cached location:', error)
+  }
+}
+
+/**
+ * Helper to get state abbreviation if possible
+ * This is a simplified version - could be expanded with a full mapping
+ */
+function getStateAbbreviation(stateName: string, country: string): string | null {
+  // Common US states
+  const usStates: Record<string, string> = {
+    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
+    'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
+    'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+    'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS',
+    'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+    'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+    'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV',
+    'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM', 'New York': 'NY',
+    'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+    'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+    'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT',
+    'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV',
+    'Wisconsin': 'WI', 'Wyoming': 'WY',
   }
 
-  return results
-}
+  // Canadian provinces
+  const canadianProvinces: Record<string, string> = {
+    'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB',
+    'New Brunswick': 'NB', 'Newfoundland and Labrador': 'NL',
+    'Northwest Territories': 'NT', 'Nova Scotia': 'NS', 'Nunavut': 'NU',
+    'Ontario': 'ON', 'Prince Edward Island': 'PE', 'Quebec': 'QC',
+    'Saskatchewan': 'SK', 'Yukon': 'YT',
+  }
 
-/**
- * Create PostGIS POINT geography from lat/lng
- * Returns the SQL fragment for inserting into PostGIS geography column
- */
-export function createPostGISPoint(latitude: number, longitude: number): string {
-  return `POINT(${longitude} ${latitude})`
-}
+  if (country === 'US') {
+    return usStates[stateName] || null
+  } else if (country === 'CA') {
+    return canadianProvinces[stateName] || null
+  }
 
-/**
- * Validate lat/lng coordinates
- */
-export function isValidCoordinates(latitude: number, longitude: number): boolean {
-  return (
-    latitude >= -90 &&
-    latitude <= 90 &&
-    longitude >= -180 &&
-    longitude <= 180 &&
-    latitude !== 0 &&
-    longitude !== 0
-  )
+  return null
 }

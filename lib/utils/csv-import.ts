@@ -170,8 +170,8 @@ export async function importAdvisorsFromCsv(
         )
 
         if (geocodeResult.success) {
-          latitude = geocodeResult.latitude
-          longitude = geocodeResult.longitude
+          latitude = geocodeResult.latitude ?? null
+          longitude = geocodeResult.longitude ?? null
           geocodingSuccessful++
         } else {
           geocodingFailed++

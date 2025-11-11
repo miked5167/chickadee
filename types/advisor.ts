@@ -124,6 +124,10 @@ export interface AdvisorProfile {
 
 // Form-specific types for editing
 export interface AdvisorFormData {
+  // Core identification
+  id?: string
+  slug?: string
+
   // Basic Info
   name: string
   description: string
@@ -169,6 +173,45 @@ export interface AdvisorFormData {
   accepting_clients: 'accepting' | 'waitlist' | 'not_accepting'
   price_range: string
   certification_info: string
+
+  // Structured Pricing Fields
+  typical_engagement_range?: string
+  pricing_structure?: string[]
+  starting_price?: number
+  consultation_fee_type?: string
+  consultation_fee_amount?: number
+  pricing_details?: string
+
+  // Team Members
+  team_members?: TeamMember[]
+
+  // Admin Controls
+  is_published?: boolean
+  is_featured?: boolean
+  is_verified?: boolean
+  is_claimed?: boolean
+
+  // Subscription Management (Admin)
+  subscription_tier?: string
+  subscription_start_date?: string
+  subscription_end_date?: string
+  monthly_view_limit?: number
+  monthly_lead_limit?: number
+  billing_status?: string
+
+  // Admin Notes
+  internal_notes?: string
+
+  // Metadata
+  created_at?: string
+  updated_at?: string
+  profile_views?: number
+  contact_clicks?: number
+
+  // Data Quality
+  data_quality_score?: number
+  last_verified_date?: string
+  needs_review?: boolean
 }
 
 // Props for shared profile section components

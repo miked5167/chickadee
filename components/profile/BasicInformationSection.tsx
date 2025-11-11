@@ -100,7 +100,6 @@ export function BasicInformationSection({ data, onChange, errors, mode = 'adviso
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  disabled={option.disabled}
                 >
                   {option.label}
                 </SelectItem>

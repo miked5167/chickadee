@@ -515,7 +515,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-3">
-                    {advisor.description.split('\n').filter(line => line.trim()).map((line, index) => (
+                    {advisor.description.split('\n').filter((line: string) => line.trim()).map((line: string, index: number) => (
                       <div key={index} className="flex items-start gap-3">
                         <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
                           <Check className="w-3 h-3 text-green-600" />

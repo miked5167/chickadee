@@ -137,6 +137,79 @@ export function clearCachedLocation(): void {
 }
 
 /**
+ * Forward geocode an address to coordinates
+ * Uses OpenStreetMap Nominatim API
+ */
+export async function geocodeAddress(
+  address?: string,
+  city?: string,
+  state?: string,
+  zipCode?: string,
+  country?: string
+): Promise<{
+  success: boolean
+  latitude?: number
+  longitude?: number
+  error?: string
+}> {
+  try {
+    // Build search query
+    const parts: string[] = []
+    if (address) parts.push(address)
+    if (city) parts.push(city)
+    if (state) parts.push(state)
+    if (zipCode) parts.push(zipCode)
+    if (country) parts.push(country)
+
+    if (parts.length === 0) {
+      return {
+        success: false,
+        error: 'No address components provided',
+      }
+    }
+
+    const query = parts.join(', ')
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`,
+      {
+        headers: {
+          'User-Agent': 'HockeyDirectory/1.0',
+        },
+      }
+    )
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: `Geocoding API returned ${response.status}`,
+      }
+    }
+
+    const data = await response.json()
+
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        error: 'No results found for address',
+      }
+    }
+
+    const result = data[0]
+    return {
+      success: true,
+      latitude: parseFloat(result.lat),
+      longitude: parseFloat(result.lon),
+    }
+  } catch (error) {
+    console.error('Error geocoding address:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown geocoding error',
+    }
+  }
+}
+
+/**
  * Helper to get state abbreviation if possible
  * This is a simplified version - could be expanded with a full mapping
  */

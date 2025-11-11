@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react'
 export function ServicesExpertiseSection({ data, onChange, errors, mode = 'advisor' }: ProfileSectionProps) {
   // Helper function to check if a value exists in an array field
   const isCheckedInArray = (field: string, value: string) => {
-    const currentValue = data[field as keyof typeof data]
+    const currentValue = data[field as keyof typeof data] as string[] | undefined
     if (Array.isArray(currentValue)) {
       return currentValue.includes(value)
     }
@@ -72,7 +72,7 @@ export function ServicesExpertiseSection({ data, onChange, errors, mode = 'advis
       setTopSpecializations(newTop)
     } else {
       // Check if we're at the limit
-      if (specializations.length >= FIELD_LIMITS.MAX_SPECIALIZATIONS) {
+      if (specializations.length >= FIELD_LIMITS.TOP_SPECIALIZATIONS) {
         return // Don't add if at max
       }
       onChange('specializations', [...specializations, value])
@@ -187,7 +187,7 @@ export function ServicesExpertiseSection({ data, onChange, errors, mode = 'advis
                         id={`specialization-${specialization}`}
                         checked={isSelected}
                         onCheckedChange={() => handleSpecializationToggle(specialization)}
-                        disabled={!isSelected && selectedSpecializations.length >= FIELD_LIMITS.MAX_SPECIALIZATIONS}
+                        disabled={!isSelected && selectedSpecializations.length >= FIELD_LIMITS.TOP_SPECIALIZATIONS}
                       />
                       <Label
                         htmlFor={`specialization-${specialization}`}
@@ -220,7 +220,7 @@ export function ServicesExpertiseSection({ data, onChange, errors, mode = 'advis
           )}
 
           <p className={`text-sm ${selectedSpecializations.length === 0 ? 'text-red-600' : 'text-gray-500'}`}>
-            {selectedSpecializations.length} / {FIELD_LIMITS.MAX_SPECIALIZATIONS} selected
+            {selectedSpecializations.length} / {FIELD_LIMITS.TOP_SPECIALIZATIONS} selected
           </p>
 
           {/* Top 4 Ranking Display */}

@@ -1,3 +1,7 @@
+/**
+ * Hockey Directory Homepage - Full featured landing page
+ * Updated: 2025-11-11
+ */
 import { Metadata } from 'next'
 import { SearchBar } from '@/components/search/SearchBar'
 import { FeaturedListings } from '@/components/listing/FeaturedListings'

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
 
 export async function GET(request: NextRequest) {
   try {
@@ -376,7 +377,7 @@ export async function PATCH(request: NextRequest) {
       .from('advisors')
       .update(updateData)
       .eq('id', advisor.id)
-      .select()
+      .select('*, slug')
       .single()
 
     if (updateError) {
@@ -385,6 +386,21 @@ export async function PATCH(request: NextRequest) {
         { error: `Failed to update profile: ${updateError.message || updateError.code || 'Unknown error'}` },
         { status: 500 }
       )
+    }
+
+    // Revalidate cache after successful update
+    try {
+      // Revalidate the specific advisor page
+      if (updatedAdvisor.slug) {
+        revalidatePath(`/listings/${updatedAdvisor.slug}`)
+      }
+      // Revalidate the listings page
+      revalidatePath('/listings')
+      // Revalidate the home page (featured advisors)
+      revalidatePath('/')
+    } catch (revalidateError) {
+      // Log but don't fail the request if revalidation fails
+      console.error('Failed to revalidate cache:', revalidateError)
     }
 
     return NextResponse.json(

@@ -26,8 +26,9 @@ import { LocationMapWrapper } from '@/components/listing/LocationMapWrapper'
 import { MessageSquarePlus, Building2, Target, School, Trophy, LineChart, Users, Shield, Zap, Award, DollarSign, Clock, Check, Instagram, Facebook, Twitter, Youtube, Linkedin, MapPin, Globe, CheckCircle, Phone, Calendar, CreditCard, UserCheck, Tag, BadgeCheck } from 'lucide-react'
 import { getEngagementRangeLabel, getPricingStructureLabel, getConsultationFeeTypeLabel, formatPrice } from '@/lib/constants/profile-fields'
 
-// Incremental Static Regeneration - revalidate every hour
-export const revalidate = 3600
+// Temporarily disable ISR to force dynamic rendering and clear cache
+export const dynamic = 'force-dynamic'
+// export const revalidate = 3600
 
 // Pre-generate top 100 advisor pages at build time
 export async function generateStaticParams() {
@@ -82,7 +83,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  // Fetch advisor data (exclude 'location' field which contains non-serializable PostGIS data)
+  // Fetch advisor data (exclude 'location' and 'search_vector' which contain non-serializable PostGIS/tsvector data)
   const { data: advisor } = await supabase
     .from('advisors')
     .select(`

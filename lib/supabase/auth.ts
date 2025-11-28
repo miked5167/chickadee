@@ -34,26 +34,49 @@ export async function isAuthenticated() {
 
 /**
  * Check if the current user is an admin
- * TODO: Implement proper admin role checking
+ * Checks against admin_users table in the database
+ * Falls back to environment variable for development
  */
-export async function isAdmin() {
+export async function isAdmin(): Promise<boolean> {
   const user = await getCurrentUser()
   if (!user) return false
 
-  // TODO: Check user metadata or a separate admin table
-  // For now, we'll use email-based checking
-  // Replace with your admin email(s)
-  const adminEmails = [
-    'admin@thehockeydirectory.com',
-    // Temporarily allowing all authenticated users for development
-    // Remove this line and add your email address for production
-  ]
+  // Development fallback: Check environment variable
+  // Set ADMIN_USER_EMAILS in .env.local for development (comma-separated)
+  // Example: ADMIN_USER_EMAILS=admin@example.com,dev@example.com
+  if (process.env.NODE_ENV === 'development' && process.env.ADMIN_USER_EMAILS) {
+    const adminEmails = process.env.ADMIN_USER_EMAILS.split(',').map(email => email.trim())
+    if (adminEmails.includes(user.email || '')) {
+      console.log('[DEV] User authenticated as admin via ADMIN_USER_EMAILS')
+      return true
+    }
+  }
 
-  // Temporarily allow any authenticated user during development
-  // Comment out the line below and uncomment the adminEmails check for production
-  return true
+  // Production check: Query admin_users table
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('id, is_active')
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single()
 
-  // return adminEmails.includes(user.email || '')
+    if (error) {
+      // If table doesn't exist or RLS blocks access, user is not admin
+      if (error.code === 'PGRST116') {
+        // No rows returned - user is not an admin
+        return false
+      }
+      console.error('Error checking admin status:', error)
+      return false
+    }
+
+    return !!data
+  } catch (error) {
+    console.error('Unexpected error in isAdmin():', error)
+    return false
+  }
 }
 
 /**

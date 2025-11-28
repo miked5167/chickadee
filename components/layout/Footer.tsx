@@ -8,7 +8,6 @@ export function Footer() {
   const navigation = {
     advisors: [
       { name: 'Find Advisors', href: '/listings' },
-      { name: 'Claim Your Listing', href: '/claim' },
       { name: 'Featured Advisors', href: '/listings?featured=true' },
     ],
     locations: [
@@ -24,7 +23,6 @@ export function Footer() {
     company: [
       { name: 'About Us', href: '/about' },
       { name: 'Contact', href: '/contact' },
-      { name: 'Submit a Listing', href: '/submit' },
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy' },

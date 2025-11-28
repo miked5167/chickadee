@@ -93,12 +93,20 @@ function transformBusinessHours(hours: any): Record<string, string> | null {
     'sunday': 'Sunday'
   }
 
-  for (const [day, dayLower] of Object.entries(daysMap)) {
-    const dayData = hours[day.toLowerCase()]
+  for (const [dayLower, dayCapitalized] of Object.entries(daysMap)) {
+    // Check both lowercase and capitalized keys for compatibility
+    const dayData = hours[dayLower] || hours[dayCapitalized]
     if (!dayData) continue
 
+    // If dayData is already a string (legacy format), use it directly
+    if (typeof dayData === 'string') {
+      transformed[dayCapitalized] = dayData
+      continue
+    }
+
+    // Otherwise handle object format
     if (dayData.closed === true) {
-      transformed[dayLower] = 'Closed'
+      transformed[dayCapitalized] = 'Closed'
     } else if (dayData.open && dayData.close) {
       // Convert "08:00" to "8 AM"
       const formatTime = (time: string) => {
@@ -109,7 +117,7 @@ function transformBusinessHours(hours: any): Record<string, string> | null {
         return `${displayHour} ${ampm}`
       }
 
-      transformed[dayLower] = `${formatTime(dayData.open)} to ${formatTime(dayData.close)}`
+      transformed[dayCapitalized] = `${formatTime(dayData.open)} to ${formatTime(dayData.close)}`
     }
   }
 

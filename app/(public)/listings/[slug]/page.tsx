@@ -26,9 +26,8 @@ import { LocationMapWrapper } from '@/components/listing/LocationMapWrapper'
 import { MessageSquarePlus, Building2, Target, School, Trophy, LineChart, Users, Shield, Zap, Award, DollarSign, Clock, Check, Instagram, Facebook, Twitter, Youtube, Linkedin, MapPin, Globe, CheckCircle, Phone, Calendar, CreditCard, UserCheck, Tag, BadgeCheck } from 'lucide-react'
 import { getEngagementRangeLabel, getPricingStructureLabel, getConsultationFeeTypeLabel, formatPrice } from '@/lib/constants/profile-fields'
 
-// Temporarily disable ISR to force dynamic rendering and clear cache
-export const dynamic = 'force-dynamic'
-// export const revalidate = 3600
+// Incremental Static Regeneration - revalidate every hour
+export const revalidate = 3600
 
 // Pre-generate top 100 advisor pages at build time
 export async function generateStaticParams() {

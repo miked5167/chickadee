@@ -82,10 +82,23 @@ export default async function ListingPage({ params }: ListingPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  // Fetch advisor data
+  // Fetch advisor data (exclude 'location' field which contains non-serializable PostGIS data)
   const { data: advisor } = await supabase
     .from('advisors')
-    .select('*')
+    .select(`
+      id, name, slug, description, logo_url, website_url, email, phone,
+      address, city, state, zip_code, country, latitude, longitude,
+      years_in_business, services_offered, specialties, price_range,
+      certification_info, linkedin_url, instagram_url, twitter_url,
+      facebook_url, youtube_url, tiktok_url, is_featured, is_claimed,
+      claimed_by_user_id, is_published, average_rating, review_count,
+      created_at, updated_at, is_verified, business_hours, team_members,
+      team_member_count, clients_served, specialization, service_area,
+      response_time, languages, consultation_format, engagement_types,
+      payment_methods, player_levels, accepting_clients, age_groups_served,
+      credentials, specializations, typical_engagement_range, pricing_structure,
+      starting_price, consultation_fee_type, consultation_fee_amount, pricing_details
+    `)
     .eq('slug', slug)
     .eq('is_published', true)
     .single()

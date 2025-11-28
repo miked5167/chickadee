@@ -137,7 +137,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   try {
     await supabase.from('listing_views').insert({
       advisor_id: advisor.id,
-      ip_address_hash: 'anonymous', // In production, hash the IP
+      ip_address: 'anonymous', // In production, hash the IP
       user_agent: 'web',
     })
   } catch (error) {

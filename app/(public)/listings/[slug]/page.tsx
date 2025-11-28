@@ -78,52 +78,6 @@ export async function generateMetadata({ params }: ListingPageProps): Promise<Me
   }
 }
 
-// Helper function to transform business hours from nested object to simple string format
-function transformBusinessHours(hours: any): Record<string, string> | null {
-  if (!hours || typeof hours !== 'object') return null
-
-  const transformed: Record<string, string> = {}
-  const daysMap: Record<string, string> = {
-    'monday': 'Monday',
-    'tuesday': 'Tuesday',
-    'wednesday': 'Wednesday',
-    'thursday': 'Thursday',
-    'friday': 'Friday',
-    'saturday': 'Saturday',
-    'sunday': 'Sunday'
-  }
-
-  for (const [dayLower, dayCapitalized] of Object.entries(daysMap)) {
-    // Check both lowercase and capitalized keys for compatibility
-    const dayData = hours[dayLower] || hours[dayCapitalized]
-    if (!dayData) continue
-
-    // If dayData is already a string (legacy format), use it directly
-    if (typeof dayData === 'string') {
-      transformed[dayCapitalized] = dayData
-      continue
-    }
-
-    // Otherwise handle object format
-    if (dayData.closed === true) {
-      transformed[dayCapitalized] = 'Closed'
-    } else if (dayData.open && dayData.close) {
-      // Convert "08:00" to "8 AM"
-      const formatTime = (time: string) => {
-        const [hours, minutes] = time.split(':')
-        const hour = parseInt(hours)
-        const ampm = hour >= 12 ? 'PM' : 'AM'
-        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
-        return `${displayHour} ${ampm}`
-      }
-
-      transformed[dayCapitalized] = `${formatTime(dayData.open)} to ${formatTime(dayData.close)}`
-    }
-  }
-
-  return Object.keys(transformed).length > 0 ? transformed : null
-}
-
 export default async function ListingPage({ params }: ListingPageProps) {
   const { slug } = await params
   const supabase = await createClient()
@@ -179,12 +133,17 @@ export default async function ListingPage({ params }: ListingPageProps) {
     .order('display_order', { ascending: true })
     .order('created_at', { ascending: true })
 
-  // Increment view count
-  await supabase.from('listing_views').insert({
-    advisor_id: advisor.id,
-    ip_address_hash: 'anonymous', // In production, hash the IP
-    user_agent: 'web',
-  })
+  // Increment view count (don't block page load if this fails)
+  try {
+    await supabase.from('listing_views').insert({
+      advisor_id: advisor.id,
+      ip_address_hash: 'anonymous', // In production, hash the IP
+      user_agent: 'web',
+    })
+  } catch (error) {
+    // Log error but don't block page load
+    console.error('Failed to track listing view:', error)
+  }
 
   const location = [advisor.city, advisor.state].filter(Boolean).join(', ') || advisor.country
   const rating = advisor.average_rating || 0

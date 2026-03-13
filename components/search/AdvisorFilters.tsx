@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
@@ -14,29 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { FaFilter, FaTimes, FaStar } from 'react-icons/fa'
-import { DollarSign } from 'lucide-react'
-import { DISTANCE_RADIUS_OPTIONS } from '@/lib/utils/distance'
-import { TYPICAL_ENGAGEMENT_RANGES, PRICING_STRUCTURE_OPTIONS, ALL_SPECIALIZATIONS } from '@/lib/constants/profile-fields'
-
-// Use the same specializations that advisors can select in their dashboard
-const SPECIALTIES = ALL_SPECIALIZATIONS
+import { FaFilter, FaTimes } from 'react-icons/fa'
 
 const SORT_OPTIONS = [
-  { value: 'distance', label: 'Distance (closest first)' },
-  { value: 'rating', label: 'Rating (highest first)' },
-  { value: 'reviews', label: 'Most Reviewed' },
-  { value: 'price-low', label: 'Price (low to high)' },
-  { value: 'price-high', label: 'Price (high to low)' },
   { value: 'name', label: 'Name (A-Z)' },
   { value: 'recent', label: 'Recently Added' },
-]
-
-const RATING_OPTIONS = [
-  { value: '', label: 'Any Rating' },
-  { value: '4', label: '4+ Stars' },
-  { value: '3', label: '3+ Stars' },
-  { value: '2', label: '2+ Stars' },
 ]
 
 interface AdvisorFiltersProps {
@@ -47,84 +28,33 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // Parse current filters from URL
-  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(() => {
-    const specialtyParam = searchParams.get('specialty')
-    return specialtyParam ? specialtyParam.split(',').map(s => s.trim()) : []
-  })
-
-  const [selectedRadius, setSelectedRadius] = useState<string>(() => {
-    return searchParams.get('radius') || '50'
-  })
-
-  const [selectedRating, setSelectedRating] = useState<string>(() => {
-    return searchParams.get('minRating') || ''
-  })
-
   const [selectedSort, setSelectedSort] = useState<string>(() => {
-    return searchParams.get('sort') || 'distance'
+    return searchParams.get('sort') || 'name'
   })
 
   const [selectedCountry, setSelectedCountry] = useState<string>(() => {
     return searchParams.get('country') || ''
   })
 
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>(() => {
-    const priceRangeParam = searchParams.get('priceRange')
-    return priceRangeParam ? priceRangeParam.split(',').map(s => s.trim()) : []
-  })
-
-  const [selectedPricingStructures, setSelectedPricingStructures] = useState<string[]>(() => {
-    const pricingStructureParam = searchParams.get('pricingStructure')
-    return pricingStructureParam ? pricingStructureParam.split(',').map(s => s.trim()) : []
-  })
-
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
-  // Track if there are any active filters
-  const hasActiveFilters =
-    selectedSpecialties.length > 0 ||
-    selectedRating !== '' ||
-    selectedRadius !== '50' ||
-    selectedCountry !== '' ||
-    selectedPriceRanges.length > 0 ||
-    selectedPricingStructures.length > 0
+  const hasActiveFilters = selectedCountry !== ''
 
   // Apply filters
   const applyFilters = () => {
     const params = new URLSearchParams()
 
-    // Preserve location search params
-    const location = searchParams.get('location')
-    const lat = searchParams.get('lat')
-    const lng = searchParams.get('lng')
+    // Preserve search params
     const search = searchParams.get('search')
     const state = searchParams.get('state')
-    const featured = searchParams.get('featured')
 
-    if (location) params.set('location', location)
-    if (lat) params.set('lat', lat)
-    if (lng) params.set('lng', lng)
     if (search) params.set('search', search)
     if (state) params.set('state', state)
-    if (featured) params.set('featured', featured)
 
     // Add filter params
-    if (selectedRadius) params.set('radius', selectedRadius)
-    if (selectedSpecialties.length > 0) {
-      params.set('specialty', selectedSpecialties.join(','))
-    }
-    if (selectedRating) params.set('minRating', selectedRating)
     if (selectedCountry) params.set('country', selectedCountry)
     if (selectedSort) params.set('sort', selectedSort)
-    if (selectedPriceRanges.length > 0) {
-      params.set('priceRange', selectedPriceRanges.join(','))
-    }
-    if (selectedPricingStructures.length > 0) {
-      params.set('pricingStructure', selectedPricingStructures.join(','))
-    }
 
-    // Reset to page 1 when filters change
     params.set('page', '1')
 
     router.push(`/listings?${params.toString()}`)
@@ -133,65 +63,19 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
 
   // Clear all filters
   const clearFilters = () => {
-    setSelectedSpecialties([])
-    setSelectedRadius('50')
-    setSelectedRating('')
     setSelectedCountry('')
-    setSelectedSort('distance')
-    setSelectedPriceRanges([])
-    setSelectedPricingStructures([])
+    setSelectedSort('name')
 
     const params = new URLSearchParams()
-    const location = searchParams.get('location')
-    const lat = searchParams.get('lat')
-    const lng = searchParams.get('lng')
     const search = searchParams.get('search')
     const state = searchParams.get('state')
-    const featured = searchParams.get('featured')
 
-    if (location) params.set('location', location)
-    if (lat) params.set('lat', lat)
-    if (lng) params.set('lng', lng)
     if (search) params.set('search', search)
     if (state) params.set('state', state)
-    if (featured) params.set('featured', featured)
     params.set('page', '1')
 
     router.push(`/listings?${params.toString()}`)
     setShowMobileFilters(false)
-  }
-
-  // Toggle specialty selection
-  const toggleSpecialty = (specialty: string) => {
-    setSelectedSpecialties(prev => {
-      if (prev.includes(specialty)) {
-        return prev.filter(s => s !== specialty)
-      } else {
-        return [...prev, specialty]
-      }
-    })
-  }
-
-  // Toggle price range selection
-  const togglePriceRange = (range: string) => {
-    setSelectedPriceRanges(prev => {
-      if (prev.includes(range)) {
-        return prev.filter(r => r !== range)
-      } else {
-        return [...prev, range]
-      }
-    })
-  }
-
-  // Toggle pricing structure selection
-  const togglePricingStructure = (structure: string) => {
-    setSelectedPricingStructures(prev => {
-      if (prev.includes(structure)) {
-        return prev.filter(s => s !== structure)
-      } else {
-        return [...prev, structure]
-      }
-    })
   }
 
   // Auto-apply when sort changes
@@ -212,7 +96,7 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
           className="w-full gap-2"
         >
           <FaFilter />
-          Filters {hasActiveFilters && `(${selectedSpecialties.length + (selectedRating ? 1 : 0)})`}
+          Filters {hasActiveFilters && '(1)'}
         </Button>
       </div>
 
@@ -262,27 +146,6 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
               </CardContent>
             </Card>
 
-            {/* Distance Radius - only show if location is set */}
-            {showLocationFilters && searchParams.get('lat') && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Distance</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup value={selectedRadius} onValueChange={setSelectedRadius}>
-                    {DISTANCE_RADIUS_OPTIONS.map(option => (
-                      <div key={option.value} className="flex items-center space-x-2">
-                        <RadioGroupItem value={option.value.toString()} id={`radius-${option.value}`} />
-                        <Label htmlFor={`radius-${option.value}`} className="cursor-pointer">
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Country Filter */}
             <Card>
               <CardHeader>
@@ -290,6 +153,12 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
               </CardHeader>
               <CardContent>
                 <RadioGroup value={selectedCountry} onValueChange={setSelectedCountry}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="" id="country-any" />
+                    <Label htmlFor="country-any" className="cursor-pointer">
+                      Any Country
+                    </Label>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="CA" id="country-ca" />
                     <Label htmlFor="country-ca" className="cursor-pointer">
@@ -302,140 +171,7 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
                       United States
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="" id="country-any" />
-                    <Label htmlFor="country-any" className="cursor-pointer">
-                      Any Country
-                    </Label>
-                  </div>
                 </RadioGroup>
-              </CardContent>
-            </Card>
-
-            {/* Rating Filter */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Minimum Rating</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <RadioGroup value={selectedRating} onValueChange={setSelectedRating}>
-                  {RATING_OPTIONS.map(option => (
-                    <div key={option.value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={option.value} id={`rating-${option.value}`} />
-                      <Label htmlFor={`rating-${option.value}`} className="flex items-center gap-1 cursor-pointer">
-                        {option.value && (
-                          <div className="flex items-center">
-                            {Array.from({ length: parseInt(option.value) }).map((_, i) => (
-                              <FaStar key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                            ))}
-                          </div>
-                        )}
-                        <span>{option.label}</span>
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </CardContent>
-            </Card>
-
-            {/* Specialties Filter */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">
-                  Specialties
-                  {selectedSpecialties.length > 0 && (
-                    <span className="ml-2 text-sm font-normal text-gray-500">
-                      ({selectedSpecialties.length})
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {SPECIALTIES.map(specialty => (
-                    <div key={specialty} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`specialty-${specialty}`}
-                        checked={selectedSpecialties.includes(specialty)}
-                        onCheckedChange={() => toggleSpecialty(specialty)}
-                      />
-                      <Label
-                        htmlFor={`specialty-${specialty}`}
-                        className="text-sm cursor-pointer"
-                      >
-                        {specialty}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Price Range Filter */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <DollarSign className="w-4 h-4" />
-                  Price Range
-                  {selectedPriceRanges.length > 0 && (
-                    <span className="ml-2 text-sm font-normal text-gray-500">
-                      ({selectedPriceRanges.length})
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {TYPICAL_ENGAGEMENT_RANGES.filter(range => range.value !== 'varies').map(range => (
-                    <div key={range.value} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`price-range-${range.value}`}
-                        checked={selectedPriceRanges.includes(range.value)}
-                        onCheckedChange={() => togglePriceRange(range.value)}
-                      />
-                      <Label
-                        htmlFor={`price-range-${range.value}`}
-                        className="text-sm cursor-pointer"
-                      >
-                        {range.label}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Pricing Structure Filter */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <DollarSign className="w-4 h-4" />
-                  Pricing Options
-                  {selectedPricingStructures.length > 0 && (
-                    <span className="ml-2 text-sm font-normal text-gray-500">
-                      ({selectedPricingStructures.length})
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {PRICING_STRUCTURE_OPTIONS.map(option => (
-                    <div key={option.value} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`pricing-structure-${option.value}`}
-                        checked={selectedPricingStructures.includes(option.value)}
-                        onCheckedChange={() => togglePricingStructure(option.value)}
-                      />
-                      <Label
-                        htmlFor={`pricing-structure-${option.value}`}
-                        className="text-sm cursor-pointer"
-                      >
-                        {option.label}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
               </CardContent>
             </Card>
 

@@ -6,8 +6,7 @@ import { AdvisorCard } from '@/components/listing/AdvisorCard'
 import { Pagination } from '@/components/search/Pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { FaSearch, FaTimes, FaStar, FaMapMarkerAlt } from 'react-icons/fa'
-import { getEngagementRangeLabel, getPricingStructureLabel } from '@/lib/constants/profile-fields'
+import { FaSearch, FaTimes } from 'react-icons/fa'
 
 interface Advisor {
   id: string
@@ -17,15 +16,9 @@ interface Advisor {
   state: string | null
   country: string
   description: string | null
-  services_offered: string[]
-  specialties: string[]
-  average_rating: number | null
-  review_count: number
-  is_verified: boolean
+  verified: boolean
   logo_url: string | null
-  years_in_business: number | null
-  distance?: number | null
-  hasCoordinates?: boolean
+  website_url?: string | null
 }
 
 interface PaginationInfo {
@@ -70,23 +63,13 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
       setError(null)
 
       try {
-        // Build query string from search params
         const params = new URLSearchParams()
 
-        if (searchParams.location) params.set('location', searchParams.location)
-        if (searchParams.lat) params.set('lat', searchParams.lat)
-        if (searchParams.lng) params.set('lng', searchParams.lng)
-        if (searchParams.radius) params.set('radius', searchParams.radius)
-        if (searchParams.specialty) params.set('specialty', searchParams.specialty)
-        if (searchParams.minRating) params.set('minRating', searchParams.minRating)
         if (searchParams.country) params.set('country', searchParams.country)
         if (searchParams.state) params.set('state', searchParams.state)
         if (searchParams.sort) params.set('sort', searchParams.sort)
         if (searchParams.page) params.set('page', searchParams.page)
         if (searchParams.search) params.set('search', searchParams.search)
-        if (searchParams.featured) params.set('featured', searchParams.featured)
-        if (searchParams.priceRange) params.set('priceRange', searchParams.priceRange)
-        if (searchParams.pricingStructure) params.set('pricingStructure', searchParams.pricingStructure)
 
         const response = await fetch(`/api/advisors?${params.toString()}`)
 
@@ -109,39 +92,10 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
     fetchAdvisors()
   }, [searchParams])
 
-  // Update search input when searchParams change
   useEffect(() => {
     setSearchInput(searchParams.search || '')
   }, [searchParams.search])
 
-  // Load Google Maps script for geocoding search terms
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-    if (!apiKey) return
-
-    // Check if Google Maps script is already loaded
-    if (window.google && window.google.maps && window.google.maps.places) {
-      return
-    }
-
-    // Check if script is already being loaded
-    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]')
-    if (existingScript) {
-      return // Script is already loading
-    }
-
-    // Load Google Maps script
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=Function.prototype`
-    script.async = true
-    script.defer = true
-    script.onerror = () => {
-      console.error('Failed to load Google Maps script')
-    }
-    document.head.appendChild(script)
-  }, [])
-
-  // Handle text search submission - use as keyword search (no geocoding)
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
     const trimmedInput = searchInput.trim()
@@ -155,93 +109,28 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
       return
     }
 
-    // Use as keyword search without geocoding
     params.set('search', trimmedInput)
     params.set('page', '1')
     router.push(`/listings?${params.toString()}`)
   }
 
-  // Remove a single filter
-  const removeFilter = (filterKey: string, filterValue?: string) => {
+  const removeFilter = (filterKey: string) => {
     const params = new URLSearchParams(window.location.search)
-
-    if (filterKey === 'specialty' && filterValue) {
-      // Remove specific specialty from comma-separated list
-      const specialties = params.get('specialty')?.split(',').filter(s => s.trim() !== filterValue) || []
-      if (specialties.length > 0) {
-        params.set('specialty', specialties.join(','))
-      } else {
-        params.delete('specialty')
-      }
-    } else if (filterKey === 'priceRange' && filterValue) {
-      // Remove specific price range from comma-separated list
-      const priceRanges = params.get('priceRange')?.split(',').filter(r => r.trim() !== filterValue) || []
-      if (priceRanges.length > 0) {
-        params.set('priceRange', priceRanges.join(','))
-      } else {
-        params.delete('priceRange')
-      }
-    } else if (filterKey === 'pricingStructure' && filterValue) {
-      // Remove specific pricing structure from comma-separated list
-      const pricingStructures = params.get('pricingStructure')?.split(',').filter(s => s.trim() !== filterValue) || []
-      if (pricingStructures.length > 0) {
-        params.set('pricingStructure', pricingStructures.join(','))
-      } else {
-        params.delete('pricingStructure')
-      }
-    } else {
-      params.delete(filterKey)
-    }
-
+    params.delete(filterKey)
     params.set('page', '1')
     router.push(`/listings?${params.toString()}`)
   }
 
-  // Get active filters for badges
   const getActiveFilters = () => {
-    const filters: Array<{ key: string; label: string; value?: string }> = []
+    const filters: Array<{ key: string; label: string }> = []
 
     if (searchParams.search) {
       filters.push({ key: 'search', label: `Search: "${searchParams.search}"` })
     }
 
-    if (searchParams.featured === 'true') {
-      filters.push({ key: 'featured', label: 'Featured Advisors' })
-    }
-
-    if (searchParams.specialty) {
-      const specialties = searchParams.specialty.split(',').map(s => s.trim())
-      specialties.forEach(specialty => {
-        filters.push({ key: 'specialty', label: specialty, value: specialty })
-      })
-    }
-
-    if (searchParams.minRating) {
-      filters.push({ key: 'minRating', label: `${searchParams.minRating}+ Stars` })
-    }
-
-    if (searchParams.radius && searchParams.radius !== '50') {
-      const radiusLabel = searchParams.radius === '999' ? 'Any distance' : `${searchParams.radius} miles`
-      filters.push({ key: 'radius', label: radiusLabel })
-    }
-
     if (searchParams.country) {
       const countryLabel = searchParams.country === 'US' ? 'United States' : 'Canada'
       filters.push({ key: 'country', label: countryLabel })
-    }
-
-    if (searchParams.priceRange) {
-      const priceRanges = searchParams.priceRange.split(',').map(r => r.trim())
-      priceRanges.forEach(range => {
-        filters.push({ key: 'priceRange', label: getEngagementRangeLabel(range), value: range })
-      })
-    }
-
-    if (searchParams.pricingStructure) {
-      const pricingStructures = searchParams.pricingStructure.split(',').map(s => s.trim())
-      pricingStructures.forEach(structure => {
-        filters.push({ key: 'pricingStructure', label: getPricingStructureLabel(structure), value: structure })
-      })
     }
 
     return filters
@@ -304,7 +193,7 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
               >
                 <span>{filter.label}</span>
                 <button
-                  onClick={() => removeFilter(filter.key, filter.value)}
+                  onClick={() => removeFilter(filter.key)}
                   className="hover:text-hockey-blue/70 transition-colors"
                   aria-label={`Remove ${filter.label} filter`}
                 >
@@ -323,12 +212,6 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
             <>
               Found <span className="font-semibold">{pagination.total}</span>{' '}
               {pagination.total === 1 ? 'advisor' : 'advisors'}
-              {searchParams.location && (
-                <>
-                  {' '}
-                  near <span className="font-semibold">{searchParams.location}</span>
-                </>
-              )}
             </>
           )}
         </p>
@@ -360,8 +243,6 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
               <AdvisorCard
                 key={advisor.id}
                 advisor={advisor}
-                showDistance={advisor.distance !== null && advisor.distance !== undefined}
-                distance={advisor.distance || undefined}
               />
             ))}
           </div>

@@ -16,22 +16,21 @@ export async function generateMetadata({ params }: ClaimPageProps): Promise<Meta
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: advisor } = await supabase
-    .from('advisors')
+  const { data: company } = await supabase
+    .from('companies')
     .select('name')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (!advisor) {
+  if (!company) {
     return {
       title: 'Advisor Not Found',
     }
   }
 
   return {
-    title: `Claim ${advisor.name} - The Hockey Directory`,
-    description: `Claim your business listing for ${advisor.name} on The Hockey Directory.`,
+    title: `Claim ${company.name} - The Hockey Directory`,
+    description: `Claim your business listing for ${company.name} on The Hockey Directory.`,
   }
 }
 
@@ -39,23 +38,22 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  // Fetch advisor data
-  const { data: advisor, error } = await supabase
-    .from('advisors')
-    .select('id, name, slug, city, state, logo_url, is_claimed')
+  // Fetch company data
+  const { data: company, error } = await supabase
+    .from('companies')
+    .select('id, name, slug, city, state_province, logo_url, verified')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (error || !advisor) {
+  if (error || !company) {
     notFound()
   }
 
-  // Check if advisor is already claimed
-  if (advisor.is_claimed) {
+  // Check if already claimed (verified = has an owner)
+  if (company.verified) {
     return (
       <div className="container mx-auto py-12 px-4 max-w-3xl">
-        <Link href={`/listings/${advisor.slug}`}>
+        <Link href={`/listings/${company.slug}`}>
           <Button variant="outline" size="sm" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Profile
@@ -68,7 +66,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
             This listing has already been claimed by its owner. If you believe this is an error,
             please contact our support team.
           </p>
-          <Link href={`/listings/${advisor.slug}`}>
+          <Link href={`/listings/${company.slug}`}>
             <Button>Back to Listing</Button>
           </Link>
         </div>
@@ -79,15 +77,15 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   // Check for pending claim
   const { data: pendingClaim } = await supabase
     .from('listing_claims')
-    .select('id, status')
-    .eq('advisor_id', advisor.id)
-    .eq('status', 'pending')
+    .select('id, claim_status')
+    .eq('company_id', company.id)
+    .eq('claim_status', 'pending')
     .single()
 
   if (pendingClaim) {
     return (
       <div className="container mx-auto py-12 px-4 max-w-3xl">
-        <Link href={`/listings/${advisor.slug}`}>
+        <Link href={`/listings/${company.slug}`}>
           <Button variant="outline" size="sm" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Profile
@@ -100,7 +98,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
             A claim for this listing is currently under review. We'll notify the claimant via email
             once the review is complete (typically within 2-3 business days).
           </p>
-          <Link href={`/listings/${advisor.slug}`}>
+          <Link href={`/listings/${company.slug}`}>
             <Button>Back to Listing</Button>
           </Link>
         </div>
@@ -111,37 +109,37 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   return (
     <div className="container mx-auto py-12 px-4 max-w-3xl">
       {/* Back Button */}
-      <Link href={`/listings/${advisor.slug}`}>
+      <Link href={`/listings/${company.slug}`}>
         <Button variant="outline" size="sm" className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Profile
         </Button>
       </Link>
 
-      {/* Advisor Header */}
+      {/* Company Header */}
       <div className="flex items-center gap-4 mb-8">
-        {advisor.logo_url && (
+        {company.logo_url && (
           <div className="w-16 h-16 rounded-lg bg-white border border-gray-200 flex items-center justify-center p-1">
             <img
-              src={advisor.logo_url}
-              alt={`${advisor.name} logo`}
+              src={company.logo_url}
+              alt={`${company.name} logo`}
               className="max-w-full max-h-full object-contain"
             />
           </div>
         )}
         <div>
-          <h1 className="text-3xl font-bold">{advisor.name}</h1>
+          <h1 className="text-3xl font-bold">{company.name}</h1>
           <p className="text-gray-600">
-            {advisor.city}, {advisor.state}
+            {[company.city, company.state_province].filter(Boolean).join(', ')}
           </p>
         </div>
       </div>
 
       {/* Claim Form */}
       <ClaimForm
-        advisorId={advisor.id}
-        advisorName={advisor.name}
-        advisorSlug={advisor.slug}
+        advisorId={company.id}
+        advisorName={company.name}
+        advisorSlug={company.slug}
       />
 
       {/* Benefits Section */}

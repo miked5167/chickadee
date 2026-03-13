@@ -4,33 +4,25 @@ import { AdvisorCard } from './AdvisorCard'
 export async function FeaturedListings() {
   const supabase = await createClient()
 
-  // Fetch featured advisors (prioritize is_featured=true, then by rating and review count)
-  const { data: advisors } = await supabase
-    .from('advisors')
+  // Fetch companies ordered by name (no is_featured column yet)
+  const { data: companies } = await supabase
+    .from('companies')
     .select(`
       id,
       slug,
       name,
       city,
-      state,
+      state_province,
       country,
       description,
-      services_offered,
-      specialties,
-      average_rating,
-      review_count,
-      is_verified,
       logo_url,
-      years_in_business,
-      is_featured
+      verified,
+      website_url
     `)
-    .eq('is_published', true)
-    .order('is_featured', { ascending: false })
-    .order('average_rating', { ascending: false, nullsFirst: false })
-    .order('review_count', { ascending: false })
+    .order('name', { ascending: true })
     .limit(6)
 
-  if (!advisors || advisors.length === 0) {
+  if (!companies || companies.length === 0) {
     return (
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -45,6 +37,20 @@ export async function FeaturedListings() {
       </section>
     )
   }
+
+  // Map to advisor card shape
+  const advisors = companies.map(c => ({
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    city: c.city,
+    state: c.state_province,
+    country: c.country,
+    description: c.description,
+    logo_url: c.logo_url,
+    verified: c.verified,
+    website_url: c.website_url,
+  }))
 
   return (
     <section className="py-16 bg-gray-50">

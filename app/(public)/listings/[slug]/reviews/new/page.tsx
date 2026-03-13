@@ -16,22 +16,21 @@ export async function generateMetadata({ params }: NewReviewPageProps): Promise<
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: advisor } = await supabase
-    .from('advisors')
+  const { data: company } = await supabase
+    .from('companies')
     .select('name')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (!advisor) {
+  if (!company) {
     return {
       title: 'Advisor Not Found',
     }
   }
 
   return {
-    title: `Write a Review for ${advisor.name} - The Hockey Directory`,
-    description: `Share your experience working with ${advisor.name} to help other hockey families.`,
+    title: `Write a Review for ${company.name} - The Hockey Directory`,
+    description: `Share your experience working with ${company.name} to help other hockey families.`,
   }
 }
 
@@ -43,35 +42,32 @@ export default async function NewReviewPage({ params }: NewReviewPageProps) {
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
   if (authError || !user) {
-    // Redirect to login with return URL
     redirect(`/login?returnTo=/listings/${slug}/reviews/new`)
   }
 
-  // Fetch advisor data
-  const { data: advisor, error } = await supabase
-    .from('advisors')
-    .select('id, name, slug, city, state, logo_url')
+  // Fetch company data
+  const { data: company, error } = await supabase
+    .from('companies')
+    .select('id, name, slug, city, state_province, logo_url')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (error || !advisor) {
+  if (error || !company) {
     notFound()
   }
 
-  // Check if user has already reviewed this advisor
+  // Check if user has already reviewed this company
   const { data: existingReview } = await supabase
     .from('reviews')
     .select('id')
-    .eq('advisor_id', advisor.id)
+    .eq('advisor_id', company.id)
     .eq('reviewer_id', user.id)
     .single()
 
   if (existingReview) {
-    // User has already reviewed this advisor
     return (
       <div className="container mx-auto py-12 px-4 max-w-3xl">
-        <Link href={`/listings/${advisor.slug}`}>
+        <Link href={`/listings/${company.slug}`}>
           <Button variant="outline" size="sm" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Profile
@@ -84,7 +80,7 @@ export default async function NewReviewPage({ params }: NewReviewPageProps) {
             You can only submit one review per advisor. If you'd like to update your review,
             please contact us.
           </p>
-          <Link href={`/listings/${advisor.slug}`}>
+          <Link href={`/listings/${company.slug}`}>
             <Button>View Your Review</Button>
           </Link>
         </div>
@@ -95,34 +91,34 @@ export default async function NewReviewPage({ params }: NewReviewPageProps) {
   return (
     <div className="container mx-auto py-12 px-4 max-w-3xl">
       {/* Back Button */}
-      <Link href={`/listings/${advisor.slug}`}>
+      <Link href={`/listings/${company.slug}`}>
         <Button variant="outline" size="sm" className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Profile
         </Button>
       </Link>
 
-      {/* Advisor Header */}
+      {/* Company Header */}
       <div className="flex items-center gap-4 mb-8">
-        {advisor.logo_url && (
+        {company.logo_url && (
           <img
-            src={advisor.logo_url}
-            alt={`${advisor.name} logo`}
+            src={company.logo_url}
+            alt={`${company.name} logo`}
             className="w-16 h-16 rounded-lg object-cover"
           />
         )}
         <div>
-          <h1 className="text-3xl font-bold">{advisor.name}</h1>
+          <h1 className="text-3xl font-bold">{company.name}</h1>
           <p className="text-gray-600">
-            {advisor.city}, {advisor.state}
+            {[company.city, company.state_province].filter(Boolean).join(', ')}
           </p>
         </div>
       </div>
 
       {/* Review Form */}
       <ReviewForm
-        advisorId={advisor.id}
-        advisorName={advisor.name}
+        advisorId={company.id}
+        advisorName={company.name}
         userId={user.id}
       />
 
@@ -130,12 +126,12 @@ export default async function NewReviewPage({ params }: NewReviewPageProps) {
       <div className="mt-8 p-6 bg-blue-50 rounded-lg">
         <h3 className="font-semibold mb-3">Review Guidelines</h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li> Be honest and constructive in your feedback</li>
-          <li> Focus on your personal experience</li>
-          <li> Be respectful and professional</li>
-          <li> Don't include personal contact information</li>
-          <li> Don't use offensive or inappropriate language</li>
-          <li> Don't submit fake or misleading reviews</li>
+          <li>✓ Be honest and constructive in your feedback</li>
+          <li>✓ Focus on your personal experience</li>
+          <li>✓ Be respectful and professional</li>
+          <li>✗ Don't include personal contact information</li>
+          <li>✗ Don't use offensive or inappropriate language</li>
+          <li>✗ Don't submit fake or misleading reviews</li>
         </ul>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { getEngagementRangeNumericValue } from '@/lib/constants/profile-fields'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,65 +32,36 @@ function getStateAbbreviation(searchText: string): string | null {
     'saskatchewan': 'SK', 'yukon': 'YT',
   }
 
-  // Check US states
-  if (usStates[normalized]) {
-    return usStates[normalized]
-  }
-
-  // Check Canadian provinces
-  if (canadianProvinces[normalized]) {
-    return canadianProvinces[normalized]
-  }
-
+  if (usStates[normalized]) return usStates[normalized]
+  if (canadianProvinces[normalized]) return canadianProvinces[normalized]
   return null
 }
 
 /**
  * GET /api/advisors
- * Search and filter advisors with location-based queries, full-text search, and pagination
+ * Search and filter companies (hockey advisor firms) with text search and pagination
  *
  * Query Parameters:
- * - location: string (city, state, zip)
- * - lat, lng: numbers (coordinates for distance search)
- * - radius: number (search radius in miles: 10, 25, 50, 100, 999)
- * - specialty: string[] (comma-separated specialties)
- * - minRating: number (minimum average rating 1-5)
  * - country: string (filter by country: "US" or "CA")
- * - state: string (state/province for priority sorting: "ON", "QC", "MA", "NY", etc.)
- * - featured: string ("true" to show only featured advisors)
- * - priceRange: string[] (comma-separated price ranges)
- * - pricingStructure: string[] (comma-separated pricing structures)
- * - sort: "distance" | "rating" | "reviews" | "price-low" | "price-high" | "name" | "recent"
+ * - state: string (state/province abbreviation: "ON", "QC", "MA", "NY", etc.)
+ * - sort: "name" | "recent"
  * - page: number (default: 1)
  * - limit: number (default: 30, max: 100)
- * - search: string (text search on name/description)
+ * - search: string (text search on name/description/city/state_province)
  */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
 
-    // Parse query parameters
-    const location = searchParams.get('location')
-    const lat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : null
-    const lng = searchParams.get('lng') ? parseFloat(searchParams.get('lng')!) : null
-    const radius = searchParams.get('radius') ? parseInt(searchParams.get('radius')!) : 50
-    const specialtyParam = searchParams.get('specialty')
-    const specialties = specialtyParam ? specialtyParam.split(',').map(s => s.trim()) : null
-    const minRating = searchParams.get('minRating') ? parseFloat(searchParams.get('minRating')!) : null
-    const country = searchParams.get('country') // "US" or "CA"
-    const searchState = searchParams.get('state') // "ON", "QC", "MA", "NY", etc.
-    const featured = searchParams.get('featured') === 'true'
-    const sort = (searchParams.get('sort') || 'distance') as string
+    const country = searchParams.get('country')
+    const searchState = searchParams.get('state')
+    const sort = (searchParams.get('sort') || 'name') as string
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1
     const limit = Math.min(
       searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 30,
       100
     )
     let searchText = searchParams.get('search')
-    const priceRangeParam = searchParams.get('priceRange')
-    const priceRanges = priceRangeParam ? priceRangeParam.split(',').map(r => r.trim()) : null
-    const pricingStructureParam = searchParams.get('pricingStructure')
-    const pricingStructures = pricingStructureParam ? pricingStructureParam.split(',').map(s => s.trim()) : null
 
     // Check if search text is a state/province name
     let detectedState: string | null = null
@@ -99,37 +69,16 @@ export async function GET(request: NextRequest) {
       const stateAbbr = getStateAbbreviation(searchText)
       if (stateAbbr) {
         detectedState = stateAbbr
-        // Clear searchText so it's treated as a state filter, not a text search
         searchText = null
       }
     }
 
     const supabase = await createClient()
 
-    // Validate coordinates if provided
-    if ((lat !== null || lng !== null) && (lat === null || lng === null)) {
-      return NextResponse.json(
-        { error: 'Both lat and lng must be provided together' },
-        { status: 400 }
-      )
-    }
-
     // Start building query
     let query = supabase
-      .from('advisors')
+      .from('companies')
       .select('*', { count: 'exact' })
-      .eq('is_published', true)
-
-    // Location-based filtering with PostGIS
-    // Note: We don't filter out advisors without coordinates here
-    // They will be included but with distance: null
-    // This allows graceful degradation for advisors with incomplete location data
-
-    // Specialty filtering
-    if (specialties && specialties.length > 0) {
-      // Use overlaps operator for array contains
-      query = query.overlaps('specialties', specialties)
-    }
 
     // Country filtering
     if (country) {
@@ -137,276 +86,97 @@ export async function GET(request: NextRequest) {
     }
 
     // State/Province filtering
-    // Use explicit state parameter OR detected state from search text
     const effectiveState = searchState || detectedState
     if (effectiveState) {
-      query = query.eq('state', effectiveState)
+      query = query.eq('state_province', effectiveState)
     }
 
-    // Featured filtering
-    if (featured) {
-      query = query.eq('is_featured', true)
-    }
-
-    // Rating filtering
-    if (minRating !== null && minRating > 0) {
-      query = query.gte('average_rating', minRating)
-    }
-
-    // Text search on name, description, city, and state
+    // Text search on name, description, city, and state_province
     if (searchText && searchText.trim().length > 0) {
-      query = query.or(`name.ilike.%${searchText}%,description.ilike.%${searchText}%,city.ilike.%${searchText}%,state.ilike.%${searchText}%`)
-    }
-
-    // Price range filtering
-    if (priceRanges && priceRanges.length > 0) {
-      query = query.in('typical_engagement_range', priceRanges)
-    }
-
-    // Pricing structure filtering
-    if (pricingStructures && pricingStructures.length > 0) {
-      // Use overlaps operator for array contains
-      query = query.overlaps('pricing_structure', pricingStructures)
+      query = query.or(`name.ilike.%${searchText}%,description.ilike.%${searchText}%,city.ilike.%${searchText}%,state_province.ilike.%${searchText}%`)
     }
 
     // Execute query
-    const { data: advisors, error, count } = await query
+    const { data: companies, error, count } = await query
 
     if (error) {
-      console.error('Advisors query error:', error)
+      console.error('Companies query error:', error)
       return NextResponse.json(
         { error: 'Failed to fetch advisors' },
         { status: 500 }
       )
     }
 
-    // Calculate distances if coordinates provided
-    let advisorsWithDistance = advisors || []
+    let sortedCompanies = [...(companies || [])]
 
-    if (lat !== null && lng !== null) {
-      advisorsWithDistance = (advisors || [])
-        .map((advisor) => {
-          if (!advisor.latitude || !advisor.longitude) {
-            return {
-              ...advisor,
-              distance: null,
-              hasCoordinates: false
-            }
-          }
-
-          // Haversine formula for distance calculation
-          const toRad = (deg: number) => (deg * Math.PI) / 180
-          const R = 3959 // Earth radius in miles
-
-          const dLat = toRad(advisor.latitude - lat)
-          const dLng = toRad(advisor.longitude - lng)
-
-          const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(lat)) *
-              Math.cos(toRad(advisor.latitude)) *
-              Math.sin(dLng / 2) *
-              Math.sin(dLng / 2)
-
-          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-          const distance = R * c
-
-          return {
-            ...advisor,
-            distance: Math.round(distance * 10) / 10, // Round to 1 decimal
-            hasCoordinates: true
-          }
-        })
-        .filter((advisor) => {
-          // Only filter out advisors WITH coordinates that are outside the radius
-          // Keep advisors without coordinates (they'll appear at the end)
-          if (advisor.distance === null) return true
-          return advisor.distance <= radius
-        })
-    } else {
-      // No location search - mark all advisors
-      advisorsWithDistance = (advisors || []).map((advisor) => ({
-        ...advisor,
-        hasCoordinates: !!(advisor.latitude && advisor.longitude)
-      }))
-    }
-
-    // Sorting
-    let sortedAdvisors = [...advisorsWithDistance]
-
-    // If there's a text search, add relevance scoring and sort by relevance first
+    // If there's a text search, add relevance scoring
     if (searchText && searchText.trim().length > 0) {
       const searchLower = searchText.toLowerCase().trim()
 
-      sortedAdvisors = sortedAdvisors.map(advisor => ({
-        ...advisor,
+      sortedCompanies = sortedCompanies.map(company => ({
+        ...company,
         relevanceScore: (() => {
-          const nameLower = (advisor.name || '').toLowerCase()
-          const cityLower = (advisor.city || '').toLowerCase()
-          const descLower = (advisor.description || '').toLowerCase()
+          const nameLower = (company.name || '').toLowerCase()
+          const cityLower = (company.city || '').toLowerCase()
+          const descLower = (company.description || '').toLowerCase()
 
-          // Higher score = more relevant
-          if (nameLower.startsWith(searchLower)) return 100 // Name starts with search
-          if (nameLower.includes(searchLower)) return 80    // Name contains search
-          if (cityLower.startsWith(searchLower)) return 60  // City starts with search
-          if (cityLower.includes(searchLower)) return 40    // City contains search
-          if (descLower.includes(searchLower)) return 20    // Description contains search
+          if (nameLower.startsWith(searchLower)) return 100
+          if (nameLower.includes(searchLower)) return 80
+          if (cityLower.startsWith(searchLower)) return 60
+          if (cityLower.includes(searchLower)) return 40
+          if (descLower.includes(searchLower)) return 20
           return 0
         })()
       }))
 
-      // Sort by relevance, then by rating
-      sortedAdvisors.sort((a, b) => {
+      sortedCompanies.sort((a: any, b: any) => {
         if (a.relevanceScore !== b.relevanceScore) {
-          return b.relevanceScore - a.relevanceScore // Higher relevance first
+          return b.relevanceScore - a.relevanceScore
         }
-        return (b.average_rating || 0) - (a.average_rating || 0) // Then by rating
+        return a.name.localeCompare(b.name)
       })
-    }
-
-    switch (sort) {
-      case 'distance':
-        if (lat !== null && lng !== null) {
-          sortedAdvisors.sort((a, b) => {
-            // Priority 1: Same state/province as search location
-            if (searchState) {
-              const aIsSameState = a.state === searchState
-              const bIsSameState = b.state === searchState
-
-              // If one is same state and other isn't, prioritize same state
-              if (aIsSameState && !bIsSameState) return -1
-              if (!aIsSameState && bIsSameState) return 1
-
-              // If both are same state, sort by distance (nulls last)
-              if (aIsSameState && bIsSameState) {
-                if (a.distance === null && b.distance === null) {
-                  return (b.average_rating || 0) - (a.average_rating || 0)
-                }
-                if (a.distance === null) return 1
-                if (b.distance === null) return -1
-                return a.distance - b.distance
-              }
-            }
-
-            // Priority 2: For non-matching states, distance takes precedence
-            if (a.distance === null && b.distance === null) {
-              // Both have no distance - group by state alphabetically
-              const stateCompare = (a.state || '').localeCompare(b.state || '')
-              if (stateCompare !== 0) return stateCompare
-              return (b.average_rating || 0) - (a.average_rating || 0)
-            }
-            if (a.distance === null) return 1 // a goes after b
-            if (b.distance === null) return -1 // b goes after a
-            return a.distance - b.distance // Both have distance - sort ascending
+    } else {
+      // Default sorting
+      switch (sort) {
+        case 'name':
+          sortedCompanies.sort((a, b) => a.name.localeCompare(b.name))
+          break
+        case 'recent':
+          sortedCompanies.sort((a, b) => {
+            const dateA = new Date(a.created_at || 0).getTime()
+            const dateB = new Date(b.created_at || 0).getTime()
+            return dateB - dateA
           })
-        }
-        break
-
-      case 'rating':
-        sortedAdvisors.sort((a, b) => {
-          const ratingA = a.average_rating || 0
-          const ratingB = b.average_rating || 0
-          return ratingB - ratingA // Highest first
-        })
-        break
-
-      case 'reviews':
-        sortedAdvisors.sort((a, b) => {
-          const countA = a.review_count || 0
-          const countB = b.review_count || 0
-          return countB - countA // Most reviews first
-        })
-        break
-
-      case 'price-low':
-        sortedAdvisors.sort((a, b) => {
-          const priceA = getEngagementRangeNumericValue(a.typical_engagement_range)
-          const priceB = getEngagementRangeNumericValue(b.typical_engagement_range)
-          // Handle nulls - put them at the end
-          if (priceA === null && priceB === null) return 0
-          if (priceA === null) return 1
-          if (priceB === null) return -1
-          return priceA - priceB // Lowest first
-        })
-        break
-
-      case 'price-high':
-        sortedAdvisors.sort((a, b) => {
-          const priceA = getEngagementRangeNumericValue(a.typical_engagement_range)
-          const priceB = getEngagementRangeNumericValue(b.typical_engagement_range)
-          // Handle nulls - put them at the end
-          if (priceA === null && priceB === null) return 0
-          if (priceA === null) return 1
-          if (priceB === null) return -1
-          return priceB - priceA // Highest first
-        })
-        break
-
-      case 'name':
-        sortedAdvisors.sort((a, b) => a.name.localeCompare(b.name))
-        break
-
-      case 'recent':
-        sortedAdvisors.sort((a, b) => {
-          const dateA = new Date(a.created_at || 0).getTime()
-          const dateB = new Date(b.created_at || 0).getTime()
-          return dateB - dateA // Newest first
-        })
-        break
-
-      default:
-        // Default to distance if coordinates provided, otherwise rating
-        if (lat !== null && lng !== null) {
-          sortedAdvisors.sort((a, b) => {
-            // Priority 1: Same state/province as search location
-            if (searchState) {
-              const aIsSameState = a.state === searchState
-              const bIsSameState = b.state === searchState
-
-              // If one is same state and other isn't, prioritize same state
-              if (aIsSameState && !bIsSameState) return -1
-              if (!aIsSameState && bIsSameState) return 1
-
-              // If both are same state, sort by distance (nulls last)
-              if (aIsSameState && bIsSameState) {
-                if (a.distance === null && b.distance === null) {
-                  return (b.average_rating || 0) - (a.average_rating || 0)
-                }
-                if (a.distance === null) return 1
-                if (b.distance === null) return -1
-                return a.distance - b.distance
-              }
-            }
-
-            // Priority 2: For non-matching states, distance takes precedence
-            if (a.distance === null && b.distance === null) {
-              // Both have no distance - group by state alphabetically
-              const stateCompare = (a.state || '').localeCompare(b.state || '')
-              if (stateCompare !== 0) return stateCompare
-              return (b.average_rating || 0) - (a.average_rating || 0)
-            }
-            if (a.distance === null) return 1
-            if (b.distance === null) return -1
-            return a.distance - b.distance
-          })
-        } else {
-          sortedAdvisors.sort((a, b) => {
-            const ratingA = a.average_rating || 0
-            const ratingB = b.average_rating || 0
-            return ratingB - ratingA
-          })
-        }
+          break
+        default:
+          sortedCompanies.sort((a, b) => a.name.localeCompare(b.name))
+      }
     }
 
     // Pagination
-    const totalResults = sortedAdvisors.length
+    const totalResults = sortedCompanies.length
     const totalPages = Math.ceil(totalResults / limit)
     const offset = (page - 1) * limit
-    const paginatedAdvisors = sortedAdvisors.slice(offset, offset + limit)
+    const paginatedCompanies = sortedCompanies.slice(offset, offset + limit)
 
-    // Response
+    // Map to advisor-like shape for frontend compatibility
+    const advisors = paginatedCompanies.map(c => ({
+      id: c.id,
+      slug: c.slug,
+      name: c.name,
+      city: c.city,
+      state: c.state_province,
+      country: c.country,
+      description: c.description,
+      logo_url: c.logo_url,
+      verified: c.verified,
+      website_url: c.website_url,
+      phone: c.phone,
+      email: c.email,
+    }))
+
     return NextResponse.json({
-      advisors: paginatedAdvisors,
+      advisors,
       pagination: {
         page,
         limit,
@@ -416,18 +186,10 @@ export async function GET(request: NextRequest) {
         hasPrevious: page > 1,
       },
       filters: {
-        location,
-        lat,
-        lng,
-        radius,
-        specialties,
-        minRating,
         country,
-        state: effectiveState, // Returns the actual state filter applied (from param or detected from search)
+        state: effectiveState,
         sort,
         search: searchText,
-        priceRanges,
-        pricingStructures,
       },
     })
   } catch (error) {

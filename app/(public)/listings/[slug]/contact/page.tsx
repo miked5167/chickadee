@@ -16,22 +16,21 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: advisor } = await supabase
-    .from('advisors')
-    .select('name, city, state')
+  const { data: company } = await supabase
+    .from('companies')
+    .select('name, city, state_province')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (!advisor) {
+  if (!company) {
     return {
       title: 'Advisor Not Found',
     }
   }
 
   return {
-    title: `Contact ${advisor.name} - The Hockey Directory`,
-    description: `Send a message to ${advisor.name} in ${advisor.city}, ${advisor.state} to discuss your hockey development needs.`,
+    title: `Contact ${company.name} - The Hockey Directory`,
+    description: `Send a message to ${company.name} in ${[company.city, company.state_province].filter(Boolean).join(', ')} to discuss your hockey development needs.`,
   }
 }
 
@@ -39,53 +38,52 @@ export default async function ContactPage({ params }: ContactPageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  // Fetch advisor data
-  const { data: advisor, error } = await supabase
-    .from('advisors')
-    .select('id, name, slug, city, state, logo_url')
+  // Fetch company data
+  const { data: company, error } = await supabase
+    .from('companies')
+    .select('id, name, slug, city, state_province, logo_url')
     .eq('slug', slug)
-    .eq('is_published', true)
     .single()
 
-  if (error || !advisor) {
+  if (error || !company) {
     notFound()
   }
 
   return (
     <div className="container mx-auto py-12 px-4 max-w-3xl">
       {/* Back Button */}
-      <Link href={`/listings/${advisor.slug}`}>
+      <Link href={`/listings/${company.slug}`}>
         <Button variant="outline" size="sm" className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Profile
         </Button>
       </Link>
 
-      {/* Advisor Header */}
+      {/* Company Header */}
       <div className="flex items-center gap-4 mb-8">
-        {advisor.logo_url && (
+        {company.logo_url && (
           <img
-            src={advisor.logo_url}
-            alt={`${advisor.name} logo`}
+            src={company.logo_url}
+            alt={`${company.name} logo`}
             className="w-16 h-16 rounded-lg object-cover"
           />
         )}
         <div>
-          <h1 className="text-3xl font-bold">{advisor.name}</h1>
+          <h1 className="text-3xl font-bold">{company.name}</h1>
           <p className="text-gray-600">
-            {advisor.city}, {advisor.state}
+            {[company.city, company.state_province].filter(Boolean).join(', ')}
           </p>
         </div>
       </div>
 
       {/* Contact Form */}
-      <ContactForm advisorId={advisor.id} advisorName={advisor.name} />
+      <ContactForm advisorId={company.id} advisorName={company.name} />
 
       {/* Info Box */}
       <div className="mt-8 p-6 bg-blue-50 rounded-lg">
         <h3 className="font-semibold mb-2">What happens next?</h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li>✓ Your message will be sent directly to {advisor.name}</li>
+          <li>✓ Your message will be sent directly to {company.name}</li>
           <li>✓ They will receive an email notification</li>
           <li>✓ Most advisors respond within 24-48 hours</li>
           <li>✓ You&apos;ll receive their response via email</li>

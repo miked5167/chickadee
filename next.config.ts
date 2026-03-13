@@ -1,10 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    // Pre-existing lint errors in admin/advisor files - ignore during build
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     // Pre-existing type issues in admin/advisor files - ignore during build
     ignoreBuildErrors: true,

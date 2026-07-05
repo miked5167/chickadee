@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import { SearchBar } from '@/components/search/SearchBar'
 import { FeaturedListings } from '@/components/listing/FeaturedListings'
-import { FaCheckCircle, FaUsers, FaShieldAlt, FaStar, FaQuoteLeft } from 'react-icons/fa'
+import { FaCheckCircle, FaUsers, FaHockeyPuck, FaGlobeAmericas, FaRoute, FaSchool, FaGraduationCap } from 'react-icons/fa'
 
 export const metadata: Metadata = {
   title: 'The Hockey Directory - Find Top Hockey Advisors Near You',
   description:
-    'Connect with 200+ verified hockey advisors across North America. Get expert guidance for AAA team placement, prep school selection, college recruiting, and elite player development.',
+    'Connect with 200+ hockey advisors and agencies across North America. Get expert guidance for AAA team placement, prep school selection, college recruiting, and elite player development.',
 }
 
 export default function HomePage() {
@@ -15,13 +15,13 @@ export default function HomePage() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'The Hockey Directory',
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://thehockeydirectory.com',
-    description: 'Find and connect with verified hockey advisors across North America',
+    url: 'https://thehockeydirectory.com',
+    description: 'Find and connect with hockey advisors across North America',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://thehockeydirectory.com/search?q={search_term_string}',
+        urlTemplate: 'https://thehockeydirectory.com/listings?location={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -31,14 +31,9 @@ export default function HomePage() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'The Hockey Directory',
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://thehockeydirectory.com',
-    logo: typeof window !== 'undefined' ? `${window.location.origin}/logo.png` : 'https://thehockeydirectory.com/logo.png',
+    url: 'https://thehockeydirectory.com',
+    logo: 'https://thehockeydirectory.com/logo.png',
     description: 'North America\'s trusted directory of hockey advisors and development professionals',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '200',
-    },
   }
 
   return (
@@ -71,7 +66,7 @@ export default function HomePage() {
               <span className="text-goal-gold">Hockey Advisor</span>
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Connect with verified advisors who help navigate your player's hockey journey and find the right opportunities at every level
+              Connect with advisors who help navigate your player's hockey journey and find the right opportunities at every level
             </p>
           </div>
 
@@ -87,22 +82,22 @@ export default function HomePage() {
             <div className="flex flex-col items-center">
               <FaUsers className="text-4xl text-hockey-blue mb-2" />
               <p className="text-2xl font-bold text-gray-800">200+</p>
-              <p className="text-sm text-gray-600">Verified Advisors</p>
+              <p className="text-sm text-gray-600">Advisors & Agencies Listed</p>
             </div>
             <div className="flex flex-col items-center">
-              <FaShieldAlt className="text-4xl text-hockey-blue mb-2" />
-              <p className="text-2xl font-bold text-gray-800">100%</p>
-              <p className="text-sm text-gray-600">Verified Profiles</p>
+              <FaHockeyPuck className="text-4xl text-hockey-blue mb-2" />
+              <p className="text-2xl font-bold text-gray-800">8,800+</p>
+              <p className="text-sm text-gray-600">Players Represented</p>
             </div>
             <div className="flex flex-col items-center">
-              <FaStar className="text-4xl text-goal-gold mb-2" />
-              <p className="text-2xl font-bold text-gray-800">4.8/5</p>
-              <p className="text-sm text-gray-600">Average Rating</p>
+              <FaGlobeAmericas className="text-4xl text-goal-gold mb-2" />
+              <p className="text-2xl font-bold text-gray-800">US & Canada</p>
+              <p className="text-sm text-gray-600">Coast-to-Coast Coverage</p>
             </div>
             <div className="flex flex-col items-center">
               <FaCheckCircle className="text-4xl text-green-600 mb-2" />
               <p className="text-2xl font-bold text-gray-800">Free</p>
-              <p className="text-sm text-gray-600">To Use</p>
+              <p className="text-sm text-gray-600">For Families, Always</p>
             </div>
           </div>
         </div>
@@ -111,81 +106,42 @@ export default function HomePage() {
       {/* Featured Listings */}
       <FeaturedListings />
 
-      {/* Testimonials Section */}
+      {/* Why Work With an Advisor Section */}
       <section className="py-16 bg-ice-blue">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">What Families Are Saying</h2>
+            <h2 className="text-3xl font-bold mb-2">Why Hockey Families Work With an Advisor</h2>
             <p className="text-gray-600">
-              Hear from hockey families who found the right guidance
+              The road through competitive hockey is full of high-stakes decisions. The right advisor has seen them all before.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Testimonial 1 */}
+            {/* Card 1 */}
             <div className="bg-white rounded-lg p-6 shadow-md">
-              <div className="flex items-center gap-1 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar key={star} className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-                ))}
-              </div>
-              <FaQuoteLeft className="text-hockey-blue text-2xl mb-4 opacity-20" />
-              <p className="text-gray-700 mb-6 italic">
-                "Finding the right advisor made all the difference in our son's journey to AAA hockey. The directory connected us with someone who truly understood the pathway."
+              <FaRoute className="text-hockey-blue text-4xl mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Navigating the Pathways</h3>
+              <p className="text-gray-700">
+                AAA or academy? Major junior or the college route? One decision at 15 can close doors at 18. Advisors know how the OHL, USHL, BCHL, and NCAA pathways actually work — and what each choice means for your player's future.
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
-                  SM
-                </div>
-                <div>
-                  <p className="font-semibold">Sarah M.</p>
-                  <p className="text-sm text-gray-500">Hockey Parent, Toronto</p>
-                </div>
-              </div>
             </div>
 
-            {/* Testimonial 2 */}
+            {/* Card 2 */}
             <div className="bg-white rounded-lg p-6 shadow-md">
-              <div className="flex items-center gap-1 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar key={star} className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-                ))}
-              </div>
-              <FaQuoteLeft className="text-hockey-blue text-2xl mb-4 opacity-20" />
-              <p className="text-gray-700 mb-6 italic">
-                "The advisor we found through this platform helped navigate the prep school process. Their expertise and connections were invaluable to our family."
+              <FaSchool className="text-hockey-blue text-4xl mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Choosing Schools & Programs</h3>
+              <p className="text-gray-700">
+                Prep schools and academies vary wildly in cost, coaching, and real exposure. An advisor who knows the programs firsthand can tell you which ones develop players — and which ones just develop invoices.
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
-                  JR
-                </div>
-                <div>
-                  <p className="font-semibold">James R.</p>
-                  <p className="text-sm text-gray-500">Hockey Parent, Boston</p>
-                </div>
-              </div>
             </div>
 
-            {/* Testimonial 3 */}
+            {/* Card 3 */}
             <div className="bg-white rounded-lg p-6 shadow-md">
-              <div className="flex items-center gap-1 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar key={star} className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-                ))}
-              </div>
-              <FaQuoteLeft className="text-hockey-blue text-2xl mb-4 opacity-20" />
-              <p className="text-gray-700 mb-6 italic">
-                "As first-time hockey parents, we had no idea where to start. The directory helped us find an advisor who answered all our questions and set realistic expectations."
+              <FaGraduationCap className="text-hockey-blue text-4xl mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Getting Recruited</h3>
+              <p className="text-gray-700">
+                College coaches see thousands of players. Advisors help families build realistic plans, protect eligibility, and get film in front of the right people at the right time — without the guesswork.
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
-                  MC
-                </div>
-                <div>
-                  <p className="font-semibold">Maria C.</p>
-                  <p className="text-sm text-gray-500">Hockey Parent, Chicago</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -217,8 +173,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Compare</h3>
               <p className="text-gray-600">
-                Read reviews, check credentials, and compare services to find the perfect match for
-                your needs.
+                Check specialties, experience, and credentials side by side to find the right match for your player.
               </p>
             </div>
 

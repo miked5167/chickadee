@@ -1,175 +1,86 @@
-'use client'
-
-import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Metadata } from 'next'
 import { BlogHero } from '@/components/blog/BlogHero'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogSidebar } from '@/components/blog/BlogSidebar'
 import { Button } from '@/components/ui/button'
 import { FaChevronLeft, FaChevronRight, FaRss } from 'react-icons/fa'
-import { Loader2 } from 'lucide-react'
+import { getBaseUrl } from '@/lib/utils/base-url'
 
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  excerpt: string | null
-  featured_image_url: string | null
-  featured_image_alt: string | null
-  published_at: string
-  read_time_minutes: number | null
-  view_count: number
-  blog_categories: {
-    id: string
-    name: string
-    slug: string
-    icon: string | null
-    color: string | null
-  } | null
-  users_public: {
-    id: string
-    display_name: string | null
-    avatar_url: string | null
-  } | null
-  tags?: Array<{
-    id: string
-    name: string
-    slug: string
+// A6: server component — posts are fetched server-side so the raw HTML contains
+// post titles (SEO). Interactivity (sidebar, pagination) stays in leaf
+// components / plain links.
+export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Hockey Insights & Advice',
+  description:
+    'Expert guidance for navigating the competitive hockey landscape — advisor selection, prep schools, college recruiting, and player development.',
+}
+
+interface BlogPageProps {
+  searchParams: Promise<{
+    category?: string
+    tag?: string
+    search?: string
+    page?: string
   }>
 }
 
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  color: string | null
-  post_count: number
+async function fetchJson(url: string) {
+  try {
+    const res = await fetch(url, { cache: 'no-store' })
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
 }
 
-interface Tag {
-  id: string
-  name: string
-  slug: string
-  post_count: number
-}
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const sp = await searchParams
+  const baseUrl = await getBaseUrl()
 
-function BlogPageContent() {
-  const searchParams = useSearchParams()
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [popularTags, setPopularTags] = useState<Tag[]>([])
-  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([])
-  const [pagination, setPagination] = useState({
+  const qs = new URLSearchParams()
+  if (sp.category) qs.set('category', sp.category)
+  if (sp.tag) qs.set('tag', sp.tag)
+  if (sp.search) qs.set('search', sp.search)
+  if (sp.page) qs.set('page', sp.page)
+
+  const isFiltering = Boolean(sp.category || sp.tag || sp.search)
+
+  const [postsData, categoriesData, tagsData, recentData, featuredData] = await Promise.all([
+    fetchJson(`${baseUrl}/api/blog/posts?${qs.toString()}`),
+    fetchJson(`${baseUrl}/api/blog/categories`),
+    fetchJson(`${baseUrl}/api/blog/tags?popular=true&limit=12`),
+    fetchJson(`${baseUrl}/api/blog/posts?limit=5&sort=recent`),
+    isFiltering ? Promise.resolve(null) : fetchJson(`${baseUrl}/api/blog/posts?featured=true&limit=1`),
+  ])
+
+  const posts = postsData?.posts || []
+  const pagination = postsData?.pagination || {
     page: 1,
     totalPages: 1,
     total: 0,
     hasMore: false,
-    hasPrevious: false
-  })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+    hasPrevious: false,
+  }
+  const categories = categoriesData?.categories || []
+  const popularTags = tagsData?.tags || []
+  const recentPosts = recentData?.posts || []
+  const featuredPost = featuredData?.posts?.[0] || null
 
-  useEffect(() => {
-    const fetchBlogData = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        // Fetch main blog posts
-        const params = new URLSearchParams(searchParams.toString())
-        const response = await fetch(`/api/blog/posts?${params.toString()}`)
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch blog posts')
-        }
-
-        const data = await response.json()
-        setPosts(data.posts || [])
-        setPagination(data.pagination || {})
-
-        // Fetch featured post (if not filtering)
-        if (!searchParams.get('category') && !searchParams.get('tag') && !searchParams.get('search')) {
-          const featuredResponse = await fetch('/api/blog/posts?featured=true&limit=1')
-          if (featuredResponse.ok) {
-            const featuredData = await featuredResponse.json()
-            if (featuredData.posts && featuredData.posts.length > 0) {
-              setFeaturedPost(featuredData.posts[0])
-            }
-          }
-        } else {
-          setFeaturedPost(null)
-        }
-
-        // Fetch categories
-        const categoriesResponse = await fetch('/api/blog/categories')
-        if (categoriesResponse.ok) {
-          const categoriesData = await categoriesResponse.json()
-          setCategories(categoriesData.categories || [])
-        }
-
-        // Fetch popular tags
-        const tagsResponse = await fetch('/api/blog/tags?popular=true&limit=12')
-        if (tagsResponse.ok) {
-          const tagsData = await tagsResponse.json()
-          setPopularTags(tagsData.tags || [])
-        }
-
-        // Fetch recent posts for sidebar
-        const recentResponse = await fetch('/api/blog/posts?limit=5&sort=recent')
-        if (recentResponse.ok) {
-          const recentData = await recentResponse.json()
-          setRecentPosts(recentData.posts || [])
-        }
-      } catch (err) {
-        console.error('Error fetching blog data:', err)
-        setError('Failed to load blog posts. Please try again.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchBlogData()
-  }, [searchParams])
-
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('page', page.toString())
-    window.location.href = `/blog?${params.toString()}`
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const buildPageHref = (page: number) => {
+    const p = new URLSearchParams(qs.toString())
+    p.set('page', String(page))
+    return `/blog?${p.toString()}`
   }
 
-  if (loading && posts.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hockey-blue mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading blog posts...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-700">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const numberedPages = Array.from({ length: pagination.totalPages }, (_, i) => i + 1).filter(
+    (page: number) =>
+      page === 1 ||
+      page === pagination.totalPages ||
+      Math.abs(page - pagination.page) <= 1
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -216,9 +127,7 @@ function BlogPageContent() {
             {/* Results Header */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {searchParams.get('category') || searchParams.get('tag') || searchParams.get('search')
-                  ? 'Filtered Posts'
-                  : 'Latest Posts'}
+                {isFiltering ? 'Filtered Posts' : 'Latest Posts'}
               </h2>
               <p className="text-gray-600">
                 {pagination.total > 0 ? (
@@ -233,7 +142,7 @@ function BlogPageContent() {
             </div>
 
             {/* Empty State */}
-            {posts.length === 0 && !loading && (
+            {posts.length === 0 && (
               <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   No posts found
@@ -251,74 +160,63 @@ function BlogPageContent() {
             {posts.length > 0 && (
               <>
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  {posts.map((post) => (
-                    <BlogCard key={post.id} post={post} />
+                  {posts.map((post: { id: string } & Record<string, unknown>) => (
+                    <BlogCard key={post.id} post={post as any} />
                   ))}
                 </div>
 
                 {/* Pagination */}
                 {pagination.totalPages > 1 && (
                   <div className="flex items-center justify-center gap-2 mt-12">
-                    <Button
-                      variant="outline"
-                      onClick={() => handlePageChange(pagination.page - 1)}
-                      disabled={!pagination.hasPrevious}
-                      className="gap-2"
-                    >
-                      <FaChevronLeft className="w-4 h-4" />
-                      Previous
-                    </Button>
+                    {pagination.hasPrevious ? (
+                      <Button asChild variant="outline" className="gap-2">
+                        <a href={buildPageHref(pagination.page - 1)}>
+                          <FaChevronLeft className="w-4 h-4" />
+                          Previous
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="outline" className="gap-2" disabled>
+                        <FaChevronLeft className="w-4 h-4" />
+                        Previous
+                      </Button>
+                    )}
 
                     <div className="flex items-center gap-2">
-                      {Array.from({ length: pagination.totalPages }, (_, i) => i + 1)
-                        .filter(page => {
-                          // Show first page, last page, current page, and pages around current
-                          return (
-                            page === 1 ||
-                            page === pagination.totalPages ||
-                            Math.abs(page - pagination.page) <= 1
-                          )
-                        })
-                        .map((page, index, array) => {
-                          // Add ellipsis
-                          if (index > 0 && page - array[index - 1] > 1) {
-                            return [
-                              <span key={`ellipsis-${page}`} className="px-2 text-gray-500">
-                                ...
-                              </span>,
-                              <Button
-                                key={page}
-                                variant={page === pagination.page ? 'default' : 'outline'}
-                                onClick={() => handlePageChange(page)}
-                                className="min-w-[40px]"
-                              >
-                                {page}
-                              </Button>
-                            ]
-                          }
-
-                          return (
+                      {numberedPages.map((page: number, index: number, array: number[]) => {
+                        const gap = index > 0 && page - array[index - 1] > 1
+                        return (
+                          <div key={page} className="flex items-center gap-2">
+                            {gap && <span className="px-2 text-gray-500">...</span>}
                             <Button
-                              key={page}
+                              asChild={page !== pagination.page}
                               variant={page === pagination.page ? 'default' : 'outline'}
-                              onClick={() => handlePageChange(page)}
                               className="min-w-[40px]"
                             >
-                              {page}
+                              {page === pagination.page ? (
+                                <span>{page}</span>
+                              ) : (
+                                <a href={buildPageHref(page)}>{page}</a>
+                              )}
                             </Button>
-                          )
-                        })}
+                          </div>
+                        )
+                      })}
                     </div>
 
-                    <Button
-                      variant="outline"
-                      onClick={() => handlePageChange(pagination.page + 1)}
-                      disabled={!pagination.hasMore}
-                      className="gap-2"
-                    >
-                      Next
-                      <FaChevronRight className="w-4 h-4" />
-                    </Button>
+                    {pagination.hasMore ? (
+                      <Button asChild variant="outline" className="gap-2">
+                        <a href={buildPageHref(pagination.page + 1)}>
+                          Next
+                          <FaChevronRight className="w-4 h-4" />
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="outline" className="gap-2" disabled>
+                        Next
+                        <FaChevronRight className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 )}
               </>
@@ -336,20 +234,5 @@ function BlogPageContent() {
         </div>
       </div>
     </div>
-  )
-}
-
-export default function BlogPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <span className="ml-3 text-gray-600">Loading blog...</span>
-        </div>
-      }
-    >
-      <BlogPageContent />
-    </Suspense>
   )
 }

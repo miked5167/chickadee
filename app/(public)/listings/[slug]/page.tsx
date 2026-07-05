@@ -43,6 +43,66 @@ interface ListingPageProps {
   }>
 }
 
+// Single source of truth for the contact card (previously duplicated inline for
+// desktop and mobile). Rendered in both responsive slots below.
+interface ContactInfoCardProps {
+  company: {
+    slug: string
+    phone?: string | null
+    email?: string | null
+    website_url?: string | null
+    address?: string | null
+    verified?: boolean | null
+  }
+  location: string
+}
+
+function ContactInfoCard({ company, location }: ContactInfoCardProps) {
+  return (
+    <Card className="border-2 border-gray-200 shadow-lg">
+      <CardHeader className="bg-hockey-blue text-white rounded-t-lg">
+        <CardTitle className="text-lg">Contact Information</CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 space-y-4">
+        {company.phone && (
+          <a href={`tel:${company.phone}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
+            <Phone className="w-5 h-5 text-hockey-blue" />
+            <span>{company.phone}</span>
+          </a>
+        )}
+        {company.email && (
+          <a href={`mailto:${company.email}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
+            <Mail className="w-5 h-5 text-hockey-blue" />
+            <span className="truncate">{company.email}</span>
+          </a>
+        )}
+        {company.website_url && (
+          <a href={company.website_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
+            <Globe className="w-5 h-5 text-hockey-blue" />
+            <span className="truncate">Visit Website</span>
+          </a>
+        )}
+        {company.address && (
+          <div className="flex items-start gap-3 text-gray-700">
+            <MapPin className="w-5 h-5 text-hockey-blue mt-0.5" />
+            <span>{company.address}, {location}</span>
+          </div>
+        )}
+        {!company.verified && (
+          <div className="pt-4 border-t">
+            <Link href={`/claim/${company.slug}`}>
+              <Button variant="outline" className="w-full">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Claim This Listing
+              </Button>
+            </Link>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
 export async function generateMetadata({ params }: ListingPageProps): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createClient()
@@ -98,6 +158,15 @@ export default async function ListingPage({ params }: ListingPageProps) {
     .order('created_at', { ascending: true })
 
   const location = [company.city, company.state_province].filter(Boolean).join(', ') || company.country
+
+  // A5: legitimate structured data (no rating/review markup — none exist)
+  const canonicalUrl = `https://thehockeydirectory.com/listings/${company.slug}`
+  const sameAs = [
+    company.website_url,
+    company.instagram_url,
+    company.twitter_url,
+    company.facebook_url,
+  ].filter(Boolean)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -240,47 +309,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
             {/* Right Column: Contact Card (Desktop) */}
             <div className="hidden lg:block w-80 flex-shrink-0">
-              <Card className="border-2 border-gray-200 shadow-lg">
-                <CardHeader className="bg-hockey-blue text-white rounded-t-lg">
-                  <CardTitle className="text-lg">Contact Information</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  {company.phone && (
-                    <a href={`tel:${company.phone}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Phone className="w-5 h-5 text-hockey-blue" />
-                      <span>{company.phone}</span>
-                    </a>
-                  )}
-                  {company.email && (
-                    <a href={`mailto:${company.email}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Mail className="w-5 h-5 text-hockey-blue" />
-                      <span className="truncate">{company.email}</span>
-                    </a>
-                  )}
-                  {company.website_url && (
-                    <a href={company.website_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Globe className="w-5 h-5 text-hockey-blue" />
-                      <span className="truncate">Visit Website</span>
-                    </a>
-                  )}
-                  {company.address && (
-                    <div className="flex items-start gap-3 text-gray-700">
-                      <MapPin className="w-5 h-5 text-hockey-blue mt-0.5" />
-                      <span>{company.address}, {location}</span>
-                    </div>
-                  )}
-                  {!company.verified && (
-                    <div className="pt-4 border-t">
-                      <Link href={`/claim/${company.slug}`}>
-                        <Button variant="outline" className="w-full">
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Claim This Listing
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <ContactInfoCard company={company} location={location} />
             </div>
           </div>
         </div>
@@ -356,53 +385,13 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
             {/* Contact Info Card - Mobile Only */}
             <div className="lg:hidden">
-              <Card className="border-2 border-gray-200">
-                <CardHeader className="bg-hockey-blue text-white rounded-t-lg">
-                  <CardTitle className="text-lg">Contact Information</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  {company.phone && (
-                    <a href={`tel:${company.phone}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Phone className="w-5 h-5 text-hockey-blue" />
-                      <span>{company.phone}</span>
-                    </a>
-                  )}
-                  {company.email && (
-                    <a href={`mailto:${company.email}`} className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Mail className="w-5 h-5 text-hockey-blue" />
-                      <span className="truncate">{company.email}</span>
-                    </a>
-                  )}
-                  {company.website_url && (
-                    <a href={company.website_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-hockey-blue transition-colors">
-                      <Globe className="w-5 h-5 text-hockey-blue" />
-                      <span className="truncate">Visit Website</span>
-                    </a>
-                  )}
-                  {company.address && (
-                    <div className="flex items-start gap-3 text-gray-700">
-                      <MapPin className="w-5 h-5 text-hockey-blue mt-0.5" />
-                      <span>{company.address}, {location}</span>
-                    </div>
-                  )}
-                  {!company.verified && (
-                    <div className="pt-4 border-t">
-                      <Link href={`/claim/${company.slug}`}>
-                        <Button variant="outline" className="w-full">
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Claim This Listing
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <ContactInfoCard company={company} location={location} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Schema.org Structured Data */}
+      {/* Schema.org Structured Data — ProfessionalService */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -411,10 +400,10 @@ export default async function ListingPage({ params }: ListingPageProps) {
             '@type': 'ProfessionalService',
             name: company.name,
             description: company.description || `Hockey advisory services by ${company.name}`,
-            url: `https://thehockeydirectory.com/listings/${company.slug}`,
+            url: canonicalUrl,
             ...(company.phone && { telephone: company.phone }),
             ...(company.email && { email: company.email }),
-            ...(company.website_url && { sameAs: [company.website_url, company.instagram_url, company.facebook_url, company.twitter_url].filter(Boolean) }),
+            ...(sameAs.length > 0 && { sameAs }),
             ...(company.address && {
               address: {
                 '@type': 'PostalAddress',
@@ -424,11 +413,40 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 addressCountry: company.country,
               },
             }),
-            ...(company.logo_url && { image: company.logo_url }),
+            ...(company.logo_url && { logo: company.logo_url, image: company.logo_url }),
             areaServed: {
               '@type': 'Country',
               name: company.country === 'CA' ? 'Canada' : 'United States',
             },
+          }),
+        }}
+      />
+
+      {/* Schema.org Structured Data — BreadcrumbList (matches visible breadcrumb) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://thehockeydirectory.com/' },
+              { '@type': 'ListItem', position: 2, name: 'Advisors', item: 'https://thehockeydirectory.com/listings' },
+              ...(company.state_province
+                ? [{
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: company.state_province,
+                    item: `https://thehockeydirectory.com/listings?state=${encodeURIComponent(company.state_province)}`,
+                  }]
+                : []),
+              {
+                '@type': 'ListItem',
+                position: company.state_province ? 4 : 3,
+                name: company.name,
+                item: canonicalUrl,
+              },
+            ],
           }),
         }}
       />

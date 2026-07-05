@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { SearchResults } from '@/components/search/SearchResults'
 import { AdvisorFilters } from '@/components/search/AdvisorFilters'
+import { getBaseUrl } from '@/lib/utils/base-url'
 
 export const metadata: Metadata = {
   title: 'Search Hockey Advisors | The Hockey Directory',
@@ -30,6 +31,28 @@ interface ListingsPageProps {
 
 export default async function ListingsPage({ searchParams }: ListingsPageProps) {
   const params = await searchParams
+
+  // A6: fetch the initial page of results server-side so the raw HTML contains
+  // advisor names/cities (SEO). SearchResults keeps all client-side filtering;
+  // this only seeds the first paint. Degrades gracefully to client fetch on error.
+  let initialData: { advisors: any[]; pagination: any } | undefined
+  try {
+    const qs = new URLSearchParams()
+    if (params.country) qs.set('country', params.country)
+    if (params.state) qs.set('state', params.state)
+    if (params.sort) qs.set('sort', params.sort)
+    if (params.page) qs.set('page', params.page)
+    if (params.search) qs.set('search', params.search)
+
+    const baseUrl = await getBaseUrl()
+    const res = await fetch(`${baseUrl}/api/advisors?${qs.toString()}`, { cache: 'no-store' })
+    if (res.ok) {
+      const data = await res.json()
+      initialData = { advisors: data.advisors || [], pagination: data.pagination || null }
+    }
+  } catch {
+    // Fall back to client-side fetch (initialData stays undefined)
+  }
 
   // Build dynamic title based on search
   const pageTitle = params.search
@@ -70,7 +93,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
                 </div>
               }
             >
-              <SearchResults searchParams={params} />
+              <SearchResults searchParams={params} initialData={initialData} />
             </Suspense>
           </div>
         </div>

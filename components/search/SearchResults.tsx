@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AdvisorCard } from '@/components/listing/AdvisorCard'
 import { Pagination } from '@/components/search/Pagination'
@@ -47,15 +47,24 @@ interface SearchResultsProps {
     priceRange?: string
     pricingStructure?: string
   }
+  // A6: server-rendered first page of results. When present, seeds the initial
+  // paint so raw HTML contains advisor names/cities and we skip the first fetch.
+  initialData?: {
+    advisors: Advisor[]
+    pagination: PaginationInfo | null
+  }
 }
 
-export function SearchResults({ searchParams }: SearchResultsProps) {
+export function SearchResults({ searchParams, initialData }: SearchResultsProps) {
   const router = useRouter()
-  const [advisors, setAdvisors] = useState<Advisor[]>([])
-  const [pagination, setPagination] = useState<PaginationInfo | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [advisors, setAdvisors] = useState<Advisor[]>(initialData?.advisors ?? [])
+  const [pagination, setPagination] = useState<PaginationInfo | null>(initialData?.pagination ?? null)
+  const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState(searchParams.search || '')
+
+  // Skip the very first client fetch when the server already provided results.
+  const skipInitialFetch = useRef(Boolean(initialData))
 
   useEffect(() => {
     const fetchAdvisors = async () => {
@@ -87,6 +96,11 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
       } finally {
         setLoading(false)
       }
+    }
+
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false
+      return
     }
 
     fetchAdvisors()

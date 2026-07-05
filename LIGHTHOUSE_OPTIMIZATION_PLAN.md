@@ -685,11 +685,10 @@ export async function generateMetadata({ params }) {
         addressRegion: advisor.state,
         postalCode: advisor.postal_code,
       },
-      aggregateRating: advisor.average_rating && {
-        '@type': 'AggregateRating',
-        ratingValue: advisor.average_rating,
-        reviewCount: advisor.review_count,
-      },
+      // NOTE: Do NOT add AggregateRating / rating markup here. There is no
+      // live review system, so any rating values would be fabricated and
+      // violate Google's structured-data policy. Only add rating schema once
+      // real, verifiable reviews exist.
     }),
   }}
 />

@@ -439,7 +439,7 @@ This is the most important finding. Unlike the "hockey advisor" space where ahad
 - [ ] Event schema (tournaments)
 - [ ] EducationalOrganization schema (prep schools)
 - [ ] BreadcrumbList schema (all pages)
-- [ ] AggregateRating schema (all listings with reviews)
+- ⛔ Do NOT add AggregateRating / rating schema. Without a live, verifiable review system any rating values are fabricated and violate Google's structured-data policy. Only revisit this once real reviews exist.
 
 **Technical SEO:**
 - [ ] Mobile-responsive design

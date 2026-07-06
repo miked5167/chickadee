@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { FiTwitter, FiFacebook, FiInstagram, FiLinkedin } from 'react-icons/fi'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -29,28 +28,6 @@ export function Footer() {
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
     ],
-    social: [
-      {
-        name: 'Twitter',
-        href: '#',
-        icon: FiTwitter,
-      },
-      {
-        name: 'Facebook',
-        href: '#',
-        icon: FiFacebook,
-      },
-      {
-        name: 'Instagram',
-        href: '#',
-        icon: FiInstagram,
-      },
-      {
-        name: 'LinkedIn',
-        href: '#',
-        icon: FiLinkedin,
-      },
-    ],
   }
 
   return (
@@ -74,20 +51,6 @@ export function Footer() {
             <p className="text-sm text-gray-400">
               Connecting hockey families with trusted advisors and development professionals across North America.
             </p>
-            <div className="flex space-x-6">
-              {navigation.social.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-400 hover:text-white transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
-                </a>
-              ))}
-            </div>
           </div>
           <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 md:grid-cols-3">
             <div>

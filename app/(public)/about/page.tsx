@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'About Us | The Hockey Directory',
+  title: 'About Us',
   description: 'Learn about The Hockey Directory - connecting hockey families with trusted advisors across North America.',
 }
 

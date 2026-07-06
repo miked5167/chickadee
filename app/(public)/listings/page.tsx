@@ -5,9 +5,9 @@ import { AdvisorFilters } from '@/components/search/AdvisorFilters'
 import { getBaseUrl } from '@/lib/utils/base-url'
 
 export const metadata: Metadata = {
-  title: 'Search Hockey Advisors | The Hockey Directory',
+  title: 'Search Hockey Advisors',
   description:
-    'Find and compare hockey advisors across North America. Filter by location, specialty, and rating to find the perfect advisor for your hockey journey.',
+    'Find and compare hockey advisors across North America. Filter by location and specialty to find the right advisor for your hockey journey.',
 }
 
 interface ListingsPageProps {
@@ -72,7 +72,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
             {pageTitle}
           </h1>
           <p className="text-gray-600">
-            Find verified hockey advisors to help guide your player's journey
+            Find hockey advisors to help guide your player's journey
           </p>
         </div>
       </div>

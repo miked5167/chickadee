@@ -138,7 +138,7 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
               {stats.map((stat, i) => (
                 <span key={i} className="flex items-center gap-2">
                   {i > 0 && <span className="text-gray-300">&bull;</span>}
-                  <span className="font-medium">{stat}</span>
+                  <span className="font-display font-medium">{stat}</span>
                 </span>
               ))}
             </div>

@@ -49,18 +49,19 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-hockey-blue to-blue-900 text-white py-20 md:py-32">
-        {/* Background Pattern */}
+      <section className="relative bg-gradient-to-br from-rink-navy via-hockey-blue to-rink-navy text-white py-20 md:py-32">
+        {/* Subtle ice texture — faint diagonal striations + a soft sheen (no dots, no photos) */}
         <div
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-[0.15] pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage:
+              'repeating-linear-gradient(115deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 22px), radial-gradient(120% 80% at 50% -20%, rgba(255,255,255,0.10), transparent 60%)',
           }}
         />
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-4 uppercase tracking-tight">
               Find the Right
               <br />
               <span className="text-goal-gold">Hockey Advisor</span>
@@ -81,22 +82,22 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="flex flex-col items-center">
               <FaUsers className="text-4xl text-hockey-blue mb-2" />
-              <p className="text-2xl font-bold text-gray-800">200+</p>
+              <p className="font-display text-3xl md:text-4xl font-semibold tabular-nums text-rink-navy">200+</p>
               <p className="text-sm text-gray-600">Advisors & Agencies Listed</p>
             </div>
             <div className="flex flex-col items-center">
               <FaHockeyPuck className="text-4xl text-hockey-blue mb-2" />
-              <p className="text-2xl font-bold text-gray-800">8,800+</p>
+              <p className="font-display text-3xl md:text-4xl font-semibold tabular-nums text-rink-navy">8,800+</p>
               <p className="text-sm text-gray-600">Players Represented</p>
             </div>
             <div className="flex flex-col items-center">
               <FaGlobeAmericas className="text-4xl text-goal-gold mb-2" />
-              <p className="text-2xl font-bold text-gray-800">US & Canada</p>
+              <p className="font-display text-3xl md:text-4xl font-semibold tabular-nums text-rink-navy">US & Canada</p>
               <p className="text-sm text-gray-600">Coast-to-Coast Coverage</p>
             </div>
             <div className="flex flex-col items-center">
               <FaCheckCircle className="text-4xl text-green-600 mb-2" />
-              <p className="text-2xl font-bold text-gray-800">Free</p>
+              <p className="font-display text-3xl md:text-4xl font-semibold tabular-nums text-rink-navy">Free</p>
               <p className="text-sm text-gray-600">For Families, Always</p>
             </div>
           </div>
@@ -110,10 +111,11 @@ export default function HomePage() {
       <section className="py-16 bg-ice-blue">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">Why Hockey Families Work With an Advisor</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2 uppercase tracking-tight">Why Hockey Families Work With an Advisor</h2>
             <p className="text-gray-600">
               The road through competitive hockey is full of high-stakes decisions. The right advisor has seen them all before.
             </p>
+            <div className="rink-divider w-20 mx-auto mt-4" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -151,8 +153,9 @@ export default function HomePage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">How It Works</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2 uppercase tracking-tight">How It Works</h2>
             <p className="text-gray-600">Finding the right hockey advisor is easy</p>
+            <div className="rink-divider w-20 mx-auto mt-4" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -194,7 +197,7 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-hockey-blue to-blue-900 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 uppercase tracking-tight">
             Are You a Hockey Advisor?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">

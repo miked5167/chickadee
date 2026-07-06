@@ -246,16 +246,16 @@ export function SearchResults({ searchParams, initialData }: SearchResultsProps)
       {advisors.length === 0 && (
         <div className="bg-white rounded-lg shadow-sm p-12 text-center">
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            No advisors found
+            No advisors match those filters
           </h3>
           <p className="text-gray-600 mb-6">
-            Try adjusting your search filters or expanding your search radius
+            Try widening your search — remove a filter or broaden the location. New advisors are added regularly.
           </p>
           <a
             href="/listings"
-            className="inline-block px-6 py-3 bg-hockey-blue text-white rounded-lg hover:bg-blue-800"
+            className="inline-block px-6 py-3 bg-hockey-blue text-white rounded-lg hover:bg-blue-800 transition-colors"
           >
-            View All Advisors
+            Clear filters
           </a>
         </div>
       )}

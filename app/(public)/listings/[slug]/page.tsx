@@ -505,7 +505,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                   {glanceRows.map((row) => (
                     <div key={row.label} className="flex items-center justify-between gap-4 text-sm">
                       <span className="text-gray-500">{row.label}</span>
-                      <span className="font-medium text-gray-900 text-right tabular-nums">{row.value}</span>
+                      <span className="font-display font-medium text-gray-900 text-right tabular-nums">{row.value}</span>
                     </div>
                   ))}
                 </CardContent>

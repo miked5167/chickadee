@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Hockey Glossary | The Hockey Directory',
+  title: 'Hockey Glossary',
   description: 'Plain-English definitions of hockey terms, pathways, and programs to help families navigate the hockey world.',
 }
 

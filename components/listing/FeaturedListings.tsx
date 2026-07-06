@@ -17,7 +17,9 @@ export async function FeaturedListings() {
       description,
       logo_url,
       verified,
-      website_url
+      website_url,
+      client_count,
+      agency_tier
     `)
     .order('name', { ascending: true })
     .limit(6)
@@ -27,9 +29,9 @@ export async function FeaturedListings() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2">Featured Hockey Advisors</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2 uppercase tracking-tight">Featured Hockey Advisors</h2>
             <p className="text-gray-600 mb-12">
-              Discover top-rated hockey advisors across North America
+              Hockey advisors and agencies across North America
             </p>
             <p className="text-gray-500">No advisors available at this time.</p>
           </div>
@@ -50,13 +52,15 @@ export async function FeaturedListings() {
     logo_url: c.logo_url,
     verified: c.verified,
     website_url: c.website_url,
+    client_count: (c as any).client_count ?? null,
+    agency_tier: (c as any).agency_tier ?? null,
   }))
 
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-2">Featured Hockey Advisors</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2 uppercase tracking-tight">Featured Hockey Advisors</h2>
           <p className="text-gray-600">
             Discover top-rated hockey advisors across North America
           </p>

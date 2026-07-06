@@ -20,6 +20,7 @@ interface ListingsPageProps {
     minRating?: string
     country?: string
     state?: string
+    tier?: string
     sort?: string
     page?: string
     search?: string
@@ -40,6 +41,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
     const qs = new URLSearchParams()
     if (params.country) qs.set('country', params.country)
     if (params.state) qs.set('state', params.state)
+    if (params.tier) qs.set('tier', params.tier)
     if (params.sort) qs.set('sort', params.sort)
     if (params.page) qs.set('page', params.page)
     if (params.search) qs.set('search', params.search)

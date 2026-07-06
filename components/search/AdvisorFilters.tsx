@@ -16,8 +16,16 @@ import {
 import { FaFilter, FaTimes } from 'react-icons/fa'
 
 const SORT_OPTIONS = [
+  { value: 'recommended', label: 'Recommended' },
   { value: 'name', label: 'Name (A-Z)' },
   { value: 'recent', label: 'Recently Added' },
+]
+
+const TIER_OPTIONS = [
+  { value: '', label: 'All Advisors' },
+  { value: 'family_advisor', label: 'Family Advisors' },
+  { value: 'established', label: 'Established' },
+  { value: 'elite_pro', label: 'Elite & Pro' },
 ]
 
 interface AdvisorFiltersProps {
@@ -29,16 +37,21 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
   const searchParams = useSearchParams()
 
   const [selectedSort, setSelectedSort] = useState<string>(() => {
-    return searchParams.get('sort') || 'name'
+    return searchParams.get('sort') || 'recommended'
   })
 
   const [selectedCountry, setSelectedCountry] = useState<string>(() => {
     return searchParams.get('country') || ''
   })
 
+  const [selectedTier, setSelectedTier] = useState<string>(() => {
+    return searchParams.get('tier') || ''
+  })
+
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
-  const hasActiveFilters = selectedCountry !== ''
+  const activeCount = (selectedCountry !== '' ? 1 : 0) + (selectedTier !== '' ? 1 : 0)
+  const hasActiveFilters = activeCount > 0
 
   // Apply filters
   const applyFilters = () => {
@@ -53,7 +66,9 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
 
     // Add filter params
     if (selectedCountry) params.set('country', selectedCountry)
-    if (selectedSort) params.set('sort', selectedSort)
+    if (selectedTier) params.set('tier', selectedTier)
+    // 'recommended' is the default completeness sort — omit it from the URL.
+    if (selectedSort && selectedSort !== 'recommended') params.set('sort', selectedSort)
 
     params.set('page', '1')
 
@@ -64,7 +79,8 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
   // Clear all filters
   const clearFilters = () => {
     setSelectedCountry('')
-    setSelectedSort('name')
+    setSelectedTier('')
+    setSelectedSort('recommended')
 
     const params = new URLSearchParams()
     const search = searchParams.get('search')
@@ -96,7 +112,7 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
           className="w-full gap-2"
         >
           <FaFilter />
-          Filters {hasActiveFilters && '(1)'}
+          Filters {hasActiveFilters && `(${activeCount})`}
         </Button>
       </div>
 
@@ -143,6 +159,25 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
                     ))}
                   </SelectContent>
                 </Select>
+              </CardContent>
+            </Card>
+
+            {/* Agency Tier Filter */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Agency Tier</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <RadioGroup value={selectedTier} onValueChange={setSelectedTier}>
+                  {TIER_OPTIONS.map((option) => (
+                    <div key={option.value || 'all'} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option.value} id={`tier-${option.value || 'all'}`} />
+                      <Label htmlFor={`tier-${option.value || 'all'}`} className="cursor-pointer">
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </CardContent>
             </Card>
 

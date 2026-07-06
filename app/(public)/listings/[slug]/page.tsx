@@ -139,6 +139,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
       address, city, state_province, country,
       instagram_url, twitter_url, facebook_url,
       verified, verified_owner_id, verification_date,
+      client_count, agency_tier,
       created_at, updated_at
     `)
     .eq('slug', slug)
@@ -167,6 +168,61 @@ export default async function ListingPage({ params }: ListingPageProps) {
     company.twitter_url,
     company.facebook_url,
   ].filter(Boolean)
+
+  // B2: derived, fabrication-free view data.
+  const TIER_LABELS: Record<string, string> = {
+    elite_pro: 'Elite & Pro',
+    established: 'Established',
+    family_advisor: 'Family Advisor',
+  }
+  const tierLabel = company.agency_tier ? TIER_LABELS[company.agency_tier] : null
+  const isClaimed = Boolean(company.verified)
+  const c = company as Record<string, any>
+
+  // "At a Glance" rows — only rendered when the underlying data actually exists.
+  const glanceRows: { label: string; value: string }[] = []
+  if (typeof company.client_count === 'number' && company.client_count > 0)
+    glanceRows.push({ label: 'Players represented', value: company.client_count.toLocaleString() })
+  if (tierLabel) glanceRows.push({ label: 'Tier', value: tierLabel })
+  if (location) glanceRows.push({ label: 'Location', value: location })
+  if (c.years_in_business) glanceRows.push({ label: 'Years in business', value: String(c.years_in_business) })
+  if (c.languages) glanceRows.push({ label: 'Languages', value: String(c.languages) })
+  if (c.response_time && isClaimed) glanceRows.push({ label: 'Response time', value: String(c.response_time) })
+  if (c.accepting_clients && isClaimed) {
+    const av = c.accepting_clients === 'accepting' ? 'Accepting clients'
+      : c.accepting_clients === 'waitlist' ? 'Waitlist' : 'Not accepting new clients'
+    glanceRows.push({ label: 'Availability', value: av })
+  }
+
+  // Auto-generated FAQ — real data only; skip any question needing unknown data.
+  const contactMethods: string[] = []
+  if (company.phone) contactMethods.push(`by phone at ${company.phone}`)
+  if (company.email) contactMethods.push(`by email at ${company.email}`)
+  if (company.website_url) contactMethods.push('through their website')
+
+  const faqs: { question: string; answer: string }[] = []
+  if (location)
+    faqs.push({
+      question: `Where is ${company.name} located?`,
+      answer: `${company.name} is a hockey advisor based in ${location}.`,
+    })
+  if (typeof company.client_count === 'number' && company.client_count > 0)
+    faqs.push({
+      question: `How many players does ${company.name} represent?`,
+      answer: `${company.name} represents ${company.client_count.toLocaleString()} players.`,
+    })
+  if (contactMethods.length > 0)
+    faqs.push({
+      question: `How do I contact ${company.name}?`,
+      answer: `You can reach ${company.name} ${contactMethods.join(', ')}.`,
+    })
+  faqs.push({
+    question: 'What does a hockey advisor do?',
+    answer:
+      'A hockey advisor helps players and families navigate decisions like team and program ' +
+      'placement, player development, and the college recruiting process across pathways such as ' +
+      'AAA, junior, prep school, and NCAA.',
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -316,7 +372,22 @@ export default async function ListingPage({ params }: ListingPageProps) {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-24 lg:pb-8">
+        {/* Unclaimed banner — claim funnel */}
+        {!isClaimed && (
+          <div className="mb-8 rounded-lg border border-hockey-blue/20 bg-ice-blue px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-gray-800">
+              <span className="font-semibold">Is this your agency?</span>{' '}
+              Claim this profile to add specialties, photos, and more.
+            </p>
+            <Link href={`/claim/${company.slug}`} className="flex-shrink-0">
+              <Button variant="outline" className="w-full sm:w-auto">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Claim this profile
+              </Button>
+            </Link>
+          </div>
+        )}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Column: Main Content */}
           <div className="flex-1 space-y-8">
@@ -328,6 +399,40 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-700 leading-relaxed">{company.description}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Mid-page CTA band */}
+            {company.state_province && (
+              <div className="rounded-lg bg-gradient-to-r from-hockey-blue to-blue-800 text-white px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-blue-50">
+                  Not sure if {company.name} is the right fit? Browse all advisors in {company.state_province}.
+                </p>
+                <Link
+                  href={`/listings?state=${encodeURIComponent(company.state_province)}`}
+                  className="flex-shrink-0"
+                >
+                  <Button className="bg-goal-gold text-gray-900 hover:bg-yellow-400 w-full sm:w-auto">
+                    Browse {company.state_province} advisors
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* FAQ Section */}
+            {faqs.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Frequently Asked Questions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-5">
+                  {faqs.map((faq, i) => (
+                    <div key={i}>
+                      <h3 className="font-semibold text-gray-900 mb-1">{faq.question}</h3>
+                      <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
             )}
@@ -388,8 +493,64 @@ export default async function ListingPage({ params }: ListingPageProps) {
               <ContactInfoCard company={company} location={location} />
             </div>
           </div>
+
+          {/* Right Sidebar: At a Glance */}
+          {glanceRows.length > 0 && (
+            <aside className="lg:w-80 flex-shrink-0">
+              <Card className="border-2 border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-lg">At a Glance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {glanceRows.map((row) => (
+                    <div key={row.label} className="flex items-center justify-between gap-4 text-sm">
+                      <span className="text-gray-500">{row.label}</span>
+                      <span className="font-medium text-gray-900 text-right tabular-nums">{row.value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </aside>
+          )}
         </div>
       </div>
+
+      {/* Sticky mobile contact bar (only the actions that exist) */}
+      {(company.phone || company.email || company.website_url) && (
+        <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-lg">
+          <div className="grid grid-flow-col auto-cols-fr">
+            {company.phone && (
+              <a
+                href={`tel:${company.phone}`}
+                className="flex flex-col items-center justify-center gap-1 py-3 text-hockey-blue"
+              >
+                <Phone className="w-5 h-5" />
+                <span className="text-xs font-medium">Call</span>
+              </a>
+            )}
+            {company.email && (
+              <a
+                href={`mailto:${company.email}`}
+                className="flex flex-col items-center justify-center gap-1 py-3 text-hockey-blue border-l border-gray-100"
+              >
+                <Mail className="w-5 h-5" />
+                <span className="text-xs font-medium">Email</span>
+              </a>
+            )}
+            {company.website_url && (
+              <a
+                href={company.website_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center gap-1 py-3 text-hockey-blue border-l border-gray-100"
+              >
+                <Globe className="w-5 h-5" />
+                <span className="text-xs font-medium">Website</span>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Schema.org Structured Data — ProfessionalService */}
       <script
@@ -450,6 +611,24 @@ export default async function ListingPage({ params }: ListingPageProps) {
           }),
         }}
       />
+
+      {/* Schema.org Structured Data — FAQPage (matches the visible FAQ) */}
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faqs.map((faq) => ({
+                '@type': 'Question',
+                name: faq.question,
+                acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+              })),
+            }),
+          }}
+        />
+      )}
     </div>
   )
 }

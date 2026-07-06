@@ -40,6 +40,7 @@ interface SearchResultsProps {
     minRating?: string
     country?: string
     state?: string
+    tier?: string
     sort?: string
     page?: string
     search?: string
@@ -76,6 +77,7 @@ export function SearchResults({ searchParams, initialData }: SearchResultsProps)
 
         if (searchParams.country) params.set('country', searchParams.country)
         if (searchParams.state) params.set('state', searchParams.state)
+        if (searchParams.tier) params.set('tier', searchParams.tier)
         if (searchParams.sort) params.set('sort', searchParams.sort)
         if (searchParams.page) params.set('page', searchParams.page)
         if (searchParams.search) params.set('search', searchParams.search)
@@ -145,6 +147,15 @@ export function SearchResults({ searchParams, initialData }: SearchResultsProps)
     if (searchParams.country) {
       const countryLabel = searchParams.country === 'US' ? 'United States' : 'Canada'
       filters.push({ key: 'country', label: countryLabel })
+    }
+
+    if (searchParams.tier) {
+      const tierLabels: Record<string, string> = {
+        family_advisor: 'Family Advisors',
+        established: 'Established',
+        elite_pro: 'Elite & Pro',
+      }
+      filters.push({ key: 'tier', label: tierLabels[searchParams.tier] || searchParams.tier })
     }
 
     return filters
@@ -224,7 +235,7 @@ export function SearchResults({ searchParams, initialData }: SearchResultsProps)
         <p className="text-gray-600">
           {pagination && (
             <>
-              Found <span className="font-semibold">{pagination.total}</span>{' '}
+              <span className="font-semibold">{pagination.total}</span>{' '}
               {pagination.total === 1 ? 'advisor' : 'advisors'}
             </>
           )}

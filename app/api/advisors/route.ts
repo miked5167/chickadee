@@ -55,7 +55,9 @@ export async function GET(request: NextRequest) {
 
     const country = searchParams.get('country')
     const searchState = searchParams.get('state')
-    const sort = (searchParams.get('sort') || 'name') as string
+    const tier = searchParams.get('tier')
+    const sort = (searchParams.get('sort') || 'recommended') as string
+    const VALID_TIERS = ['elite_pro', 'established', 'family_advisor']
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1
     const limit = Math.min(
       searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 30,
@@ -89,6 +91,11 @@ export async function GET(request: NextRequest) {
     const effectiveState = searchState || detectedState
     if (effectiveState) {
       query = query.eq('state_province', effectiveState)
+    }
+
+    // Agency-tier filtering (B3)
+    if (tier && VALID_TIERS.includes(tier)) {
+      query = query.eq('agency_tier', tier)
     }
 
     // Text search on name, description, city, and state_province
@@ -148,8 +155,26 @@ export async function GET(request: NextRequest) {
             return dateB - dateA
           })
           break
+        case 'recommended':
         default:
-          sortedCompanies.sort((a, b) => a.name.localeCompare(b.name))
+          // B3 completeness sort: claimed first, then profiles with both a logo
+          // and description, then by client_count desc, then name. Rewards
+          // complete/claimed listings and nudges claiming.
+          sortedCompanies.sort((a, b) => {
+            const claimedA = a.verified ? 1 : 0
+            const claimedB = b.verified ? 1 : 0
+            if (claimedA !== claimedB) return claimedB - claimedA
+
+            const completeA = a.logo_url && a.description ? 1 : 0
+            const completeB = b.logo_url && b.description ? 1 : 0
+            if (completeA !== completeB) return completeB - completeA
+
+            const clientsA = a.client_count || 0
+            const clientsB = b.client_count || 0
+            if (clientsA !== clientsB) return clientsB - clientsA
+
+            return (a.name || '').localeCompare(b.name || '')
+          })
       }
     }
 
@@ -159,7 +184,10 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit
     const paginatedCompanies = sortedCompanies.slice(offset, offset + limit)
 
-    // Map to advisor-like shape for frontend compatibility
+    // Map to advisor-like shape for frontend compatibility.
+    // New fields (client_count/agency_tier and any optional profile fields) are
+    // read defensively — absent columns come back undefined and become null, so
+    // the card only renders stats that actually exist.
     const advisors = paginatedCompanies.map(c => ({
       id: c.id,
       slug: c.slug,
@@ -173,6 +201,11 @@ export async function GET(request: NextRequest) {
       website_url: c.website_url,
       phone: c.phone,
       email: c.email,
+      client_count: c.client_count ?? null,
+      agency_tier: c.agency_tier ?? null,
+      specializations: c.specializations ?? null,
+      accepting_clients: c.accepting_clients ?? null,
+      years_in_business: c.years_in_business ?? null,
     }))
 
     return NextResponse.json({
@@ -188,6 +221,7 @@ export async function GET(request: NextRequest) {
       filters: {
         country,
         state: effectiveState,
+        tier: tier && VALID_TIERS.includes(tier) ? tier : null,
         sort,
         search: searchText,
       },

@@ -1,4 +1,20 @@
 import { createClient } from './server'
+import type { User } from '@supabase/supabase-js'
+
+type ServerSupabaseClient = Awaited<ReturnType<typeof createClient>>
+
+export type AdminAuthorization =
+  | {
+      status: 'authorized'
+      supabase: ServerSupabaseClient
+      user: User
+    }
+  | {
+      status: 'unauthenticated'
+    }
+  | {
+      status: 'forbidden'
+    }
 
 /**
  * Get the current user from the session
@@ -33,50 +49,49 @@ export async function isAuthenticated() {
 }
 
 /**
- * Check if the current user is an admin
- * Checks against admin_users table in the database
- * Falls back to environment variable for development
+ * Authorize the current request using the M3 public.is_admin() contract.
+ *
+ * The request-scoped client is deliberately created once and is returned only
+ * after both session authentication and administrator authorization succeed.
+ * Callers must complete this check before constructing a service-role client.
+ */
+export async function getAdminAuthorization(): Promise<AdminAuthorization> {
+  let supabase: ServerSupabaseClient
+
+  try {
+    supabase = await createClient()
+  } catch {
+    return { status: 'unauthenticated' }
+  }
+
+  try {
+    const {
+      data: { user },
+      error: authenticationError,
+    } = await supabase.auth.getUser()
+
+    if (authenticationError || !user) {
+      return { status: 'unauthenticated' }
+    }
+
+    const { data: authorized, error: authorizationError } = await supabase.rpc('is_admin')
+
+    if (authorizationError || authorized !== true) {
+      return { status: 'forbidden' }
+    }
+
+    return { status: 'authorized', supabase, user }
+  } catch {
+    return { status: 'forbidden' }
+  }
+}
+
+/**
+ * Boolean layout guard backed exclusively by public.is_admin().
  */
 export async function isAdmin(): Promise<boolean> {
-  const user = await getCurrentUser()
-  if (!user) return false
-
-  // Development fallback: Check environment variable
-  // Set ADMIN_USER_EMAILS in .env.local for development (comma-separated)
-  // Example: ADMIN_USER_EMAILS=admin@example.com,dev@example.com
-  if (process.env.NODE_ENV === 'development' && process.env.ADMIN_USER_EMAILS) {
-    const adminEmails = process.env.ADMIN_USER_EMAILS.split(',').map(email => email.trim())
-    if (adminEmails.includes(user.email || '')) {
-      console.log('[DEV] User authenticated as admin via ADMIN_USER_EMAILS')
-      return true
-    }
-  }
-
-  // Production check: Query admin_users table
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('admin_users')
-      .select('id, is_active')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
-
-    if (error) {
-      // If table doesn't exist or RLS blocks access, user is not admin
-      if (error.code === 'PGRST116') {
-        // No rows returned - user is not an admin
-        return false
-      }
-      console.error('Error checking admin status:', error)
-      return false
-    }
-
-    return !!data
-  } catch (error) {
-    console.error('Unexpected error in isAdmin():', error)
-    return false
-  }
+  const authorization = await getAdminAuthorization()
+  return authorization.status === 'authorized'
 }
 
 /**

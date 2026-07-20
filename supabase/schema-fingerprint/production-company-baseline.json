@@ -1,0 +1,1368 @@
+{
+  "formatVersion": 1,
+  "source": {
+    "kind": "canonical-production-derived-baseline",
+    "capturedDate": "2026-07-19",
+    "migration": "supabase/migrations/20260719000000_production_company_baseline.sql",
+    "containsData": false
+  },
+  "extensions": [
+    {
+      "name": "uuid-ossp",
+      "schema": "extensions"
+    },
+    {
+      "name": "postgis",
+      "schema": "public"
+    }
+  ],
+  "enums": [
+    {
+      "schema": "public",
+      "name": "claim_status",
+      "labels": [
+        "pending",
+        "under_review",
+        "approved",
+        "rejected"
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "media_type",
+      "labels": [
+        "photo",
+        "video"
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "moderation_status",
+      "labels": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "user_type",
+      "labels": [
+        "searcher",
+        "advisor"
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "verification_method",
+      "labels": [
+        "email",
+        "phone",
+        "document",
+        "manual"
+      ],
+      "owner": "postgres"
+    }
+  ],
+  "tables": [
+    {
+      "schema": "public",
+      "name": "advisors",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "name",
+          "type": "character varying(50)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(50) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "title",
+          "type": "character varying(100)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(100)"
+        },
+        {
+          "ordinal": 5,
+          "name": "bio",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 6,
+          "name": "specialties",
+          "type": "text[]",
+          "nullable": true,
+          "default": null,
+          "definition": "text[]"
+        },
+        {
+          "ordinal": 7,
+          "name": "years_experience",
+          "type": "integer",
+          "nullable": true,
+          "default": null,
+          "definition": "integer"
+        },
+        {
+          "ordinal": 8,
+          "name": "playing_background",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 9,
+          "name": "certifications",
+          "type": "text[]",
+          "nullable": true,
+          "default": null,
+          "definition": "text[]"
+        },
+        {
+          "ordinal": 10,
+          "name": "contact_email",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 11,
+          "name": "contact_phone",
+          "type": "character varying(20)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(20)"
+        },
+        {
+          "ordinal": 12,
+          "name": "profile_image_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 13,
+          "name": "display_order",
+          "type": "integer",
+          "nullable": true,
+          "default": "0",
+          "definition": "integer DEFAULT 0"
+        },
+        {
+          "ordinal": 14,
+          "name": "active",
+          "type": "boolean",
+          "nullable": true,
+          "default": "true",
+          "definition": "boolean DEFAULT true"
+        },
+        {
+          "ordinal": 15,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 16,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "companies",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "name",
+          "type": "character varying(100)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(100) NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "slug",
+          "type": "character varying(100)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(100) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "description",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 5,
+          "name": "website_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 6,
+          "name": "phone",
+          "type": "character varying(20)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(20)"
+        },
+        {
+          "ordinal": 7,
+          "name": "email",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 8,
+          "name": "address",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 9,
+          "name": "city",
+          "type": "character varying(50)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(50)"
+        },
+        {
+          "ordinal": 10,
+          "name": "state_province",
+          "type": "character varying(50)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(50)"
+        },
+        {
+          "ordinal": 11,
+          "name": "country",
+          "type": "character varying(50)",
+          "nullable": true,
+          "default": "'Canada'::character varying",
+          "definition": "character varying(50) DEFAULT 'Canada'::character varying"
+        },
+        {
+          "ordinal": 12,
+          "name": "location",
+          "type": "public.geography(Point, 4326)",
+          "nullable": true,
+          "default": null,
+          "definition": "public.geography(Point, 4326)"
+        },
+        {
+          "ordinal": 13,
+          "name": "facebook_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 14,
+          "name": "instagram_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 15,
+          "name": "twitter_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 16,
+          "name": "logo_url",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 17,
+          "name": "verified",
+          "type": "boolean",
+          "nullable": true,
+          "default": "false",
+          "definition": "boolean DEFAULT false"
+        },
+        {
+          "ordinal": 18,
+          "name": "verified_owner_id",
+          "type": "uuid",
+          "nullable": true,
+          "default": null,
+          "definition": "uuid"
+        },
+        {
+          "ordinal": 19,
+          "name": "verification_date",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null,
+          "definition": "timestamp with time zone"
+        },
+        {
+          "ordinal": 20,
+          "name": "search_vector",
+          "type": "tsvector",
+          "nullable": true,
+          "default": null,
+          "definition": "tsvector"
+        },
+        {
+          "ordinal": 21,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 22,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "listing_claims",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "claimant_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "claim_status",
+          "type": "public.claim_status",
+          "nullable": true,
+          "default": "'pending'::public.claim_status",
+          "definition": "public.claim_status DEFAULT 'pending'::public.claim_status"
+        },
+        {
+          "ordinal": 5,
+          "name": "verification_method",
+          "type": "public.verification_method",
+          "nullable": true,
+          "default": null,
+          "definition": "public.verification_method"
+        },
+        {
+          "ordinal": 6,
+          "name": "verification_data",
+          "type": "jsonb",
+          "nullable": true,
+          "default": "'{}'::jsonb",
+          "definition": "jsonb DEFAULT '{}'::jsonb"
+        },
+        {
+          "ordinal": 7,
+          "name": "business_email",
+          "type": "character varying(255)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(255)"
+        },
+        {
+          "ordinal": 8,
+          "name": "business_phone",
+          "type": "character varying(20)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(20)"
+        },
+        {
+          "ordinal": 9,
+          "name": "supporting_documents",
+          "type": "text[]",
+          "nullable": true,
+          "default": null,
+          "definition": "text[]"
+        },
+        {
+          "ordinal": 10,
+          "name": "admin_notes",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 11,
+          "name": "submitted_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 12,
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null,
+          "definition": "timestamp with time zone"
+        },
+        {
+          "ordinal": 13,
+          "name": "reviewed_by",
+          "type": "uuid",
+          "nullable": true,
+          "default": null,
+          "definition": "uuid"
+        },
+        {
+          "ordinal": 14,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 15,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "media_content",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "file_name",
+          "type": "character varying(255)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(255) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "file_path",
+          "type": "character varying(500)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(500) NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "file_type",
+          "type": "public.media_type",
+          "nullable": false,
+          "default": null,
+          "definition": "public.media_type NOT NULL"
+        },
+        {
+          "ordinal": 6,
+          "name": "file_size",
+          "type": "integer",
+          "nullable": false,
+          "default": null,
+          "definition": "integer NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "mime_type",
+          "type": "character varying(50)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(50) NOT NULL"
+        },
+        {
+          "ordinal": 8,
+          "name": "caption",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 9,
+          "name": "display_order",
+          "type": "integer",
+          "nullable": true,
+          "default": "0",
+          "definition": "integer DEFAULT 0"
+        },
+        {
+          "ordinal": 10,
+          "name": "is_featured",
+          "type": "boolean",
+          "nullable": true,
+          "default": "false",
+          "definition": "boolean DEFAULT false"
+        },
+        {
+          "ordinal": 11,
+          "name": "is_introduction_video",
+          "type": "boolean",
+          "nullable": true,
+          "default": "false",
+          "definition": "boolean DEFAULT false"
+        },
+        {
+          "ordinal": 12,
+          "name": "moderation_status",
+          "type": "public.moderation_status",
+          "nullable": true,
+          "default": "'pending'::public.moderation_status",
+          "definition": "public.moderation_status DEFAULT 'pending'::public.moderation_status"
+        },
+        {
+          "ordinal": 13,
+          "name": "uploaded_by",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 14,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 15,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "users",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "user_type",
+          "type": "public.user_type",
+          "nullable": true,
+          "default": "'searcher'::public.user_type",
+          "definition": "public.user_type DEFAULT 'searcher'::public.user_type"
+        },
+        {
+          "ordinal": 3,
+          "name": "first_name",
+          "type": "character varying(30)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(30)"
+        },
+        {
+          "ordinal": 4,
+          "name": "last_name",
+          "type": "character varying(30)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(30)"
+        },
+        {
+          "ordinal": 5,
+          "name": "search_preferences",
+          "type": "jsonb",
+          "nullable": true,
+          "default": "'{}'::jsonb",
+          "definition": "jsonb DEFAULT '{}'::jsonb"
+        },
+        {
+          "ordinal": 6,
+          "name": "contact_history",
+          "type": "jsonb",
+          "nullable": true,
+          "default": "'[]'::jsonb",
+          "definition": "jsonb DEFAULT '[]'::jsonb"
+        },
+        {
+          "ordinal": 7,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        },
+        {
+          "ordinal": 8,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    }
+  ],
+  "constraints": [
+    {
+      "table": "advisors",
+      "name": "advisors_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "advisors",
+      "name": "advisors_display_order_check",
+      "type": "check",
+      "definition": "CHECK ((display_order >= 0))"
+    },
+    {
+      "table": "advisors",
+      "name": "advisors_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "advisors",
+      "name": "advisors_years_experience_check",
+      "type": "check",
+      "definition": "CHECK (((years_experience >= 0) AND (years_experience <= 50)))"
+    },
+    {
+      "table": "advisors",
+      "name": "valid_advisor_email",
+      "type": "check",
+      "definition": "CHECK ((((contact_email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2, }$'::text) OR (contact_email IS NULL)))"
+    },
+    {
+      "table": "advisors",
+      "name": "valid_advisor_name_length",
+      "type": "check",
+      "definition": "CHECK ((char_length((name)::text) >= 2))"
+    },
+    {
+      "table": "companies",
+      "name": "companies_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_slug_key",
+      "type": "unique",
+      "definition": "UNIQUE (slug)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_verified_owner_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (verified_owner_id) REFERENCES public.users(id)"
+    },
+    {
+      "table": "companies",
+      "name": "valid_email",
+      "type": "check",
+      "definition": "CHECK ((((email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2, }$'::text) OR (email IS NULL)))"
+    },
+    {
+      "table": "companies",
+      "name": "valid_name_length",
+      "type": "check",
+      "definition": "CHECK ((char_length((name)::text) >= 3))"
+    },
+    {
+      "table": "companies",
+      "name": "valid_slug_format",
+      "type": "check",
+      "definition": "CHECK (((slug)::text ~* '^[a-z0-9-]+$'::text))"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_claimant_user_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (claimant_user_id) REFERENCES public.users(id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_reviewed_by_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (reviewed_by) REFERENCES public.users(id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "one_active_claim_per_company",
+      "type": "exclude",
+      "definition": "EXCLUDE USING btree (company_id WITH =) WHERE ((claim_status = ANY (ARRAY['pending'::public.claim_status, 'under_review'::public.claim_status])))"
+    },
+    {
+      "table": "listing_claims",
+      "name": "valid_business_email",
+      "type": "check",
+      "definition": "CHECK ((((business_email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2, }$'::text) OR (business_email IS NULL)))"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_display_order_check",
+      "type": "check",
+      "definition": "CHECK ((display_order >= 0))"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_file_size_check",
+      "type": "check",
+      "definition": "CHECK ((file_size <= 10485760))"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_uploaded_by_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (uploaded_by) REFERENCES public.users(id)"
+    },
+    {
+      "table": "users",
+      "name": "users_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE"
+    },
+    {
+      "table": "users",
+      "name": "users_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    }
+  ],
+  "indexes": [
+    {
+      "table": "advisors",
+      "name": "advisors_active_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(active = true)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX advisors_active_idx ON public.advisors USING btree (active) WHERE (active = true)"
+    },
+    {
+      "table": "advisors",
+      "name": "advisors_company_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX advisors_company_idx ON public.advisors USING btree (company_id)"
+    },
+    {
+      "table": "advisors",
+      "name": "advisors_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint advisors_pkey"
+    },
+    {
+      "table": "companies",
+      "name": "companies_location_idx",
+      "unique": false,
+      "method": "gist",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX companies_location_idx ON public.companies USING gist (location)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint companies_pkey"
+    },
+    {
+      "table": "companies",
+      "name": "companies_search_vector_idx",
+      "unique": false,
+      "method": "gin",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX companies_search_vector_idx ON public.companies USING gin (search_vector)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_slug_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX companies_slug_idx ON public.companies USING btree (slug)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_slug_key",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint companies_slug_key"
+    },
+    {
+      "table": "companies",
+      "name": "companies_verified_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(verified = true)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX companies_verified_idx ON public.companies USING btree (verified) WHERE (verified = true)"
+    },
+    {
+      "table": "companies",
+      "name": "companies_verified_owner_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX companies_verified_owner_idx ON public.companies USING btree (verified_owner_id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_claimant_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX listing_claims_claimant_idx ON public.listing_claims USING btree (claimant_user_id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_company_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX listing_claims_company_idx ON public.listing_claims USING btree (company_id)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint listing_claims_pkey"
+    },
+    {
+      "table": "listing_claims",
+      "name": "listing_claims_status_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX listing_claims_status_idx ON public.listing_claims USING btree (claim_status)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "one_active_claim_per_company",
+      "unique": false,
+      "method": "btree",
+      "predicate": "((claim_status = ANY (ARRAY['pending'::public.claim_status, 'under_review'::public.claim_status])))",
+      "constraintBacked": true,
+      "definition": "backed by constraint one_active_claim_per_company"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_company_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX media_content_company_idx ON public.media_content USING btree (company_id)"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_featured_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(is_featured = true)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX media_content_featured_idx ON public.media_content USING btree (is_featured) WHERE (is_featured = true)"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_intro_video_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(is_introduction_video = true)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX media_content_intro_video_idx ON public.media_content USING btree (is_introduction_video) WHERE (is_introduction_video = true)"
+    },
+    {
+      "table": "media_content",
+      "name": "media_content_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint media_content_pkey"
+    },
+    {
+      "table": "users",
+      "name": "users_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint users_pkey"
+    }
+  ],
+  "rowLevelSecurity": [
+    {
+      "table": "advisors",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "companies",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "listing_claims",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "media_content",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "users",
+      "enabled": true,
+      "forced": false
+    }
+  ],
+  "policies": [
+    {
+      "table": "advisors",
+      "name": "Company owners can manage advisors",
+      "permissive": true,
+      "command": "all",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(company_id IN (SELECT companies.id FROM public.companies WHERE (companies.verified_owner_id = auth.uid())))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can manage advisors\" ON public.advisors FOR ALL TO authenticated USING ((company_id IN (SELECT companies.id FROM public.companies WHERE (companies.verified_owner_id = auth.uid()))))"
+    },
+    {
+      "table": "advisors",
+      "name": "Public read access for advisors",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "(active = true)",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Public read access for advisors\" ON public.advisors FOR SELECT TO anon, authenticated USING ((active = true))"
+    },
+    {
+      "table": "companies",
+      "name": "Company owners can update their listings",
+      "permissive": true,
+      "command": "update",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(verified_owner_id = auth.uid())",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can update their listings\" ON public.companies FOR UPDATE TO authenticated USING ((verified_owner_id = auth.uid()))"
+    },
+    {
+      "table": "companies",
+      "name": "Public read access for companies",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Public read access for companies\" ON public.companies FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
+      "table": "listing_claims",
+      "name": "Users can create claims",
+      "permissive": true,
+      "command": "insert",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "(claimant_user_id = auth.uid())",
+      "definition": "CREATE POLICY \"Users can create claims\" ON public.listing_claims FOR INSERT TO authenticated WITH CHECK ((claimant_user_id = auth.uid()))"
+    },
+    {
+      "table": "listing_claims",
+      "name": "Users can update their pending claims",
+      "permissive": true,
+      "command": "update",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "((claimant_user_id = auth.uid()) AND (claim_status = 'pending'::public.claim_status))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Users can update their pending claims\" ON public.listing_claims FOR UPDATE TO authenticated USING (((claimant_user_id = auth.uid()) AND (claim_status = 'pending'::public.claim_status)))"
+    },
+    {
+      "table": "listing_claims",
+      "name": "Users can view their own claims",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(claimant_user_id = auth.uid())",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Users can view their own claims\" ON public.listing_claims FOR SELECT TO authenticated USING ((claimant_user_id = auth.uid()))"
+    },
+    {
+      "table": "media_content",
+      "name": "Company owners can manage media",
+      "permissive": true,
+      "command": "all",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(company_id IN (SELECT companies.id FROM public.companies WHERE (companies.verified_owner_id = auth.uid())))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can manage media\" ON public.media_content FOR ALL TO authenticated USING ((company_id IN (SELECT companies.id FROM public.companies WHERE (companies.verified_owner_id = auth.uid()))))"
+    },
+    {
+      "table": "media_content",
+      "name": "Public read access for approved media",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "(moderation_status = 'approved'::public.moderation_status)",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Public read access for approved media\" ON public.media_content FOR SELECT TO anon, authenticated USING ((moderation_status = 'approved'::public.moderation_status))"
+    },
+    {
+      "table": "users",
+      "name": "Users can view and update their own profile",
+      "permissive": true,
+      "command": "all",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(id = auth.uid())",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Users can view and update their own profile\" ON public.users FOR ALL TO authenticated USING ((id = auth.uid()))"
+    }
+  ],
+  "functions": [
+    {
+      "schema": "public",
+      "name": "update_updated_at_column",
+      "identityArguments": "",
+      "resultType": "trigger",
+      "language": "plpgsql",
+      "securityDefiner": false,
+      "volatility": "volatile",
+      "definition": "CREATE FUNCTION public.update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$",
+      "definitionSha256": "718bd6024beb8ab5e6fbf99f42857a66aa526d49753078ebd735a797362b94a5",
+      "owner": "postgres"
+    }
+  ],
+  "triggers": [
+    {
+      "table": "advisors",
+      "name": "update_advisors_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_advisors_updated_at BEFORE UPDATE ON public.advisors FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    },
+    {
+      "table": "listing_claims",
+      "name": "update_listing_claims_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_listing_claims_updated_at BEFORE UPDATE ON public.listing_claims FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    },
+    {
+      "table": "media_content",
+      "name": "update_media_content_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_media_content_updated_at BEFORE UPDATE ON public.media_content FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    },
+    {
+      "table": "users",
+      "name": "update_users_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    }
+  ],
+  "grants": [
+    {
+      "kind": "function",
+      "name": "update_updated_at_column",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "update_updated_at_column",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "update_updated_at_column",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "advisors",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "advisors",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "advisors",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "companies",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "companies",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "companies",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "listing_claims",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "listing_claims",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "listing_claims",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "media_content",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "media_content",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "media_content",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "users",
+      "grantee": "anon",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "users",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "users",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    }
+  ]
+}

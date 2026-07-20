@@ -25,7 +25,15 @@
     "seo:all": "npm run seo:keywords && npm run seo:competitors && npm run seo:local",
     "scrape-logos": "tsx scripts/scrape-logos.ts",
     "scrape-client-counts": "tsx scripts/scrape-client-counts.ts",
-    "add-missing-agencies": "tsx scripts/add-missing-agencies.ts"
+    "add-missing-agencies": "tsx scripts/add-missing-agencies.ts",
+    "db:fingerprint:generate": "node scripts/database/generate-schema-fingerprint.mjs",
+    "db:fingerprint:check": "node scripts/database/generate-schema-fingerprint.mjs --check",
+    "db:types:generate": "node scripts/database/generate-database-types.mjs",
+    "db:types:check": "node scripts/database/generate-database-types.mjs --check",
+    "db:validate": "node scripts/database/validate-migrations.mjs",
+    "db:validate:rules": "node scripts/database/test-validation-rules.mjs",
+    "db:validate:evidence": "node scripts/database/validate-production-evidence.mjs",
+    "db:validate:bootstrap": "node scripts/database/validate-fresh-bootstrap.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

@@ -17,6 +17,7 @@ import {
 import { ContactCard } from '@/components/listing/ContactCard'
 import { ContactModal } from '@/components/listing/ContactModal'
 import { HeroContactCard } from '@/components/listing/HeroContactCard'
+import { ReviewsList } from '@/components/listing/ReviewsList'
 import { Instagram, Facebook, Twitter, Globe, Phone, MapPin, CheckCircle, Mail } from 'lucide-react'
 
 // Incremental Static Regeneration - revalidate every hour
@@ -353,6 +354,15 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 </CardContent>
               </Card>
             )}
+
+            <Card id="reviews">
+              <CardHeader>
+                <CardTitle>Reviews of {company.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ReviewsList companyId={company.id} companySlug={company.slug} />
+              </CardContent>
+            </Card>
 
             {/* Contact Info Card - Mobile Only */}
             <div className="lg:hidden">

@@ -8,24 +8,15 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Loader2, Star, CheckCircle } from 'lucide-react'
 import { z } from 'zod'
-
-// Validation schema
-const reviewFormSchema = z.object({
-  rating: z.number().min(1, 'Please select a rating').max(5),
-  title: z.string().max(100, 'Title is too long').optional(),
-  review_text: z.string().min(50, 'Review must be at least 50 characters').max(1000, 'Review is too long'),
-  is_verified: z.boolean().refine(val => val === true, 'You must confirm this is a genuine review'),
-})
-
-type ReviewFormData = z.infer<typeof reviewFormSchema>
+import { reviewSubmissionSchema } from '@/lib/reviews/validation'
 
 interface ReviewFormProps {
-  advisorId: string
-  advisorName: string
-  userId: string
+  companyId: string
+  companyName: string
+  companySlug: string
 }
 
-export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) {
+export function ReviewForm({ companyId, companyName, companySlug }: ReviewFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -36,7 +27,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
   const [hoverRating, setHoverRating] = useState(0)
   const [title, setTitle] = useState('')
   const [reviewText, setReviewText] = useState('')
-  const [isVerified, setIsVerified] = useState(false)
+  const [experienceConfirmed, setExperienceConfirmed] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,14 +36,15 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
 
     // Validate with Zod
     try {
-      const formData: ReviewFormData = {
+      const formData = {
+        company_id: companyId,
         rating,
         title: title || undefined,
         review_text: reviewText,
-        is_verified: isVerified,
+        experience_confirmed: experienceConfirmed,
       }
 
-      reviewFormSchema.parse(formData)
+      reviewSubmissionSchema.parse(formData)
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.issues[0].message)
@@ -70,11 +62,11 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          advisor_id: advisorId,
+          company_id: companyId,
           rating,
           title: title || null,
           review_text: reviewText,
-          is_verified: isVerified,
+          experience_confirmed: experienceConfirmed,
         }),
       })
 
@@ -87,7 +79,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
 
       // Redirect back to listing page after 2 seconds
       setTimeout(() => {
-        router.push(`/listings/${advisorId}`)
+        router.push(`/listings/${companySlug}`)
         router.refresh()
       }, 2000)
     } catch (err) {
@@ -105,7 +97,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">Review Submitted!</h3>
           <p className="text-gray-600 mb-4">
-            Thank you for reviewing {advisorName}. Your feedback helps other families make informed decisions.
+            Thank you for reviewing {companyName}. Your review is now published and helps other hockey families make informed decisions.
           </p>
           <p className="text-sm text-gray-500">
             Redirecting you back to the listing...
@@ -117,7 +109,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
 
   return (
     <Card className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Write a Review for {advisorName}</h2>
+      <h2 className="text-2xl font-bold mb-6">Write a Review for {companyName}</h2>
 
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
@@ -138,6 +130,8 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
                 disabled={loading}
+                aria-label={`${star} star${star === 1 ? '' : 's'}`}
+                aria-pressed={rating === star}
                 className="transition-transform hover:scale-110 disabled:opacity-50"
               >
                 <Star
@@ -187,7 +181,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
             id="reviewText"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Share your experience working with this advisor. What did you appreciate? What could be improved? (minimum 50 characters)"
+            placeholder="Share your experience working with this company. What did you appreciate? What could be improved? (minimum 50 characters)"
             required
             rows={6}
             disabled={loading}
@@ -199,18 +193,18 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
           </p>
         </div>
 
-        {/* Verification Checkbox */}
+        {/* Experience confirmation */}
         <div className="flex items-start gap-2 p-4 bg-blue-50 rounded-lg">
           <input
             type="checkbox"
-            id="verified"
-            checked={isVerified}
-            onChange={(e) => setIsVerified(e.target.checked)}
+            id="experience-confirmed"
+            checked={experienceConfirmed}
+            onChange={(e) => setExperienceConfirmed(e.target.checked)}
             disabled={loading}
             className="w-4 h-4 mt-1 text-hockey-blue border-gray-300 rounded focus:ring-hockey-blue"
           />
-          <Label htmlFor="verified" className="text-sm">
-            I confirm that this is a genuine review based on my personal experience with this advisor.
+          <Label htmlFor="experience-confirmed" className="text-sm">
+            I confirm that this review is based on my personal experience with this company.
             I understand that fake or misleading reviews violate our{' '}
             <a href="/terms" target="_blank" className="text-hockey-blue hover:underline">
               Terms of Service
@@ -222,7 +216,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
         <Button
           type="submit"
           className="w-full"
-          disabled={loading || rating === 0 || reviewText.length < 50 || !isVerified}
+          disabled={loading || rating === 0 || reviewText.trim().length < 50 || !experienceConfirmed}
         >
           {loading ? (
             <>
@@ -235,7 +229,7 @@ export function ReviewForm({ advisorId, advisorName, userId }: ReviewFormProps) 
         </Button>
 
         <p className="text-xs text-gray-500 text-center">
-          Your review will be visible to other users. Reviews are moderated to ensure authenticity.
+          Your review will be published immediately. It will be attributed to a Directory member without displaying your account identity.
         </p>
       </form>
     </Card>

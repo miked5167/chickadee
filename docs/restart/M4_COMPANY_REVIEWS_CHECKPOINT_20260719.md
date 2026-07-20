@@ -85,7 +85,7 @@ The pre-existing `package.json` change, migration quarantine, M1–M3 documentat
 - M1 SHA-256: `4b65fa234b56534985f249cc8061efd98b05ba927c5de130839b8fd35c1d1db8`
 - M2 SHA-256: `95fb374bb07c5a4941b3dd78e6a6db9bf5b4b456c15670fb3ac9805e3a81b547`
 - M3 SHA-256: `a968f41fb10e6ecbe1ff8363abe0322031defd6aa361ce3c98498603ade55f6d`
-- Reviewed local M4 SHA-256: `7e05bd5ceaa429ebdd61d3236ed2806384bc30778f2325c76d046e84da50dd50`
+- Reviewed local M4 SHA-256: `05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7`
 - Focused M4 unit tests: 7/7 passed.
 - Full unit suite: 117/117 passed across 6 files.
 - TypeScript: `npm exec tsc -- --noEmit` passed.
@@ -119,3 +119,54 @@ The two-person first-administrator bootstrap remains postponed exactly as before
 Review this local M4 diff and the immediate-publication decision. If approved, the next action should be a separate **read-only M4 production preflight** that proves exact project identity, exact ordered M1+M2+M3 history, unchanged application counts, zero existing `reviews` object collision, exact M1–M4 hashes, current public smokes, a protected schema/data backup, and a pinned Supabase CLI dry run listing only `20260719000003_company_reviews.sql`.
 
 Do not apply M4, deploy the application, bootstrap an administrator, commit, push, or change production under that review alone. Each consequential action requires its own exact proposal and explicit approval.
+
+## Read-only production preflight follow-up (2026-07-19)
+
+The approved M4 production preflight stopped before backup creation or CLI dry-run because the live `public.is_admin()` catalog attributes did not satisfy the exact M4 prerequisite check (`m3_function_exact`). The exact ordered M1+M2+M3 history, M3 administrator table, own-status policy, timestamp trigger, and absence of M4 review objects passed the preceding read-only checks. No production mutation occurred and M4 was not applied.
+
+The protected post-M3 evidence package `advisor-directory-production-post-m3-20260719T184639Z` was revalidated independently: 28 checksums, 1,337 archive entries, exact M1+M2+M3 migration history, exact application counts, and complete M3 catalog/schema agreement passed. This narrows the open question to a live catalog-attribute comparison for `public.is_admin()`; it does not justify weakening or bypassing the M4 guard.
+
+The exact next step is one targeted read-only catalog query that records the non-secret `pg_proc` attributes for `public.is_admin()` and compares them with the protected post-M3 definition. Do not deploy or apply M4 until that difference is understood and the unchanged M4 migration is revalidated against production.
+
+## Production preflight resolution (2026-07-20)
+
+The targeted read-only diagnostic completed against PostgreSQL 17.6 and proved that `public.is_admin()` retains the exact required security meaning: owner `postgres`, SQL/stable/parallel-safe/security-definer attributes, Boolean scalar result, no arguments, fixed empty `search_path`, authenticated and service-role execution only, and no anonymous or PUBLIC execution. Evidence was written outside the repository to `m4-is-admin-diagnostic-20260720T094348Z.json` under the protected production evidence root.
+
+The false rejection came from comparing PostgreSQL's internal `proconfig` array representation rather than its security meaning. M4 now requires exactly one function setting named `search_path` and verifies through `pg_get_functiondef` that its value is the empty path. The guard remains fail-closed and the negative validator rejects removal of this requirement. The revised M4 SHA-256 is `05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7`.
+
+The revised migration passed a fresh disposable PostgreSQL 18.4 M1-to-M4 bootstrap, repeat-run no-op check, catalog fingerprint, fail-closed guards, administrator role matrix, public/authenticated review role matrix, and zero-fixture check. The disposable server was stopped and its port released.
+
+The full read-only production preflight then passed. Protected evidence package: `advisor-directory-production-pre-m4-20260720T095530Z`.
+
+- Exact routed project/database identity matched.
+- Exact ordered M1+M2+M3 history matched.
+- M3 authorization objects matched and `admin_users` remained empty.
+- M4 review objects were absent.
+- Counts remained companies 202, advisors 177, listing claims 0, media content 0, users 0, administrators 0.
+- The protected archive contained 1,337 entries and passed list, schema-stream, data-stream, checksum, catalog, and canonical M3 evidence validation.
+- Production site returned 200 and the public API returned the expected total of 202.
+- Supabase CLI 2.109.1 dry-run listed only `20260719000003_company_reviews.sql`.
+- `production_changes_made` and `baseline_ddl_executed` remained false.
+
+Operational follow-up files added or changed after the combined M1-M4 restart commit:
+
+- `scripts/database/run-m3-production-preflight.ps1`
+- `scripts/database/run-m4-production-function-diagnostic.ps1`
+- `scripts/database/validate-production-evidence.mjs`
+- `scripts/database/validate-migrations.mjs`
+- `scripts/database/test-validation-rules.mjs`
+- `supabase/migrations/20260719000003_company_reviews.sql`
+- `docs/restart/M4_COMPANY_REVIEWS_CHECKPOINT_20260719.md`
+
+The exact recommended next step is an approval decision for a new local corrective commit containing the PostgreSQL 17-compatible M4 guard and production-preflight tooling. Do not push, deploy the application, or apply M4 under that commit approval. Applying M4 remains a separate consequential action requiring an exact proposal and explicit approval. The two-person administrator bootstrap remains postponed and no administrator access or mutation workflow was enabled.
+
+Final post-resolution validation:
+
+- Focused M4 tests: 7/7 passed.
+- Full unit suite: 117/117 passed.
+- TypeScript: passed.
+- Focused M4/restart lint: zero errors; the listing page retains the same five pre-existing warnings.
+- Changed JavaScript database validators: zero lint errors and zero warnings.
+- Repository-wide lint: 204 errors and 150 warnings across 129 files, all existing repository debt and none introduced in the changed JavaScript validators.
+- Production build: passed; all 65 static pages generated with loopback-only placeholder Supabase variables.
+- Migration/static and negative-rule validators: passed with the revised M4 hash and PostgreSQL 17-compatible fixed-search-path guard.

@@ -10,6 +10,7 @@ import {
   validateM3SqlSafety,
   validateM4SqlSafety,
   validateM3PreflightScript,
+  validateM4PreflightScript,
   validateM3ApplyScript,
   validateM3PostVerificationScript,
   validateProductionApplyScript,
@@ -43,6 +44,7 @@ validateM3SqlSafety(m3)
 validateM4SqlSafety(m4)
 validateProductionApplyScript(productionApplyScript)
 validateM3PreflightScript(m3PreflightScript)
+validateM4PreflightScript(m3PreflightScript)
 validateM3ApplyScript(m3ApplyScript)
 validateM3PostVerificationScript(m3PostVerificationScript)
 
@@ -87,9 +89,14 @@ expectFailure('M4 reviewer impersonation policy', () => validateM4SqlSafety(m4.r
 expectFailure('M4 administrator mutation policy', () => validateM4SqlSafety(m4.replace('FOR UPDATE\n  TO authenticated', 'FOR UPDATE\n  TO authenticated, service_role')))
 expectFailure('M4 exposes reviewer identity', () => validateM4SqlSafety(m4.replace('GRANT SELECT (id, company_id, rating', 'GRANT SELECT (id, company_id, reviewer_user_id, rating')))
 expectFailure('M4 allows company cascade deletion', () => validateM4SqlSafety(m4.replace('REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT', 'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE')))
+expectFailure('M4 weakens fixed search_path guard', () => validateM4SqlSafety(m4.replace("pg_catalog.pg_get_functiondef(admin_function.oid) LIKE '%SET search_path TO ''''%'", 'admin_function.proconfig IS NOT NULL')))
 expectFailure('M3 preflight can apply migrations', () => validateM3PreflightScript(m3PreflightScript.replace("'db', 'push', '--dry-run', '--db-url'", "'db', 'push', '--db-url'")))
 expectFailure('M3 preflight skips M2 evidence validation', () => validateM3PreflightScript(m3PreflightScript.replace('--target m2', '--target current')))
 expectFailure('M3 preflight omits object-absence guard', () => validateM3PreflightScript(m3PreflightScript.replaceAll("'m3_objects_absent'", "'objects_unknown'")))
+expectFailure('M4 preflight can apply migrations', () => validateM4PreflightScript(m3PreflightScript.replace("'db', 'push', '--dry-run', '--db-url'", "'db', 'push', '--db-url'")))
+expectFailure('M4 preflight skips M3 evidence validation', () => validateM4PreflightScript(m3PreflightScript.replace('--target m3', '--target current')))
+expectFailure('M4 preflight omits object-state guards', () => validateM4PreflightScript(m3PreflightScript.replace("@('m3_table_exact','m3_function_exact','m3_policy_exact','m3_trigger_exact','m4_objects_absent')", "@('objects_unknown')")))
+expectFailure('M4 preflight weakens fixed search_path guard', () => validateM4PreflightScript(m3PreflightScript.replace("pg_catalog.pg_get_functiondef(p.oid) LIKE '%SET search_path TO ''''%'", 'p.proconfig IS NOT NULL')))
 expectFailure('M3 apply missing approval phrase', () => validateM3ApplyScript(m3ApplyScript.replaceAll('APPROVE M3 PRODUCTION MIGRATION', 'UNAPPROVED')))
 expectFailure('M3 apply skips immediate dry run', () => validateM3ApplyScript(m3ApplyScript.replace("'db','push','--dry-run','--db-url'", "'db','push','--db-url'")))
 expectFailure('M3 apply broadens migration scope', () => validateM3ApplyScript(`${m3ApplyScript}\n--include-all`))

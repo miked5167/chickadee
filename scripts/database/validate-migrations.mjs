@@ -28,7 +28,7 @@ const m4Path = path.join(activeDirectory, m4Filename)
 const adoptedBaselineSha256 = '4b65fa234b56534985f249cc8061efd98b05ba927c5de130839b8fd35c1d1db8'
 const reviewedM2Sha256 = '95fb374bb07c5a4941b3dd78e6a6db9bf5b4b456c15670fb3ac9805e3a81b547'
 const reviewedM3Sha256 = 'a968f41fb10e6ecbe1ff8363abe0322031defd6aa361ce3c98498603ade55f6d'
-const reviewedM4Sha256 = '7e05bd5ceaa429ebdd61d3236ed2806384bc30778f2325c76d046e84da50dd50'
+const reviewedM4Sha256 = '05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'
 
 const legacyHashes = new Map([
   ['20250104000000_claim_improvements.sql', 'd75ccbad41a3dd118fdcd796a9ee73820b8a4a5d63471e1acaf763c5f5be601d'],
@@ -384,9 +384,13 @@ export function validateM4SqlSafety(sql) {
     "to_regprocedure('auth.uid()')",
     "to_regclass('public.companies')",
     "companies_trigger.tgname = 'update_companies_updated_at'",
-    "to_regclass('public.admin_users')",
-    "to_regprocedure('public.is_admin()')",
-    "enum_type.typname = 'moderation_status'",
+      "to_regclass('public.admin_users')",
+      "to_regprocedure('public.is_admin()')",
+      'cardinality(admin_function.proconfig) = 1',
+      'admin_function.proconfig[array_lower(admin_function.proconfig, 1)]',
+      ") = 'search_path'",
+      "pg_catalog.pg_get_functiondef(admin_function.oid) LIKE '%SET search_path TO ''''%'",
+      "enum_type.typname = 'moderation_status'",
     "to_regclass('public.reviews')",
     "table_trigger.tgname = 'update_reviews_updated_at'",
   ]) assert(guard.includes(evidence), `M4 guard omits required check: ${evidence}`)
@@ -487,6 +491,33 @@ export function validateM3PreflightScript(script) {
   ]
   for (const token of prohibited) assert(!script.includes(token), `M3 production preflight contains prohibited scope: ${token}`)
   assert((script.match(/'db', 'push',/g) ?? []).length === 1, 'M3 production preflight must invoke only one dry-run push')
+}
+
+export function validateM4PreflightScript(script) {
+  const required = [
+    "[ValidateSet('M3', 'M4')]",
+    "Read-Host 'Enter the PRODUCTION Supabase database password for the READ-ONLY M4 preflight' -AsSecureString",
+    "'05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'",
+    "throw 'Production migration history differs from exact M1+M2+M3 state.'",
+    "@('m3_table_exact','m3_function_exact','m3_policy_exact','m3_trigger_exact','m4_objects_absent')",
+    'cardinality(p.proconfig) = 1',
+    "split_part(p.proconfig[array_lower(p.proconfig, 1)], '=', 1) = 'search_path'",
+    "pg_catalog.pg_get_functiondef(p.oid) LIKE '%SET search_path TO ''''%'",
+    '$ArchiveEntries -ne 1337',
+    '$DryRunMigrations[0] -ne $M4Filename',
+    'validate-production-evidence.mjs $BackupDirectory --target m3',
+    'production_changes_made=$false',
+    'Remove-Item Env:PGPASSWORD',
+    'ZeroFreeBSTR',
+  ]
+  for (const evidence of required) assert(script.includes(evidence), `M4 production preflight omits required safeguard: ${evidence}`)
+  const prohibited = [
+    "'db', 'push', '--db-url'",
+    '--include-all', '--include-seed', '--include-roles',
+    'migration repair', 'DROP TABLE', 'DROP FUNCTION', 'TRUNCATE TABLE',
+  ]
+  for (const token of prohibited) assert(!script.includes(token), `M4 production preflight contains prohibited scope: ${token}`)
+  assert((script.match(/'db', 'push',/g) ?? []).length === 1, 'M4 production preflight must invoke only one dry-run push')
 }
 
 export function validateM3ApplyScript(script) {
@@ -643,6 +674,7 @@ async function main() {
   validateM4SqlSafety(m4Sql)
   validateProductionApplyScript(productionApplyScript)
   validateM3PreflightScript(m3PreflightScript)
+  validateM4PreflightScript(m3PreflightScript)
   validateM3ApplyScript(m3ApplyScript)
   validateM3PostVerificationScript(m3PostVerificationScript)
 

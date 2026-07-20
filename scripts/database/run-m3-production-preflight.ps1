@@ -1,5 +1,8 @@
 [CmdletBinding()]
-param()
+param(
+  [ValidateSet('M3', 'M4')]
+  [string]$Target = 'M3'
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -18,6 +21,10 @@ $M3Version = '20260719000002'
 $M3Name = 'administrator_authorization_foundation'
 $M3Filename = "${M3Version}_${M3Name}.sql"
 $M3Sha256 = 'a968f41fb10e6ecbe1ff8363abe0322031defd6aa361ce3c98498603ade55f6d'
+$M4Version = '20260719000003'
+$M4Name = 'company_reviews'
+$M4Filename = "${M4Version}_${M4Name}.sql"
+$M4Sha256 = '05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'
 $SupabaseCliVersion = '2.109.1'
 $ExpectedBranch = 'codex/restart-foundation'
 $RepositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
@@ -29,14 +36,15 @@ $PgRestore = Join-Path $PostgresBin 'pg_restore.exe'
 $ProtectedRootName = @('HockeyAdvisorDirectory', 'Backups') -join '-'
 $BackupRoot = Join-Path $env:USERPROFILE (Join-Path $ProtectedRootName 'production')
 $Timestamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
-$BackupName = "advisor-directory-production-pre-m3-$Timestamp"
+$TargetLower = $Target.ToLowerInvariant()
+$BackupName = "advisor-directory-production-pre-$TargetLower-$Timestamp"
 $BackupDirectory = Join-Path $BackupRoot $BackupName
 $ArchivePath = Join-Path $BackupDirectory "production-$Timestamp.dump"
 $SchemaPath = Join-Path $BackupDirectory "production-schema-$Timestamp.sql"
 $DataStreamPath = Join-Path $BackupDirectory 'data-stream-validation.sql'
 $ArchiveContentsPath = Join-Path $BackupDirectory 'archive-contents.txt'
 $RolesPath = Join-Path $BackupDirectory "roles-$Timestamp.sql"
-$CliWorkDirectory = Join-Path $BackupDirectory 'm3-cli-work'
+$CliWorkDirectory = Join-Path $BackupDirectory "$TargetLower-cli-work"
 $PasswordPointer = [IntPtr]::Zero
 $SecurePassword = $null
 
@@ -102,16 +110,22 @@ try {
   $M1Path = Join-Path $RepositoryRoot "supabase\migrations\${M1Version}_${M1Name}.sql"
   $M2Path = Join-Path $RepositoryRoot "supabase\migrations\${M2Version}_${M2Name}.sql"
   $M3Path = Join-Path $RepositoryRoot "supabase\migrations\$M3Filename"
+  $M4Path = Join-Path $RepositoryRoot "supabase\migrations\$M4Filename"
   if ((Get-FileHash -Algorithm SHA256 -LiteralPath $M1Path).Hash.ToLowerInvariant() -ne $M1Sha256) { throw 'M1 hash differs from the adopted hash.' }
   if ((Get-FileHash -Algorithm SHA256 -LiteralPath $M2Path).Hash.ToLowerInvariant() -ne $M2Sha256) { throw 'M2 hash differs from the applied hash.' }
   if ((Get-FileHash -Algorithm SHA256 -LiteralPath $M3Path).Hash.ToLowerInvariant() -ne $M3Sha256) { throw 'M3 hash differs from the reviewed hash.' }
+  if ((Get-FileHash -Algorithm SHA256 -LiteralPath $M4Path).Hash.ToLowerInvariant() -ne $M4Sha256) { throw 'M4 hash differs from the reviewed hash.' }
 
   & node scripts/database/validate-migrations.mjs
   Assert-LastExitCode 'Repository migration validation failed.'
   & node scripts/database/test-validation-rules.mjs
   Assert-LastExitCode 'Repository negative-rule validation failed.'
 
-  $SecurePassword = Read-Host 'Enter the PRODUCTION Supabase database password for the READ-ONLY M3 preflight' -AsSecureString
+  if ($Target -eq 'M3') {
+    $SecurePassword = Read-Host 'Enter the PRODUCTION Supabase database password for the READ-ONLY M3 preflight' -AsSecureString
+  } else {
+    $SecurePassword = Read-Host 'Enter the PRODUCTION Supabase database password for the READ-ONLY M4 preflight' -AsSecureString
+  }
   $PasswordPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword)
   $env:PGPASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($PasswordPointer)
   $script:PsqlArguments = @('-X', '-w', '-h', $PoolerHost, '-p', $PoolerPort, '-U', $DatabaseUser, '-d', $DatabaseName, '--set', 'ON_ERROR_STOP=1', '--set', 'VERBOSITY=terse')
@@ -125,11 +139,16 @@ SELECT json_build_object(
 "@) | ConvertFrom-Json
   if ($IdentityObject.database -ne $DatabaseName -or $IdentityObject.connected_user -ne 'postgres') { throw 'Routed production database identity is ambiguous.' }
 
-  $ExpectedHistorySignature = "${M1Version}:${M1Name},${M2Version}:${M2Name}"
+  $ExpectedHistorySignature = if ($Target -eq 'M3') {
+    "${M1Version}:${M1Name},${M2Version}:${M2Name}"
+  } else {
+    "${M1Version}:${M1Name},${M2Version}:${M2Name},${M3Version}:${M3Name}"
+  }
   $HistorySignature = Invoke-ReadOnlyScalar "SELECT coalesce(string_agg(version || ':' || name, ',' ORDER BY version), '') FROM supabase_migrations.schema_migrations"
   if ($HistorySignature -ne $ExpectedHistorySignature) {
     Write-Output "Observed migration history signature: $HistorySignature"
-    throw 'Production migration history differs from exact M1+M2 state.'
+    if ($Target -eq 'M3') { throw 'Production migration history differs from exact M1+M2 state.' }
+    throw 'Production migration history differs from exact M1+M2+M3 state.'
   }
 
   $Prerequisites = (Invoke-ReadOnlyScalar @"
@@ -188,21 +207,77 @@ SELECT json_build_object(
        WHERE n.nspname = 'public' AND c.conname LIKE 'admin_users_%'
     )
     AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_policy WHERE polname = 'Users can inspect own administrator status')
-    AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_trigger WHERE tgname = 'update_admin_users_updated_at' AND NOT tgisinternal)
+    AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_trigger WHERE tgname = 'update_admin_users_updated_at' AND NOT tgisinternal),
+  'm3_table_exact', EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+     WHERE c.oid = to_regclass('public.admin_users')
+       AND c.relkind IN ('r','p') AND c.relrowsecurity AND NOT c.relforcerowsecurity
+       AND pg_catalog.pg_get_userbyid(c.relowner) = 'postgres'
+  ),
+  'm3_function_exact', EXISTS (
+    SELECT 1 FROM pg_catalog.pg_proc p
+     WHERE p.oid = to_regprocedure('public.is_admin()')
+       AND p.prorettype = 'pg_catalog.bool'::pg_catalog.regtype
+       AND p.prosecdef AND p.provolatile = 's'
+       AND cardinality(p.proconfig) = 1
+       AND split_part(p.proconfig[array_lower(p.proconfig, 1)], '=', 1) = 'search_path'
+       AND pg_catalog.pg_get_functiondef(p.oid) LIKE '%SET search_path TO ''''%'
+       AND pg_catalog.pg_get_userbyid(p.proowner) = 'postgres'
+  ),
+  'm3_policy_exact', EXISTS (
+    SELECT 1 FROM pg_catalog.pg_policy p
+     WHERE p.polrelid = to_regclass('public.admin_users')
+       AND p.polname = 'Users can inspect own administrator status' AND p.polcmd = 'r'
+  ),
+  'm3_trigger_exact', EXISTS (
+    SELECT 1 FROM pg_catalog.pg_trigger t
+     WHERE t.tgrelid = to_regclass('public.admin_users')
+       AND t.tgname = 'update_admin_users_updated_at'
+       AND t.tgfoid = to_regprocedure('public.update_updated_at_column()')
+       AND t.tgtype = 19 AND t.tgenabled = 'O' AND NOT t.tgisinternal
+  ),
+  'm4_objects_absent', to_regclass('public.reviews') IS NULL
+    AND NOT EXISTS (
+      SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+       WHERE n.nspname = 'public'
+         AND c.relname IN ('reviews_pkey','reviews_company_reviewer_key','reviews_company_published_idx','reviews_reviewer_idx')
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM pg_catalog.pg_constraint c JOIN pg_catalog.pg_namespace n ON n.oid = c.connamespace
+       WHERE n.nspname = 'public' AND c.conname LIKE 'reviews_%'
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM pg_catalog.pg_policy
+       WHERE polname IN ('Published company reviews are public','Users can create own company reviews','Users can update own company reviews','Users can delete own company reviews')
+    )
+    AND NOT EXISTS (SELECT 1 FROM pg_catalog.pg_trigger WHERE tgname = 'update_reviews_updated_at' AND NOT tgisinternal)
 )::text
 "@) | ConvertFrom-Json
-  foreach ($Property in @('m2_trigger_exact','timestamp_function_exact','auth_identity_exact','auth_uid_exact','api_roles_exact','public_create_revoked','m3_objects_absent')) {
-    if ($Prerequisites.$Property -ne $true) { throw "Production M3 prerequisite failed: $Property" }
+  $CommonPrerequisites = @('m2_trigger_exact','timestamp_function_exact','auth_identity_exact','auth_uid_exact','api_roles_exact','public_create_revoked')
+  $TargetPrerequisites = if ($Target -eq 'M3') { @('m3_objects_absent') } else { @('m3_table_exact','m3_function_exact','m3_policy_exact','m3_trigger_exact','m4_objects_absent') }
+  foreach ($Property in @($CommonPrerequisites + $TargetPrerequisites)) {
+    if ($Prerequisites.$Property -ne $true) {
+      if ($Target -eq 'M3') { throw "Production M3 prerequisite failed: $Property" }
+      throw "Production M4 prerequisite failed: $Property"
+    }
   }
 
   $ExpectedCounts = [ordered]@{ companies = 202; advisors = 177; listing_claims = 0; media_content = 0; users = 0 }
-  $CountsBefore = (Invoke-ReadOnlyScalar @"
+  if ($Target -eq 'M4') { $ExpectedCounts.admin_users = 0 }
+  $CountsSql = if ($Target -eq 'M3') { @"
 SELECT json_build_object(
   'companies',(SELECT count(*) FROM public.companies), 'advisors',(SELECT count(*) FROM public.advisors),
   'listing_claims',(SELECT count(*) FROM public.listing_claims), 'media_content',(SELECT count(*) FROM public.media_content),
   'users',(SELECT count(*) FROM public.users)
 )::text
-"@) | ConvertFrom-Json
+"@ } else { @"
+SELECT json_build_object(
+  'companies',(SELECT count(*) FROM public.companies), 'advisors',(SELECT count(*) FROM public.advisors),
+  'listing_claims',(SELECT count(*) FROM public.listing_claims), 'media_content',(SELECT count(*) FROM public.media_content),
+  'users',(SELECT count(*) FROM public.users), 'admin_users',(SELECT count(*) FROM public.admin_users)
+)::text
+"@ }
+  $CountsBefore = (Invoke-ReadOnlyScalar $CountsSql) | ConvertFrom-Json
   foreach ($Name in $ExpectedCounts.Keys) { if ([int64]$CountsBefore.$Name -ne $ExpectedCounts[$Name]) { throw "Production count differs for public.$Name." } }
 
   New-Item -ItemType Directory -Path $BackupDirectory | Out-Null
@@ -231,11 +306,13 @@ SELECT json_build_object(
   Export-ReadOnlyCsv 'function-privileges.csv' "SELECT routine_schema function_schema,routine_name function_name,grantee,privilege_type,is_grantable FROM information_schema.routine_privileges ORDER BY 1,2,3,4"
   Export-ReadOnlyCsv 'triggers.csv' "SELECT n.nspname schema_name,c.relname table_name,t.tgname trigger_name,t.tgenabled enabled_state,pg_catalog.pg_get_triggerdef(t.oid,true) definition FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid=t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE NOT t.tgisinternal ORDER BY 1,2,3"
   Export-ReadOnlyCsv 'table-privileges.csv' "SELECT grantor,grantee,table_schema,table_name,privilege_type,is_grantable FROM information_schema.table_privileges ORDER BY 3,4,2,5"
-  Export-ReadOnlyCsv 'exact-row-counts.csv' "SELECT 'public'::text schema_name,'advisors'::text table_name,count(*)::bigint exact_row_count FROM public.advisors UNION ALL SELECT 'public','companies',count(*) FROM public.companies UNION ALL SELECT 'public','listing_claims',count(*) FROM public.listing_claims UNION ALL SELECT 'public','media_content',count(*) FROM public.media_content UNION ALL SELECT 'public','users',count(*) FROM public.users ORDER BY 1,2"
+  $ExactCountsQuery = "SELECT 'public'::text schema_name,'advisors'::text table_name,count(*)::bigint exact_row_count FROM public.advisors UNION ALL SELECT 'public','companies',count(*) FROM public.companies UNION ALL SELECT 'public','listing_claims',count(*) FROM public.listing_claims UNION ALL SELECT 'public','media_content',count(*) FROM public.media_content UNION ALL SELECT 'public','users',count(*) FROM public.users"
+  if ($Target -eq 'M4') { $ExactCountsQuery += " UNION ALL SELECT 'public','admin_users',count(*) FROM public.admin_users" }
+  Export-ReadOnlyCsv 'exact-row-counts.csv' "$ExactCountsQuery ORDER BY 1,2"
   Export-ReadOnlyCsv 'migration-history-status.csv' "SELECT (to_regclass('supabase_migrations.schema_migrations') IS NOT NULL)::text standard_migration_table_present,'supabase_migrations.schema_migrations'::text expected_relation"
   Export-ReadOnlyCsv 'migration-history-versions.csv' "SELECT version,name FROM supabase_migrations.schema_migrations ORDER BY version"
 
-  $CountsAfter = (Invoke-ReadOnlyScalar "SELECT json_build_object('companies',(SELECT count(*) FROM public.companies),'advisors',(SELECT count(*) FROM public.advisors),'listing_claims',(SELECT count(*) FROM public.listing_claims),'media_content',(SELECT count(*) FROM public.media_content),'users',(SELECT count(*) FROM public.users))::text") | ConvertFrom-Json
+  $CountsAfter = (Invoke-ReadOnlyScalar $CountsSql) | ConvertFrom-Json
   foreach ($Name in $ExpectedCounts.Keys) {
     if ([int64]$CountsAfter.$Name -ne $ExpectedCounts[$Name] -or [int64]$CountsAfter.$Name -ne [int64]$CountsBefore.$Name) { throw "Production count changed during preflight for public.$Name." }
   }
@@ -243,12 +320,17 @@ SELECT json_build_object(
   New-Item -ItemType Directory -Path $CliWorkDirectory | Out-Null
   [void](Invoke-SupabaseCli @('--yes', "supabase@$SupabaseCliVersion", '--workdir', $CliWorkDirectory, 'init') 'Could not initialize isolated Supabase CLI work directory.')
   New-Item -ItemType Directory -Path (Join-Path $CliWorkDirectory 'supabase\migrations') -Force | Out-Null
-  Copy-Item -LiteralPath $M1Path,$M2Path,$M3Path -Destination (Join-Path $CliWorkDirectory 'supabase\migrations')
+  $MigrationPaths = if ($Target -eq 'M3') { @($M1Path,$M2Path,$M3Path) } else { @($M1Path,$M2Path,$M3Path,$M4Path) }
+  Copy-Item -LiteralPath $MigrationPaths -Destination (Join-Path $CliWorkDirectory 'supabase\migrations')
   $DatabaseUrlScheme = @('postgresql', '://') -join ''
   $PasswordlessDbUrl = "${DatabaseUrlScheme}${DatabaseUser}@${PoolerHost}:${PoolerPort}/${DatabaseName}?sslmode=require"
   $DryRunText = (Invoke-SupabaseCli @('--yes', "supabase@$SupabaseCliVersion", '--workdir', $CliWorkDirectory, 'db', 'push', '--dry-run', '--db-url', $PasswordlessDbUrl) 'Pinned Supabase CLI dry run failed.') -join "`n"
   $DryRunMigrations = @([regex]::Matches($DryRunText, '\b\d{14}_[a-z0-9_]+\.sql\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
-  if ($DryRunMigrations.Count -ne 1 -or $DryRunMigrations[0] -ne $M3Filename) { throw 'Pinned CLI dry run does not contain exactly M3.' }
+  if ($Target -eq 'M3') {
+    if ($DryRunMigrations.Count -ne 1 -or $DryRunMigrations[0] -ne $M3Filename) { throw 'Pinned CLI dry run does not contain exactly M3.' }
+  } else {
+    if ($DryRunMigrations.Count -ne 1 -or $DryRunMigrations[0] -ne $M4Filename) { throw 'Pinned CLI dry run does not contain exactly M4.' }
+  }
   $DryRunText | Set-Content -Encoding utf8 -LiteralPath (Join-Path $BackupDirectory 'supabase-dry-run.txt')
 
   $SiteResponse = Invoke-WebRequest -Uri 'https://www.thehockeydirectory.com/' -UseBasicParsing -TimeoutSec 30
@@ -260,29 +342,54 @@ SELECT json_build_object(
   if ((@(git status --porcelain=v1) -join "`n") -ne $WorktreeBeforeText) { throw 'Repository worktree changed during production preflight.' }
   if ((git branch --show-current).Trim() -ne $ExpectedBranch) { throw 'Branch changed during production preflight.' }
   $ArchiveEntries = @(Get-Content -LiteralPath $ArchiveContentsPath | Where-Object { $_.Trim() -and -not $_.StartsWith(';') }).Count
-  if ($ArchiveEntries -ne 1322) { throw "Protected pre-M3 archive has $ArchiveEntries entries instead of exact M2 count 1322." }
+  if ($Target -eq 'M3') {
+    if ($ArchiveEntries -ne 1322) { throw "Protected pre-M3 archive has $ArchiveEntries entries instead of exact M2 count 1322." }
+  } else {
+    if ($ArchiveEntries -ne 1337) { throw "Protected pre-M4 archive has $ArchiveEntries entries instead of exact M3 count 1337." }
+  }
 
-  [ordered]@{
+  $MigrationHistory = @(@{version=$M1Version;name=$M1Name},@{version=$M2Version;name=$M2Name})
+  if ($Target -eq 'M4') { $MigrationHistory += @{version=$M3Version;name=$M3Name} }
+  $Summary = [ordered]@{
     status='success'; captured_at_utc=(Get-Date).ToUniversalTime().ToString('o'); project_ref=$ProjectRef
-    routed_identity_match=$true; migration_history=@(@{version=$M1Version;name=$M1Name},@{version=$M2Version;name=$M2Name})
-    m3_objects_absent=$true; m3_prerequisites_match=$true; application_counts=$ExpectedCounts
-    m1_sha256=$M1Sha256; m2_sha256=$M2Sha256; m3_sha256=$M3Sha256
+    routed_identity_match=$true; migration_history=$MigrationHistory; application_counts=$ExpectedCounts
+    m1_sha256=$M1Sha256; m2_sha256=$M2Sha256; m3_sha256=$M3Sha256; m4_sha256=$M4Sha256
     supabase_cli_version=$SupabaseCliVersion; dry_run_migrations=$DryRunMigrations
     archive_bytes=(Get-Item -LiteralPath $ArchivePath).Length; archive_entries=$ArchiveEntries
     archive_list_validation='passed'; schema_stream_validation='passed'; data_stream_validation='passed'
     site_smoke_status=200; api_total=202; production_changes_made=$false; baseline_ddl_executed=$false
-  } | ConvertTo-Json -Depth 6 | Set-Content -Encoding utf8 -LiteralPath (Join-Path $BackupDirectory 'preflight-summary.json')
+  }
+  if ($Target -eq 'M3') {
+    $Summary['m3_objects_absent'] = $true
+    $Summary['m3_prerequisites_match'] = $true
+  } else {
+    $Summary['m3_objects_exact'] = $true
+    $Summary['m4_objects_absent'] = $true
+    $Summary['m4_prerequisites_match'] = $true
+  }
+  $Summary | ConvertTo-Json -Depth 6 | Set-Content -Encoding utf8 -LiteralPath (Join-Path $BackupDirectory 'preflight-summary.json')
   @{success=$true;status='success';production_changes_made=$false;baseline_ddl_executed=$false} | ConvertTo-Json | Set-Content -Encoding utf8 -LiteralPath (Join-Path $BackupDirectory 'status.json')
   Write-EvidenceChecksumManifest
 
-  & node scripts/database/validate-production-evidence.mjs $BackupDirectory --target m2
-  Assert-LastExitCode 'Fresh protected pre-M3 evidence validation failed.'
+  if ($Target -eq 'M3') {
+    & node scripts/database/validate-production-evidence.mjs $BackupDirectory --target m2
+    Assert-LastExitCode 'Fresh protected pre-M3 evidence validation failed.'
+  } else {
+    & node scripts/database/validate-production-evidence.mjs $BackupDirectory --target m3
+    Assert-LastExitCode 'Fresh protected pre-M4 evidence validation failed.'
+  }
   & node scripts/database/validate-migrations.mjs
   Assert-LastExitCode 'Final repository validation failed.'
 
-  Write-Output "M3 production preflight passed with no production mutation. Evidence package: $BackupName"
-  Write-Output "History: exact M1+M2; M3 objects: absent; counts: 202/177/0/0/0."
-  Write-Output "Pinned CLI dry run: $M3Filename only."
+  if ($Target -eq 'M3') {
+    Write-Output "M3 production preflight passed with no production mutation. Evidence package: $BackupName"
+    Write-Output "History: exact M1+M2; M3 objects: absent; counts: 202/177/0/0/0."
+    Write-Output "Pinned CLI dry run: $M3Filename only."
+  } else {
+    Write-Output "M4 production preflight passed with no production mutation. Evidence package: $BackupName"
+    Write-Output "History: exact M1+M2+M3; M3 foundation: exact and empty; M4 objects: absent; counts: 202/177/0/0/0/0."
+    Write-Output "Pinned CLI dry run: $M4Filename only."
+  }
 } catch {
   $Failure = $_
   if (Test-Path -LiteralPath $BackupDirectory) {

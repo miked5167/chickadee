@@ -81,7 +81,13 @@ BEGIN
        AND admin_function.prosecdef
        AND admin_function.provolatile = 's'
        AND admin_function.prorettype = 'pg_catalog.bool'::pg_catalog.regtype
-       AND admin_function.proconfig = ARRAY['search_path=""']
+       AND cardinality(admin_function.proconfig) = 1
+       AND split_part(
+             admin_function.proconfig[array_lower(admin_function.proconfig, 1)],
+             '=',
+             1
+           ) = 'search_path'
+       AND pg_catalog.pg_get_functiondef(admin_function.oid) LIKE '%SET search_path TO ''''%'
        AND pg_catalog.pg_get_userbyid(admin_function.proowner) = 'postgres'
   ) THEN
     RAISE EXCEPTION 'M4 prerequisite failed: exact M3 authorization foundation is absent';

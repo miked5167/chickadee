@@ -8,7 +8,6 @@ import {
   baselineFingerprintPath,
   normalizeSql,
   projectFingerprint,
-  targetFingerprintPath,
 } from './generate-schema-fingerprint.mjs'
 
 const baseApplicationTables = ['companies', 'advisors', 'listing_claims', 'media_content', 'users']
@@ -135,12 +134,12 @@ async function validateIntegrity(directory, target) {
   assert(['true', 't', 'false', 'f'].includes(historyStatusValue), 'Migration-history status is not a recognized boolean')
   const historyPresent = historyStatusValue === 'true' || historyStatusValue === 't'
   assert(target === 'baseline' || historyPresent, 'Forward-target evidence requires standard migration history')
-  const expectedArchiveEntries = target === 'current' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317))
+  const expectedArchiveEntries = target === 'current' || target === 'm3' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317))
   assert(archiveEntries.length === expectedArchiveEntries, `Expected ${expectedArchiveEntries.toLocaleString('en-US')} archive entries; found ${archiveEntries.length}`)
 
   if (historyPresent) {
     const migrationVersions = await csv(directory, 'migration-history-versions.csv')
-    const expectedHistory = target === 'current'
+    const expectedHistory = target === 'current' || target === 'm3'
       ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name], [m3Version, m3Name]]
       : (target === 'm2'
           ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name]]
@@ -158,7 +157,11 @@ async function validateIntegrity(directory, target) {
 }
 
 async function validateCatalogs(directory, expected, target) {
-  const applicationTables = new Set(target === 'current' ? [...baseApplicationTables, 'admin_users'] : baseApplicationTables)
+  const applicationTables = new Set(
+    target === 'current' || target === 'm3'
+      ? [...baseApplicationTables, 'admin_users']
+      : baseApplicationTables,
+  )
   const tables = (await csv(directory, 'tables.csv')).filter((row) => row.schema_name === 'public' && applicationTables.has(row.table_name))
   assert(tables.length === expected.tables.length, 'Application table count differs from canonical fingerprint')
   for (const table of expected.tables) {
@@ -203,12 +206,13 @@ async function validateCatalogs(directory, expected, target) {
     assert(policies.some((row) => row.table_name === policy.table && row.policy_name === policy.name), `Catalog is missing policy ${policy.table}.${policy.name}`)
   }
 
-  const expectedFunctionNames = new Set(target === 'current' ? ['update_updated_at_column', 'is_admin'] : ['update_updated_at_column'])
+  const includesM3 = target === 'm3' || target === 'current'
+  const expectedFunctionNames = new Set(includesM3 ? ['update_updated_at_column', 'is_admin'] : ['update_updated_at_column'])
   const functions = (await csv(directory, 'functions.csv')).filter((row) => row.schema_name === 'public' && expectedFunctionNames.has(row.function_name))
   assert(functions.length === expectedFunctionNames.size, 'Application function register is missing or duplicated')
   const timestampFunction = functions.find((row) => row.function_name === 'update_updated_at_column')
   assert(timestampFunction?.owner === 'postgres' && timestampFunction.security_definer === 'f' && timestampFunction.volatility === 'v', 'Timestamp function attributes differ')
-  if (target === 'current') {
+  if (includesM3) {
     const adminFunction = functions.find((row) => row.function_name === 'is_admin')
     assert(
       adminFunction?.owner === 'postgres'
@@ -240,7 +244,7 @@ async function validateCatalogs(directory, expected, target) {
       assert(JSON.stringify(actual) === JSON.stringify(expectedPrivileges), `Grant mismatch for ${table}.${grantee}`)
     }
   }
-  if (target === 'current') {
+  if (includesM3) {
     const apiGrantees = new Set(['PUBLIC', 'anon', 'authenticated', 'service_role'])
     const adminPrivileges = privileges.filter((row) => row.table_name === 'admin_users' && apiGrantees.has(row.grantee)).map((row) => `${row.grantee}.${row.privilege_type}`).sort()
     const servicePrivileges = ['DELETE', 'INSERT', 'REFERENCES', 'SELECT', 'TRIGGER', 'TRUNCATE', 'UPDATE'].map((privilege) => `service_role.${privilege}`)
@@ -252,7 +256,7 @@ async function validateCatalogs(directory, expected, target) {
 
   const rowCounts = (await csv(directory, 'exact-row-counts.csv')).filter((row) => row.schema_name === 'public' && applicationTables.has(row.table_name))
   const expectedCounts = new Map(exactApplicationCounts)
-  if (target === 'current') expectedCounts.set('admin_users', 0)
+  if (includesM3) expectedCounts.set('admin_users', 0)
   assert(rowCounts.length === expectedCounts.size, 'Application exact-count register is incomplete')
   for (const [table, expectedCount] of expectedCounts) {
     const actual = rowCounts.find((row) => row.table_name === table)
@@ -262,14 +266,30 @@ async function validateCatalogs(directory, expected, target) {
 
 async function main() {
   const target = option('--target') || 'baseline'
-  assert(['baseline', 'm2', 'current'].includes(target), '--target must be baseline, m2, or current')
+  assert(['baseline', 'm2', 'm3', 'current'].includes(target), '--target must be baseline, m2, m3, or current')
   const positional = process.argv.slice(2).find((argument, index, arguments_) => argument !== '--target' && arguments_[index - 1] !== '--target')
   const supplied = positional || process.env.SCHEMA_EVIDENCE_DIR
   assert(supplied, 'Provide the protected evidence directory as the first argument or SCHEMA_EVIDENCE_DIR')
   const directory = path.resolve(supplied)
   const integrity = await validateIntegrity(directory, target)
   let expected
-  if (target === 'current') expected = JSON.parse(await readFile(targetFingerprintPath, 'utf8'))
+  if (target === 'current' || target === 'm3') {
+    const migrationDirectory = path.dirname(baselinePath)
+    const m2Path = path.join(migrationDirectory, `${m2Version}_${m2Name}.sql`)
+    const m3Path = path.join(migrationDirectory, `${m3Version}_${m3Name}.sql`)
+    expected = buildFingerprint(
+      `${await readFile(baselinePath, 'utf8')}\n${await readFile(m2Path, 'utf8')}\n${await readFile(m3Path, 'utf8')}`,
+      {
+        kind: 'deterministic-m3-target',
+        baseMigration: 'supabase/migrations/20260719000000_production_company_baseline.sql',
+        forwardMigrations: [
+          'supabase/migrations/20260719000001_add_companies_updated_at_trigger.sql',
+          'supabase/migrations/20260719000002_administrator_authorization_foundation.sql',
+        ],
+        containsData: false,
+      },
+    )
+  }
   else if (target === 'baseline') expected = JSON.parse(await readFile(baselineFingerprintPath, 'utf8'))
   else {
     const m2Path = path.join(path.dirname(baselinePath), `${m2Version}_${m2Name}.sql`)

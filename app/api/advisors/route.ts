@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
     // Start building query
     let query = supabase
       .from('companies')
-      .select('*, advisors(specialties)')
+      .select('*')
 
     if (requestedIds.length > 0) query = query.in('id', requestedIds)
 
@@ -168,21 +168,33 @@ export async function GET(request: NextRequest) {
 
     const companyIds = (companies || []).map((company) => company.id)
     const profilesByCompany = new Map<string, Record<string, unknown>>()
+    const advisorsByCompany = new Map<string, Array<{ specialties?: string[] | null }>>()
     if (companyIds.length > 0) {
-      const { data: profiles, error: profilesError } = await supabase
-        .from('company_profiles')
-        .select('*')
-        .in('company_id', companyIds)
+      const [profilesResult, advisorsResult] = await Promise.all([
+        supabase.from('company_profiles').select('*').in('company_id', companyIds),
+        supabase.from('advisors').select('company_id, specialties').in('company_id', companyIds).eq('active', true),
+      ])
 
-      if (profilesError) {
-        console.warn('Company profiles are not available yet:', profilesError.code)
+      if (profilesResult.error) {
+        console.warn('Company profiles are not available yet:', profilesResult.error.code)
       } else {
-        for (const profile of profiles || []) profilesByCompany.set(profile.company_id, profile)
+        for (const profile of profilesResult.data || []) profilesByCompany.set(profile.company_id, profile)
+      }
+
+      if (advisorsResult.error) {
+        console.warn('Advisor specialties are not available:', advisorsResult.error.code)
+      } else {
+        for (const advisor of advisorsResult.data || []) {
+          const current = advisorsByCompany.get(advisor.company_id) || []
+          current.push({ specialties: advisor.specialties })
+          advisorsByCompany.set(advisor.company_id, current)
+        }
       }
     }
 
     let sortedCompanies = (companies || []).map((company) => ({
       ...company,
+      advisors: advisorsByCompany.get(company.id) || [],
       profile: profilesByCompany.get(company.id) || null,
     }))
 

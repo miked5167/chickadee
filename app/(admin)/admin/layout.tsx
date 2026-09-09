@@ -1,105 +1,40 @@
-'use client'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { LockKeyhole, ShieldCheck } from 'lucide-react'
+import { getAdminAuthorization } from '@/lib/supabase/auth'
 
-import { redirect, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/admin/AppSidebar'
-import { Separator } from '@/components/ui/separator'
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb'
-import { usePathname } from 'next/navigation'
+export const dynamic = 'force-dynamic'
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+export default async function AdminLayout() {
+  const authorization = await getAdminAuthorization()
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createClient()
-      const { data: { user }, error } = await supabase.auth.getUser()
-
-      if (error || !user) {
-        router.push('/login?returnTo=/admin/dashboard')
-        return
-      }
-
-      setUser(user)
-      setLoading(false)
-    }
-
-    checkAuth()
-  }, [router])
-
-  const handleLogout = async () => {
-    try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
-      router.push('/login')
-      router.refresh()
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
+  if (authorization.status === 'unauthenticated') {
+    redirect('/login?returnTo=/admin/dashboard')
   }
 
-  const getBreadcrumbs = () => {
-    const paths = pathname.split('/').filter(Boolean)
-    const breadcrumbs = []
-
-    breadcrumbs.push({ label: 'Admin', href: '/admin/dashboard' })
-
-    if (paths.length > 1) {
-      const page = paths[paths.length - 1]
-      const label = page.charAt(0).toUpperCase() + page.slice(1).replace('-', ' ')
-      breadcrumbs.push({ label, href: pathname })
-    }
-
-    return breadcrumbs
+  if (authorization.status === 'forbidden') {
+    redirect('/?notice=administrator-access-required')
   }
-
-  if (loading) {
-    return null
-  }
-
-  const breadcrumbs = getBreadcrumbs()
 
   return (
-    <SidebarProvider>
-      <AppSidebar
-        userName={user?.email?.split('@')[0] || 'Admin'}
-        userRole="Administrator"
-        onLogout={handleLogout}
-      />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              {breadcrumbs.map((crumb, index) => (
-                <div key={`${crumb.href}-${index}`} className="flex items-center gap-2">
-                  {index > 0 && <BreadcrumbSeparator />}
-                  <BreadcrumbItem>
-                    {index === breadcrumbs.length - 1 ? (
-                      <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
-                    )}
-                  </BreadcrumbItem>
-                </div>
-              ))}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <div className="flex flex-1 flex-col">
-          {children}
+    <main className="min-h-screen bg-ice-white px-4 py-20">
+      <div className="mx-auto max-w-2xl rounded-2xl border border-blue-200 bg-white p-8 shadow-lg sm:p-10">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-hockey-blue">
+          <LockKeyhole className="h-7 w-7" aria-hidden="true" />
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+        <p className="mt-7 font-display text-sm font-bold uppercase tracking-[0.2em] text-hockey-blue">Safety lock</p>
+        <h1 className="mt-2 font-display text-4xl font-extrabold uppercase tracking-tight text-arena-navy">Administrator workflows are unavailable</h1>
+        <p className="mt-5 leading-7 text-slate-700">
+          Your administrator authorization was confirmed, but listing, claim, review, lead, and publishing operations remain disabled until the secure administrator bootstrap and production cutover are completed.
+        </p>
+        <div className="mt-6 flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm leading-6 text-green-950">
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+          This page does not grant access, change a role, or enable a database mutation.
+        </div>
+        <Link href="/" className="mt-8 inline-flex min-h-11 items-center justify-center rounded-md bg-hockey-blue px-5 py-3 font-bold text-white hover:bg-board-blue">
+          Return to the directory
+        </Link>
+      </div>
+    </main>
   )
 }

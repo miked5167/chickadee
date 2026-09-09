@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "properties": {
+    "listing_name": { "type": "string" },
+    "known_website": { "type": ["string", "null"] },
+    "website": {
+      "type": "object",
+      "properties": {
+        "match_status": { "type": "string", "enum": ["confirmed", "possible", "not_found"] },
+        "official_name": { "type": ["string", "null"] },
+        "summary": { "type": ["string", "null"] },
+        "services": { "type": "array", "items": { "type": "string" } },
+        "specialties": { "type": "array", "items": { "type": "string" } },
+        "player_levels": { "type": "array", "items": { "type": "string" } },
+        "pathways": { "type": "array", "items": { "type": "string" } },
+        "team_members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": ["string", "null"] }
+            },
+            "required": ["name", "role"]
+          }
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "full_address": { "type": "string" },
+              "address_type": { "type": ["string", "null"] },
+              "source_url": { "type": "string" }
+            },
+            "required": ["full_address", "address_type", "source_url"]
+          }
+        },
+        "phone": { "type": ["string", "null"] },
+        "email": { "type": ["string", "null"] },
+        "founded_year": { "type": ["integer", "null"] },
+        "service_area": { "type": "array", "items": { "type": "string" } },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "offers_remote": { "type": ["boolean", "null"] },
+        "business_hours": { "type": ["string", "null"] },
+        "pricing_information": { "type": ["string", "null"] },
+        "social_urls": { "type": "array", "items": { "type": "string" } },
+        "source_urls": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["match_status", "official_name", "summary", "services", "specialties", "player_levels", "pathways", "team_members", "addresses", "phone", "email", "founded_year", "service_area", "languages", "offers_remote", "business_hours", "pricing_information", "social_urls", "source_urls"]
+    },
+    "google_business": {
+      "type": "object",
+      "properties": {
+        "match_status": { "type": "string", "enum": ["confirmed", "possible", "not_found"] },
+        "business_name": { "type": ["string", "null"] },
+        "maps_url": { "type": ["string", "null"] },
+        "address": { "type": ["string", "null"] },
+        "phone": { "type": ["string", "null"] },
+        "website": { "type": ["string", "null"] },
+        "primary_category": { "type": ["string", "null"] },
+        "rating": { "type": ["number", "null"] },
+        "review_count": { "type": ["integer", "null"] },
+        "review_themes": { "type": "array", "items": { "type": "string" } },
+        "source_urls": { "type": "array", "items": { "type": "string" } },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] }
+      },
+      "required": ["match_status", "business_name", "maps_url", "address", "phone", "website", "primary_category", "rating", "review_count", "review_themes", "source_urls", "confidence"]
+    },
+    "elite_prospects": {
+      "type": "object",
+      "properties": {
+        "match_status": { "type": "string", "enum": ["confirmed", "possible", "not_found"] },
+        "agency_name": { "type": ["string", "null"] },
+        "agency_url": { "type": ["string", "null"] },
+        "represented_player_count": { "type": ["integer", "null"] },
+        "agent_names": { "type": "array", "items": { "type": "string" } },
+        "source_urls": { "type": "array", "items": { "type": "string" } },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] }
+      },
+      "required": ["match_status", "agency_name", "agency_url", "represented_player_count", "agent_names", "source_urls", "confidence"]
+    },
+    "recommended_address": { "type": ["string", "null"] },
+    "address_confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+    "notes": { "type": "array", "items": { "type": "string" } },
+    "researched_at": { "type": "string" }
+  },
+  "required": ["listing_name", "known_website", "website", "google_business", "elite_prospects", "recommended_address", "address_confidence", "notes", "researched_at"]
+}

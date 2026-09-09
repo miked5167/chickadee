@@ -95,25 +95,25 @@ export async function isAdmin(): Promise<boolean> {
 }
 
 /**
- * Check if the current user has claimed a specific advisor listing
+ * Check whether the current user is the verified owner of a company listing.
  */
-export async function hasClaimedAdvisor(advisorId: string) {
+export async function hasClaimedAdvisor(companyId: string) {
   const user = await getCurrentUser()
   if (!user) return false
 
   const supabase = await createClient()
   const { data } = await supabase
-    .from('advisors')
+    .from('companies')
     .select('id')
-    .eq('id', advisorId)
-    .eq('claimed_by_user_id', user.id)
+    .eq('id', companyId)
+    .eq('verified_owner_id', user.id)
     .single()
 
   return !!data
 }
 
 /**
- * Get the advisor listing claimed by the current user
+ * Get the company listing owned by the current user.
  */
 export async function getClaimedAdvisor() {
   const user = await getCurrentUser()
@@ -121,46 +121,10 @@ export async function getClaimedAdvisor() {
 
   const supabase = await createClient()
   const { data } = await supabase
-    .from('advisors')
-    .select('*')
-    .eq('claimed_by_user_id', user.id)
-    .eq('is_claimed', true)
+    .from('companies')
+    .select('id, name, slug, verified, verified_owner_id')
+    .eq('verified_owner_id', user.id)
     .single()
 
   return data
-}
-
-/**
- * Get or create public user profile
- */
-export async function getOrCreatePublicProfile() {
-  const user = await getCurrentUser()
-  if (!user) return null
-
-  const supabase = await createClient()
-
-  // Try to get existing profile
-  const { data: existingProfile } = await supabase
-    .from('users_public')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  if (existingProfile) {
-    return existingProfile
-  }
-
-  // Create new profile if it doesn't exist
-  const { data: newProfile } = await supabase
-    .from('users_public')
-    .insert({
-      id: user.id,
-      display_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
-      avatar_url: user.user_metadata?.avatar_url || null,
-      auth_provider: user.app_metadata?.provider || 'email',
-    })
-    .select()
-    .single()
-
-  return newProfile
 }

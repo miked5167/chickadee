@@ -138,7 +138,7 @@ export default function DemoAdvisorDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome back, {mockAdvisor.name}!</h1>
-          <p className="text-gray-600">Here's how your listing is performing</p>
+          <p className="text-gray-600">Here&apos;s how your listing is performing</p>
         </div>
 
         {/* Quick Actions */}

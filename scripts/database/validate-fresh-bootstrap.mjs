@@ -16,6 +16,9 @@ const baselineMigrationPath = path.join(migrationsDirectory, '20260719000000_pro
 const m2MigrationPath = path.join(migrationsDirectory, '20260719000001_add_companies_updated_at_trigger.sql')
 const m3MigrationPath = path.join(migrationsDirectory, '20260719000002_administrator_authorization_foundation.sql')
 const m4MigrationPath = path.join(migrationsDirectory, '20260719000003_company_reviews.sql')
+const m5MigrationPath = path.join(migrationsDirectory, '20260821000000_company_profiles.sql')
+const m6MigrationPath = path.join(migrationsDirectory, '20260821000001_company_leads_and_events.sql')
+const m7MigrationPath = path.join(migrationsDirectory, '20260821000002_advisor_interest_submissions.sql')
 
 function option(name) {
   const index = process.argv.indexOf(name)
@@ -24,6 +27,31 @@ function option(name) {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
+}
+
+function firstDifference(expected, actual, location = 'fingerprint') {
+  if (Object.is(expected, actual)) return null
+  if (typeof expected !== typeof actual || expected === null || actual === null) return `${location}: expected ${JSON.stringify(expected)}, received ${JSON.stringify(actual)}`
+  if (Array.isArray(expected)) {
+    if (!Array.isArray(actual)) return `${location}: expected an array`
+    if (expected.length !== actual.length) return `${location}.length: expected ${expected.length}, received ${actual.length}`
+    for (let index = 0; index < expected.length; index += 1) {
+      const difference = firstDifference(expected[index], actual[index], `${location}[${index}]`)
+      if (difference) return difference
+    }
+    return null
+  }
+  if (typeof expected === 'object') {
+    const expectedKeys = Object.keys(expected)
+    const actualKeys = Object.keys(actual)
+    if (JSON.stringify(expectedKeys) !== JSON.stringify(actualKeys)) return `${location} keys: expected ${JSON.stringify(expectedKeys)}, received ${JSON.stringify(actualKeys)}`
+    for (const key of expectedKeys) {
+      const difference = firstDifference(expected[key], actual[key], `${location}.${key}`)
+      if (difference) return difference
+    }
+    return null
+  }
+  return `${location}: expected ${JSON.stringify(expected)}, received ${JSON.stringify(actual)}`
 }
 
 function executable(name) {
@@ -79,7 +107,7 @@ function verifyIdentity(connection) {
 function verifyBlankAndCapable(connection) {
   const available = scalar(connection, "SELECT string_agg(name, ',' ORDER BY name) FROM pg_available_extensions WHERE name IN ('postgis','uuid-ossp');")
   assert(available === 'postgis,uuid-ossp', 'Disposable server lacks required postgis and uuid-ossp extensions')
-  const existing = Number(scalar(connection, "SELECT count(*) FROM (VALUES (to_regclass('public.users')), (to_regclass('public.companies')), (to_regclass('public.advisors')), (to_regclass('public.listing_claims')), (to_regclass('public.media_content')), (to_regclass('public.admin_users')), (to_regclass('public.reviews'))) AS guarded(object) WHERE object IS NOT NULL;"))
+  const existing = Number(scalar(connection, "SELECT count(*) FROM (VALUES (to_regclass('public.users')), (to_regclass('public.companies')), (to_regclass('public.advisors')), (to_regclass('public.listing_claims')), (to_regclass('public.media_content')), (to_regclass('public.admin_users')), (to_regclass('public.reviews')), (to_regclass('public.company_profiles')), (to_regclass('public.company_leads')), (to_regclass('public.directory_events')), (to_regclass('public.advisor_interest_submissions'))) AS guarded(object) WHERE object IS NOT NULL;"))
   assert(existing === 0, 'Disposable database is not blank for application objects')
   assert(scalar(connection, "SELECT to_regprocedure('public.is_admin()') IS NULL;") === 't', 'Disposable database already contains public.is_admin()')
   const ledger = scalar(connection, "SELECT to_regclass('migration_validation.schema_migrations') IS NOT NULL;")
@@ -116,15 +144,15 @@ async function applyPending(connection) {
 function validateCatalog(connection) {
   const result = scalar(connection, `
     SELECT json_build_object(
-      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews')),
-      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews')),
-      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews') AND NOT t.tgisinternal),
-      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews') AND c.relrowsecurity AND NOT c.relforcerowsecurity),
+      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
+      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
+      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND NOT t.tgisinternal),
+      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND c.relrowsecurity AND NOT c.relforcerowsecurity),
       'ambiguous_columns', (SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name IN ('listing_claims','media_content') AND column_name = 'advisor_id')
     )::text;
   `)
   const checks = JSON.parse(result)
-  assert(checks.tables === 7 && checks.policies === 15 && checks.triggers === 7 && checks.rls_enabled === 7 && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
+  assert(checks.tables === 11 && checks.policies === 22 && checks.triggers === 9 && checks.rls_enabled === 11 && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
 }
 
 async function compareFingerprint(connection) {
@@ -135,7 +163,8 @@ async function compareFingerprint(connection) {
     if (dump.status !== 0) throw new Error(dump.stderr.trim() || 'Schema-only pg_dump failed')
     const expected = JSON.parse(await readFile(targetFingerprintPath, 'utf8'))
     const actual = projectFingerprint(buildFingerprint(await readFile(dumpPath, 'utf8')), expected)
-    assert(JSON.stringify(actual) === JSON.stringify(expected), 'Bootstrapped target fingerprint differs from the canonical fingerprint')
+    const difference = firstDifference(expected, actual)
+    assert(!difference, `Bootstrapped target fingerprint differs from the canonical fingerprint: ${difference}`)
   } finally {
     await rm(temporaryDirectory, { recursive: true, force: true })
   }
@@ -461,6 +490,21 @@ function validateFailClosedM4Guards(connection) {
   assert(ownerAttempt.stderr.includes('M4 ownership guard'), 'Wrong M4 migration owner did not fail through the ownership guard')
 }
 
+function validateFailClosedM5M6M7Guards(connection) {
+  const m5Duplicate = psql(connection, ['--file', m5MigrationPath], { expectFailure: true, failureLabel: 'direct M5 re-execution' })
+  assert(m5Duplicate.stderr.includes('M5 duplicate guard'), 'Direct M5 re-execution did not fail through the duplicate guard')
+  const m6Duplicate = psql(connection, ['--file', m6MigrationPath], { expectFailure: true, failureLabel: 'direct M6 re-execution' })
+  assert(m6Duplicate.stderr.includes('M6 duplicate guard'), 'Direct M6 re-execution did not fail through the duplicate guard')
+  const m5Owner = psql(connection, ['--command', 'SET ROLE authenticated;', '--file', m5MigrationPath], { expectFailure: true, failureLabel: 'M5 execution by the wrong owner' })
+  assert(m5Owner.stderr.includes('M5 ownership guard'), 'Wrong M5 migration owner did not fail through the ownership guard')
+  const m6Owner = psql(connection, ['--command', 'SET ROLE authenticated;', '--file', m6MigrationPath], { expectFailure: true, failureLabel: 'M6 execution by the wrong owner' })
+  assert(m6Owner.stderr.includes('M6 ownership guard'), 'Wrong M6 migration owner did not fail through the ownership guard')
+  const m7Duplicate = psql(connection, ['--file', m7MigrationPath], { expectFailure: true, failureLabel: 'direct M7 re-execution' })
+  assert(m7Duplicate.stderr.includes('M7 duplicate guard'), 'Direct M7 re-execution did not fail through the duplicate guard')
+  const m7Owner = psql(connection, ['--command', 'SET ROLE authenticated;', '--file', m7MigrationPath], { expectFailure: true, failureLabel: 'M7 execution by the wrong owner' })
+  assert(m7Owner.stderr.includes('M7 ownership guard'), 'Wrong M7 migration owner did not fail through the ownership guard')
+}
+
 async function main() {
   const connection = connectionArguments()
   const identity = verifyIdentity(connection)
@@ -477,13 +521,14 @@ async function main() {
   validateFailClosedM3Guards(connection)
   validateM4RoleMatrix(connection)
   validateFailClosedM4Guards(connection)
+  validateFailClosedM5M6M7Guards(connection)
   await compareFingerprint(connection)
   validateCatalog(connection)
 
   const guardAttempt = psql(connection, ['--file', baselineMigrationPath], { expectFailure: true, failureLabel: 'baseline re-execution' })
   assert(guardAttempt.stderr.includes('Fresh-environment guard'), 'Baseline did not fail through its fresh-environment guard on an existing schema')
 
-  process.stdout.write(`Fresh M1+M2+M3+M4 bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
+  process.stdout.write(`Fresh M1 through M7 bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
 }
 
 main().catch((error) => {

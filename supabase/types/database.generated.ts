@@ -52,6 +52,48 @@ export type Database = {
         }
         Relationships: []
       }
+      advisor_interest_submissions: {
+        Row: {
+          id: string
+          contact_name: string
+          business_name: string
+          email: string
+          website_url: string | null
+          interests: string[]
+          message: string | null
+          consent_confirmed: boolean
+          ip_hash: string
+          user_agent: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          contact_name: string
+          business_name: string
+          email: string
+          website_url?: string | null
+          interests: string[]
+          message?: string | null
+          consent_confirmed: boolean
+          ip_hash: string
+          user_agent?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          contact_name?: string
+          business_name?: string
+          email?: string
+          website_url?: string | null
+          interests?: string[]
+          message?: string | null
+          consent_confirmed?: boolean
+          ip_hash?: string
+          user_agent?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       advisors: {
         Row: {
           id: string
@@ -196,6 +238,207 @@ export type Database = {
             columns: ['verified_owner_id']
             isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      company_leads: {
+        Row: {
+          id: string
+          company_id: string
+          contact_name: string
+          contact_email: string
+          contact_phone: string | null
+          player_age: number | null
+          player_level: string | null
+          goals: string[]
+          message: string
+          consent_confirmed: boolean
+          status: string
+          owner_notes: string | null
+          referral_url: string | null
+          ip_hash: string
+          user_agent: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          company_id: string
+          contact_name: string
+          contact_email: string
+          contact_phone?: string | null
+          player_age?: number | null
+          player_level?: string | null
+          goals?: string[]
+          message: string
+          consent_confirmed: boolean
+          status?: string
+          owner_notes?: string | null
+          referral_url?: string | null
+          ip_hash: string
+          user_agent?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          company_id?: string
+          contact_name?: string
+          contact_email?: string
+          contact_phone?: string | null
+          player_age?: number | null
+          player_level?: string | null
+          goals?: string[]
+          message?: string
+          consent_confirmed?: boolean
+          status?: string
+          owner_notes?: string | null
+          referral_url?: string | null
+          ip_hash?: string
+          user_agent?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'company_leads_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      company_profiles: {
+        Row: {
+          company_id: string
+          tagline: string | null
+          services: string[]
+          specialties: string[]
+          pathways: string[]
+          player_levels: string[]
+          age_groups: string[]
+          service_areas: string[]
+          languages: string[]
+          offers_remote: boolean
+          accepting_clients: boolean | null
+          pricing_models: string[]
+          price_min: number | null
+          price_max: number | null
+          price_currency: string | null
+          response_time: string | null
+          founded_year: number | null
+          business_hours: Json
+          faq: Json
+          last_reviewed_at: string | null
+          source_label: string | null
+          source_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          tagline?: string | null
+          services?: string[]
+          specialties?: string[]
+          pathways?: string[]
+          player_levels?: string[]
+          age_groups?: string[]
+          service_areas?: string[]
+          languages?: string[]
+          offers_remote?: boolean
+          accepting_clients?: boolean | null
+          pricing_models?: string[]
+          price_min?: number | null
+          price_max?: number | null
+          price_currency?: string | null
+          response_time?: string | null
+          founded_year?: number | null
+          business_hours?: Json
+          faq?: Json
+          last_reviewed_at?: string | null
+          source_label?: string | null
+          source_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          tagline?: string | null
+          services?: string[]
+          specialties?: string[]
+          pathways?: string[]
+          player_levels?: string[]
+          age_groups?: string[]
+          service_areas?: string[]
+          languages?: string[]
+          offers_remote?: boolean
+          accepting_clients?: boolean | null
+          pricing_models?: string[]
+          price_min?: number | null
+          price_max?: number | null
+          price_currency?: string | null
+          response_time?: string | null
+          founded_year?: number | null
+          business_hours?: Json
+          faq?: Json
+          last_reviewed_at?: string | null
+          source_label?: string | null
+          source_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'company_profiles_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      directory_events: {
+        Row: {
+          id: string
+          company_id: string
+          event_type: string
+          session_id: string
+          ip_hash: string
+          user_agent: string | null
+          referrer: string | null
+          metadata: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          company_id: string
+          event_type: string
+          session_id: string
+          ip_hash: string
+          user_agent?: string | null
+          referrer?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          company_id?: string
+          event_type?: string
+          session_id?: string
+          ip_hash?: string
+          user_agent?: string | null
+          referrer?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'directory_events_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
             referencedColumns: ['id']
           },
         ]
@@ -448,4 +691,8 @@ export type CompanyRow = Database['public']['Tables']['companies']['Row']
 export type AdvisorPersonRow = Database['public']['Tables']['advisors']['Row']
 export type AdminUserRow = Database['public']['Tables']['admin_users']['Row']
 export type ReviewRow = Database['public']['Tables']['reviews']['Row']
+export type CompanyProfileRow = Database['public']['Tables']['company_profiles']['Row']
+export type CompanyLeadRow = Database['public']['Tables']['company_leads']['Row']
+export type DirectoryEventRow = Database['public']['Tables']['directory_events']['Row']
+export type AdvisorInterestSubmissionRow = Database['public']['Tables']['advisor_interest_submissions']['Row']
 

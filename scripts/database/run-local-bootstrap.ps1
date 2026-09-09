@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$Database = 'hockey_advisor_migration_validation_m4_20260719',
+  [string]$Database = 'hockey_advisor_migration_validation_m7_20260821',
   [int]$Port = 55434
 )
 
@@ -15,7 +15,7 @@ if (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue) { throw
 $RepositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $InstalledPostgres = 'C:\Program Files\PostgreSQL\18'
 $TempBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar)
-$TempRoot = Join-Path $TempBase ('hockey-advisor-m4-validation-' + [guid]::NewGuid().ToString('N'))
+$TempRoot = Join-Path $TempBase ('hockey-advisor-m7-validation-' + [guid]::NewGuid().ToString('N'))
 $RuntimeRoot = Join-Path $TempRoot 'postgresql'
 $PostgresBin = Join-Path $RuntimeRoot 'bin'
 $InitDb = Join-Path $PostgresBin 'initdb.exe'
@@ -104,7 +104,7 @@ try {
   }
 
   $ResolvedTempRoot = [IO.Path]::GetFullPath($TempRoot)
-  $ExpectedPrefix = $TempBase + [IO.Path]::DirectorySeparatorChar + 'hockey-advisor-m4-validation-'
+  $ExpectedPrefix = $TempBase + [IO.Path]::DirectorySeparatorChar + 'hockey-advisor-m7-validation-'
   if (-not $ResolvedTempRoot.StartsWith($ExpectedPrefix, [StringComparison]::OrdinalIgnoreCase)) {
     throw 'Refusing to remove an unverified disposable-cluster path.'
   }

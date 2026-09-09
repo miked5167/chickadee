@@ -39,6 +39,9 @@ export const targetSource = {
     'supabase/migrations/20260719000001_add_companies_updated_at_trigger.sql',
     'supabase/migrations/20260719000002_administrator_authorization_foundation.sql',
     'supabase/migrations/20260719000003_company_reviews.sql',
+    'supabase/migrations/20260821000000_company_profiles.sql',
+    'supabase/migrations/20260821000001_company_leads_and_events.sql',
+    'supabase/migrations/20260821000002_advisor_interest_submissions.sql',
   ],
   containsData: false,
 }

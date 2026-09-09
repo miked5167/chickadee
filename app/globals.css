@@ -4,35 +4,37 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-
-  /* Brand Colors */
-  --hockey-blue: #003f87;
-  --ice-white: #FFFFFF;
-  --puck-black: #1A1A1A;
-  --red-line: #C8102E;
-  --goal-gold: #FFB81C;
-  --ice-blue: #E8F4F8;
-  --neutral-gray: #6B7280;
-  --success-green: #10B981;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Rink-side scouting desk */
+  --arena-navy: #081b33;
+  --board-blue: #123c68;
+  --hockey-blue: #0b4f8a;
+  --ice-white: #f7fbfc;
+  --puck-black: #111820;
+  --red-line: #c83238;
+  --goal-gold: #e8b44a;
+  --ice-blue: #e2f0f4;
+  --frost: #c8dce4;
+  --neutral-gray: #526574;
+  --success-green: #197a54;
+  --radius: 0.75rem;
+  --background: #f7fbfc;
+  --foreground: #111820;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --primary: #0b4f8a;
+  --primary-foreground: #ffffff;
+  --secondary: #d64045;
+  --secondary-foreground: #ffffff;
+  --muted: #edf4f6;
+  --muted-foreground: #5f6f7d;
+  --accent: #e8b44a;
+  --accent-foreground: #111820;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #c8dce4;
+  --input: #b8cdd6;
+  --ring: #e8b44a;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -68,9 +70,13 @@
   --color-ice-blue: var(--ice-blue);
   --color-neutral-gray: var(--neutral-gray);
   --color-success-green: var(--success-green);
+  --color-arena-navy: var(--arena-navy);
+  --color-board-blue: var(--board-blue);
+  --color-frost: var(--frost);
 
   /* Fonts */
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-barlow-condensed);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -143,6 +149,57 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: linear-gradient(180deg, rgba(226, 240, 244, 0.3), transparent 18rem);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-barlow-condensed), sans-serif;
+    letter-spacing: -0.015em;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--goal-gold);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-barlow-condensed), sans-serif;
+  }
+
+  .rink-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+
+  .red-line-rule {
+    position: relative;
+  }
+
+  .red-line-rule::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 4px;
+    background: var(--red-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

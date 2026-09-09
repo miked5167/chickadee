@@ -11,12 +11,18 @@ export function CookieConsent() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // Check if user has already given consent
-    const consent = localStorage.getItem(CONSENT_KEY)
-    if (!consent) {
-      setShowBanner(true)
+    const timer = window.setTimeout(() => {
+      const consent = localStorage.getItem(CONSENT_KEY)
+      setShowBanner(!consent)
+      setIsLoaded(true)
+    }, 0)
+
+    const handleReset = () => setShowBanner(true)
+    window.addEventListener('hockey-cookie-consent-reset', handleReset)
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('hockey-cookie-consent-reset', handleReset)
     }
-    setIsLoaded(true)
   }, [])
 
   const handleAccept = () => {
@@ -26,10 +32,8 @@ export function CookieConsent() {
       marketing: false,
       acceptedAt: new Date().toISOString(),
     }))
+    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: true } }))
     setShowBanner(false)
-
-    // Initialize analytics here if needed
-    // Example: window.gtag('consent', 'update', { analytics_storage: 'granted' })
   }
 
   const handleDecline = () => {
@@ -39,6 +43,7 @@ export function CookieConsent() {
       marketing: false,
       acceptedAt: new Date().toISOString(),
     }))
+    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: false } }))
     setShowBanner(false)
   }
 
@@ -53,40 +58,40 @@ export function CookieConsent() {
   }
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 pb-2 sm:pb-5">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="p-4 rounded-lg bg-puck-black shadow-lg sm:p-6">
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-white">
-                We use cookies to improve your experience on our site. By using The Hockey Directory, you consent to our use of cookies for analytics and functionality.{' '}
+    <div className="fixed inset-x-0 bottom-0 z-50 pb-2 sm:pb-5" role="region" aria-label="Cookie preferences">
+      <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
+        <div className="rounded-xl border border-white/10 bg-puck-black p-4 shadow-2xl sm:p-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0 sm:flex-1">
+              <p className="text-sm leading-6 text-white">
+                We use necessary storage for site preferences. With your permission, we also use analytics to understand how the directory is used.{' '}
                 <Link
                   href="/cookie-policy"
                   className="font-medium text-goal-gold hover:text-goal-gold/80 underline"
                 >
-                  Learn more
+                  Learn more about cookies
                 </Link>
               </p>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex flex-wrap items-center gap-2 sm:flex-shrink-0 sm:flex-nowrap">
               <button
                 type="button"
                 onClick={handleDecline}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-white/20 rounded-lg hover:bg-white/10 transition-colors"
+                className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-white/25 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-white/10 sm:flex-none"
               >
                 Decline
               </button>
               <button
                 type="button"
                 onClick={handleAccept}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg bg-hockey-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-board-blue sm:flex-none"
               >
                 Accept
               </button>
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="inline-flex items-center p-2 text-white hover:text-neutral-gray transition-colors"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center text-white transition-colors hover:text-frost"
                 aria-label="Dismiss cookie banner"
               >
                 <FiX className="h-5 w-5" />
@@ -96,5 +101,19 @@ export function CookieConsent() {
         </div>
       </div>
     </div>
+  )
+}
+
+export function CookieSettingsButton({ className = '' }: { className?: string }) {
+  const reopenSettings = () => {
+    localStorage.removeItem(CONSENT_KEY)
+    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: false } }))
+    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-reset'))
+  }
+
+  return (
+    <button type="button" onClick={reopenSettings} className={className}>
+      Cookie settings
+    </button>
   )
 }

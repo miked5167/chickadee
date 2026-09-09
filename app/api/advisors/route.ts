@@ -1,7 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { calculateDistance, isValidCoordinate } from '@/lib/utils/distance'
+import { publicPreviewFeedUrl, publicPreviewProfileUrl } from '@/lib/preview/advisor-feed'
 
 export const dynamic = 'force-dynamic'
+
+type PointValue =
+  | { type?: string; coordinates?: [number, number] }
+  | string
+  | null
+
+function readPoint(value: PointValue): { lat: number; lng: number } | null {
+  if (value && typeof value === 'object' && Array.isArray(value.coordinates)) {
+    const [lng, lat] = value.coordinates
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return { lat, lng }
+  }
+
+  if (typeof value === 'string') {
+    const match = value.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i)
+    if (match) return { lng: Number(match[1]), lat: Number(match[2]) }
+  }
+
+  return null
+}
 
 // Helper function to detect if search text is a state/province name and convert to abbreviation
 function getStateAbbreviation(searchText: string): string | null {
@@ -52,9 +73,40 @@ function getStateAbbreviation(searchText: string): string | null {
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
+    const previewFeedUrl = publicPreviewFeedUrl(searchParams)
+    if (previewFeedUrl) {
+      const previewResponse = await fetch(previewFeedUrl, { cache: 'no-store' })
+      if (!previewResponse.ok) {
+        return NextResponse.json({ error: 'The public preview feed is temporarily unavailable.' }, { status: 502 })
+      }
+      const previewPayload = await previewResponse.json() as { advisors?: Array<Record<string, unknown> & { slug?: string }> }
+      if (previewPayload.advisors) {
+        previewPayload.advisors = previewPayload.advisors.map((advisor) => ({
+          ...advisor,
+          profile_url: typeof advisor.slug === 'string' ? publicPreviewProfileUrl(advisor.slug) : null,
+        }))
+      }
+      return NextResponse.json(previewPayload, {
+        headers: { 'Cache-Control': 'private, no-store' },
+      })
+    }
 
     const country = searchParams.get('country')
+    const requestedIds = (searchParams.get('ids') || '').split(',').map((id) => id.trim()).filter((id) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)).slice(0, 50)
     const searchState = searchParams.get('state')
+    const specialty = searchParams.get('specialty')?.trim() || null
+    const service = searchParams.get('service')?.trim() || null
+    const pathway = searchParams.get('pathway')?.trim() || null
+    const playerLevel = searchParams.get('level')?.trim() || null
+    const language = searchParams.get('language')?.trim() || null
+    const pricingModel = searchParams.get('pricing')?.trim() || null
+    const remoteOnly = searchParams.get('remote') === 'true'
+    const acceptingOnly = searchParams.get('accepting') === 'true'
+    const verified = searchParams.get('verified') === 'true'
+    const latitude = Number(searchParams.get('lat'))
+    const longitude = Number(searchParams.get('lng'))
+    const radius = Math.min(Math.max(Number(searchParams.get('radius') || '100'), 5), 1000)
+    const hasCoordinates = isValidCoordinate(latitude, longitude)
     const sort = (searchParams.get('sort') || 'name') as string
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1
     const limit = Math.min(
@@ -78,11 +130,17 @@ export async function GET(request: NextRequest) {
     // Start building query
     let query = supabase
       .from('companies')
-      .select('*', { count: 'exact' })
+      .select('*, advisors(specialties)')
+
+    if (requestedIds.length > 0) query = query.in('id', requestedIds)
 
     // Country filtering
     if (country) {
       query = query.eq('country', country)
+    }
+
+    if (verified) {
+      query = query.eq('verified', true)
     }
 
     // State/Province filtering
@@ -93,11 +151,12 @@ export async function GET(request: NextRequest) {
 
     // Text search on name, description, city, and state_province
     if (searchText && searchText.trim().length > 0) {
-      query = query.or(`name.ilike.%${searchText}%,description.ilike.%${searchText}%,city.ilike.%${searchText}%,state_province.ilike.%${searchText}%`)
+      const safeSearchText = searchText.trim().replace(/[,%().]/g, ' ').replace(/\s+/g, ' ')
+      query = query.or(`name.ilike.%${safeSearchText}%,description.ilike.%${safeSearchText}%,city.ilike.%${safeSearchText}%,state_province.ilike.%${safeSearchText}%`)
     }
 
     // Execute query
-    const { data: companies, error, count } = await query
+    const { data: companies, error } = await query
 
     if (error) {
       console.error('Companies query error:', error)
@@ -107,7 +166,59 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    let sortedCompanies = [...(companies || [])]
+    const companyIds = (companies || []).map((company) => company.id)
+    const profilesByCompany = new Map<string, Record<string, unknown>>()
+    if (companyIds.length > 0) {
+      const { data: profiles, error: profilesError } = await supabase
+        .from('company_profiles')
+        .select('*')
+        .in('company_id', companyIds)
+
+      if (profilesError) {
+        console.warn('Company profiles are not available yet:', profilesError.code)
+      } else {
+        for (const profile of profiles || []) profilesByCompany.set(profile.company_id, profile)
+      }
+    }
+
+    let sortedCompanies = (companies || []).map((company) => ({
+      ...company,
+      profile: profilesByCompany.get(company.id) || null,
+    }))
+
+    const includesText = (values: unknown, wanted: string) =>
+      Array.isArray(values) && values.some((value) => typeof value === 'string' && value.toLocaleLowerCase().includes(wanted.toLocaleLowerCase()))
+
+    if (specialty) {
+      sortedCompanies = sortedCompanies.filter((company) =>
+        includesText(company.profile?.specialties, specialty)
+        || includesText(company.profile?.services, specialty)
+        || (company.advisors || []).some((advisor: { specialties?: string[] | null }) =>
+          includesText(advisor.specialties, specialty),
+        ),
+      )
+    }
+
+    if (service) sortedCompanies = sortedCompanies.filter((company) => includesText(company.profile?.services, service))
+    if (pathway) sortedCompanies = sortedCompanies.filter((company) => includesText(company.profile?.pathways, pathway))
+    if (playerLevel) sortedCompanies = sortedCompanies.filter((company) => includesText(company.profile?.player_levels, playerLevel))
+    if (language) sortedCompanies = sortedCompanies.filter((company) => includesText(company.profile?.languages, language))
+    if (pricingModel) sortedCompanies = sortedCompanies.filter((company) => includesText(company.profile?.pricing_models, pricingModel))
+    if (remoteOnly) sortedCompanies = sortedCompanies.filter((company) => company.profile?.offers_remote === true)
+    if (acceptingOnly) sortedCompanies = sortedCompanies.filter((company) => company.profile?.accepting_clients === true)
+
+    if (hasCoordinates) {
+      sortedCompanies = sortedCompanies
+        .map((company) => {
+          const point = readPoint(company.location as PointValue)
+          if (!point) return { ...company, distanceMiles: null }
+          return {
+            ...company,
+            distanceMiles: calculateDistance(latitude, longitude, point.lat, point.lng),
+          }
+        })
+        .filter((company) => company.distanceMiles !== null && company.distanceMiles <= radius)
+    }
 
     // If there's a text search, add relevance scoring
     if (searchText && searchText.trim().length > 0) {
@@ -129,12 +240,14 @@ export async function GET(request: NextRequest) {
         })()
       }))
 
-      sortedCompanies.sort((a: any, b: any) => {
+      sortedCompanies.sort((a, b) => {
         if (a.relevanceScore !== b.relevanceScore) {
           return b.relevanceScore - a.relevanceScore
         }
         return a.name.localeCompare(b.name)
       })
+    } else if (hasCoordinates) {
+      sortedCompanies.sort((a, b) => (a.distanceMiles ?? Number.POSITIVE_INFINITY) - (b.distanceMiles ?? Number.POSITIVE_INFINITY))
     } else {
       // Default sorting
       switch (sort) {
@@ -160,7 +273,9 @@ export async function GET(request: NextRequest) {
     const paginatedCompanies = sortedCompanies.slice(offset, offset + limit)
 
     // Map to advisor-like shape for frontend compatibility
-    const advisors = paginatedCompanies.map(c => ({
+    const advisors = paginatedCompanies.map(c => {
+      const point = readPoint(c.location as PointValue)
+      return ({
       id: c.id,
       slug: c.slug,
       name: c.name,
@@ -173,7 +288,16 @@ export async function GET(request: NextRequest) {
       website_url: c.website_url,
       phone: c.phone,
       email: c.email,
-    }))
+      specialties: Array.from(new Set((c.advisors || []).flatMap((advisor: { specialties?: string[] | null }) => advisor.specialties || []))).slice(0, 6),
+      services: Array.isArray(c.profile?.services) ? c.profile.services : [],
+      pathways: Array.isArray(c.profile?.pathways) ? c.profile.pathways : [],
+      offers_remote: c.profile?.offers_remote === true,
+      accepting_clients: typeof c.profile?.accepting_clients === 'boolean' ? c.profile.accepting_clients : null,
+      tagline: typeof c.profile?.tagline === 'string' ? c.profile.tagline : null,
+      latitude: point?.lat ?? null,
+      longitude: point?.lng ?? null,
+      distance: c.distanceMiles ?? null,
+    })})
 
     return NextResponse.json({
       advisors,
@@ -190,6 +314,17 @@ export async function GET(request: NextRequest) {
         state: effectiveState,
         sort,
         search: searchText,
+        specialty,
+        service,
+        pathway,
+        level: playerLevel,
+        language,
+        pricing: pricingModel,
+        remote: remoteOnly,
+        accepting: acceptingOnly,
+        ids: requestedIds,
+        verified,
+        radius: hasCoordinates ? radius : null,
       },
     })
   } catch (error) {

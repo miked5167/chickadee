@@ -1,12 +1,43 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Script from 'next/script'
 
-export function GoogleAnalytics({ measurementId }: { measurementId?: string }) {
-  // Use environment variable or prop
-  const gaId = measurementId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+const CONSENT_KEY = 'hockey-directory-cookie-consent'
 
-  if (!gaId) {
+type Gtag = (...args: unknown[]) => void
+
+declare global {
+  interface Window {
+    gtag?: Gtag
+  }
+}
+
+export function GoogleAnalytics({ measurementId }: { measurementId?: string }) {
+  const gaId = measurementId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+  const [analyticsAllowed, setAnalyticsAllowed] = useState(false)
+
+  useEffect(() => {
+    const readConsent = () => {
+      try {
+        const stored = localStorage.getItem(CONSENT_KEY)
+        setAnalyticsAllowed(Boolean(stored && JSON.parse(stored).analytics === true))
+      } catch {
+        setAnalyticsAllowed(false)
+      }
+    }
+
+    const handleConsentChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ analytics?: boolean }>
+      setAnalyticsAllowed(customEvent.detail?.analytics === true)
+    }
+
+    readConsent()
+    window.addEventListener('hockey-cookie-consent-changed', handleConsentChange)
+    return () => window.removeEventListener('hockey-cookie-consent-changed', handleConsentChange)
+  }, [])
+
+  if (!gaId || !analyticsAllowed) {
     return null
   }
 
@@ -32,15 +63,15 @@ export function GoogleAnalytics({ measurementId }: { measurementId?: string }) {
 }
 
 // Helper functions for tracking events
-export const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', eventName, eventParams)
+export const trackEvent = (eventName: string, eventParams?: Record<string, unknown>) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, eventParams)
   }
 }
 
 export const trackPageView = (url: string) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('config', process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('config', process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, {
       page_path: url,
     })
   }

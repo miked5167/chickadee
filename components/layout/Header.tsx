@@ -9,39 +9,48 @@ import { UserMenu } from '@/components/auth/UserMenu'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, loading } = useAuth()
+  const { user, loading, signOut } = useAuth()
 
   const navigation = [
     { name: 'Find Advisors', href: '/listings' },
-    { name: 'Blog', href: '/blog' },
+    { name: 'Saved', href: '/saved' },
+    { name: 'How It Works', href: '/#how-it-works' },
+    { name: 'Guides', href: '/guides' },
+    { name: 'Hockey Glossary', href: '/glossary' },
     { name: 'About', href: '/about' },
   ]
 
   return (
-    <header className="bg-white border-b border-border sticky top-0 z-50">
+    <header className="sticky top-0 z-50 border-b border-frost/80 bg-ice-white/95 backdrop-blur-xl">
+      <div className="hidden bg-arena-navy text-ice-white md:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em]">
+          <span>Independent guidance for hockey families</span>
+          <span className="text-frost">Canada · United States</span>
+        </div>
+      </div>
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex h-28 sm:h-32 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                src="/hockey-directory-logo-v6.png"
+                src="/hockey-directory-logo-v7.png"
                 alt="The Hockey Directory"
-                width={600}
-                height={150}
+                width={2087}
+                height={753}
                 priority
-                className="h-24 w-auto sm:h-28"
+                className="h-12 w-auto sm:h-14"
               />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
+          <div className="hidden md:flex md:items-center md:space-x-7">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-neutral-gray hover:text-primary transition-colors"
+                className="rounded-sm text-sm font-semibold text-arena-navy transition-colors hover:text-hockey-blue focus-visible:outline-offset-4"
               >
                 {item.name}
               </Link>
@@ -58,15 +67,15 @@ export function Header() {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium text-neutral-gray hover:text-primary transition-colors"
+                  className="text-sm font-semibold text-arena-navy transition-colors hover:text-hockey-blue"
                 >
                   Sign In
                 </Link>
                 <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                  href="/listings"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md bg-red-line px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-red-line/90"
                 >
-                  Get Started
+                  Claim a Listing
                 </Link>
               </>
             )}
@@ -78,7 +87,8 @@ export function Header() {
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-lg text-neutral-gray hover:text-primary hover:bg-ice-blue transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-expanded="false"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <span className="sr-only">Open main menu</span>
               {mobileMenuOpen ? (
@@ -92,7 +102,7 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border py-4">
+          <div id="mobile-navigation" className="border-t border-border py-4 md:hidden">
             <div className="space-y-1 px-2">
               {navigation.map((item) => (
                 <Link
@@ -116,7 +126,6 @@ export function Header() {
                   </Link>
                   <button
                     onClick={async () => {
-                      const { signOut } = useAuth()
                       await signOut()
                       setMobileMenuOpen(false)
                     }}
@@ -135,11 +144,11 @@ export function Header() {
                     Sign In
                   </Link>
                   <Link
-                    href="/login"
-                    className="block px-3 py-2 text-base font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors text-center"
+                    href="/listings"
+                    className="block min-h-11 rounded-lg bg-red-line px-3 py-2.5 text-center text-base font-bold text-white transition-colors hover:bg-red-line/90"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Get Started
+                    Claim a Listing
                   </Link>
                 </>
               )}

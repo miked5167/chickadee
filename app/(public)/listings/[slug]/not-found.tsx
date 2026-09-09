@@ -10,7 +10,7 @@ export default function ListingNotFound() {
           <div className="text-6xl font-bold text-hockey-blue mb-4">404</div>
           <h1 className="text-3xl font-bold mb-2">Advisor Not Found</h1>
           <p className="text-gray-600 mb-8">
-            We couldn't find the advisor you're looking for. They may have been removed or the link
+            We couldn&apos;t find the advisor you&apos;re looking for. They may have been removed or the link
             might be incorrect.
           </p>
         </div>

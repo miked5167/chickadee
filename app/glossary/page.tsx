@@ -1,81 +1,38 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Hockey Glossary | The Hockey Directory',
-  description: 'Plain-English definitions of hockey terms, pathways, and programs to help families navigate the hockey world.',
+  title: 'Hockey Glossary for Families',
+  description: 'Plain-language definitions of common hockey pathways, recruiting terms, and advisor services.',
+  alternates: { canonical: '/glossary' },
 }
 
+const groups = [
+  { title: 'Player levels and pathways', terms: [
+    ['AAA hockey', 'A high competitive classification used by many minor hockey organizations. Standards and labels vary by region.'],
+    ['Prep school hockey', 'School-based hockey programs that combine academics and competitive play, often with boarding or tuition costs.'],
+    ['Junior hockey', 'Post-minor competitive hockey organized through several leagues and classifications. Eligibility, player rights, and costs differ by league.'],
+    ['Major junior', 'The Canadian Hockey League pathway made up of the OHL, WHL, and QMJHL. Families should verify current eligibility implications before committing.'],
+    ['NCAA hockey', 'College hockey governed by the National Collegiate Athletic Association in the United States. Recruiting and eligibility rules can change.'],
+    ['U SPORTS hockey', 'University hockey within Canada’s national university sport system.'],
+  ] },
+  { title: 'Advisor and recruiting terms', terms: [
+    ['Hockey advisor', 'A person or company hired to provide guidance about development, teams, schools, recruiting, or career decisions. Services and qualifications vary.'],
+    ['Agent', 'A representative who may negotiate professional playing contracts or related commercial agreements. Licensing requirements depend on the league or association.'],
+    ['Family advisor', 'A term often used for an advisor working with amateur players and families. The title itself does not prove a credential or endorsement.'],
+    ['Player assessment', 'An evaluation of a player’s current strengths, development needs, and possible next steps, often using live viewing or video.'],
+    ['Showcase', 'An event intended to give players exposure to scouts, coaches, or teams. Attendance does not guarantee recruitment.'],
+    ['Commitment', 'A stated intention between a player and a program. The practical and legal meaning depends on the league, school, age, and documents involved.'],
+  ] },
+  { title: 'Directory trust terms', terms: [
+    ['Owner connected', 'The directory account has been connected to the business listing through the directory claim process.'],
+    ['Business details verified', 'Selected business information has been checked. This is not an endorsement or a guarantee of service quality.'],
+    ['Published review', 'A review visible after meeting the directory’s submission and moderation rules. Reviews remain individual opinions.'],
+    ['Conflict of interest', 'A financial or personal interest that could influence a recommendation, such as compensation from a referred team, event, or service.'],
+  ] },
+]
+
 export default function GlossaryPage() {
-  return (
-    <div className="min-h-screen bg-ice-blue">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-puck-black sm:text-6xl mb-6">
-            Hockey Glossary
-          </h1>
-          <p className="text-xl text-neutral-gray mb-12 max-w-2xl mx-auto">
-            Your comprehensive guide to hockey terminology, pathways, and programs
-          </p>
-
-          <div className="bg-white rounded-lg shadow-lg p-12 max-w-2xl mx-auto">
-            <div className="mb-8">
-              <svg
-                className="mx-auto h-24 w-24 text-hockey-blue"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                />
-              </svg>
-            </div>
-
-            <h2 className="text-3xl font-bold text-puck-black mb-4">
-              Coming Soon
-            </h2>
-
-            <p className="text-lg text-neutral-gray mb-6">
-              We're building a comprehensive glossary to help hockey families understand:
-            </p>
-
-            <ul className="text-left text-neutral-gray space-y-3 mb-8 max-w-md mx-auto">
-              <li className="flex items-start">
-                <svg className="h-6 w-6 text-hockey-blue mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Hockey pathways (AAA, Junior, NCAA, USports)</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="h-6 w-6 text-hockey-blue mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>College recruiting terms and timelines</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="h-6 w-6 text-hockey-blue mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Hockey development programs</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="h-6 w-6 text-hockey-blue mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>How to find the right advisor for your needs</span>
-              </li>
-            </ul>
-
-            <p className="text-neutral-gray">
-              Check back soon for plain-English definitions and guides to help you navigate your hockey journey.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  const terms = groups.flatMap((group) => group.terms.map(([name, description]) => ({ '@type': 'DefinedTerm', name, description })))
+  return <main className="min-h-screen bg-ice-white"><section className="rink-grid border-b-4 border-red-line bg-arena-navy text-white"><div className="mx-auto max-w-6xl px-4 py-14 sm:px-6"><p className="text-xs font-bold uppercase tracking-[0.2em] text-goal-gold">Plain-language reference</p><h1 className="font-display text-5xl font-extrabold uppercase sm:text-6xl">Hockey glossary</h1><p className="mt-4 max-w-2xl text-lg leading-8 text-ice-blue">Useful starting definitions for families. Always confirm current rules with the relevant league, school, or governing body.</p></div></section><div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6">{groups.map((group) => <section key={group.title}><h2 className="font-display text-3xl font-bold uppercase text-arena-navy">{group.title}</h2><dl className="mt-5 grid gap-4 md:grid-cols-2">{group.terms.map(([term, definition]) => <div key={term} className="rounded-xl border border-frost bg-white p-5"><dt className="font-display text-xl font-bold uppercase text-hockey-blue">{term}</dt><dd className="mt-2 leading-7 text-neutral-gray">{definition}</dd></div>)}</dl></section>)}<aside className="rounded-xl bg-arena-navy p-6 text-white"><h2 className="font-display text-2xl font-bold uppercase">Need a research process?</h2><p className="mt-2 text-ice-blue">Use our family guides for interview questions, fee comparisons, and due diligence.</p><Link href="/guides" className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-goal-gold px-5 font-bold text-arena-navy">Read the guides</Link></aside></div><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: 'Hockey glossary for families', url: 'https://thehockeydirectory.com/glossary', hasDefinedTerm: terms }) }} /></main>
 }

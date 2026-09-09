@@ -22,7 +22,7 @@ export function LocationMap({ latitude, longitude, name }: LocationMapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<HTMLDivElement | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)
   const mountedRef = useRef(true)
 
   useEffect(() => {
@@ -48,8 +48,6 @@ export function LocationMap({ latitude, longitude, name }: LocationMapProps) {
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey) {
-      setError(true)
-      console.error('Google Maps API key not found')
       return
     }
 

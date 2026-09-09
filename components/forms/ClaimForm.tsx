@@ -1,97 +1,86 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { CheckCircle2, Loader2, LogIn, ShieldCheck } from 'lucide-react'
+import { z } from 'zod'
+import { useAuth } from '@/lib/hooks/use-auth'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card } from '@/components/ui/card'
-import { Loader2, CheckCircle } from 'lucide-react'
-import { z } from 'zod'
+import { Textarea } from '@/components/ui/textarea'
 
-// Validation schema
-const claimFormSchema = z.object({
-  claimantName: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
-  claimantEmail: z.string().email('Invalid email address'),
-  claimantPhone: z.string().optional(),
-  verificationInfo: z.string().min(50, 'Please provide at least 50 characters of verification information').max(1000, 'Verification info is too long'),
+const claimSchema = z.object({
+  businessEmail: z.string().trim().email('Enter a valid business email address.'),
+  businessPhone: z.string().trim().max(30, 'Phone number is too long.'),
+  relationship: z.string().trim().min(20, 'Describe your relationship in at least 20 characters.').max(500),
+  verificationDetails: z.string().trim().min(50, 'Provide at least 50 characters of verification information.').max(1500),
 })
 
-type ClaimFormData = z.infer<typeof claimFormSchema>
-
 interface ClaimFormProps {
-  advisorId: string
-  advisorName: string
-  advisorSlug: string
+  companyId: string
+  companyName: string
+  companySlug: string
 }
 
-export function ClaimForm({ advisorId, advisorName, advisorSlug }: ClaimFormProps) {
-  const router = useRouter()
+export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProps) {
+  const { user, loading: authLoading } = useAuth()
+  const [businessEmail, setBusinessEmail] = useState('')
+  const [businessPhone, setBusinessPhone] = useState('')
+  const [relationship, setRelationship] = useState('')
+  const [verificationDetails, setVerificationDetails] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Form state
-  const [claimantName, setClaimantName] = useState('')
-  const [claimantEmail, setClaimantEmail] = useState('')
-  const [claimantPhone, setClaimantPhone] = useState('')
-  const [verificationInfo, setVerificationInfo] = useState('')
+  if (authLoading) {
+    return <Card className="flex min-h-48 items-center justify-center border-frost"><Loader2 className="h-7 w-7 animate-spin text-hockey-blue" aria-label="Checking sign-in status" /></Card>
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  if (!user) {
+    return (
+      <Card className="border-frost p-7 text-center sm:p-10">
+        <LogIn className="mx-auto h-10 w-10 text-hockey-blue" aria-hidden="true" />
+        <h2 className="mt-4 font-display text-3xl font-bold uppercase text-arena-navy">Sign in to submit a claim</h2>
+        <p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-gray">
+          Claims are tied to a Directory account so ownership cannot be granted from an unverified form submission.
+        </p>
+        <Button asChild className="mt-6 min-h-12 px-6 font-bold">
+          <Link href={`/login?returnTo=${encodeURIComponent(`/claim/${companySlug}`)}`}>Sign in or create an account</Link>
+        </Button>
+      </Card>
+    )
+  }
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
     setError(null)
 
-    // Validate with Zod
-    try {
-      const formData: ClaimFormData = {
-        claimantName,
-        claimantEmail,
-        claimantPhone: claimantPhone || undefined,
-        verificationInfo,
-      }
-
-      claimFormSchema.parse(formData)
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setError(err.issues[0].message)
-      } else {
-        setError('Validation failed. Please check your inputs.')
-      }
-      setLoading(false)
+    const parsed = claimSchema.safeParse({ businessEmail, businessPhone, relationship, verificationDetails })
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? 'Review the claim information and try again.')
       return
     }
 
+    setLoading(true)
     try {
       const response = await fetch('/api/advisors/claim', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          advisor_id: advisorId,
-          claimant_name: claimantName,
-          claimant_email: claimantEmail,
-          claimant_phone: claimantPhone || null,
-          verification_info: verificationInfo,
+          company_id: companyId,
+          business_email: parsed.data.businessEmail,
+          business_phone: parsed.data.businessPhone || null,
+          relationship: parsed.data.relationship,
+          verification_details: parsed.data.verificationDetails,
         }),
       })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to submit claim')
-      }
-
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'The claim could not be submitted.')
       setSuccess(true)
-
-      // Redirect back to listing page after 3 seconds
-      setTimeout(() => {
-        router.push(`/listings/${advisorSlug}`)
-        router.refresh()
-      }, 3000)
-    } catch (err) {
-      console.error('Error submitting claim:', err)
-      setError(err instanceof Error ? err.message : 'Failed to submit claim. Please try again.')
+    } catch (submissionError) {
+      setError(submissionError instanceof Error ? submissionError.message : 'The claim could not be submitted.')
     } finally {
       setLoading(false)
     }
@@ -99,166 +88,60 @@ export function ClaimForm({ advisorId, advisorName, advisorSlug }: ClaimFormProp
 
   if (success) {
     return (
-      <Card className="p-8">
-        <div className="text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-2">Check Your Email!</h3>
-          <p className="text-gray-600 mb-4">
-            We've sent a verification email to <strong>{claimantEmail}</strong>
-          </p>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-left">
-            <h4 className="font-semibold text-blue-900 mb-2">Next Steps:</h4>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-900">
-              <li>Check your email inbox (and spam folder)</li>
-              <li>Click the verification link</li>
-              <li>Create your account password</li>
-              <li>Wait for admin approval (usually 24-48 hours)</li>
-              <li>Access your dashboard once approved</li>
-            </ol>
-          </div>
-          <p className="text-sm text-gray-500">
-            Verification link expires in 24 hours
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Redirecting you back to the listing...
-          </p>
-        </div>
+      <Card className="border-success-green/30 bg-green-50 p-8 text-center">
+        <CheckCircle2 className="mx-auto h-12 w-12 text-success-green" aria-hidden="true" />
+        <h2 className="mt-4 font-display text-3xl font-bold uppercase text-arena-navy">Claim received</h2>
+        <p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-gray">
+          Your claim for {companyName} is recorded as pending. No listing access is granted until the business relationship is reviewed.
+        </p>
+        <Button asChild variant="outline" className="mt-6"><Link href={`/listings/${companySlug}`}>Return to the listing</Link></Button>
       </Card>
     )
   }
 
   return (
-    <Card className="p-6">
-      <h2 className="text-2xl font-bold mb-2">Claim This Listing</h2>
-      <p className="text-gray-600 mb-6">
-        Are you {advisorName} or an authorized representative? Complete this form to claim and manage this listing.
-      </p>
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Claimant Name */}
+    <Card className="border-frost p-6 shadow-sm sm:p-8">
+      <div className="flex items-start gap-3">
+        <ShieldCheck className="mt-1 h-7 w-7 shrink-0 text-hockey-blue" aria-hidden="true" />
         <div>
-          <Label htmlFor="claimantName">Your Full Name *</Label>
-          <Input
-            id="claimantName"
-            type="text"
-            value={claimantName}
-            onChange={(e) => setClaimantName(e.target.value)}
-            placeholder="John Smith"
-            required
-            disabled={loading}
-          />
+          <h2 className="font-display text-3xl font-bold uppercase text-arena-navy">Confirm your connection</h2>
+          <p className="mt-2 leading-7 text-neutral-gray">Provide business contact information and enough detail for a careful ownership review.</p>
         </div>
+      </div>
 
-        {/* Claimant Email */}
-        <div>
-          <Label htmlFor="claimantEmail">Your Email Address *</Label>
-          <Input
-            id="claimantEmail"
-            type="email"
-            value={claimantEmail}
-            onChange={(e) => setClaimantEmail(e.target.value)}
-            placeholder="john@example.com"
-            required
-            disabled={loading}
-          />
-          <p className="text-sm text-gray-500 mt-1">
-            We'll send claim status updates to this email
-          </p>
-        </div>
+      {error && <p className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800" role="alert">{error}</p>}
 
-        {/* Claimant Phone */}
-        <div>
-          <Label htmlFor="claimantPhone">Your Phone Number (Optional)</Label>
-          <Input
-            id="claimantPhone"
-            type="tel"
-            value={claimantPhone}
-            onChange={(e) => setClaimantPhone(e.target.value)}
-            placeholder="(555) 123-4567"
-            disabled={loading}
-          />
-        </div>
-
-        {/* Verification Info */}
-        <div>
-          <Label htmlFor="verificationInfo">Business Verification Information *</Label>
-          <textarea
-            id="verificationInfo"
-            value={verificationInfo}
-            onChange={(e) => setVerificationInfo(e.target.value)}
-            placeholder="Please provide information to verify your connection to this business. For example: business registration number, official email address, website ownership, social media accounts, etc. (minimum 50 characters)"
-            required
-            rows={6}
-            disabled={loading}
-            maxLength={1000}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-hockey-blue disabled:opacity-50"
-          />
-          <p className="text-sm text-gray-500 mt-1">
-            {verificationInfo.length} / 50 characters minimum ({1000 - verificationInfo.length} remaining)
-          </p>
-        </div>
-
-        {/* Info Box */}
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="font-semibold mb-3 text-blue-900">What happens next?</h4>
-          <div className="space-y-3 text-sm text-blue-900">
-            <div className="flex gap-2">
-              <span className="text-blue-600 font-bold">1.</span>
-              <div>
-                <strong>Verify Your Email</strong>
-                <p className="text-blue-800">We'll send you a verification link to confirm your email address</p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-blue-600 font-bold">2.</span>
-              <div>
-                <strong>Create Your Password</strong>
-                <p className="text-blue-800">Set up a secure password for your dashboard account</p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-blue-600 font-bold">3.</span>
-              <div>
-                <strong>Admin Review</strong>
-                <p className="text-blue-800">Our team will review your claim (usually 24-48 hours)</p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-blue-600 font-bold">4.</span>
-              <div>
-                <strong>Dashboard Access</strong>
-                <p className="text-blue-800">Once approved, log in and manage your listing, view leads & analytics</p>
-              </div>
-            </div>
+      <form onSubmit={handleSubmit} className="mt-7 space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="business-email">Business email</Label>
+            <Input id="business-email" type="email" autoComplete="email" value={businessEmail} onChange={(event) => setBusinessEmail(event.target.value)} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="business-phone">Business phone <span className="text-neutral-gray">(optional)</span></Label>
+            <Input id="business-phone" type="tel" autoComplete="tel" value={businessPhone} onChange={(event) => setBusinessPhone(event.target.value)} />
           </div>
         </div>
 
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={loading || claimantName.length < 2 || !claimantEmail || verificationInfo.length < 50}
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              Submitting Claim...
-            </>
-          ) : (
-            'Submit Claim Request'
-          )}
-        </Button>
+        <div className="space-y-2">
+          <Label htmlFor="relationship">Your relationship to {companyName}</Label>
+          <Textarea id="relationship" value={relationship} onChange={(event) => setRelationship(event.target.value)} rows={3} maxLength={500} placeholder="For example: owner, partner, employee, or authorized agency representative." required />
+          <p className="text-xs text-neutral-gray">{relationship.length}/500 characters</p>
+        </div>
 
-        <p className="text-xs text-gray-500 text-center">
-          By submitting this claim, you confirm that you are authorized to represent this business.
-          False claims may result in permanent ban from The Hockey Directory.
-        </p>
+        <div className="space-y-2">
+          <Label htmlFor="verification-details">How can we verify this relationship?</Label>
+          <Textarea id="verification-details" value={verificationDetails} onChange={(event) => setVerificationDetails(event.target.value)} rows={5} maxLength={1500} placeholder="Describe the official website, business registration, company email domain, or other evidence that connects you to this business." required />
+          <p className="text-xs text-neutral-gray">{verificationDetails.length}/1500 characters · minimum 50</p>
+        </div>
+
+        <div className="rounded-lg bg-ice-blue p-4 text-sm leading-6 text-board-blue">
+          Submitting a claim does not automatically verify the listing or grant access. False ownership claims may be rejected.
+        </div>
+
+        <Button type="submit" disabled={loading} className="min-h-12 w-full font-bold">
+          {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting claim…</> : 'Submit claim for review'}
+        </Button>
       </form>
     </Card>
   )

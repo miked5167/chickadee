@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - The Hockey Directory',
+  title: 'Terms of Service',
   description: 'Terms of Service for The Hockey Directory - Read our terms and conditions for using our platform to find hockey advisors.',
+  alternates: { canonical: '/terms' },
 }
 
 export default function TermsPage() {
@@ -12,13 +13,13 @@ export default function TermsPage() {
 
       <div className="prose prose-lg max-w-none">
         <p className="text-gray-600 mb-8">
-          <strong>Last Updated:</strong> November 4, 2025
+          <strong>Last Updated:</strong> August 21, 2026
         </p>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
           <p className="mb-4">
-            By accessing and using The Hockey Directory ("we," "us," or "our"), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use our website.
+            By accessing and using The Hockey Directory (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use our website.
           </p>
         </section>
 
@@ -31,7 +32,7 @@ export default function TermsPage() {
             <li>A searchable directory of hockey advisors</li>
             <li>Contact forms to connect with advisors</li>
             <li>Review and rating systems</li>
-            <li>Blog content related to hockey development</li>
+            <li>Research guides related to hockey advisors and pathways</li>
             <li>Listing claim services for advisors</li>
           </ul>
         </section>
@@ -108,7 +109,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">7. Disclaimer of Warranties</h2>
           <p className="mb-4">
-            The Hockey Directory is provided "as is" without warranties of any kind. We do not guarantee:
+            The Hockey Directory is provided &quot;as is&quot; without warranties of any kind. We do not guarantee:
           </p>
           <ul className="list-disc pl-6 mb-4">
             <li>The accuracy or completeness of advisor information</li>

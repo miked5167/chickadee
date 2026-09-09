@@ -120,6 +120,7 @@ export function ContactModal({
           phone: phone || null,
           elite_prospects_link: eliteProspectsLink || null,
           message,
+          consent_confirmed: true,
         }),
       })
 
@@ -159,7 +160,7 @@ export function ContactModal({
               </div>
               <h3 className="text-2xl font-bold mb-3 text-gray-900">Message Sent Successfully!</h3>
               <p className="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
-                Thank you for contacting <span className="font-semibold text-gray-900">{advisorName}</span>. They will get back to you shortly, typically within 24-48 hours.
+                Your inquiry for <span className="font-semibold text-gray-900">{advisorName}</span> has been recorded. Response times depend on the company.
               </p>
               <div className="flex justify-center">
                 <Button onClick={() => setOpen(false)} className="bg-blue-600 hover:bg-blue-700 px-8">

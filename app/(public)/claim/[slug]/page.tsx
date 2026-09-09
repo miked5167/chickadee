@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: ClaimPageProps): Promise<Meta
   return {
     title: `Claim ${company.name} - The Hockey Directory`,
     description: `Claim your business listing for ${company.name} on The Hockey Directory.`,
+    robots: { index: false, follow: false },
   }
 }
 
@@ -41,7 +42,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   // Fetch company data
   const { data: company, error } = await supabase
     .from('companies')
-    .select('id, name, slug, city, state_province, logo_url, verified')
+    .select('id, name, slug, city, state_province, logo_url, verified_owner_id')
     .eq('slug', slug)
     .single()
 
@@ -49,8 +50,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
     notFound()
   }
 
-  // Check if already claimed (verified = has an owner)
-  if (company.verified) {
+  if (company.verified_owner_id) {
     return (
       <div className="container mx-auto py-12 px-4 max-w-3xl">
         <Link href={`/listings/${company.slug}`}>
@@ -64,7 +64,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
           <h2 className="text-2xl font-bold mb-4">Listing Already Claimed</h2>
           <p className="text-gray-700 mb-6">
             This listing has already been claimed by its owner. If you believe this is an error,
-            please contact our support team.
+             return to the listing and use the correction process once it is available.
           </p>
           <Link href={`/listings/${company.slug}`}>
             <Button>Back to Listing</Button>
@@ -79,8 +79,8 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
     .from('listing_claims')
     .select('id, claim_status')
     .eq('company_id', company.id)
-    .eq('claim_status', 'pending')
-    .single()
+    .in('claim_status', ['pending', 'under_review'])
+    .maybeSingle()
 
   if (pendingClaim) {
     return (
@@ -95,8 +95,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Claim Pending Review</h2>
           <p className="text-gray-700 mb-6">
-            A claim for this listing is currently under review. We'll notify the claimant via email
-            once the review is complete (typically within 2-3 business days).
+             You already have an active claim for this listing. No ownership access is granted while the claim is pending.
           </p>
           <Link href={`/listings/${company.slug}`}>
             <Button>Back to Listing</Button>
@@ -107,7 +106,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4 max-w-3xl">
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       {/* Back Button */}
       <Link href={`/listings/${company.slug}`}>
         <Button variant="outline" size="sm" className="mb-6">
@@ -128,7 +127,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
           </div>
         )}
         <div>
-          <h1 className="text-3xl font-bold">{company.name}</h1>
+          <h1 className="font-display text-4xl font-extrabold uppercase text-arena-navy">Claim {company.name}</h1>
           <p className="text-gray-600">
             {[company.city, company.state_province].filter(Boolean).join(', ')}
           </p>
@@ -137,21 +136,18 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
 
       {/* Claim Form */}
       <ClaimForm
-        advisorId={company.id}
-        advisorName={company.name}
-        advisorSlug={company.slug}
+        companyId={company.id}
+        companyName={company.name}
+        companySlug={company.slug}
       />
 
       {/* Benefits Section */}
       <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-        <h3 className="font-semibold mb-3">Benefits of Claiming Your Listing</h3>
+        <h3 className="font-semibold mb-3">What an approved claim establishes</h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li>✓ Respond to and manage reviews</li>
-          <li>✓ Update your business information</li>
-          <li>✓ View and respond to leads from interested families</li>
-          <li>✓ Track profile views and engagement</li>
-          <li>✓ Add photos and showcase your services</li>
-          <li>✓ Gain verified business status</li>
+          <li>✓ Connects an authenticated account to the company listing</li>
+          <li>✓ Marks the listing as claimed by the business</li>
+          <li>✓ Creates the secure ownership basis for future profile-management features</li>
         </ul>
       </div>
     </div>

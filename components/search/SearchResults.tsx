@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { AdvisorCard } from '@/components/listing/AdvisorCard'
 import { Pagination } from '@/components/search/Pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FaSearch, FaTimes } from 'react-icons/fa'
+import { Grid2X2, Map } from 'lucide-react'
+import { DirectoryMap } from '@/components/search/DirectoryMap'
 
 interface Advisor {
   id: string
@@ -19,6 +22,15 @@ interface Advisor {
   verified: boolean
   logo_url: string | null
   website_url?: string | null
+  specialties?: string[]
+  services?: string[]
+  pathways?: string[]
+  offers_remote?: boolean
+  accepting_clients?: boolean | null
+  tagline?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  distance?: number | null
 }
 
 interface PaginationInfo {
@@ -37,6 +49,13 @@ interface SearchResultsProps {
     lng?: string
     radius?: string
     specialty?: string
+    service?: string
+    pathway?: string
+    level?: string
+    language?: string
+    pricing?: string
+    remote?: string
+    accepting?: string
     minRating?: string
     country?: string
     state?: string
@@ -46,6 +65,7 @@ interface SearchResultsProps {
     featured?: string
     priceRange?: string
     pricingStructure?: string
+    verified?: string
   }
 }
 
@@ -56,6 +76,7 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState(searchParams.search || '')
+  const [view, setView] = useState<'grid' | 'map'>('grid')
 
   useEffect(() => {
     const fetchAdvisors = async () => {
@@ -70,6 +91,18 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
         if (searchParams.sort) params.set('sort', searchParams.sort)
         if (searchParams.page) params.set('page', searchParams.page)
         if (searchParams.search) params.set('search', searchParams.search)
+        if (searchParams.lat) params.set('lat', searchParams.lat)
+        if (searchParams.lng) params.set('lng', searchParams.lng)
+        if (searchParams.radius) params.set('radius', searchParams.radius)
+        if (searchParams.specialty) params.set('specialty', searchParams.specialty)
+        if (searchParams.service) params.set('service', searchParams.service)
+        if (searchParams.pathway) params.set('pathway', searchParams.pathway)
+        if (searchParams.level) params.set('level', searchParams.level)
+        if (searchParams.language) params.set('language', searchParams.language)
+        if (searchParams.pricing) params.set('pricing', searchParams.pricing)
+        if (searchParams.remote) params.set('remote', searchParams.remote)
+        if (searchParams.accepting) params.set('accepting', searchParams.accepting)
+        if (searchParams.verified) params.set('verified', searchParams.verified)
 
         const response = await fetch(`/api/advisors?${params.toString()}`)
 
@@ -116,7 +149,14 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
 
   const removeFilter = (filterKey: string) => {
     const params = new URLSearchParams(window.location.search)
-    params.delete(filterKey)
+    if (filterKey === 'radius') {
+      params.delete('radius')
+      params.delete('lat')
+      params.delete('lng')
+      params.delete('location')
+    } else {
+      params.delete(filterKey)
+    }
     params.set('page', '1')
     router.push(`/listings?${params.toString()}`)
   }
@@ -131,6 +171,26 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
     if (searchParams.country) {
       const countryLabel = searchParams.country === 'US' ? 'United States' : 'Canada'
       filters.push({ key: 'country', label: countryLabel })
+    }
+
+    if (searchParams.specialty) {
+      filters.push({ key: 'specialty', label: searchParams.specialty })
+    }
+
+    if (searchParams.service) filters.push({ key: 'service', label: searchParams.service })
+    if (searchParams.pathway) filters.push({ key: 'pathway', label: searchParams.pathway })
+    if (searchParams.level) filters.push({ key: 'level', label: searchParams.level })
+    if (searchParams.language) filters.push({ key: 'language', label: searchParams.language })
+    if (searchParams.pricing) filters.push({ key: 'pricing', label: searchParams.pricing })
+    if (searchParams.remote === 'true') filters.push({ key: 'remote', label: 'Remote service available' })
+    if (searchParams.accepting === 'true') filters.push({ key: 'accepting', label: 'Accepting new clients' })
+
+    if (searchParams.verified === 'true') {
+      filters.push({ key: 'verified', label: 'Business connection verified' })
+    }
+
+    if (searchParams.lat && searchParams.lng) {
+      filters.push({ key: 'radius', label: `Within ${searchParams.radius || '100'} miles` })
     }
 
     return filters
@@ -206,7 +266,7 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
       )}
 
       {/* Results Header */}
-      <div className="mb-6">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-gray-600">
           {pagination && (
             <>
@@ -215,6 +275,7 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
             </>
           )}
         </p>
+        <div className="flex rounded-lg border border-frost bg-white p-1" aria-label="Results view"><button type="button" onClick={() => setView('grid')} aria-pressed={view === 'grid'} className={`flex min-h-10 items-center gap-2 rounded-md px-3 text-sm font-bold ${view === 'grid' ? 'bg-ice-blue text-hockey-blue' : 'text-neutral-gray'}`}><Grid2X2 className="h-4 w-4" />Grid</button><button type="button" onClick={() => setView('map')} aria-pressed={view === 'map'} className={`flex min-h-10 items-center gap-2 rounded-md px-3 text-sm font-bold ${view === 'map' ? 'bg-ice-blue text-hockey-blue' : 'text-neutral-gray'}`}><Map className="h-4 w-4" />Map</button></div>
       </div>
 
       {/* Empty State */}
@@ -226,23 +287,27 @@ export function SearchResults({ searchParams }: SearchResultsProps) {
           <p className="text-gray-600 mb-6">
             Try adjusting your search filters or expanding your search radius
           </p>
-          <a
+          <Link
             href="/listings"
             className="inline-block px-6 py-3 bg-hockey-blue text-white rounded-lg hover:bg-blue-800"
           >
             View All Advisors
-          </a>
+          </Link>
         </div>
       )}
 
       {/* Results Grid */}
-      {advisors.length > 0 && (
+      {advisors.length > 0 && view === 'map' && <DirectoryMap advisors={advisors} />}
+
+      {advisors.length > 0 && view === 'grid' && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {advisors.map((advisor) => (
               <AdvisorCard
                 key={advisor.id}
                 advisor={advisor}
+                showDistance={typeof advisor.distance === 'number'}
+                distance={advisor.distance ?? undefined}
               />
             ))}
           </div>

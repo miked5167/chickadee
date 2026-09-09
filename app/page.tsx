@@ -1,211 +1,205 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import {
+  ArrowRight,
+  BadgeCheck,
+  BookOpenCheck,
+  Building2,
+  ClipboardCheck,
+  MapPinned,
+  Search,
+  ShieldCheck,
+  Users,
+} from 'lucide-react'
 import { SearchBar } from '@/components/search/SearchBar'
 import { FeaturedListings } from '@/components/listing/FeaturedListings'
-import { FaCheckCircle, FaUsers, FaHockeyPuck, FaGlobeAmericas, FaRoute, FaSchool, FaGraduationCap } from 'react-icons/fa'
 
 export const metadata: Metadata = {
-  title: 'The Hockey Directory - Find Top Hockey Advisors Near You',
+  title: 'Find Hockey Advisors in Canada and the United States',
   description:
-    'Connect with 200+ hockey advisors and agencies across North America. Get expert guidance for AAA team placement, prep school selection, college recruiting, and elite player development.',
+    'Research more than 200 hockey advisors and agencies. Search by name or location, review company details, and contact advisors directly.',
+  alternates: { canonical: '/' },
 }
 
-export default function HomePage() {
-  // Structured data for SEO
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'The Hockey Directory',
-    url: 'https://thehockeydirectory.com',
-    description: 'Find and connect with hockey advisors across North America',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://thehockeydirectory.com/listings?location={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
-    },
-  }
+const directoryFacts = [
+  { value: '202', label: 'company listings', icon: Building2 },
+  { value: '177', label: 'advisor profiles', icon: Users },
+  { value: '2', label: 'countries covered', icon: MapPinned },
+  { value: 'Free', label: 'for hockey families', icon: ShieldCheck },
+]
 
-  const organizationData = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'The Hockey Directory',
-    url: 'https://thehockeydirectory.com',
-    logo: 'https://thehockeydirectory.com/logo.png',
-    description: 'North America\'s trusted directory of hockey advisors and development professionals',
-  }
+const reasons = [
+  {
+    title: 'Understand the pathways',
+    copy: 'Compare advice around AAA, academy, junior, prep school, NCAA, U SPORTS, and professional routes before a decision closes future options.',
+    icon: MapPinned,
+  },
+  {
+    title: 'Check the fit',
+    copy: 'Look at an advisor’s location, team, experience, specialties, and contact details before you invest time in a first conversation.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Ask better questions',
+    copy: 'Use the directory and hockey glossary to understand the language, costs, expectations, and tradeoffs behind each recommendation.',
+    icon: BookOpenCheck,
+  },
+]
+
+export default function HomePage() {
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'The Hockey Directory',
+      url: 'https://thehockeydirectory.com',
+      description: 'An independent directory of hockey advisors across Canada and the United States.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: 'https://thehockeydirectory.com/listings?search={search_term_string}',
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'The Hockey Directory',
+      url: 'https://thehockeydirectory.com',
+      logo: 'https://thehockeydirectory.com/hockey-directory-logo-v7.png',
+      description: 'An independent directory helping hockey families research advisors and player pathways.',
+    },
+  ]
 
   return (
     <>
-      {/* Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
-      />
-
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-hockey-blue to-blue-900 text-white py-20 md:py-32">
-        {/* Background Pattern */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
+      {structuredData.map((item) => (
+        <script
+          key={item['@type']}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
         />
+      ))}
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              Find the Right
-              <br />
-              <span className="text-goal-gold">Hockey Advisor</span>
+      <section className="relative isolate min-h-[660px] overflow-hidden bg-arena-navy text-white lg:min-h-[720px]">
+        <Image
+          src="/hockey-directory-hero-v1.png"
+          alt="A hockey family and advisor discussing player pathways beside the rink"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[68%_center]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,27,51,0.98)_0%,rgba(8,27,51,0.93)_35%,rgba(8,27,51,0.48)_68%,rgba(8,27,51,0.12)_100%)]" />
+        <div className="rink-grid absolute inset-0 opacity-50" />
+        <div className="absolute inset-x-0 bottom-0 h-1 bg-red-line" />
+
+        <div className="relative mx-auto flex min-h-[660px] max-w-7xl flex-col justify-center px-4 pb-12 pt-16 sm:px-6 lg:min-h-[720px] lg:px-8">
+          <div className="max-w-3xl">
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ice-blue backdrop-blur-sm">
+              <BadgeCheck className="h-4 w-4 text-goal-gold" />
+              Independent hockey advisor directory
+            </p>
+            <h1 className="font-display max-w-3xl text-5xl font-extrabold uppercase leading-[0.92] tracking-[-0.025em] text-white sm:text-6xl lg:text-8xl">
+              Find the right voice for your player’s{' '}
+              <span className="text-goal-gold">next move.</span>
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Connect with advisors who help navigate your player's hockey journey and find the right opportunities at every level
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-ice-blue sm:text-xl">
+              Research hockey advisors and agencies across Canada and the United States. Start with the facts, build a shortlist, and make a more informed first call.
             </p>
           </div>
 
-          {/* Search Bar */}
-          <SearchBar />
-        </div>
-      </section>
-
-      {/* Trust Indicators */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="flex flex-col items-center">
-              <FaUsers className="text-4xl text-hockey-blue mb-2" />
-              <p className="text-2xl font-bold text-gray-800">200+</p>
-              <p className="text-sm text-gray-600">Advisors & Agencies Listed</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaHockeyPuck className="text-4xl text-hockey-blue mb-2" />
-              <p className="text-2xl font-bold text-gray-800">8,800+</p>
-              <p className="text-sm text-gray-600">Players Represented</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaGlobeAmericas className="text-4xl text-goal-gold mb-2" />
-              <p className="text-2xl font-bold text-gray-800">US & Canada</p>
-              <p className="text-sm text-gray-600">Coast-to-Coast Coverage</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaCheckCircle className="text-4xl text-green-600 mb-2" />
-              <p className="text-2xl font-bold text-gray-800">Free</p>
-              <p className="text-sm text-gray-600">For Families, Always</p>
-            </div>
+          <div className="mt-9 max-w-5xl rounded-xl border border-white/20 bg-arena-navy/80 p-3 shadow-2xl shadow-black/30 backdrop-blur-md sm:p-4">
+            <SearchBar />
           </div>
         </div>
       </section>
 
-      {/* Featured Listings */}
+      <section aria-label="Directory facts" className="border-b border-frost bg-white">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-frost px-4 sm:px-6 md:grid-cols-4 md:divide-y-0 lg:px-8">
+          {directoryFacts.map(({ value, label, icon: Icon }) => (
+            <div key={label} className="flex min-h-28 items-center gap-3 px-3 py-6 sm:px-6">
+              <Icon className="h-6 w-6 shrink-0 text-hockey-blue" aria-hidden="true" />
+              <div>
+                <p className="font-display text-3xl font-extrabold uppercase leading-none text-arena-navy">{value}</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-neutral-gray">{label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <FeaturedListings />
 
-      {/* Why Work With an Advisor Section */}
-      <section className="py-16 bg-ice-blue">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">Why Hockey Families Work With an Advisor</h2>
-            <p className="text-gray-600">
-              The road through competitive hockey is full of high-stakes decisions. The right advisor has seen them all before.
+      <section className="bg-ice-blue py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-red-line">The decision room</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase leading-none text-arena-navy sm:text-6xl">
+              Better information before the next hockey decision.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-neutral-gray">
+              An advisor can help, but the relationship still needs to fit your player, family, goals, and budget. The directory gives you a consistent place to begin that research.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Card 1 */}
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <FaRoute className="text-hockey-blue text-4xl mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Navigating the Pathways</h3>
-              <p className="text-gray-700">
-                AAA or academy? Major junior or the college route? One decision at 15 can close doors at 18. Advisors know how the OHL, USHL, BCHL, and NCAA pathways actually work — and what each choice means for your player's future.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <FaSchool className="text-hockey-blue text-4xl mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Choosing Schools & Programs</h3>
-              <p className="text-gray-700">
-                Prep schools and academies vary wildly in cost, coaching, and real exposure. An advisor who knows the programs firsthand can tell you which ones develop players — and which ones just develop invoices.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <FaGraduationCap className="text-hockey-blue text-4xl mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Getting Recruited</h3>
-              <p className="text-gray-700">
-                College coaches see thousands of players. Advisors help families build realistic plans, protect eligibility, and get film in front of the right people at the right time — without the guesswork.
-              </p>
-            </div>
+          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+            {reasons.map(({ title, copy, icon: Icon }) => (
+              <article key={title} className="red-line-rule rounded-r-xl border border-frost bg-white p-7 pl-8 shadow-sm">
+                <Icon className="h-8 w-8 text-hockey-blue" aria-hidden="true" />
+                <h3 className="mt-5 font-display text-2xl font-bold uppercase text-arena-navy">{title}</h3>
+                <p className="mt-3 leading-7 text-neutral-gray">{copy}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">How It Works</h2>
-            <p className="text-gray-600">Finding the right hockey advisor is easy</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-hockey-blue text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Search</h3>
-              <p className="text-gray-600">
-                Enter your location to find hockey advisors near you. Filter by specialty, rating,
-                and more.
-              </p>
+      <section id="how-it-works" className="bg-white py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div className="lg:sticky lg:top-32">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-red-line">How it works</p>
+              <h2 className="mt-3 font-display text-4xl font-extrabold uppercase leading-none text-arena-navy sm:text-6xl">
+                From search to first conversation.
+              </h2>
+              <Link href="/listings" className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-md bg-hockey-blue px-6 py-3 font-bold text-white transition-colors hover:bg-board-blue">
+                Search the directory <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-hockey-blue text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Compare</h3>
-              <p className="text-gray-600">
-                Check specialties, experience, and credentials side by side to find the right match for your player.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-hockey-blue text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Connect</h3>
-              <p className="text-gray-600">
-                Contact advisors directly through phone, email, or website to start your hockey
-                journey.
-              </p>
-            </div>
+            <ol className="space-y-4">
+              {[
+                ['Search', 'Start with a company name, city, state, or province. Use filters to narrow the directory.'],
+                ['Research', 'Read the listing details, look at the people behind the company, and check what information has been verified.'],
+                ['Connect', 'Contact the advisor directly and ask specific questions about fit, fees, conflicts, communication, and expectations.'],
+              ].map(([title, copy], index) => (
+                <li key={title} className="grid grid-cols-[3.5rem_1fr] gap-5 rounded-xl border border-frost bg-ice-white p-6 sm:grid-cols-[5rem_1fr] sm:p-8">
+                  <span className="font-display text-4xl font-extrabold text-slate-500 sm:text-6xl" aria-hidden="true">0{index + 1}</span>
+                  <div>
+                    <h3 className="font-display text-3xl font-bold uppercase text-arena-navy">{title}</h3>
+                    <p className="mt-2 leading-7 text-neutral-gray">{copy}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-hockey-blue to-blue-900 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Are You a Hockey Advisor?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join our directory and connect with players and families looking for expert guidance
-          </p>
-          <a
-            href="/claim"
-            className="inline-block px-8 py-4 bg-goal-gold text-gray-900 font-semibold rounded-lg hover:bg-yellow-400 transition-colors"
-          >
-            Claim Your Free Listing
-          </a>
+      <section className="rink-grid border-y border-white/10 bg-arena-navy py-16 text-white sm:py-20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-goal-gold">For hockey advisors</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase leading-none sm:text-5xl">Your company may already be listed.</h2>
+            <p className="mt-4 text-lg leading-8 text-frost">Find your profile, confirm the details, and begin the listing claim process.</p>
+          </div>
+          <Link href="/listings" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-md bg-goal-gold px-7 py-3 font-extrabold text-arena-navy transition-colors hover:bg-white">
+            Find your company <Search className="h-4 w-4" />
+          </Link>
         </div>
       </section>
     </>

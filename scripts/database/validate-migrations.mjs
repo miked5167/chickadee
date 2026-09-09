@@ -25,10 +25,19 @@ const m3Filename = '20260719000002_administrator_authorization_foundation.sql'
 const m3Path = path.join(activeDirectory, m3Filename)
 const m4Filename = '20260719000003_company_reviews.sql'
 const m4Path = path.join(activeDirectory, m4Filename)
+const m5Filename = '20260821000000_company_profiles.sql'
+const m5Path = path.join(activeDirectory, m5Filename)
+const m6Filename = '20260821000001_company_leads_and_events.sql'
+const m6Path = path.join(activeDirectory, m6Filename)
+const m7Filename = '20260821000002_advisor_interest_submissions.sql'
+const m7Path = path.join(activeDirectory, m7Filename)
 const adoptedBaselineSha256 = '4b65fa234b56534985f249cc8061efd98b05ba927c5de130839b8fd35c1d1db8'
 const reviewedM2Sha256 = '95fb374bb07c5a4941b3dd78e6a6db9bf5b4b456c15670fb3ac9805e3a81b547'
 const reviewedM3Sha256 = 'a968f41fb10e6ecbe1ff8363abe0322031defd6aa361ce3c98498603ade55f6d'
 const reviewedM4Sha256 = '05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'
+const reviewedM5Sha256 = '854df7aab36a71b229b92525194972144fa118e4dd537d7cb81ed26eb8de49cc'
+const reviewedM6Sha256 = '6eb36ca91d99dba5ee605a101cc48329c1d586ff0b2e0f14f864971e289673e9'
+const reviewedM7Sha256 = 'dd3633aa14ba58d2340c5e1512cf20353006ac1b98e3d4f75431d4322409234e'
 
 const legacyHashes = new Map([
   ['20250104000000_claim_improvements.sql', 'd75ccbad41a3dd118fdcd796a9ee73820b8a4a5d63471e1acaf763c5f5be601d'],
@@ -126,6 +135,76 @@ const expectedM4 = {
   trigger: 'reviews.update_reviews_updated_at',
 }
 
+const expectedM5 = {
+  table: ['company_id', 'tagline', 'services', 'specialties', 'pathways', 'player_levels', 'age_groups', 'service_areas', 'languages', 'offers_remote', 'accepting_clients', 'pricing_models', 'price_min', 'price_max', 'price_currency', 'response_time', 'founded_year', 'business_hours', 'faq', 'last_reviewed_at', 'source_label', 'source_url', 'created_at', 'updated_at'],
+  constraints: [
+    'company_profiles.company_profiles_business_hours_check',
+    'company_profiles.company_profiles_company_id_fkey',
+    'company_profiles.company_profiles_currency_check',
+    'company_profiles.company_profiles_faq_check',
+    'company_profiles.company_profiles_founded_year_check',
+    'company_profiles.company_profiles_pkey',
+    'company_profiles.company_profiles_price_max_check',
+    'company_profiles.company_profiles_price_min_check',
+    'company_profiles.company_profiles_price_order_check',
+    'company_profiles.company_profiles_tagline_check',
+  ],
+  indexes: [
+    'company_profiles.company_profiles_accepting_idx',
+    'company_profiles.company_profiles_pathways_idx',
+    'company_profiles.company_profiles_pkey',
+    'company_profiles.company_profiles_services_idx',
+    'company_profiles.company_profiles_specialties_idx',
+  ],
+  policies: [
+    'company_profiles.Company owners can create profiles',
+    'company_profiles.Company owners can delete profiles',
+    'company_profiles.Company owners can update profiles',
+    'company_profiles.Company profiles are public',
+  ],
+  trigger: 'company_profiles.update_company_profiles_updated_at',
+}
+
+const expectedM6 = {
+  tables: {
+    company_leads: ['id', 'company_id', 'contact_name', 'contact_email', 'contact_phone', 'player_age', 'player_level', 'goals', 'message', 'consent_confirmed', 'status', 'owner_notes', 'referral_url', 'ip_hash', 'user_agent', 'created_at', 'updated_at'],
+    directory_events: ['id', 'company_id', 'event_type', 'session_id', 'ip_hash', 'user_agent', 'referrer', 'metadata', 'created_at'],
+  },
+  constraints: [
+    'company_leads.company_leads_age_check', 'company_leads.company_leads_company_id_fkey', 'company_leads.company_leads_consent_check', 'company_leads.company_leads_email_check', 'company_leads.company_leads_ip_hash_check', 'company_leads.company_leads_message_check', 'company_leads.company_leads_notes_check', 'company_leads.company_leads_pkey', 'company_leads.company_leads_status_check',
+    'directory_events.directory_events_company_id_fkey', 'directory_events.directory_events_ip_hash_check', 'directory_events.directory_events_metadata_check', 'directory_events.directory_events_pkey', 'directory_events.directory_events_type_check',
+  ],
+  indexes: [
+    'company_leads.company_leads_company_created_idx', 'company_leads.company_leads_company_status_idx', 'company_leads.company_leads_pkey', 'company_leads.company_leads_rate_limit_idx',
+    'directory_events.directory_events_company_created_idx', 'directory_events.directory_events_company_type_idx', 'directory_events.directory_events_pkey', 'directory_events.directory_events_rate_limit_idx',
+  ],
+  policies: [
+    'company_leads.Company owners can read own leads',
+    'company_leads.Company owners can update own lead status',
+    'directory_events.Company owners can read own directory events',
+  ],
+  trigger: 'company_leads.update_company_leads_updated_at',
+}
+
+const expectedM7 = {
+  table: ['id', 'contact_name', 'business_name', 'email', 'website_url', 'interests', 'message', 'consent_confirmed', 'ip_hash', 'user_agent', 'created_at'],
+  constraints: [
+    'advisor_interest_submissions.advisor_interest_submissions_business_name_check',
+    'advisor_interest_submissions.advisor_interest_submissions_consent_check',
+    'advisor_interest_submissions.advisor_interest_submissions_contact_name_check',
+    'advisor_interest_submissions.advisor_interest_submissions_email_check',
+    'advisor_interest_submissions.advisor_interest_submissions_interests_check',
+    'advisor_interest_submissions.advisor_interest_submissions_ip_hash_check',
+    'advisor_interest_submissions.advisor_interest_submissions_message_check',
+    'advisor_interest_submissions.advisor_interest_submissions_pkey',
+  ],
+  indexes: [
+    'advisor_interest_submissions.advisor_interest_submissions_created_idx',
+    'advisor_interest_submissions.advisor_interest_submissions_pkey',
+    'advisor_interest_submissions.advisor_interest_submissions_rate_limit_idx',
+  ],
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
@@ -157,13 +236,16 @@ export function validateActiveFileNames(activeFiles) {
   for (let index = 1; index < ordered.length; index += 1) assert(ordered[index] > ordered[index - 1], 'Active migration versions are not strictly ordered')
 }
 
-export function validateRegister(fingerprint, { currentTarget = false, includesM3 = false, includesM4 = false } = {}) {
+export function validateRegister(fingerprint, { currentTarget = false, includesM3 = false, includesM4 = false, includesM5 = false, includesM6 = false, includesM7 = false } = {}) {
   equalList(fingerprint.extensions.map((item) => `${item.schema}.${item.name}`), expected.extensions, 'Extension')
   equalList(fingerprint.enums.map((item) => item.name), expected.enums, 'Enum')
   const expectedTables = {
     ...(includesM3 ? { admin_users: expectedM3.table } : {}),
     ...expected.tables,
     ...(includesM4 ? { reviews: expectedM4.table } : {}),
+    ...(includesM5 ? { company_profiles: expectedM5.table } : {}),
+    ...(includesM6 ? expectedM6.tables : {}),
+    ...(includesM7 ? { advisor_interest_submissions: expectedM7.table } : {}),
   }
   equalList(fingerprint.tables.map((item) => item.name), Object.keys(expectedTables), 'Table')
   for (const table of fingerprint.tables) {
@@ -171,9 +253,9 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
     assert(table.owner === 'postgres', `Table owner differs for ${table.name}`)
   }
   assert(fingerprint.enums.every((item) => item.owner === 'postgres'), 'Enum ownership differs from production')
-  const expectedConstraints = [...expected.constraints, ...(includesM3 ? expectedM3.constraints : []), ...(includesM4 ? expectedM4.constraints : [])]
-  const expectedIndexes = [...expected.indexes, ...(includesM3 ? expectedM3.indexes : []), ...(includesM4 ? expectedM4.indexes : [])]
-  const expectedPolicies = [...expected.policies, ...(includesM3 ? expectedM3.policies : []), ...(includesM4 ? expectedM4.policies : [])]
+  const expectedConstraints = [...expected.constraints, ...(includesM3 ? expectedM3.constraints : []), ...(includesM4 ? expectedM4.constraints : []), ...(includesM5 ? expectedM5.constraints : []), ...(includesM6 ? expectedM6.constraints : []), ...(includesM7 ? expectedM7.constraints : [])]
+  const expectedIndexes = [...expected.indexes, ...(includesM3 ? expectedM3.indexes : []), ...(includesM4 ? expectedM4.indexes : []), ...(includesM5 ? expectedM5.indexes : []), ...(includesM6 ? expectedM6.indexes : []), ...(includesM7 ? expectedM7.indexes : [])]
+  const expectedPolicies = [...expected.policies, ...(includesM3 ? expectedM3.policies : []), ...(includesM4 ? expectedM4.policies : []), ...(includesM5 ? expectedM5.policies : []), ...(includesM6 ? expectedM6.policies : [])]
   equalList(fingerprint.constraints.map((item) => `${item.table}.${item.name}`), expectedConstraints, 'Constraint')
   equalList(fingerprint.indexes.map((item) => `${item.table}.${item.name}`), expectedIndexes, 'Index')
   equalList(fingerprint.policies.map((item) => `${item.table}.${item.name}`), expectedPolicies, 'Policy')
@@ -182,8 +264,10 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
     : expected.triggers
   if (includesM3) expectedTriggers.push(expectedM3.trigger)
   if (includesM4) expectedTriggers.push(expectedM4.trigger)
+  if (includesM5) expectedTriggers.push(expectedM5.trigger)
+  if (includesM6) expectedTriggers.push(expectedM6.trigger)
   equalList(fingerprint.triggers.map((item) => `${item.table}.${item.name}`), expectedTriggers, 'Trigger')
-  assert(fingerprint.rowLevelSecurity.length === 5 + (includesM3 ? 1 : 0) + (includesM4 ? 1 : 0) && fingerprint.rowLevelSecurity.every((item) => item.enabled && !item.forced), 'RLS enabled/forced state differs from production')
+  assert(fingerprint.rowLevelSecurity.length === 5 + (includesM3 ? 1 : 0) + (includesM4 ? 1 : 0) + (includesM5 ? 1 : 0) + (includesM6 ? 2 : 0) + (includesM7 ? 1 : 0) && fingerprint.rowLevelSecurity.every((item) => item.enabled && !item.forced), 'RLS enabled/forced state differs from production')
   const timestampFunction = fingerprint.functions.find((item) => item.name === 'update_updated_at_column')
   assert(timestampFunction?.owner === 'postgres' && !timestampFunction.securityDefiner && timestampFunction.volatility === 'volatile', 'Timestamp function register differs from production')
   if (includesM3) {
@@ -218,6 +302,18 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
     'table.reviews.authenticated.DELETE, INSERT(company_id), INSERT(experience_confirmed_at), INSERT(rating), INSERT(review_text), INSERT(reviewer_user_id), INSERT(title), SELECT(company_id), SELECT(created_at), SELECT(experience_confirmed_at), SELECT(id), SELECT(rating), SELECT(review_text), SELECT(title), SELECT(updated_at), UPDATE(experience_confirmed_at), UPDATE(rating), UPDATE(review_text), UPDATE(title)',
     'table.reviews.service_role.ALL',
   )
+  if (includesM5) expectedGrants.push(
+    'table.company_profiles.anon.SELECT',
+    'table.company_profiles.authenticated.DELETE, INSERT, SELECT, UPDATE',
+    'table.company_profiles.service_role.ALL',
+  )
+  if (includesM6) expectedGrants.push(
+    'table.company_leads.authenticated.SELECT, UPDATE(owner_notes), UPDATE(status)',
+    'table.company_leads.service_role.ALL',
+    'table.directory_events.authenticated.SELECT',
+    'table.directory_events.service_role.ALL',
+  )
+  if (includesM7) expectedGrants.push('table.advisor_interest_submissions.service_role.ALL')
   equalList(fingerprint.grants.map((item) => `${item.kind}.${item.name}.${item.grantee}.${item.privileges}`), expectedGrants, 'Grant')
   assert(fingerprint.source.containsData === false, 'Fingerprint must be definitions-only')
 }
@@ -441,6 +537,215 @@ export function validateM4SqlSafety(sql) {
   assert((sql.match(/\bCREATE\s+FUNCTION\b/gi) ?? []).length === 0, 'M4 must not add a privileged function')
 }
 
+export function validateM5SqlSafety(sql) {
+  const statements = splitStatements(sql)
+  assert(statements.length === 23, 'M5 statement register differs from the reviewed company-profile scope')
+  assert(normalizeSql(statements[0]) === "SET lock_timeout = '5s'", 'M5 lock timeout differs from the reviewed value')
+  assert(normalizeSql(statements[1]) === "SET statement_timeout = '30s'", 'M5 statement timeout differs from the reviewed value')
+  assert(/^DO \$guard\$/i.test(normalizeSql(statements[2])), 'M5 prerequisite guard is missing or misplaced')
+  assert(/^CREATE TABLE public\.company_profiles\b/i.test(normalizeSql(statements[3])), 'M5 must create only public.company_profiles')
+  assert(normalizeSql(statements[8]) === 'ALTER TABLE public.company_profiles ENABLE ROW LEVEL SECURITY', 'M5 must enable RLS immediately on company_profiles')
+  assert(normalizeSql(statements[13]) === 'CREATE TRIGGER update_company_profiles_updated_at BEFORE UPDATE ON public.company_profiles FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()', 'M5 timestamp trigger differs from the reviewed contract')
+  assert(normalizeSql(statements[21]) === 'RESET statement_timeout', 'M5 must reset statement_timeout')
+  assert(normalizeSql(statements[22]) === 'RESET lock_timeout', 'M5 must reset lock_timeout')
+
+  const guard = statements[2]
+  for (const evidence of [
+    "current_user <> 'postgres'",
+    "to_regclass('public.companies')",
+    "to_regclass('public.reviews')",
+    "to_regprocedure('public.update_updated_at_column()')",
+    "to_regprocedure('auth.uid()')",
+    "column_attribute.attname = 'verified_owner_id'",
+    "column_attribute.atttypid = 'pg_catalog.uuid'::pg_catalog.regtype",
+    "function_language.lanname = 'plpgsql'",
+    "function_proc.provolatile = 'v'",
+    'NOT function_proc.prosecdef',
+    "pg_catalog.pg_get_userbyid(function_proc.proowner) = 'postgres'",
+    "rolname IN ('anon', 'authenticated')",
+    "rolname = 'service_role'",
+    "has_schema_privilege('authenticated', 'public', 'CREATE')",
+    "to_regclass('public.company_profiles')",
+    "'Company owners can update profiles'",
+    "tgname = 'update_company_profiles_updated_at'",
+  ]) assert(guard.includes(evidence), `M5 guard omits required check: ${evidence}`)
+
+  const table = normalizeSql(statements[3])
+  for (const evidence of [
+    'company_id uuid NOT NULL',
+    'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE',
+    'CONSTRAINT company_profiles_pkey PRIMARY KEY (company_id)',
+    'CONSTRAINT company_profiles_tagline_check CHECK',
+    'CONSTRAINT company_profiles_price_order_check CHECK',
+    "CONSTRAINT company_profiles_business_hours_check CHECK ((jsonb_typeof(business_hours) = 'object'::text))",
+    "CONSTRAINT company_profiles_faq_check CHECK ((jsonb_typeof(faq) = 'array'::text))",
+  ]) assert(table.includes(normalizeSql(evidence)), `M5 company_profiles definition omits ${evidence}`)
+
+  const policies = statements.slice(9, 13).map(normalizeSql)
+  assert(policies[0] === 'CREATE POLICY "Company profiles are public" ON public.company_profiles FOR SELECT TO anon, authenticated USING (true)', 'M5 public read policy differs')
+  assert(policies[1].includes('FOR INSERT TO authenticated') && policies[1].includes('companies.verified_owner_id = auth.uid()'), 'M5 insert policy must be verified-owner scoped')
+  assert(policies[2].includes('FOR UPDATE TO authenticated') && policies[2].includes('companies.verified_owner_id = auth.uid()'), 'M5 update policy must be verified-owner scoped')
+  assert(policies[3].includes('FOR DELETE TO authenticated') && policies[3].includes('companies.verified_owner_id = auth.uid()'), 'M5 delete policy must be verified-owner scoped')
+  assert(policies.every((policy) => !/is_admin|service_role|email/i.test(policy)), 'M5 must not add an administrator or email-based mutation path')
+
+  const normalizedStatements = statements.map(normalizeSql)
+  for (const privilege of [
+    'REVOKE ALL ON TABLE public.company_profiles FROM PUBLIC',
+    'REVOKE ALL ON TABLE public.company_profiles FROM anon',
+    'REVOKE ALL ON TABLE public.company_profiles FROM authenticated',
+    'GRANT SELECT ON TABLE public.company_profiles TO anon',
+    'GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.company_profiles TO authenticated',
+    'GRANT ALL ON TABLE public.company_profiles TO service_role',
+  ]) assert(normalizedStatements.includes(privilege), `M5 privilege register omits: ${privilege}`)
+
+  const prohibited = [
+    /^\s*(?:INSERT\s+INTO|UPDATE\s+[a-z".]|DELETE\s+FROM|COPY\s+)/im,
+    /\b(?:DROP|TRUNCATE)\b/i,
+    /\bCREATE\s+(?:SCHEMA|EXTENSION|TYPE|FUNCTION|VIEW|MATERIALIZED)\b/i,
+    /\bCREATE\s+TABLE\s+(?!public\.company_profiles\b)/i,
+    /\b(?:advisor_id|is_admin|admin_users)\b/i,
+    /\bsupabase_migrations\b/i,
+  ]
+  for (const pattern of prohibited) assert(!pattern.test(sql), `M5 contains prohibited scope: ${pattern}`)
+  assert((sql.match(/\bCREATE\s+TABLE\b/gi) ?? []).length === 1, 'M5 must create exactly one table')
+  assert((sql.match(/\bCREATE\s+POLICY\b/gi) ?? []).length === 4, 'M5 must create exactly four public/owner policies')
+  assert((sql.match(/\bCREATE\s+FUNCTION\b/gi) ?? []).length === 0, 'M5 must not add a privileged function')
+}
+
+export function validateM6SqlSafety(sql) {
+  const statements = splitStatements(sql)
+  assert(statements.length === 32, 'M6 statement register differs from the reviewed lead/event scope')
+  assert(normalizeSql(statements[0]) === "SET lock_timeout = '5s'", 'M6 lock timeout differs from the reviewed value')
+  assert(normalizeSql(statements[1]) === "SET statement_timeout = '30s'", 'M6 statement timeout differs from the reviewed value')
+  assert(/^DO \$guard\$/i.test(normalizeSql(statements[2])), 'M6 prerequisite guard is missing or misplaced')
+  assert(/^CREATE TABLE public\.company_leads\b/i.test(normalizeSql(statements[3])), 'M6 must create public.company_leads first')
+  assert(normalizeSql(statements[7]) === 'ALTER TABLE public.company_leads ENABLE ROW LEVEL SECURITY', 'M6 must enable RLS immediately on company_leads')
+  assert(normalizeSql(statements[10]) === 'CREATE TRIGGER update_company_leads_updated_at BEFORE UPDATE ON public.company_leads FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()', 'M6 lead timestamp trigger differs')
+  assert(/^CREATE TABLE public\.directory_events\b/i.test(normalizeSql(statements[11])), 'M6 must create public.directory_events second')
+  assert(normalizeSql(statements[15]) === 'ALTER TABLE public.directory_events ENABLE ROW LEVEL SECURITY', 'M6 must enable RLS immediately on directory_events')
+  assert(normalizeSql(statements[30]) === 'RESET statement_timeout' && normalizeSql(statements[31]) === 'RESET lock_timeout', 'M6 must reset both timeouts')
+
+  const guard = statements[2]
+  for (const evidence of [
+    "current_user <> 'postgres'",
+    "to_regclass('public.companies')",
+    "to_regclass('public.company_profiles')",
+    "to_regprocedure('public.update_updated_at_column()')",
+    "to_regprocedure('auth.uid()')",
+    "rolname = 'authenticated'",
+    "rolname = 'service_role'",
+    "has_schema_privilege('authenticated', 'public', 'CREATE')",
+    "to_regclass('public.company_leads')",
+    "to_regclass('public.directory_events')",
+    "tgname = 'update_company_leads_updated_at'",
+  ]) assert(guard.includes(evidence), `M6 guard omits required check: ${evidence}`)
+
+  const leadsTable = normalizeSql(statements[3])
+  for (const evidence of [
+    'company_id uuid NOT NULL',
+    'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT',
+    'CONSTRAINT company_leads_consent_check CHECK (consent_confirmed)',
+    'CONSTRAINT company_leads_message_check CHECK',
+    'CONSTRAINT company_leads_ip_hash_check CHECK',
+  ]) assert(leadsTable.includes(normalizeSql(evidence)), `M6 company_leads definition omits ${evidence}`)
+
+  const eventsTable = normalizeSql(statements[11])
+  for (const evidence of [
+    'company_id uuid NOT NULL',
+    'session_id uuid NOT NULL',
+    'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT',
+    'CONSTRAINT directory_events_type_check CHECK',
+    "CONSTRAINT directory_events_metadata_check CHECK ((jsonb_typeof(metadata) = 'object'::text))",
+  ]) assert(eventsTable.includes(normalizeSql(evidence)), `M6 directory_events definition omits ${evidence}`)
+
+  const policies = [statements[8], statements[9], statements[16]].map(normalizeSql)
+  assert(policies[0].includes('FOR SELECT TO authenticated') && policies[0].includes('companies.verified_owner_id = auth.uid()'), 'M6 lead read policy must be owner scoped')
+  assert(policies[1].includes('FOR UPDATE TO authenticated') && policies[1].includes('companies.verified_owner_id = auth.uid()'), 'M6 lead update policy must be owner scoped')
+  assert(policies[2].includes('FOR SELECT TO authenticated') && policies[2].includes('companies.verified_owner_id = auth.uid()'), 'M6 event read policy must be owner scoped')
+  assert(policies.every((policy) => !/is_admin|email|service_role/i.test(policy)), 'M6 must not add an administrator, email, or service-role policy path')
+
+  const normalizedStatements = statements.map(normalizeSql)
+  for (const privilege of [
+    'REVOKE ALL ON TABLE public.company_leads FROM PUBLIC',
+    'REVOKE ALL ON TABLE public.company_leads FROM anon',
+    'REVOKE ALL ON TABLE public.company_leads FROM authenticated',
+    'GRANT SELECT ON TABLE public.company_leads TO authenticated',
+    'GRANT UPDATE (status, owner_notes) ON TABLE public.company_leads TO authenticated',
+    'GRANT ALL ON TABLE public.company_leads TO service_role',
+    'REVOKE ALL ON TABLE public.directory_events FROM PUBLIC',
+    'REVOKE ALL ON TABLE public.directory_events FROM anon',
+    'REVOKE ALL ON TABLE public.directory_events FROM authenticated',
+    'GRANT SELECT ON TABLE public.directory_events TO authenticated',
+    'GRANT ALL ON TABLE public.directory_events TO service_role',
+  ]) assert(normalizedStatements.includes(privilege), `M6 privilege register omits: ${privilege}`)
+
+  const prohibited = [
+    /^\s*(?:INSERT\s+INTO|UPDATE\s+[a-z".]|DELETE\s+FROM|COPY\s+)/im,
+    /\b(?:DROP|TRUNCATE)\b/i,
+    /\bCREATE\s+(?:SCHEMA|EXTENSION|TYPE|FUNCTION|VIEW|MATERIALIZED)\b/i,
+    /\bCREATE\s+TABLE\s+(?!public\.(?:company_leads|directory_events)\b)/i,
+    /\b(?:advisor_id|is_admin|admin_users)\b/i,
+    /\bsupabase_migrations\b/i,
+  ]
+  for (const pattern of prohibited) assert(!pattern.test(sql), `M6 contains prohibited scope: ${pattern}`)
+  assert((sql.match(/\bCREATE\s+TABLE\b/gi) ?? []).length === 2, 'M6 must create exactly two tables')
+  assert((sql.match(/\bCREATE\s+POLICY\b/gi) ?? []).length === 3, 'M6 must create exactly three owner read/update policies')
+  assert((sql.match(/\bCREATE\s+FUNCTION\b/gi) ?? []).length === 0, 'M6 must not add a privileged function')
+}
+
+export function validateM7SqlSafety(sql) {
+  const statements = splitStatements(sql)
+  assert(statements.length === 14, 'M7 statement register differs from the reviewed advisor-interest scope')
+  assert(normalizeSql(statements[0]) === "SET lock_timeout = '5s'", 'M7 lock timeout differs from the reviewed value')
+  assert(normalizeSql(statements[1]) === "SET statement_timeout = '30s'", 'M7 statement timeout differs from the reviewed value')
+  assert(/^DO \$guard\$/i.test(normalizeSql(statements[2])), 'M7 prerequisite guard is missing or misplaced')
+  assert(/^CREATE TABLE public\.advisor_interest_submissions\b/i.test(normalizeSql(statements[3])), 'M7 must create only the private advisor-interest table')
+  assert(normalizeSql(statements[6]) === 'ALTER TABLE public.advisor_interest_submissions ENABLE ROW LEVEL SECURITY', 'M7 must enable RLS before privileges are assigned')
+  assert(normalizeSql(statements[12]) === 'RESET statement_timeout' && normalizeSql(statements[13]) === 'RESET lock_timeout', 'M7 must reset both timeouts')
+
+  const guard = statements[2]
+  for (const evidence of [
+    "current_user <> 'postgres'",
+    "to_regclass('public.companies')",
+    "to_regclass('public.company_leads')",
+    "to_regclass('public.directory_events')",
+    "rolname = 'authenticated'",
+    "rolname = 'service_role'",
+    "has_schema_privilege('authenticated', 'public', 'CREATE')",
+    "to_regclass('public.advisor_interest_submissions')",
+  ]) assert(guard.includes(evidence), `M7 guard omits required check: ${evidence}`)
+
+  const table = normalizeSql(statements[3])
+  for (const evidence of [
+    'contact_name character varying(100) NOT NULL',
+    'business_name character varying(150) NOT NULL',
+    'interests text[] NOT NULL',
+    'CONSTRAINT advisor_interest_submissions_interests_check CHECK',
+    'CONSTRAINT advisor_interest_submissions_consent_check CHECK (consent_confirmed)',
+    'CONSTRAINT advisor_interest_submissions_ip_hash_check CHECK',
+  ]) assert(table.includes(normalizeSql(evidence)), `M7 advisor-interest definition omits ${evidence}`)
+
+  const normalizedStatements = statements.map(normalizeSql)
+  for (const privilege of [
+    'REVOKE ALL ON TABLE public.advisor_interest_submissions FROM PUBLIC',
+    'REVOKE ALL ON TABLE public.advisor_interest_submissions FROM anon',
+    'REVOKE ALL ON TABLE public.advisor_interest_submissions FROM authenticated',
+    'GRANT ALL ON TABLE public.advisor_interest_submissions TO service_role',
+  ]) assert(normalizedStatements.includes(privilege), `M7 privilege register omits: ${privilege}`)
+
+  const prohibited = [
+    /^\s*(?:INSERT\s+INTO|UPDATE\s+[a-z".]|DELETE\s+FROM|COPY\s+)/im,
+    /\b(?:DROP|TRUNCATE)\b/i,
+    /\bCREATE\s+(?:SCHEMA|EXTENSION|TYPE|FUNCTION|VIEW|MATERIALIZED|POLICY)\b/i,
+    /\bCREATE\s+TABLE\s+(?!public\.advisor_interest_submissions\b)/i,
+    /\b(?:is_admin|admin_users|payment|subscription|entitlement)\b/i,
+    /\bsupabase_migrations\b/i,
+  ]
+  for (const pattern of prohibited) assert(!pattern.test(sql), `M7 contains prohibited scope: ${pattern}`)
+  assert((sql.match(/\bCREATE\s+TABLE\b/gi) ?? []).length === 1, 'M7 must create exactly one table')
+  assert((sql.match(/\bCREATE\s+POLICY\b/gi) ?? []).length === 0, 'M7 must not expose advisor-interest rows through an RLS policy')
+}
+
 export function validateProductionApplyScript(script) {
   const required = [
     "[ValidateSet('APPROVE M2 PRODUCTION MIGRATION')]",
@@ -571,6 +876,65 @@ export function validateM3PostVerificationScript(script) {
   for (const token of prohibited) assert(!script.includes(token), `M3 post-verification wrapper contains prohibited scope: ${token}`)
 }
 
+export function validateM4ApplyScript(script) {
+  const required = [
+    "[ValidateSet('APPROVE M4 PRODUCTION MIGRATION')]",
+    "run-m3-production-preflight.ps1') -Target M4",
+    'Where-Object { $_.CreationTimeUtc -ge $PreflightStartedAtUtc }',
+    'validate-production-evidence.mjs $ApprovedPreflightDirectory.FullName --target m3',
+    "Read-Host 'Enter the PRODUCTION Supabase database password for the APPROVED M4 migration' -AsSecureString",
+    "'05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'",
+    '$DryRunMigrations[0] -ne $M4Filename',
+    "'db','push','--dry-run','--db-url',$PasswordlessDbUrl",
+    "'db','push','--yes','--db-url',$PasswordlessDbUrl",
+    '$ApplySucceeded = $true',
+    "$PostState.counts_signature -ne '202,177,0,0,0,0,0'",
+    "Export-ReadOnlyCsv 'column-privileges.csv'",
+    '$ArchiveEntries -ne 1356',
+    'validate-production-evidence.mjs $PostDirectory --target m4',
+    'first_admin_created=$false;review_rows_created=0',
+    'Remove-Item Env:PGPASSWORD',
+    'ZeroFreeBSTR',
+  ]
+  for (const evidence of required) assert(script.includes(evidence), `M4 production apply wrapper omits required safeguard: ${evidence}`)
+  const prohibited = [
+    '--include-all', '--include-seed', '--include-roles', 'migration repair',
+    'DROP TABLE', 'DROP FUNCTION', 'TRUNCATE TABLE',
+    'INSERT INTO public.admin_users', 'UPDATE public.admin_users', 'DELETE FROM public.admin_users',
+    'INSERT INTO public.reviews', 'UPDATE public.reviews', 'DELETE FROM public.reviews',
+  ]
+  for (const token of prohibited) assert(!script.includes(token), `M4 production apply wrapper contains prohibited scope: ${token}`)
+  assert((script.match(/'db','push',/g) ?? []).length === 2, 'M4 production apply wrapper must contain exactly one dry-run and one apply invocation')
+}
+
+export function validateM4PostVerificationScript(script) {
+  const required = [
+    '[string]$ApplyEvidenceDirectory',
+    'validate-production-evidence.mjs\') $ApplyEvidenceDirectory --target m4',
+    "Read-Host 'Enter the PRODUCTION Supabase database password for READ-ONLY M4 post-verification' -AsSecureString",
+    "'05bbef023d1b74e5707d801554e2839248d9a976f71fea41155167b69f8f69f7'",
+    '$PostState.history_signature -ne $ExpectedHistorySignature',
+    "$PostState.counts_signature -ne '202,177,0,0,0,0,0'",
+    'Assert-ReadOnlyQueryFails "SET LOCAL ROLE anon; SELECT reviewer_user_id',
+    'Assert-ReadOnlyQueryFails "SET LOCAL ROLE authenticated; SELECT moderation_status',
+    "Export-ReadOnlyCsv 'column-privileges.csv'",
+    '$ArchiveEntries -ne 1356',
+    'validate-production-evidence.mjs $PostDirectory --target m4',
+    'apply_reinvoked=$false',
+    'first_admin_created=$false;review_rows_created=0',
+    'Remove-Item Env:PGPASSWORD',
+    'ZeroFreeBSTR',
+  ]
+  for (const evidence of required) assert(script.includes(evidence), `M4 post-verification wrapper omits required safeguard: ${evidence}`)
+  const prohibited = [
+    'Invoke-SupabaseCli', "'db','push'", "'db', 'push'", 'migration repair',
+    'DROP TABLE', 'DROP FUNCTION', 'TRUNCATE TABLE',
+    'INSERT INTO public.admin_users', 'UPDATE public.admin_users', 'DELETE FROM public.admin_users',
+    'INSERT INTO public.reviews', 'UPDATE public.reviews', 'DELETE FROM public.reviews',
+  ]
+  for (const token of prohibited) assert(!script.includes(token), `M4 post-verification wrapper contains prohibited scope: ${token}`)
+}
+
 export function validateSqlSafety(sql, fingerprint) {
   const guardStart = sql.indexOf('DO $guard$')
   const firstChange = Math.min(...['CREATE SCHEMA', 'CREATE EXTENSION', 'CREATE TYPE', 'CREATE TABLE', 'CREATE FUNCTION'].map((token) => sql.indexOf(token)).filter((index) => index >= 0))
@@ -622,7 +986,7 @@ async function validateSensitiveContent(files) {
 async function main() {
   const activeFiles = (await readdir(activeDirectory)).filter((name) => name.endsWith('.sql')).sort()
   validateActiveFileNames(activeFiles)
-  equalList(activeFiles, [baselineFilename, m2Filename, m3Filename, m4Filename], 'Active migration file')
+  equalList(activeFiles, [baselineFilename, m2Filename, m3Filename, m4Filename, m5Filename, m6Filename, m7Filename], 'Active migration file')
   await validateLegacy(activeFiles)
 
   const baselineBytes = await readFile(baselinePath)
@@ -637,6 +1001,15 @@ async function main() {
   const m4Bytes = await readFile(m4Path)
   assert(createHash('sha256').update(m4Bytes).digest('hex') === reviewedM4Sha256, 'Reviewed M4 migration bytes changed')
   const m4Sql = m4Bytes.toString('utf8')
+  const m5Bytes = await readFile(m5Path)
+  assert(createHash('sha256').update(m5Bytes).digest('hex') === reviewedM5Sha256, 'Reviewed M5 migration bytes changed')
+  const m5Sql = m5Bytes.toString('utf8')
+  const m6Bytes = await readFile(m6Path)
+  assert(createHash('sha256').update(m6Bytes).digest('hex') === reviewedM6Sha256, 'Reviewed M6 migration bytes changed')
+  const m6Sql = m6Bytes.toString('utf8')
+  const m7Bytes = await readFile(m7Path)
+  assert(createHash('sha256').update(m7Bytes).digest('hex') === reviewedM7Sha256, 'Reviewed M7 migration bytes changed')
+  const m7Sql = m7Bytes.toString('utf8')
   const productionApplyScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m2-production-apply.ps1')
   const productionApplyScript = await readFile(productionApplyScriptPath, 'utf8')
   const m3PreflightScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-preflight.ps1')
@@ -645,6 +1018,10 @@ async function main() {
   const m3ApplyScript = await readFile(m3ApplyScriptPath, 'utf8')
   const m3PostVerificationScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-post-verification.ps1')
   const m3PostVerificationScript = await readFile(m3PostVerificationScriptPath, 'utf8')
+  const m4ApplyScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m4-production-apply.ps1')
+  const m4ApplyScript = await readFile(m4ApplyScriptPath, 'utf8')
+  const m4PostVerificationScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m4-production-post-verification.ps1')
+  const m4PostVerificationScript = await readFile(m4PostVerificationScriptPath, 'utf8')
   const baselineFingerprint = buildFingerprint(baselineSql)
   const m2Fingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}`, {
     kind: 'deterministic-m2-target',
@@ -658,25 +1035,44 @@ async function main() {
     forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`],
     containsData: false,
   })
-  const targetFingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}`, {
-    kind: 'deterministic-current-target',
+  const m4Fingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}`, {
+    kind: 'deterministic-m4-target',
     baseMigration: `supabase/migrations/${baselineFilename}`,
     forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`],
+    containsData: false,
+  })
+  const m5Fingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}\n${m5Sql}`, {
+    kind: 'deterministic-m5-target',
+    baseMigration: `supabase/migrations/${baselineFilename}`,
+    forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`, `supabase/migrations/${m5Filename}`],
+    containsData: false,
+  })
+  const targetFingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}\n${m5Sql}\n${m6Sql}\n${m7Sql}`, {
+    kind: 'deterministic-current-target',
+    baseMigration: `supabase/migrations/${baselineFilename}`,
+    forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`, `supabase/migrations/${m5Filename}`, `supabase/migrations/${m6Filename}`, `supabase/migrations/${m7Filename}`],
     containsData: false,
   })
   validateRegister(baselineFingerprint)
   validateRegister(m2Fingerprint, { currentTarget: true })
   validateRegister(m3Fingerprint, { currentTarget: true, includesM3: true })
-  validateRegister(targetFingerprint, { currentTarget: true, includesM3: true, includesM4: true })
+  validateRegister(m4Fingerprint, { currentTarget: true, includesM3: true, includesM4: true })
+  validateRegister(m5Fingerprint, { currentTarget: true, includesM3: true, includesM4: true, includesM5: true })
+  validateRegister(targetFingerprint, { currentTarget: true, includesM3: true, includesM4: true, includesM5: true, includesM6: true, includesM7: true })
   validateSqlSafety(baselineSql, baselineFingerprint)
   validateM2SqlSafety(m2Sql)
   validateM3SqlSafety(m3Sql)
   validateM4SqlSafety(m4Sql)
+  validateM5SqlSafety(m5Sql)
+  validateM6SqlSafety(m6Sql)
+  validateM7SqlSafety(m7Sql)
   validateProductionApplyScript(productionApplyScript)
   validateM3PreflightScript(m3PreflightScript)
   validateM4PreflightScript(m3PreflightScript)
   validateM3ApplyScript(m3ApplyScript)
   validateM3PostVerificationScript(m3PostVerificationScript)
+  validateM4ApplyScript(m4ApplyScript)
+  validateM4PostVerificationScript(m4PostVerificationScript)
 
   const generatedBaseline = await generatedBaselineFingerprintText()
   const checkedInBaseline = await readFile(baselineFingerprintPath, 'utf8')
@@ -693,8 +1089,12 @@ async function main() {
     && checkedInTypes.includes('export type AdvisorPersonRow')
     && checkedInTypes.includes('export type AdminUserRow')
     && checkedInTypes.includes('export type ReviewRow')
+    && checkedInTypes.includes('export type CompanyProfileRow')
+    && checkedInTypes.includes('export type CompanyLeadRow')
+    && checkedInTypes.includes('export type DirectoryEventRow')
+    && checkedInTypes.includes('export type AdvisorInterestSubmissionRow')
     && checkedInTypes.includes('is_admin:'),
-    'Database types do not include the distinct company, advisor-person, M3 administrator, and M4 review contracts',
+    'Database types do not include the distinct company, advisor-person, authorization, review, profile, lead, event, and advisor-interest contracts',
   )
 
   const databaseFiles = [
@@ -710,6 +1110,8 @@ async function main() {
     m3PreflightScriptPath,
     m3ApplyScriptPath,
     m3PostVerificationScriptPath,
+    m4ApplyScriptPath,
+    m4PostVerificationScriptPath,
     productionApplyScriptPath,
     path.join(repositoryRoot, 'scripts', 'database', 'validate-production-evidence.mjs'),
     path.join(repositoryRoot, 'scripts', 'database', 'validate-fresh-bootstrap.mjs'),
@@ -719,7 +1121,7 @@ async function main() {
     path.join(repositoryRoot, 'package.json'),
   ]
   await validateSensitiveContent(databaseFiles)
-  process.stdout.write('M1/M2/M3 immutability, exact M4 company-review scope/guards, layered fingerprints, legacy quarantine, and derived types passed.\n')
+  process.stdout.write('M1 through M5 immutability, exact M6 lead/event and M7 advisor-interest scope/guards, layered fingerprints, legacy quarantine, and derived types passed.\n')
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

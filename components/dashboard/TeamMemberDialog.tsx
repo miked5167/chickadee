@@ -22,7 +22,6 @@ interface TeamMember {
   title: string | null
   bio: string | null
   photo_url: string | null
-  linkedin_url: string | null
   email: string | null
   phone: string | null
   display_order: number
@@ -46,7 +45,6 @@ export default function TeamMemberDialog({
     bio: '',
     email: '',
     phone: '',
-    linkedin_url: '',
     display_order: 0,
     is_active: true,
   })
@@ -67,7 +65,6 @@ export default function TeamMemberDialog({
           bio: member.bio || '',
           email: member.email || '',
           phone: member.phone || '',
-          linkedin_url: member.linkedin_url || '',
           display_order: member.display_order,
           is_active: member.is_active,
         })
@@ -80,7 +77,6 @@ export default function TeamMemberDialog({
           bio: '',
           email: '',
           phone: '',
-          linkedin_url: '',
           display_order: 0,
           is_active: true,
         })
@@ -349,20 +345,6 @@ export default function TeamMemberDialog({
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               placeholder="(555) 123-4567"
-            />
-          </div>
-
-          {/* LinkedIn */}
-          <div className="space-y-2">
-            <Label htmlFor="linkedin">LinkedIn URL</Label>
-            <Input
-              id="linkedin"
-              type="url"
-              value={formData.linkedin_url}
-              onChange={(e) =>
-                setFormData({ ...formData, linkedin_url: e.target.value })
-              }
-              placeholder="https://linkedin.com/in/johndoe"
             />
           </div>
 

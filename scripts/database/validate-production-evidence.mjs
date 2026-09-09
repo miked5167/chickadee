@@ -17,6 +17,8 @@ const m2Version = '20260719000001'
 const m2Name = 'add_companies_updated_at_trigger'
 const m3Version = '20260719000002'
 const m3Name = 'administrator_authorization_foundation'
+const m4Version = '20260719000003'
+const m4Name = 'company_reviews'
 const exactApplicationCounts = new Map([
   ['companies', 202],
   ['advisors', 177],
@@ -134,16 +136,18 @@ async function validateIntegrity(directory, target) {
   assert(['true', 't', 'false', 'f'].includes(historyStatusValue), 'Migration-history status is not a recognized boolean')
   const historyPresent = historyStatusValue === 'true' || historyStatusValue === 't'
   assert(target === 'baseline' || historyPresent, 'Forward-target evidence requires standard migration history')
-  const expectedArchiveEntries = target === 'current' || target === 'm3' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317))
+  const expectedArchiveEntries = target === 'm4' ? 1356 : (target === 'current' || target === 'm3' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317)))
   assert(archiveEntries.length === expectedArchiveEntries, `Expected ${expectedArchiveEntries.toLocaleString('en-US')} archive entries; found ${archiveEntries.length}`)
 
   if (historyPresent) {
     const migrationVersions = await csv(directory, 'migration-history-versions.csv')
-    const expectedHistory = target === 'current' || target === 'm3'
-      ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name], [m3Version, m3Name]]
+    const expectedHistory = target === 'm4'
+      ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name], [m3Version, m3Name], [m4Version, m4Name]]
+      : (target === 'current' || target === 'm3'
+        ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name], [m3Version, m3Name]]
       : (target === 'm2'
           ? [[adoptedBaselineVersion, adoptedBaselineName], [m2Version, m2Name]]
-          : [[adoptedBaselineVersion, adoptedBaselineName]])
+          : [[adoptedBaselineVersion, adoptedBaselineName]]))
     assert(migrationVersions.length === expectedHistory.length, `Expected exactly ${expectedHistory.length} migration-history row(s)`)
     for (let index = 0; index < expectedHistory.length; index += 1) {
       assert(
@@ -158,9 +162,11 @@ async function validateIntegrity(directory, target) {
 
 async function validateCatalogs(directory, expected, target) {
   const applicationTables = new Set(
-    target === 'current' || target === 'm3'
-      ? [...baseApplicationTables, 'admin_users']
-      : baseApplicationTables,
+    target === 'm4'
+      ? [...baseApplicationTables, 'admin_users', 'reviews']
+      : target === 'current' || target === 'm3'
+        ? [...baseApplicationTables, 'admin_users']
+        : baseApplicationTables,
   )
   const tables = (await csv(directory, 'tables.csv')).filter((row) => row.schema_name === 'public' && applicationTables.has(row.table_name))
   assert(tables.length === expected.tables.length, 'Application table count differs from canonical fingerprint')
@@ -206,7 +212,8 @@ async function validateCatalogs(directory, expected, target) {
     assert(policies.some((row) => row.table_name === policy.table && row.policy_name === policy.name), `Catalog is missing policy ${policy.table}.${policy.name}`)
   }
 
-  const includesM3 = target === 'm3' || target === 'current'
+  const includesM3 = target === 'm3' || target === 'm4' || target === 'current'
+  const includesM4 = target === 'm4'
   const expectedFunctionNames = new Set(includesM3 ? ['update_updated_at_column', 'is_admin'] : ['update_updated_at_column'])
   const functions = (await csv(directory, 'functions.csv')).filter((row) => row.schema_name === 'public' && expectedFunctionNames.has(row.function_name))
   assert(functions.length === expectedFunctionNames.size, 'Application function register is missing or duplicated')
@@ -238,7 +245,7 @@ async function validateCatalogs(directory, expected, target) {
   const privileges = (await csv(directory, 'table-privileges.csv')).filter((row) => row.table_schema === 'public' && applicationTables.has(row.table_name))
   const expectedPrivileges = ['DELETE', 'INSERT', 'REFERENCES', 'SELECT', 'TRIGGER', 'TRUNCATE', 'UPDATE']
   for (const table of applicationTables) {
-    if (table === 'admin_users') continue
+    if (table === 'admin_users' || table === 'reviews') continue
     for (const grantee of ['anon', 'authenticated', 'service_role']) {
       const actual = privileges.filter((row) => row.table_name === table && row.grantee === grantee).map((row) => row.privilege_type).sort()
       assert(JSON.stringify(actual) === JSON.stringify(expectedPrivileges), `Grant mismatch for ${table}.${grantee}`)
@@ -254,9 +261,39 @@ async function validateCatalogs(directory, expected, target) {
     )
   }
 
+  if (includesM4) {
+    const apiGrantees = new Set(['PUBLIC', 'anon', 'authenticated', 'service_role'])
+    const reviewPrivileges = privileges
+      .filter((row) => row.table_name === 'reviews' && apiGrantees.has(row.grantee))
+      .map((row) => `${row.grantee}.${row.privilege_type}`)
+      .sort()
+    const servicePrivileges = ['DELETE', 'INSERT', 'REFERENCES', 'SELECT', 'TRIGGER', 'TRUNCATE', 'UPDATE']
+      .map((privilege) => `service_role.${privilege}`)
+    assert(
+      JSON.stringify(reviewPrivileges) === JSON.stringify(['authenticated.DELETE', ...servicePrivileges].sort()),
+      'M4 reviews table privilege register differs',
+    )
+
+    const columnPrivileges = (await csv(directory, 'column-privileges.csv'))
+      .filter((row) => row.table_schema === 'public' && row.table_name === 'reviews' && ['anon', 'authenticated'].includes(row.grantee))
+      .map((row) => `${row.grantee}.${row.privilege_type}.${row.column_name}`)
+      .sort()
+    const publicColumns = ['id', 'company_id', 'rating', 'title', 'review_text', 'experience_confirmed_at', 'created_at', 'updated_at']
+    const insertColumns = ['company_id', 'reviewer_user_id', 'rating', 'title', 'review_text', 'experience_confirmed_at']
+    const updateColumns = ['rating', 'title', 'review_text', 'experience_confirmed_at']
+    const expectedColumnPrivileges = [
+      ...publicColumns.map((column) => `anon.SELECT.${column}`),
+      ...publicColumns.map((column) => `authenticated.SELECT.${column}`),
+      ...insertColumns.map((column) => `authenticated.INSERT.${column}`),
+      ...updateColumns.map((column) => `authenticated.UPDATE.${column}`),
+    ].sort()
+    assert(JSON.stringify(columnPrivileges) === JSON.stringify(expectedColumnPrivileges), 'M4 reviews column privilege register differs')
+  }
+
   const rowCounts = (await csv(directory, 'exact-row-counts.csv')).filter((row) => row.schema_name === 'public' && applicationTables.has(row.table_name))
   const expectedCounts = new Map(exactApplicationCounts)
   if (includesM3) expectedCounts.set('admin_users', 0)
+  if (includesM4) expectedCounts.set('reviews', 0)
   assert(rowCounts.length === expectedCounts.size, 'Application exact-count register is incomplete')
   for (const [table, expectedCount] of expectedCounts) {
     const actual = rowCounts.find((row) => row.table_name === table)
@@ -266,14 +303,33 @@ async function validateCatalogs(directory, expected, target) {
 
 async function main() {
   const target = option('--target') || 'baseline'
-  assert(['baseline', 'm2', 'm3', 'current'].includes(target), '--target must be baseline, m2, m3, or current')
+  assert(['baseline', 'm2', 'm3', 'm4', 'current'].includes(target), '--target must be baseline, m2, m3, m4, or current')
   const positional = process.argv.slice(2).find((argument, index, arguments_) => argument !== '--target' && arguments_[index - 1] !== '--target')
   const supplied = positional || process.env.SCHEMA_EVIDENCE_DIR
   assert(supplied, 'Provide the protected evidence directory as the first argument or SCHEMA_EVIDENCE_DIR')
   const directory = path.resolve(supplied)
   const integrity = await validateIntegrity(directory, target)
   let expected
-  if (target === 'current' || target === 'm3') {
+  if (target === 'm4') {
+    const migrationDirectory = path.dirname(baselinePath)
+    const m2Path = path.join(migrationDirectory, `${m2Version}_${m2Name}.sql`)
+    const m3Path = path.join(migrationDirectory, `${m3Version}_${m3Name}.sql`)
+    const m4Path = path.join(migrationDirectory, `${m4Version}_${m4Name}.sql`)
+    expected = buildFingerprint(
+      `${await readFile(baselinePath, 'utf8')}\n${await readFile(m2Path, 'utf8')}\n${await readFile(m3Path, 'utf8')}\n${await readFile(m4Path, 'utf8')}`,
+      {
+        kind: 'deterministic-m4-target',
+        baseMigration: 'supabase/migrations/20260719000000_production_company_baseline.sql',
+        forwardMigrations: [
+          'supabase/migrations/20260719000001_add_companies_updated_at_trigger.sql',
+          'supabase/migrations/20260719000002_administrator_authorization_foundation.sql',
+          'supabase/migrations/20260719000003_company_reviews.sql',
+        ],
+        containsData: false,
+      },
+    )
+  }
+  else if (target === 'current' || target === 'm3') {
     const migrationDirectory = path.dirname(baselinePath)
     const m2Path = path.join(migrationDirectory, `${m2Version}_${m2Name}.sql`)
     const m3Path = path.join(migrationDirectory, `${m3Version}_${m3Name}.sql`)

@@ -31,6 +31,8 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
   return {
     title: `Contact ${company.name} - The Hockey Directory`,
     description: `Send a message to ${company.name} in ${[company.city, company.state_province].filter(Boolean).join(', ')} to discuss your hockey development needs.`,
+    alternates: { canonical: `/listings/${slug}/contact` },
+    robots: { index: false, follow: true },
   }
 }
 
@@ -83,10 +85,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
       <div className="mt-8 p-6 bg-blue-50 rounded-lg">
         <h3 className="font-semibold mb-2">What happens next?</h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li>✓ Your message will be sent directly to {company.name}</li>
-          <li>✓ They will receive an email notification</li>
-          <li>✓ Most advisors respond within 24-48 hours</li>
-          <li>✓ You&apos;ll receive their response via email</li>
+          <li>✓ Your inquiry will be stored securely for {company.name}</li>
+          <li>✓ An email notice is sent when the company has a directory email</li>
+          <li>✓ The company decides whether and when to respond</li>
+          <li>✓ Your details are used for this inquiry under our privacy policy</li>
         </ul>
       </div>
     </div>

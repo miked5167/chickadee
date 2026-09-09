@@ -147,4 +147,19 @@ describe('administrator API route cutover', () => {
       expect(source).not.toMatch(/auth\.getUser/)
     }
   })
+
+  it('keeps the administrator screen behind authorization and the safety lock', () => {
+    const source = readFileSync(
+      path.join(process.cwd(), 'app', '(admin)', 'admin', 'layout.tsx'),
+      'utf8',
+    )
+
+    expect(source).toContain('getAdminAuthorization')
+    expect(source).toContain('Administrator workflows are unavailable')
+    expect(source).toContain("redirect('/login?returnTo=/admin/dashboard')")
+    expect(source).toContain("redirect('/?notice=administrator-access-required')")
+    expect(source).not.toMatch(/create(?:Admin)?Client/)
+    expect(source).not.toMatch(/auth\.getUser/)
+    expect(source).not.toMatch(/\{children\}/)
+  })
 })

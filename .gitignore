@@ -44,4 +44,14 @@ next-env.d.ts
 # Contains API tokens and should never be committed
 .claude.json
 **/mcp.json
+
+# Firecrawl raw web research cache
+.firecrawl/
+
+# Local advisor research exports contain public contact data gathered for review.
+# Keep them out of this public repository; the site does not read these files.
+data/enrichment/
+
+# Unselected logo explorations are local review material, not production assets.
+public/logo-concepts-20260822/
 nul

@@ -1,229 +1,94 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { extractPublicId, deleteImage } from '@/lib/cloudinary/config'
 
-/**
- * Update a team member
- * PATCH /api/advisor/team/[id]
- */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+const idSchema = z.string().uuid()
+const updateSchema = z.object({
+  name: z.string().trim().min(2).max(50).optional(),
+  title: z.string().trim().max(100).nullable().optional(),
+  bio: z.string().trim().max(3000).nullable().optional(),
+  email: z.string().trim().email().max(255).nullable().optional().or(z.literal('')),
+  phone: z.string().trim().max(20).nullable().optional(),
+  display_order: z.coerce.number().int().min(0).max(1000).optional(),
+  is_active: z.boolean().optional(),
+}).strict()
 
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+async function authorizeMember(id: string) {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return { supabase, status: 401 as const, member: null }
 
-    const { id } = await params
-    const teamMemberId = id
+  const { data: member } = await supabase
+    .from('advisors')
+    .select('id, company_id, profile_image_url')
+    .eq('id', id)
+    .single()
 
-    // Get claimed advisor for this user
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('claimed_by_user_id', user.id)
-      .single()
-
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed advisor found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // Check that team member belongs to this advisor
-    const { data: existingMember, error: checkError } = await supabase
-      .from('advisor_team_members')
-      .select('id, advisor_id')
-      .eq('id', teamMemberId)
-      .single()
-
-    if (checkError || !existingMember) {
-      return NextResponse.json(
-        { error: 'Team member not found' },
-        { status: 404 }
-      )
-    }
-
-    if (existingMember.advisor_id !== advisor.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized to update this team member' },
-        { status: 403 }
-      )
-    }
-
-    // Parse request body
-    const body = await request.json()
-    const {
-      name,
-      title,
-      bio,
-      photo_url,
-      linkedin_url,
-      email,
-      phone,
-      display_order,
-      is_active,
-    } = body
-
-    // Validate required fields
-    if (name !== undefined && name.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'Name cannot be empty' },
-        { status: 400 }
-      )
-    }
-
-    // Build update object with only provided fields
-    const updates: any = {
-      updated_at: new Date().toISOString(),
-    }
-
-    if (name !== undefined) updates.name = name.trim()
-    if (title !== undefined) updates.title = title?.trim() || null
-    if (bio !== undefined) updates.bio = bio?.trim() || null
-    if (photo_url !== undefined) updates.photo_url = photo_url || null
-    if (linkedin_url !== undefined) updates.linkedin_url = linkedin_url?.trim() || null
-    if (email !== undefined) updates.email = email?.trim() || null
-    if (phone !== undefined) updates.phone = phone?.trim() || null
-    if (display_order !== undefined) updates.display_order = display_order
-    if (is_active !== undefined) updates.is_active = is_active
-
-    // Update team member
-    const { data: teamMember, error: updateError } = await supabase
-      .from('advisor_team_members')
-      .update(updates)
-      .eq('id', teamMemberId)
-      .select()
-      .single()
-
-    if (updateError) {
-      console.error('Error updating team member:', updateError)
-      return NextResponse.json(
-        { error: 'Failed to update team member' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        teamMember,
-        message: 'Team member updated successfully',
-      },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error in PATCH /api/advisor/team/[id]:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
+  if (!member) return { supabase, status: 404 as const, member: null }
+  const { data: company } = await supabase.from('companies').select('id').eq('id', member.company_id).eq('verified_owner_id', user.id).single()
+  return { supabase, status: company ? 200 as const : 403 as const, member: company ? member : null }
 }
 
-/**
- * Delete a team member
- * DELETE /api/advisor/team/[id]
- */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  if (!idSchema.safeParse(id).success) return NextResponse.json({ error: 'Team member identifier is invalid.' }, { status: 400 })
+  const { supabase, status, member } = await authorizeMember(id)
+  if (!member) return NextResponse.json({ error: status === 401 ? 'Unauthorized' : status === 404 ? 'Team member not found.' : 'Forbidden' }, { status })
 
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+  let body: unknown
+  try { body = await request.json() } catch { return NextResponse.json({ error: 'Request body is invalid.' }, { status: 400 }) }
+  const parsed = updateSchema.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ error: 'Please check the team member details.' }, { status: 400 })
 
-    const { id } = await params
-    const teamMemberId = id
-
-    // Get claimed advisor for this user
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('claimed_by_user_id', user.id)
-      .single()
-
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed advisor found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // Check that team member belongs to this advisor and get photo URL
-    const { data: existingMember, error: checkError } = await supabase
-      .from('advisor_team_members')
-      .select('id, advisor_id, photo_url')
-      .eq('id', teamMemberId)
-      .single()
-
-    if (checkError || !existingMember) {
-      return NextResponse.json(
-        { error: 'Team member not found' },
-        { status: 404 }
-      )
-    }
-
-    if (existingMember.advisor_id !== advisor.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized to delete this team member' },
-        { status: 403 }
-      )
-    }
-
-    // Delete photo from Cloudinary if exists
-    if (existingMember.photo_url) {
-      const publicId = extractPublicId(existingMember.photo_url)
-      if (publicId) {
-        try {
-          await deleteImage(publicId)
-        } catch (error) {
-          console.error('Error deleting team member photo:', error)
-          // Don't fail the delete if Cloudinary cleanup fails
-        }
-      }
-    }
-
-    // Delete team member
-    const { error: deleteError } = await supabase
-      .from('advisor_team_members')
-      .delete()
-      .eq('id', teamMemberId)
-
-    if (deleteError) {
-      console.error('Error deleting team member:', deleteError)
-      return NextResponse.json(
-        { error: 'Failed to delete team member' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Team member deleted successfully',
-      },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error in DELETE /api/advisor/team/[id]:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+  const input = parsed.data
+  const update = {
+    ...(input.name !== undefined ? { name: input.name } : {}),
+    ...(input.title !== undefined ? { title: input.title || null } : {}),
+    ...(input.bio !== undefined ? { bio: input.bio || null } : {}),
+    ...(input.email !== undefined ? { contact_email: input.email || null } : {}),
+    ...(input.phone !== undefined ? { contact_phone: input.phone || null } : {}),
+    ...(input.display_order !== undefined ? { display_order: input.display_order } : {}),
+    ...(input.is_active !== undefined ? { active: input.is_active } : {}),
   }
+
+  const { data, error } = await supabase.from('advisors').update(update).eq('id', member.id)
+    .select('id, name, title, bio, profile_image_url, contact_email, contact_phone, display_order, active, created_at, updated_at').single()
+  if (error || !data) return NextResponse.json({ error: 'Team member could not be updated.' }, { status: 500 })
+
+  return NextResponse.json({
+    teamMember: {
+      id: data.id,
+      name: data.name,
+      title: data.title,
+      bio: data.bio,
+      photo_url: data.profile_image_url,
+      email: data.contact_email,
+      phone: data.contact_phone,
+      display_order: data.display_order ?? 0,
+      is_active: data.active ?? true,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    },
+    message: 'Team member updated.',
+  })
+}
+
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  if (!idSchema.safeParse(id).success) return NextResponse.json({ error: 'Team member identifier is invalid.' }, { status: 400 })
+  const { supabase, status, member } = await authorizeMember(id)
+  if (!member) return NextResponse.json({ error: status === 401 ? 'Unauthorized' : status === 404 ? 'Team member not found.' : 'Forbidden' }, { status })
+
+  const { error } = await supabase.from('advisors').delete().eq('id', member.id)
+  if (error) return NextResponse.json({ error: 'Team member could not be deleted.' }, { status: 500 })
+
+  if (member.profile_image_url) {
+    const publicId = extractPublicId(member.profile_image_url)
+    if (publicId) {
+      try { await deleteImage(publicId) } catch (cleanupError) { console.error('Team photo cleanup failed:', cleanupError) }
+    }
+  }
+
+  return NextResponse.json({ success: true, message: 'Team member deleted.' })
 }

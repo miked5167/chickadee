@@ -1,123 +1,107 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { ArrowRight, CheckCircle2, ShieldCheck, Search, Users } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'About Us | The Hockey Directory',
-  description: 'Learn about The Hockey Directory - connecting hockey families with trusted advisors across North America.',
+  title: 'About The Hockey Directory',
+  description: 'Why The Hockey Directory exists, how listing verification works, and what hockey families should confirm for themselves.',
+  alternates: { canonical: '/about' },
 }
 
+const principles = [
+  {
+    icon: Search,
+    title: 'Make research easier',
+    copy: 'Bring useful business details, services, locations, pathways, and contact options into one searchable place.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Explain trust signals',
+    copy: 'A verified badge confirms the business relationship to a listing. It is not an endorsement or a promise about service quality.',
+  },
+  {
+    icon: Users,
+    title: 'Keep families in control',
+    copy: 'Comparison tools and practical guides help families prepare better questions before choosing an advisor.',
+  },
+]
+
 export default function AboutPage() {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'The Hockey Directory',
+    url: 'https://thehockeydirectory.com',
+    description: 'An independent research directory for hockey families looking for advisor information.',
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-hockey-blue via-blue-700 to-ice-blue text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              About The Hockey Directory
-            </h1>
-            <p className="text-xl text-blue-100">
-              Connecting hockey families with trusted advisors across North America
-            </p>
-          </div>
+    <main className="bg-ice-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+
+      <section className="rink-grid overflow-hidden bg-arena-navy py-20 text-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <p className="font-display text-sm font-bold uppercase tracking-[0.22em] text-goal-gold">Our purpose</p>
+          <h1 className="mt-4 max-w-4xl font-display text-5xl font-extrabold uppercase leading-[0.95] tracking-tight sm:text-6xl">
+            Better information before a big hockey decision
+          </h1>
+          <p className="mt-7 max-w-3xl text-lg leading-8 text-frost">
+            The Hockey Directory was created after one family saw how difficult it could be to find, compare, and evaluate hockey advisors. We are building an independent starting point for that research.
+          </p>
         </div>
-      </div>
+      </section>
 
-      {/* Content Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="prose prose-lg max-w-none">
-            {/* Introduction */}
-            <div className="mb-12">
-              <p className="text-xl text-gray-700 leading-relaxed font-medium">
-                <strong>The Hockey Directory was born from a hockey family's journey, and the recognition that finding the right advisor shouldn't be a matter of luck.</strong>
-              </p>
-            </div>
-
-            <div className="space-y-6 text-gray-700 leading-relaxed">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div>
+            <p className="font-display text-sm font-bold uppercase tracking-[0.18em] text-hockey-blue">Why it exists</p>
+            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase tracking-tight text-arena-navy">A practical research tool, not a recommendation service</h2>
+            <div className="mt-6 space-y-5 text-base leading-8 text-slate-700">
               <p>
-                For four years, our family worked with a hockey advisor as our son navigated the competitive hockey landscape. That relationship made all the difference. When trades came up, we had someone in our corner helping us evaluate opportunities and protect our son's interests. When development decisions arose, we had expert guidance to ensure he was being looked after properly... not just as a player, but as a young person.
+                Hockey families often make important decisions with scattered information and limited time. The directory puts basic business information, specialties, service areas, pathway experience, reviews, and contact options in one place.
               </p>
-
-              <p className="font-semibold text-gray-900">
-                We were fortunate. We found an advisor who genuinely cared about our son's well-being and provided honest, informed guidance throughout his journey.
-              </p>
-
               <p>
-                But we also know that not every family has been as lucky. Through our years in competitive hockey, we've heard the stories. Families who worked with advisors who prioritized their own interests over the player's development, who provided poor guidance during critical decisions, or who simply weren't qualified to be advising hockey families in the first place.
+                We do not choose an advisor for a family, certify professional ability, or guarantee an outcome. Families should interview more than one provider, confirm current credentials and fees directly, check references, and use independent legal or financial advice when appropriate.
               </p>
-
               <p>
-                The problem wasn't that these families didn't do their research. The problem was that there was nowhere to do the research. No central platform to find qualified hockey advisors, compare their backgrounds, or read honest reviews from other hockey families who had worked with them.
-              </p>
-
-              <p className="text-xl font-bold text-hockey-blue">
-                That's why we created The Hockey Directory.
-              </p>
-            </div>
-
-            {/* Section: Connecting Families */}
-            <div className="mt-12 p-8 bg-ice-blue rounded-lg border-l-4 border-hockey-blue">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Connecting Hockey Families With Trusted Advisors
-              </h2>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  The Hockey Directory is the first platform dedicated to helping hockey families find and evaluate family hockey advisors across North America. We're building the resource we wish had existed when we started our search... a trusted directory where you can find qualified advisors, understand their experience and approach, and make informed decisions based on reviews from families who have been there.
-                </p>
-                <p>
-                  Whether you're facing player movement decisions, evaluating opportunities, navigating trades, or simply want an experienced person in your corner, finding the right hockey advisor can make all the difference. It turns a stressful, uncertain situation into one where you feel confident and in control.
-                </p>
-              </div>
-            </div>
-
-            {/* Section: Built By Hockey Families */}
-            <div className="mt-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Built By Hockey Families, For Hockey Families
-              </h2>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  We understand the competitive hockey world because we've lived it. As players, coaches, and parents. We know what it's like to make tough decisions about your child's hockey career, often with incomplete information and pressure to act quickly.
-                </p>
-                <p>
-                  We also know the difference the right advisor can make. And we believe every hockey family deserves access to that same quality of guidance and support.
-                </p>
-                <p>
-                  Our mission is simple: to ensure that hockey families across North America can find qualified, trustworthy hockey advisors. Not through luck or connections, but through transparent information and honest reviews.
-                </p>
-              </div>
-            </div>
-
-            {/* Closing Statement */}
-            <div className="mt-12 p-8 bg-gradient-to-r from-hockey-blue to-blue-600 text-white rounded-lg text-center">
-              <p className="text-2xl font-bold">
-                Welcome to The Hockey Directory, where hockey families find the right advisor for their journey.
+                Some listings begin with public business information and may be incomplete or unclaimed. Verified owners can keep their own details current. Reviews are displayed only when they meet the directory’s publishing rules.
               </p>
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Ready to Find Your Advisor?
-            </h3>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/listings"
-                className="inline-flex items-center justify-center px-8 py-3 bg-hockey-blue text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Browse Advisors
-              </a>
-              <a
-                href="/blog"
-                className="inline-flex items-center justify-center px-8 py-3 bg-white text-hockey-blue font-semibold rounded-lg border-2 border-hockey-blue hover:bg-ice-blue transition-colors"
-              >
-                Read Our Blog
-              </a>
-            </div>
-          </div>
+          <aside className="rounded-2xl border border-blue-200 bg-white p-7 shadow-sm">
+            <h2 className="font-display text-2xl font-extrabold uppercase text-arena-navy">What verification means</h2>
+            <ul className="mt-5 space-y-4 text-sm leading-6 text-slate-700">
+              <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-hockey-blue" />The account’s relationship to the listed business has been confirmed.</li>
+              <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-hockey-blue" />The verified owner can maintain the listing’s business details.</li>
+              <li className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-hockey-blue" />It does not rank, recommend, license, or guarantee the advisor.</li>
+            </ul>
+          </aside>
         </div>
-      </div>
-    </div>
+
+        <div className="mt-16 grid gap-5 md:grid-cols-3">
+          {principles.map(({ icon: Icon, title, copy }) => (
+            <article key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <Icon className="h-8 w-8 text-red-line" />
+              <h2 className="mt-5 font-display text-2xl font-extrabold uppercase text-arena-navy">{title}</h2>
+              <p className="mt-3 leading-7 text-slate-600">{copy}</p>
+            </article>
+          ))}
+        </div>
+
+        <section className="mt-16 rounded-2xl bg-hockey-blue p-8 text-white sm:p-10">
+          <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="font-display text-3xl font-extrabold uppercase">Start with facts, then have the conversation</h2>
+              <p className="mt-3 max-w-2xl leading-7 text-blue-100">Browse the directory or use the family guides to prepare questions before contacting anyone.</p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+              <Link href="/listings" className="inline-flex items-center justify-center rounded-md bg-goal-gold px-5 py-3 font-bold text-arena-navy hover:bg-yellow-300">Browse advisors <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href="/guides" className="inline-flex items-center justify-center rounded-md border border-white/40 px-5 py-3 font-bold hover:bg-white/10">Read family guides</Link>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
   )
 }

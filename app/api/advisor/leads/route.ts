@@ -1,118 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
+const statuses = ['new', 'contacted', 'qualified', 'closed', 'spam'] as const
+
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return NextResponse.json({ error: 'Sign in required.' }, { status: 401 })
 
-    // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: company } = await supabase.from('companies').select('id').eq('verified_owner_id', user.id).maybeSingle()
+    if (!company) return NextResponse.json({ error: 'No connected company listing was found.' }, { status: 404 })
 
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    // Get advisor record for this user
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('is_claimed', true)
-      .single()
-
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed listing found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // Get query parameters
-    const searchParams = request.nextUrl.searchParams
-    const status = searchParams.get('status') || 'all'
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-
-    // Calculate offset
+    const requestedStatus = request.nextUrl.searchParams.get('status') || 'all'
+    const status = statuses.includes(requestedStatus as typeof statuses[number]) ? requestedStatus : 'all'
+    const page = Math.max(Number(request.nextUrl.searchParams.get('page') || 1), 1)
+    const limit = Math.min(Math.max(Number(request.nextUrl.searchParams.get('limit') || 20), 1), 100)
     const offset = (page - 1) * limit
 
-    // Build query
-    let query = supabase
-      .from('leads')
-      .select('*', { count: 'exact' })
-      .eq('advisor_id', advisor.id)
-      .order('created_at', { ascending: false })
+    let query = supabase.from('company_leads').select('*', { count: 'exact' }).eq('company_id', company.id).order('created_at', { ascending: false })
+    if (status !== 'all') query = query.eq('status', status)
+    const [{ data: leads, error, count }, { data: statusRows }] = await Promise.all([
+      query.range(offset, offset + limit - 1),
+      supabase.from('company_leads').select('status').eq('company_id', company.id),
+    ])
 
-    // Filter by status
-    if (status !== 'all') {
-      query = query.eq('status', status)
+    if (error) {
+      console.error('Owner lead query failed:', error.code)
+      return NextResponse.json({ error: 'Inquiries could not be loaded.' }, { status: 500 })
     }
 
-    // Apply pagination
-    const { data: leads, error: leadsError, count } = await query.range(offset, offset + limit - 1)
+    const statusCounts: Record<string, number> = { all: statusRows?.length || 0, new: 0, contacted: 0, qualified: 0, closed: 0, spam: 0 }
+    for (const row of statusRows || []) statusCounts[row.status] = (statusCounts[row.status] || 0) + 1
 
-    if (leadsError) {
-      console.error('Error fetching leads:', leadsError)
-      return NextResponse.json(
-        { error: 'Failed to fetch leads' },
-        { status: 500 }
-      )
-    }
-
-    // Get counts for all statuses
-    const { count: allCount } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-
-    const { count: newCount } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .eq('status', 'new')
-
-    const { count: contactedCount } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .eq('status', 'contacted')
-
-    const { count: convertedCount } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .eq('status', 'converted')
-
-    const { count: closedCount } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .eq('status', 'closed')
-
-    return NextResponse.json(
-      {
-        leads: leads || [],
-        total: count || 0,
-        page,
-        limit,
-        totalPages: Math.ceil((count || 0) / limit),
-        statusCounts: {
-          all: allCount || 0,
-          new: newCount || 0,
-          contacted: contactedCount || 0,
-          converted: convertedCount || 0,
-          closed: closedCount || 0,
-        },
-      },
-      { status: 200 }
-    )
+    return NextResponse.json({ leads: leads || [], total: count || 0, page, limit, totalPages: Math.ceil((count || 0) / limit), statusCounts }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     console.error('Error in GET /api/advisor/leads:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

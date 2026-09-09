@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Loader2,
   Plus,
@@ -11,7 +11,6 @@ import {
   Users,
   AlertCircle,
   CheckCircle,
-  Upload,
 } from 'lucide-react'
 import Image from 'next/image'
 import TeamMemberDialog from '@/components/dashboard/TeamMemberDialog'
@@ -22,7 +21,6 @@ interface TeamMember {
   title: string | null
   bio: string | null
   photo_url: string | null
-  linkedin_url: string | null
   email: string | null
   phone: string | null
   display_order: number
@@ -169,7 +167,7 @@ export default function TeamManagementPage() {
               <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">No Team Members Yet</h3>
               <p className="text-gray-600 mb-6">
-                Add team members to showcase your organization's expertise and build trust with families.
+                Add team members to showcase your organization&apos;s expertise and build trust with families.
               </p>
               <Button onClick={handleAddNew}>
                 <Plus className="w-4 h-4 mr-2" />
@@ -222,23 +220,13 @@ export default function TeamManagementPage() {
                   )}
 
                   {/* Contact Info */}
-                  {(member.email || member.phone || member.linkedin_url) && (
+                  {(member.email || member.phone) && (
                     <div className="mb-4 pt-4 border-t border-gray-200 space-y-1 text-sm">
                       {member.email && (
                         <div className="text-gray-600 truncate">{member.email}</div>
                       )}
                       {member.phone && (
                         <div className="text-gray-600">{member.phone}</div>
-                      )}
-                      {member.linkedin_url && (
-                        <a
-                          href={member.linkedin_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline block truncate"
-                        >
-                          LinkedIn Profile
-                        </a>
                       )}
                     </div>
                   )}

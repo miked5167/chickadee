@@ -2,12 +2,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { SearchResults } from '@/components/search/SearchResults'
 import { AdvisorFilters } from '@/components/search/AdvisorFilters'
-
-export const metadata: Metadata = {
-  title: 'Search Hockey Advisors | The Hockey Directory',
-  description:
-    'Find and compare hockey advisors across North America. Filter by location, specialty, and rating to find the perfect advisor for your hockey journey.',
-}
+import { ComparisonTray } from '@/components/listing/ComparisonTray'
 
 interface ListingsPageProps {
   searchParams: Promise<{
@@ -16,6 +11,13 @@ interface ListingsPageProps {
     lng?: string
     radius?: string
     specialty?: string
+    service?: string
+    pathway?: string
+    level?: string
+    language?: string
+    pricing?: string
+    remote?: string
+    accepting?: string
     minRating?: string
     country?: string
     state?: string
@@ -25,7 +27,20 @@ interface ListingsPageProps {
     featured?: string
     priceRange?: string
     pricingStructure?: string
+    verified?: string
   }>
+}
+
+export async function generateMetadata({ searchParams }: ListingsPageProps): Promise<Metadata> {
+  const params = await searchParams
+  const hasFilters = Object.values(params).some(Boolean)
+
+  return {
+    title: params.location ? `Hockey Advisors near ${params.location}` : 'Find Hockey Advisors',
+    description: 'Search hockey advisor companies by name, location, specialty, or verified business connection across Canada and the United States.',
+    alternates: { canonical: '/listings' },
+    robots: hasFilters ? { index: false, follow: true } : { index: true, follow: true },
+  }
 }
 
 export default async function ListingsPage({ searchParams }: ListingsPageProps) {
@@ -39,21 +54,22 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
     : 'Search Hockey Advisors'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-ice-white">
       {/* Page Header */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+      <div className="rink-grid border-b-4 border-red-line bg-arena-navy text-white">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-goal-gold">Hockey advisor directory</p>
+          <h1 className="font-display text-4xl font-extrabold uppercase leading-none md:text-6xl">
             {pageTitle}
           </h1>
-          <p className="text-gray-600">
-            Find verified hockey advisors to help guide your player's journey
+          <p className="mt-3 max-w-2xl text-ice-blue">
+            Search 202 company listings, then review the people and details behind each business before making contact.
           </p>
         </div>
       </div>
 
       {/* Main Content with Sidebar */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
@@ -75,6 +91,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
           </div>
         </div>
       </div>
+      <ComparisonTray />
     </div>
   )
 }

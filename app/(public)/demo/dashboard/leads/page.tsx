@@ -277,7 +277,7 @@ export default function DemoLeadsPage() {
                         {lead.child_age && (
                           <div className="flex items-center gap-1">
                             <User className="w-4 h-4" />
-                            Child's age: {lead.child_age}
+                            Child&apos;s age: {lead.child_age}
                           </div>
                         )}
                       </div>

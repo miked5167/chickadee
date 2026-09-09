@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { MetricCard } from '@/components/dashboard/MetricCard'
@@ -53,11 +53,7 @@ export default function AdvisorDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [recentActivity, setRecentActivity] = useState<Activity[]>([])
 
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true)
     setError(null)
 
@@ -89,7 +85,11 @@ export default function AdvisorDashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router])
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [fetchDashboardData])
 
   if (loading) {
     return (
@@ -134,7 +134,7 @@ export default function AdvisorDashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome back, {advisor.name}!</h1>
-          <p className="text-gray-600">Here's how your listing is performing</p>
+          <p className="text-gray-600">Here&apos;s how your listing is performing</p>
         </div>
 
         {/* Quick Actions */}

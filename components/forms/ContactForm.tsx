@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -27,7 +26,6 @@ interface ContactFormProps {
 }
 
 export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -80,6 +78,7 @@ export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
           phone: phone || null,
           child_age: childAge ? parseInt(childAge) : null,
           message,
+          consent_confirmed: true,
         }),
       })
 
@@ -117,7 +116,7 @@ export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Thank you for contacting {advisorName}. They will get back to you shortly.
+            Your inquiry for {advisorName} has been recorded. Response times depend on the company.
           </p>
           <Button onClick={() => setSuccess(false)} variant="outline">
             Send Another Message
@@ -248,7 +247,7 @@ export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
         </Button>
 
         <p className="text-xs text-gray-500 text-center">
-          Your information will be sent directly to {advisorName}. They typically respond within 24-48 hours.
+          Your contact information and message will be shared with {advisorName} for this inquiry.
         </p>
       </form>
     </Card>

@@ -20,6 +20,23 @@ const SORT_OPTIONS = [
   { value: 'recent', label: 'Recently Added' },
 ]
 
+const SPECIALTY_OPTIONS = [
+  'College Recruiting',
+  'Junior Hockey',
+  'Player Development',
+  'Prep School',
+  'Professional',
+  'Female Hockey',
+]
+
+const SERVICE_OPTIONS = ['Advisor Selection', 'Player Assessment', 'Development Planning', 'Team Placement', 'Contract Guidance', 'Family Consultation']
+const PATHWAY_OPTIONS = ['Minor Hockey', 'Prep School', 'Junior Hockey', 'NCAA', 'U SPORTS', 'Professional Hockey']
+const LEVEL_OPTIONS = ['Youth', 'AAA', 'Prep', 'Junior', 'College / University', 'Professional']
+const LANGUAGE_OPTIONS = ['English', 'French']
+const PRICING_OPTIONS = ['one-time', 'season-long', 'package-based', 'hourly', 'retainer', 'free-consultation']
+
+const RADIUS_OPTIONS = [25, 50, 100, 250]
+
 interface AdvisorFiltersProps {
   showLocationFilters?: boolean
 }
@@ -36,23 +53,48 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
     return searchParams.get('country') || ''
   })
 
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>(() => searchParams.get('specialty') || '')
+  const [selectedService, setSelectedService] = useState<string>(() => searchParams.get('service') || '')
+  const [selectedPathway, setSelectedPathway] = useState<string>(() => searchParams.get('pathway') || '')
+  const [selectedLevel, setSelectedLevel] = useState<string>(() => searchParams.get('level') || '')
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(() => searchParams.get('language') || '')
+  const [selectedPricing, setSelectedPricing] = useState<string>(() => searchParams.get('pricing') || '')
+  const [verifiedOnly, setVerifiedOnly] = useState(() => searchParams.get('verified') === 'true')
+  const [remoteOnly, setRemoteOnly] = useState(() => searchParams.get('remote') === 'true')
+  const [acceptingOnly, setAcceptingOnly] = useState(() => searchParams.get('accepting') === 'true')
+  const [selectedRadius, setSelectedRadius] = useState(() => searchParams.get('radius') || '100')
+
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
-  const hasActiveFilters = selectedCountry !== ''
+  const activeFilterCount = [selectedCountry, selectedSpecialty, selectedService, selectedPathway, selectedLevel, selectedLanguage, selectedPricing, verifiedOnly ? 'verified' : '', remoteOnly ? 'remote' : '', acceptingOnly ? 'accepting' : ''].filter(Boolean).length
+  const hasActiveFilters = activeFilterCount > 0
 
   // Apply filters
   const applyFilters = () => {
-    const params = new URLSearchParams()
-
-    // Preserve search params
-    const search = searchParams.get('search')
-    const state = searchParams.get('state')
-
-    if (search) params.set('search', search)
-    if (state) params.set('state', state)
+    const params = new URLSearchParams(searchParams.toString())
 
     // Add filter params
     if (selectedCountry) params.set('country', selectedCountry)
+    else params.delete('country')
+    if (selectedSpecialty) params.set('specialty', selectedSpecialty)
+    else params.delete('specialty')
+    if (selectedService) params.set('service', selectedService)
+    else params.delete('service')
+    if (selectedPathway) params.set('pathway', selectedPathway)
+    else params.delete('pathway')
+    if (selectedLevel) params.set('level', selectedLevel)
+    else params.delete('level')
+    if (selectedLanguage) params.set('language', selectedLanguage)
+    else params.delete('language')
+    if (selectedPricing) params.set('pricing', selectedPricing)
+    else params.delete('pricing')
+    if (verifiedOnly) params.set('verified', 'true')
+    else params.delete('verified')
+    if (remoteOnly) params.set('remote', 'true')
+    else params.delete('remote')
+    if (acceptingOnly) params.set('accepting', 'true')
+    else params.delete('accepting')
+    if (showLocationFilters) params.set('radius', selectedRadius)
     if (selectedSort) params.set('sort', selectedSort)
 
     params.set('page', '1')
@@ -64,14 +106,29 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
   // Clear all filters
   const clearFilters = () => {
     setSelectedCountry('')
+    setSelectedSpecialty('')
+    setSelectedService('')
+    setSelectedPathway('')
+    setSelectedLevel('')
+    setSelectedLanguage('')
+    setSelectedPricing('')
+    setVerifiedOnly(false)
+    setRemoteOnly(false)
+    setAcceptingOnly(false)
     setSelectedSort('name')
 
-    const params = new URLSearchParams()
-    const search = searchParams.get('search')
-    const state = searchParams.get('state')
-
-    if (search) params.set('search', search)
-    if (state) params.set('state', state)
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('country')
+    params.delete('specialty')
+    params.delete('service')
+    params.delete('pathway')
+    params.delete('level')
+    params.delete('language')
+    params.delete('pricing')
+    params.delete('verified')
+    params.delete('remote')
+    params.delete('accepting')
+    params.set('sort', 'name')
     params.set('page', '1')
 
     router.push(`/listings?${params.toString()}`)
@@ -96,7 +153,7 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
           className="w-full gap-2"
         >
           <FaFilter />
-          Filters {hasActiveFilters && '(1)'}
+          Filters {hasActiveFilters && `(${activeFilterCount})`}
         </Button>
       </div>
 
@@ -119,6 +176,7 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
             <button
               onClick={() => setShowMobileFilters(false)}
               className="p-2 hover:bg-gray-100 rounded-lg"
+              aria-label="Close filters"
             >
               <FaTimes />
             </button>
@@ -172,6 +230,125 @@ export function AdvisorFilters({ showLocationFilters = true }: AdvisorFiltersPro
                     </Label>
                   </div>
                 </RadioGroup>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Specialty</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select value={selectedSpecialty || 'any'} onValueChange={(value) => setSelectedSpecialty(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Any specialty" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any specialty</SelectItem>
+                    {SPECIALTY_OPTIONS.map((specialty) => (
+                      <SelectItem key={specialty} value={specialty}>{specialty}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-base">Service</CardTitle></CardHeader>
+              <CardContent>
+                <Select value={selectedService || 'any'} onValueChange={(value) => setSelectedService(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Any service" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any service</SelectItem>
+                    {SERVICE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-base">Hockey pathway</CardTitle></CardHeader>
+              <CardContent>
+                <Select value={selectedPathway || 'any'} onValueChange={(value) => setSelectedPathway(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Any pathway" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any pathway</SelectItem>
+                    {PATHWAY_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-base">Player level</CardTitle></CardHeader>
+              <CardContent>
+                <Select value={selectedLevel || 'any'} onValueChange={(value) => setSelectedLevel(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Any level" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any level</SelectItem>
+                    {LEVEL_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-base">Language & pricing</CardTitle></CardHeader>
+              <CardContent className="space-y-3">
+                <Select value={selectedLanguage || 'any'} onValueChange={(value) => setSelectedLanguage(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Any language" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any language</SelectItem>
+                    {LANGUAGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                <Select value={selectedPricing || 'any'} onValueChange={(value) => setSelectedPricing(value === 'any' ? '' : value)}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Any pricing model" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Any pricing model</SelectItem>
+                    {PRICING_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option.replaceAll('-', ' ')}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
+
+            {showLocationFilters && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Distance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Select value={selectedRadius} onValueChange={setSelectedRadius}>
+                    <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {RADIUS_OPTIONS.map((radius) => (
+                        <SelectItem key={radius} value={String(radius)}>Within {radius} miles</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </CardContent>
+              </Card>
+            )}
+
+            <Card>
+              <CardContent className="space-y-4 pt-6">
+                <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm font-semibold text-arena-navy">
+                  <input type="checkbox" checked={acceptingOnly} onChange={(event) => setAcceptingOnly(event.target.checked)} className="h-5 w-5 rounded border-frost text-hockey-blue" />
+                  Accepting new clients
+                </label>
+                <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm font-semibold text-arena-navy">
+                  <input type="checkbox" checked={remoteOnly} onChange={(event) => setRemoteOnly(event.target.checked)} className="h-5 w-5 rounded border-frost text-hockey-blue" />
+                  Remote service available
+                </label>
+                <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm font-semibold text-arena-navy">
+                  <input
+                    type="checkbox"
+                    checked={verifiedOnly}
+                    onChange={(event) => setVerifiedOnly(event.target.checked)}
+                    className="h-5 w-5 rounded border-frost text-hockey-blue"
+                  />
+                  Business connection verified
+                </label>
+                <p className="mt-2 text-xs leading-5 text-neutral-gray">Shows listings whose business relationship has been confirmed. This is not an endorsement.</p>
               </CardContent>
             </Card>
 

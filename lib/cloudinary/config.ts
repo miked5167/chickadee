@@ -4,6 +4,7 @@
  */
 
 import { v2 as cloudinary } from 'cloudinary'
+import { createHash } from 'node:crypto'
 
 // Configure Cloudinary
 cloudinary.config({
@@ -50,9 +51,8 @@ export function generateUploadSignature(
   publicId: string,
   timestamp: number
 ): string {
-  const crypto = require('crypto')
   const params = `public_id=${publicId}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`
-  return crypto.createHash('sha256').update(params).digest('hex')
+  return createHash('sha256').update(params).digest('hex')
 }
 
 /**

@@ -6,9 +6,9 @@ import { repositoryRoot, targetFingerprintPath } from './generate-schema-fingerp
 const outputPath = path.join(repositoryRoot, 'supabase', 'types', 'database.generated.ts')
 
 function typeScriptType(sqlType) {
-  if (sqlType === 'uuid' || sqlType === 'text' || sqlType.startsWith('character varying') || sqlType === 'timestamp with time zone') return 'string'
+  if (sqlType === 'uuid' || sqlType === 'text' || sqlType.startsWith('character varying') || sqlType.startsWith('character(') || sqlType === 'timestamp with time zone') return 'string'
   if (sqlType === 'text[]') return 'string[]'
-  if (sqlType === 'integer') return 'number'
+  if (sqlType === 'smallint' || sqlType === 'integer' || sqlType === 'bigint' || sqlType === 'numeric') return 'number'
   if (sqlType === 'boolean') return 'boolean'
   if (sqlType === 'jsonb') return 'Json'
   if (sqlType.startsWith('public.')) {
@@ -120,6 +120,18 @@ export function generateTypes(fingerprint) {
   }
   if (fingerprint.tables.some((table) => table.name === 'reviews')) {
     lines.push("export type ReviewRow = Database['public']['Tables']['reviews']['Row']")
+  }
+  if (fingerprint.tables.some((table) => table.name === 'company_profiles')) {
+    lines.push("export type CompanyProfileRow = Database['public']['Tables']['company_profiles']['Row']")
+  }
+  if (fingerprint.tables.some((table) => table.name === 'company_leads')) {
+    lines.push("export type CompanyLeadRow = Database['public']['Tables']['company_leads']['Row']")
+  }
+  if (fingerprint.tables.some((table) => table.name === 'directory_events')) {
+    lines.push("export type DirectoryEventRow = Database['public']['Tables']['directory_events']['Row']")
+  }
+  if (fingerprint.tables.some((table) => table.name === 'advisor_interest_submissions')) {
+    lines.push("export type AdvisorInterestSubmissionRow = Database['public']['Tables']['advisor_interest_submissions']['Row']")
   }
   lines.push('')
   return `${lines.join('\n')}\n`

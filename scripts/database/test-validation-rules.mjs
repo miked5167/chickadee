@@ -9,10 +9,15 @@ import {
   validateM2SqlSafety,
   validateM3SqlSafety,
   validateM4SqlSafety,
+  validateM5SqlSafety,
+  validateM6SqlSafety,
+  validateM7SqlSafety,
   validateM3PreflightScript,
   validateM4PreflightScript,
   validateM3ApplyScript,
   validateM3PostVerificationScript,
+  validateM4ApplyScript,
+  validateM4PostVerificationScript,
   validateProductionApplyScript,
   validateRegister,
   validateSensitiveText,
@@ -34,19 +39,29 @@ const fingerprint = buildFingerprint(baseline)
 const m2 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260719000001_add_companies_updated_at_trigger.sql'), 'utf8')
 const m3 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260719000002_administrator_authorization_foundation.sql'), 'utf8')
 const m4 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260719000003_company_reviews.sql'), 'utf8')
+const m5 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260821000000_company_profiles.sql'), 'utf8')
+const m6 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260821000001_company_leads_and_events.sql'), 'utf8')
+const m7 = await readFile(path.join(repositoryRoot, 'supabase', 'migrations', '20260821000002_advisor_interest_submissions.sql'), 'utf8')
 const productionApplyScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m2-production-apply.ps1'), 'utf8')
 const m3PreflightScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-preflight.ps1'), 'utf8')
 const m3ApplyScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-apply.ps1'), 'utf8')
 const m3PostVerificationScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-post-verification.ps1'), 'utf8')
+const m4ApplyScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m4-production-apply.ps1'), 'utf8')
+const m4PostVerificationScript = await readFile(path.join(repositoryRoot, 'scripts', 'database', 'run-m4-production-post-verification.ps1'), 'utf8')
 
 validateM2SqlSafety(m2)
 validateM3SqlSafety(m3)
 validateM4SqlSafety(m4)
+validateM5SqlSafety(m5)
+validateM6SqlSafety(m6)
+validateM7SqlSafety(m7)
 validateProductionApplyScript(productionApplyScript)
 validateM3PreflightScript(m3PreflightScript)
 validateM4PreflightScript(m3PreflightScript)
 validateM3ApplyScript(m3ApplyScript)
 validateM3PostVerificationScript(m3PostVerificationScript)
+validateM4ApplyScript(m4ApplyScript)
+validateM4PostVerificationScript(m4PostVerificationScript)
 
 expectFailure('duplicate migration version', () => validateActiveFileNames([
   '20260719000000_one.sql',
@@ -90,6 +105,23 @@ expectFailure('M4 administrator mutation policy', () => validateM4SqlSafety(m4.r
 expectFailure('M4 exposes reviewer identity', () => validateM4SqlSafety(m4.replace('GRANT SELECT (id, company_id, rating', 'GRANT SELECT (id, company_id, reviewer_user_id, rating')))
 expectFailure('M4 allows company cascade deletion', () => validateM4SqlSafety(m4.replace('REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT', 'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE')))
 expectFailure('M4 weakens fixed search_path guard', () => validateM4SqlSafety(m4.replace("pg_catalog.pg_get_functiondef(admin_function.oid) LIKE '%SET search_path TO ''''%'", 'admin_function.proconfig IS NOT NULL')))
+expectFailure('M5 row-bearing seed', () => validateM5SqlSafety(m5.replace('RESET statement_timeout;', 'INSERT INTO public.company_profiles DEFAULT VALUES;\nRESET statement_timeout;')))
+expectFailure('M5 wrong company delete behavior', () => validateM5SqlSafety(m5.replace('REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE', 'REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT')))
+expectFailure('M5 owner policy loses identity binding', () => validateM5SqlSafety(m5.replaceAll('companies.verified_owner_id = auth.uid()', 'companies.verified_owner_id IS NOT NULL')))
+expectFailure('M5 administrator mutation path', () => validateM5SqlSafety(m5.replace('companies.verified_owner_id = auth.uid()', 'public.is_admin()')))
+expectFailure('M5 public mutation grant', () => validateM5SqlSafety(m5.replace('GRANT SELECT ON TABLE public.company_profiles TO anon;', 'GRANT SELECT, INSERT ON TABLE public.company_profiles TO anon;')))
+expectFailure('M5 missing auth identity prerequisite', () => validateM5SqlSafety(m5.replace("to_regprocedure('auth.uid()')", "to_regprocedure('auth.missing_uid()')")))
+expectFailure('M6 row-bearing lead seed', () => validateM6SqlSafety(m6.replace('RESET statement_timeout;', 'INSERT INTO public.company_leads DEFAULT VALUES;\nRESET statement_timeout;')))
+expectFailure('M6 exposes leads to anonymous users', () => validateM6SqlSafety(m6.replace('REVOKE ALL ON TABLE public.company_leads FROM anon;', 'GRANT SELECT ON TABLE public.company_leads TO anon;')))
+expectFailure('M6 owner policy loses identity binding', () => validateM6SqlSafety(m6.replaceAll('companies.verified_owner_id = auth.uid()', 'companies.verified_owner_id IS NOT NULL')))
+expectFailure('M6 administrator mutation path', () => validateM6SqlSafety(m6.replace('companies.verified_owner_id = auth.uid()', 'public.is_admin()')))
+expectFailure('M6 stores raw IP column', () => validateM6SqlSafety(m6.replaceAll('ip_hash', 'ip_address')))
+expectFailure('M6 permits company cascade deletion', () => validateM6SqlSafety(m6.replaceAll('ON UPDATE RESTRICT ON DELETE RESTRICT', 'ON UPDATE RESTRICT ON DELETE CASCADE')))
+expectFailure('M7 row-bearing seed', () => validateM7SqlSafety(m7.replace('RESET statement_timeout;', 'INSERT INTO public.advisor_interest_submissions DEFAULT VALUES;\nRESET statement_timeout;')))
+expectFailure('M7 exposes private submissions to anonymous users', () => validateM7SqlSafety(m7.replace('REVOKE ALL ON TABLE public.advisor_interest_submissions FROM anon;', 'GRANT SELECT ON TABLE public.advisor_interest_submissions TO anon;')))
+expectFailure('M7 exposes private submissions to signed-in users', () => validateM7SqlSafety(m7.replace('REVOKE ALL ON TABLE public.advisor_interest_submissions FROM authenticated;', 'GRANT SELECT ON TABLE public.advisor_interest_submissions TO authenticated;')))
+expectFailure('M7 adds a public access policy', () => validateM7SqlSafety(m7.replace('ALTER TABLE public.advisor_interest_submissions OWNER TO postgres;', 'CREATE POLICY public_read ON public.advisor_interest_submissions FOR SELECT TO anon USING (true);\nALTER TABLE public.advisor_interest_submissions OWNER TO postgres;')))
+expectFailure('M7 stores a raw IP address', () => validateM7SqlSafety(m7.replaceAll('ip_hash', 'ip_address')))
 expectFailure('M3 preflight can apply migrations', () => validateM3PreflightScript(m3PreflightScript.replace("'db', 'push', '--dry-run', '--db-url'", "'db', 'push', '--db-url'")))
 expectFailure('M3 preflight skips M2 evidence validation', () => validateM3PreflightScript(m3PreflightScript.replace('--target m2', '--target current')))
 expectFailure('M3 preflight omits object-absence guard', () => validateM3PreflightScript(m3PreflightScript.replaceAll("'m3_objects_absent'", "'objects_unknown'")))
@@ -104,9 +136,18 @@ expectFailure('M3 apply creates a first administrator', () => validateM3ApplyScr
 expectFailure('M3 post-verification can reapply', () => validateM3PostVerificationScript(`${m3PostVerificationScript}\n'db','push'`))
 expectFailure('M3 post-verification claims apply reinvocation', () => validateM3PostVerificationScript(m3PostVerificationScript.replaceAll('apply_reinvoked=$false', 'apply_reinvoked=$true')))
 expectFailure('M3 post-verification skips current evidence validation', () => validateM3PostVerificationScript(m3PostVerificationScript.replace('--target current', '--target m2')))
+expectFailure('M4 apply missing approval phrase', () => validateM4ApplyScript(m4ApplyScript.replaceAll('APPROVE M4 PRODUCTION MIGRATION', 'UNAPPROVED')))
+expectFailure('M4 apply skips approved-window preflight', () => validateM4ApplyScript(m4ApplyScript.replace("run-m3-production-preflight.ps1') -Target M4", "run-m3-production-preflight.ps1') -Target M3")))
+expectFailure('M4 apply skips immediate dry run', () => validateM4ApplyScript(m4ApplyScript.replace("'db','push','--dry-run','--db-url'", "'db','push','--db-url'")))
+expectFailure('M4 apply broadens migration scope', () => validateM4ApplyScript(`${m4ApplyScript}\n--include-all`))
+expectFailure('M4 apply seeds a review', () => validateM4ApplyScript(`${m4ApplyScript}\nINSERT INTO public.reviews DEFAULT VALUES;`))
+expectFailure('M4 apply creates a first administrator', () => validateM4ApplyScript(`${m4ApplyScript}\nINSERT INTO public.admin_users DEFAULT VALUES;`))
+expectFailure('M4 post-verification can reapply', () => validateM4PostVerificationScript(`${m4PostVerificationScript}\n'db','push'`))
+expectFailure('M4 post-verification claims apply reinvocation', () => validateM4PostVerificationScript(m4PostVerificationScript.replaceAll('apply_reinvoked=$false', 'apply_reinvoked=$true')))
+expectFailure('M4 post-verification skips M4 evidence validation', () => validateM4PostVerificationScript(m4PostVerificationScript.replaceAll('--target m4', '--target m3')))
 expectFailure('production apply missing approval phrase', () => validateProductionApplyScript(productionApplyScript.replace('APPROVE M2 PRODUCTION MIGRATION', 'UNAPPROVED')))
 expectFailure('production apply broadens migration scope', () => validateProductionApplyScript(`${productionApplyScript}\n--include-all`))
 expectFailure('production apply skips current evidence validation', () => validateProductionApplyScript(productionApplyScript.replace('--target current', '--target baseline')))
 expectFailure('production verification resume can reapply', () => validateProductionApplyScript(productionApplyScript.replace('apply_reinvoked = $false', 'apply_reinvoked = $true')))
 
-process.stdout.write('Negative baseline, M2, M3, and M4 migration safety rule tests passed.\n')
+process.stdout.write('Negative baseline through M7 migration safety rule tests passed.\n')

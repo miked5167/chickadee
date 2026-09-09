@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { FiTwitter, FiFacebook, FiInstagram, FiLinkedin } from 'react-icons/fi'
+import { CookieSettingsButton } from './CookieConsent'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -8,90 +7,55 @@ export function Footer() {
   const navigation = {
     advisors: [
       { name: 'Find Advisors', href: '/listings' },
-      { name: 'Featured Advisors', href: '/listings?featured=true' },
+      { name: 'Claim Your Listing', href: '/listings' },
+      { name: 'Advisor Sign In', href: '/login' },
     ],
     locations: [
-      { name: 'Toronto Hockey Advisors', href: '/listings?location=Toronto%2C%20ON&lat=43.6532&lng=-79.3832&country=CA&state=ON' },
-      { name: 'Boston Hockey Advisors', href: '/listings?location=Boston%2C%20MA&lat=42.3601&lng=-71.0589&country=US&state=MA' },
-      { name: 'Vancouver Hockey Advisors', href: '/listings?location=Vancouver%2C%20BC&lat=49.2827&lng=-123.1207&country=CA&state=BC' },
-      { name: 'Minneapolis Hockey Advisors', href: '/listings?location=Minneapolis%2C%20MN&lat=44.9778&lng=-93.2650&country=US&state=MN' },
+      { name: 'Ontario Hockey Advisors', href: '/hockey-advisors/ontario' },
+      { name: 'Massachusetts Hockey Advisors', href: '/hockey-advisors/massachusetts' },
+      { name: 'British Columbia Advisors', href: '/hockey-advisors/british-columbia' },
+      { name: 'Minnesota Hockey Advisors', href: '/hockey-advisors/minnesota' },
     ],
     resources: [
-      { name: 'Blog', href: '/blog' },
-      { name: 'Glossary', href: '/glossary' },
+      { name: 'Hockey Glossary', href: '/glossary' },
+      { name: 'Family Research Guides', href: '/guides' },
+      { name: 'Saved Listings', href: '/saved' },
+      { name: 'How the Directory Works', href: '/#how-it-works' },
     ],
     company: [
       { name: 'About Us', href: '/about' },
-      { name: 'Contact', href: '/contact' },
+      { name: 'For Hockey Advisors', href: '/for-advisors' },
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy' },
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
     ],
-    social: [
-      {
-        name: 'Twitter',
-        href: '#',
-        icon: FiTwitter,
-      },
-      {
-        name: 'Facebook',
-        href: '#',
-        icon: FiFacebook,
-      },
-      {
-        name: 'Instagram',
-        href: '#',
-        icon: FiInstagram,
-      },
-      {
-        name: 'LinkedIn',
-        href: '#',
-        icon: FiLinkedin,
-      },
-    ],
   }
 
   return (
-    <footer className="bg-puck-black" aria-labelledby="footer-heading">
+    <footer className="rink-grid border-t-4 border-red-line bg-arena-navy" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+        <div className="xl:grid xl:grid-cols-[1.2fr_2fr] xl:gap-16">
           <div className="space-y-8">
             {/* Logo and Description */}
-            <Link href="/" className="inline-block">
-              <Image
-                src="/hockey-directory-logo-v6.png"
-                alt="The Hockey Directory"
-                width={600}
-                height={150}
-                className="h-24 w-auto sm:h-28"
-              />
+            <Link href="/" className="inline-block font-display text-3xl font-extrabold uppercase leading-[0.85] tracking-tight text-white">
+              <span className="block text-goal-gold">The Hockey</span>
+              <span className="block border-b-4 border-red-line pb-2">Directory</span>
             </Link>
-            <p className="text-sm text-gray-400">
-              Connecting hockey families with trusted advisors and development professionals across North America.
+            <p className="max-w-md text-sm leading-6 text-frost">
+              An independent directory that helps hockey families research advisors, understand pathways, and make more informed first conversations.
             </p>
-            <div className="flex space-x-6">
-              {navigation.social.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-400 hover:text-white transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
-                </a>
-              ))}
+            <div className="red-line-rule rounded-r-md bg-white/5 py-3 pl-5 pr-4 text-xs leading-5 text-frost">
+              Listings may be unclaimed. A verified badge means the business relationship to the listing has been confirmed; it is not an endorsement.
             </div>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0 md:grid-cols-3">
+          <div className="mt-12 grid grid-cols-2 gap-8 xl:mt-0 md:grid-cols-4">
             <div>
-              <h3 className="text-sm font-semibold text-white">Advisors</h3>
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">Directory</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.advisors.map((item) => (
                   <li key={item.name}>
@@ -106,7 +70,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-white">Top Locations</h3>
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">Top locations</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.locations.map((item) => (
                   <li key={item.name}>
@@ -121,7 +85,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-white">Resources</h3>
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">Resources</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.resources.map((item) => (
                   <li key={item.name}>
@@ -136,7 +100,7 @@ export function Footer() {
               </ul>
             </div>
             <div className="mt-12 md:mt-0">
-              <h3 className="text-sm font-semibold text-white">Company</h3>
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">Company</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.company.map((item) => (
                   <li key={item.name}>
@@ -150,8 +114,8 @@ export function Footer() {
                 ))}
               </ul>
             </div>
-            <div className="mt-12 md:mt-0">
-              <h3 className="text-sm font-semibold text-white">Legal</h3>
+            <div className="md:col-start-4">
+              <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">Legal</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.legal.map((item) => (
                   <li key={item.name}>
@@ -163,14 +127,16 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <CookieSettingsButton className="text-sm text-gray-400 transition-colors hover:text-white" />
+                </li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-gray-800 pt-8">
-          <p className="text-sm text-gray-400 text-center">
-            &copy; {currentYear} The Hockey Directory. All rights reserved.
-          </p>
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/15 pt-8 text-sm text-frost sm:flex-row sm:items-center sm:justify-between">
+          <p>&copy; {currentYear} The Hockey Directory. All rights reserved.</p>
+          <p>Built for families navigating competitive hockey.</p>
         </div>
       </div>
     </footer>

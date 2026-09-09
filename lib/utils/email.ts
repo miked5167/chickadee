@@ -13,6 +13,20 @@ function getResend(): Resend {
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@thehockeydirectory.com'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  })[character] || character)
+}
+
+function safeEmailHeader(value: string): string {
+  return value.replace(/[\r\n]+/g, ' ').trim()
+}
+
 interface LeadNotificationData {
   advisorName: string
   advisorEmail: string
@@ -42,7 +56,7 @@ export async function sendLeadNotificationEmail(data: LeadNotificationData): Pro
     const { data: emailData, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: data.advisorEmail,
-      subject: `New Lead: ${data.parentName} is interested in your services`,
+      subject: `New Lead: ${safeEmailHeader(data.parentName)} is interested in your services`,
       html: emailHtml,
       text: emailText,
     })
@@ -63,7 +77,17 @@ export async function sendLeadNotificationEmail(data: LeadNotificationData): Pro
 /**
  * Generate HTML email template for lead notification
  */
-function generateLeadNotificationHTML(data: LeadNotificationData): string {
+function generateLeadNotificationHTML(rawData: LeadNotificationData): string {
+  const data = {
+    ...rawData,
+    advisorName: escapeHtml(rawData.advisorName),
+    advisorEmail: escapeHtml(rawData.advisorEmail),
+    parentName: escapeHtml(rawData.parentName),
+    parentEmail: escapeHtml(rawData.parentEmail),
+    parentPhone: rawData.parentPhone ? escapeHtml(rawData.parentPhone) : undefined,
+    eliteProspectsLink: rawData.eliteProspectsLink ? escapeHtml(rawData.eliteProspectsLink) : undefined,
+    message: escapeHtml(rawData.message),
+  }
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -220,10 +244,12 @@ export async function sendLeadConfirmationEmail(
       return false
     }
 
+    const safeParentName = escapeHtml(parentName)
+    const safeAdvisorName = escapeHtml(advisorName)
     const { error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to: parentEmail,
-      subject: `Your message to ${advisorName} has been sent`,
+      subject: `Your inquiry for ${safeEmailHeader(advisorName)} was received`,
       html: `
 <!DOCTYPE html>
 <html>
@@ -231,11 +257,11 @@ export async function sendLeadConfirmationEmail(
   <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
     <h2 style="color: #0066CC;">Message Sent Successfully!</h2>
 
-    <p>Hi ${parentName},</p>
+    <p>Hi ${safeParentName},</p>
 
-    <p>Your message to <strong>${advisorName}</strong> has been sent successfully.</p>
+    <p>Your inquiry for <strong>${safeAdvisorName}</strong> has been recorded successfully.</p>
 
-    <p>They will review your inquiry and typically respond within 24-48 hours via email.</p>
+    <p>The company will review your inquiry. Response times vary by company.</p>
 
     <p>If you have any questions, feel free to reach out to us.</p>
 
@@ -253,9 +279,9 @@ export async function sendLeadConfirmationEmail(
       text: `
 Hi ${parentName},
 
-Your message to ${advisorName} has been sent successfully.
+Your inquiry for ${advisorName} has been recorded successfully.
 
-They will review your inquiry and typically respond within 24-48 hours via email.
+The company will review your inquiry. Response times vary by company.
 
 If you have any questions, feel free to reach out to us.
 

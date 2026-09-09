@@ -1,137 +1,99 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-export async function GET(request: NextRequest) {
+type RecentLead = {
+  id: string
+  contact_name: string
+  created_at: string
+  status: string
+}
+
+type RecentReview = {
+  id: string
+  rating: number
+  title: string | null
+  created_at: string
+}
+
+export async function GET() {
   try {
     const supabase = await createClient()
-
-    // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get advisor record for this user
-    // For now, we'll find the advisor by checking if they have a claimed listing
-    // In production, you'd link user_id to advisor via claimed_by_user_id
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id, name, slug, is_claimed, average_rating, review_count')
-      .eq('is_claimed', true)
+    const { data: company, error: companyError } = await supabase
+      .from('companies')
+      .select('id, name, slug, verified')
+      .eq('verified_owner_id', user.id)
       .single()
 
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed listing found for this user' },
-        { status: 404 }
-      )
+    if (companyError || !company) {
+      return NextResponse.json({ error: 'No verified-owner listing found for this account.' }, { status: 404 })
     }
 
-    // Calculate date 30 days ago
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-    const thirtyDaysAgoISO = thirtyDaysAgo.toISOString()
+    const since = thirtyDaysAgo.toISOString()
 
-    // Fetch profile views (last 30 days)
-    const { count: profileViews } = await supabase
-      .from('listing_views')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .gte('created_at', thirtyDaysAgoISO)
+    const [profileViewsResult, totalClicksResult, recentLeadCountResult, totalLeadCountResult, recentLeadsResult, reviewsResult] = await Promise.all([
+      supabase.from('directory_events').select('id', { count: 'exact', head: true })
+        .eq('company_id', company.id).eq('event_type', 'profile_view').gte('created_at', since),
+      supabase.from('directory_events').select('id', { count: 'exact', head: true })
+        .eq('company_id', company.id).in('event_type', ['website_click', 'email_click', 'phone_click']),
+      supabase.from('company_leads').select('id', { count: 'exact', head: true })
+        .eq('company_id', company.id).gte('created_at', since),
+      supabase.from('company_leads').select('id', { count: 'exact', head: true })
+        .eq('company_id', company.id),
+      supabase.from('company_leads').select('id, contact_name, created_at, status')
+        .eq('company_id', company.id).order('created_at', { ascending: false }).limit(5),
+      supabase.from('reviews').select('id, rating, title, created_at')
+        .eq('company_id', company.id).order('created_at', { ascending: false }).limit(100),
+    ])
 
-    // Fetch total clicks
-    const { count: totalClicks } = await supabase
-      .from('click_tracking')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
+    const reviews = (reviewsResult.data ?? []) as RecentReview[]
+    const ratingTotal = reviews.reduce((sum, review) => sum + review.rating, 0)
+    const averageRating = reviews.length > 0 ? ratingTotal / reviews.length : 0
 
-    // Fetch leads (last 30 days)
-    const { count: leadsLast30Days } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-      .gte('created_at', thirtyDaysAgoISO)
-
-    // Fetch total leads
-    const { count: totalLeads } = await supabase
-      .from('leads')
-      .select('*', { count: 'exact', head: true })
-      .eq('advisor_id', advisor.id)
-
-    // Fetch recent activity (last 10 items)
-    const { data: recentLeads } = await supabase
-      .from('leads')
-      .select('id, parent_name, created_at, status')
-      .eq('advisor_id', advisor.id)
-      .order('created_at', { ascending: false })
-      .limit(5)
-
-    const { data: recentReviews } = await supabase
-      .from('reviews')
-      .select(`
-        id,
-        rating,
-        review_title,
-        created_at,
-        reviewer:users_public!reviews_user_id_fkey (
-          display_name
-        )
-      `)
-      .eq('advisor_id', advisor.id)
-      .eq('is_published', true)
-      .order('created_at', { ascending: false })
-      .limit(5)
-
-    // Combine and sort recent activity
     const recentActivity = [
-      ...(recentLeads || []).map(lead => ({
+      ...((recentLeadsResult.data ?? []) as RecentLead[]).map((lead) => ({
         type: 'lead' as const,
         id: lead.id,
-        description: `New lead from ${lead.parent_name}`,
+        description: `New inquiry from ${lead.contact_name}`,
         date: lead.created_at,
         status: lead.status,
       })),
-      ...(recentReviews || []).map((review: any) => ({
+      ...reviews.slice(0, 5).map((review) => ({
         type: 'review' as const,
         id: review.id,
-        description: `New ${review.rating}-star review${review.review_title ? `: ${review.review_title}` : ''}`,
+        description: `New ${review.rating}-star review${review.title ? `: ${review.title}` : ''}`,
         date: review.created_at,
-        reviewer: review.reviewer?.display_name || 'Anonymous',
       })),
-    ]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 10)
+    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10)
 
-    return NextResponse.json(
-      {
-        advisor: {
-          id: advisor.id,
-          name: advisor.name,
-          slug: advisor.slug,
-          average_rating: advisor.average_rating || 0,
-          review_count: advisor.review_count || 0,
-        },
-        stats: {
-          profileViews: profileViews || 0,
-          totalClicks: totalClicks || 0,
-          leadsLast30Days: leadsLast30Days || 0,
-          totalLeads: totalLeads || 0,
-          averageRating: advisor.average_rating || 0,
-          reviewCount: advisor.review_count || 0,
-        },
-        recentActivity,
+    return NextResponse.json({
+      advisor: {
+        id: company.id,
+        name: company.name,
+        slug: company.slug,
+        average_rating: averageRating,
+        review_count: reviews.length,
+        verified: company.verified,
       },
-      { status: 200 }
-    )
+      stats: {
+        profileViews: profileViewsResult.count ?? 0,
+        totalClicks: totalClicksResult.count ?? 0,
+        leadsLast30Days: recentLeadCountResult.count ?? 0,
+        totalLeads: totalLeadCountResult.count ?? 0,
+        averageRating,
+        reviewCount: reviews.length,
+      },
+      recentActivity,
+    })
   } catch (error) {
     console.error('Error in GET /api/advisor/dashboard:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Dashboard data could not be loaded.' }, { status: 500 })
   }
 }

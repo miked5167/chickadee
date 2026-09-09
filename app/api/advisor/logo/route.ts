@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import cloudinary, { LOGO_UPLOAD_OPTIONS, extractPublicId, deleteImage } from '@/lib/cloudinary/config'
+import type { UploadApiResponse } from 'cloudinary'
 
 /**
  * Upload or update advisor logo
@@ -19,11 +20,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get claimed advisor for this user
+    // Get the company listing owned by this user.
     const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
+      .from('companies')
       .select('id, logo_url')
-      .eq('claimed_by_user_id', user.id)
+      .eq('verified_owner_id', user.id)
       .single()
 
     if (advisorError || !advisor) {
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     // Upload to Cloudinary with logo transformations
-    const uploadResult = await new Promise<any>((resolve, reject) => {
+    const uploadResult = await new Promise<UploadApiResponse>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: LOGO_UPLOAD_OPTIONS.folder,
@@ -103,7 +104,8 @@ export async function POST(request: NextRequest) {
         },
         (error, result) => {
           if (error) reject(error)
-          else resolve(result)
+          else if (result) resolve(result)
+          else reject(new Error('Image upload did not return a result.'))
         }
       )
 
@@ -112,7 +114,7 @@ export async function POST(request: NextRequest) {
 
     // Update advisor record with new logo URL
     const { error: updateError } = await supabase
-      .from('advisors')
+      .from('companies')
       .update({
         logo_url: uploadResult.secure_url,
         updated_at: new Date().toISOString(),
@@ -158,7 +160,7 @@ export async function POST(request: NextRequest) {
  * Delete advisor logo
  * DELETE /api/advisor/logo
  */
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     // Check authentication
     const supabase = await createClient()
@@ -171,11 +173,11 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get claimed advisor for this user
+    // Get the company listing owned by this user.
     const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
+      .from('companies')
       .select('id, logo_url')
-      .eq('claimed_by_user_id', user.id)
+      .eq('verified_owner_id', user.id)
       .single()
 
     if (advisorError || !advisor) {
@@ -205,7 +207,7 @@ export async function DELETE(request: NextRequest) {
 
     // Remove logo URL from advisor record
     const { error: updateError } = await supabase
-      .from('advisors')
+      .from('companies')
       .update({
         logo_url: null,
         updated_at: new Date().toISOString(),

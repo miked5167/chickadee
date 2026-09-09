@@ -6,7 +6,10 @@
     "forwardMigrations": [
       "supabase/migrations/20260719000001_add_companies_updated_at_trigger.sql",
       "supabase/migrations/20260719000002_administrator_authorization_foundation.sql",
-      "supabase/migrations/20260719000003_company_reviews.sql"
+      "supabase/migrations/20260719000003_company_reviews.sql",
+      "supabase/migrations/20260821000000_company_profiles.sql",
+      "supabase/migrations/20260821000001_company_leads_and_events.sql",
+      "supabase/migrations/20260821000002_advisor_interest_submissions.sql"
     ],
     "containsData": false
   },
@@ -144,6 +147,101 @@
         {
           "ordinal": 9,
           "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "advisor_interest_submissions",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "contact_name",
+          "type": "character varying(100)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(100) NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "business_name",
+          "type": "character varying(150)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(150) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "email",
+          "type": "character varying(320)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(320) NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "website_url",
+          "type": "character varying(2048)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(2048)"
+        },
+        {
+          "ordinal": 6,
+          "name": "interests",
+          "type": "text[]",
+          "nullable": false,
+          "default": null,
+          "definition": "text[] NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "message",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 8,
+          "name": "consent_confirmed",
+          "type": "boolean",
+          "nullable": false,
+          "default": null,
+          "definition": "boolean NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "ip_hash",
+          "type": "character(64)",
+          "nullable": false,
+          "default": null,
+          "definition": "character(64) NOT NULL"
+        },
+        {
+          "ordinal": 10,
+          "name": "user_agent",
+          "type": "character varying(500)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(500)"
+        },
+        {
+          "ordinal": 11,
+          "name": "created_at",
           "type": "timestamp with time zone",
           "nullable": false,
           "default": "now()",
@@ -466,6 +564,427 @@
           "nullable": true,
           "default": "now()",
           "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "company_leads",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "contact_name",
+          "type": "character varying(100)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(100) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "contact_email",
+          "type": "character varying(320)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(320) NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "contact_phone",
+          "type": "character varying(50)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(50)"
+        },
+        {
+          "ordinal": 6,
+          "name": "player_age",
+          "type": "smallint",
+          "nullable": true,
+          "default": null,
+          "definition": "smallint"
+        },
+        {
+          "ordinal": 7,
+          "name": "player_level",
+          "type": "character varying(100)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(100)"
+        },
+        {
+          "ordinal": 8,
+          "name": "goals",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "message",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 10,
+          "name": "consent_confirmed",
+          "type": "boolean",
+          "nullable": false,
+          "default": null,
+          "definition": "boolean NOT NULL"
+        },
+        {
+          "ordinal": 11,
+          "name": "status",
+          "type": "character varying(20)",
+          "nullable": false,
+          "default": "'new'::character varying",
+          "definition": "character varying(20) DEFAULT 'new'::character varying NOT NULL"
+        },
+        {
+          "ordinal": 12,
+          "name": "owner_notes",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 13,
+          "name": "referral_url",
+          "type": "character varying(2048)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(2048)"
+        },
+        {
+          "ordinal": 14,
+          "name": "ip_hash",
+          "type": "character(64)",
+          "nullable": false,
+          "default": null,
+          "definition": "character(64) NOT NULL"
+        },
+        {
+          "ordinal": 15,
+          "name": "user_agent",
+          "type": "character varying(500)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(500)"
+        },
+        {
+          "ordinal": 16,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        },
+        {
+          "ordinal": 17,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "company_profiles",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "tagline",
+          "type": "character varying(160)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(160)"
+        },
+        {
+          "ordinal": 3,
+          "name": "services",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "specialties",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "pathways",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 6,
+          "name": "player_levels",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "age_groups",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 8,
+          "name": "service_areas",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "languages",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 10,
+          "name": "offers_remote",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false",
+          "definition": "boolean DEFAULT false NOT NULL"
+        },
+        {
+          "ordinal": 11,
+          "name": "accepting_clients",
+          "type": "boolean",
+          "nullable": true,
+          "default": null,
+          "definition": "boolean"
+        },
+        {
+          "ordinal": 12,
+          "name": "pricing_models",
+          "type": "text[]",
+          "nullable": false,
+          "default": "'{}'::text[]",
+          "definition": "text[] DEFAULT '{}'::text[] NOT NULL"
+        },
+        {
+          "ordinal": 13,
+          "name": "price_min",
+          "type": "integer",
+          "nullable": true,
+          "default": null,
+          "definition": "integer"
+        },
+        {
+          "ordinal": 14,
+          "name": "price_max",
+          "type": "integer",
+          "nullable": true,
+          "default": null,
+          "definition": "integer"
+        },
+        {
+          "ordinal": 15,
+          "name": "price_currency",
+          "type": "character(3)",
+          "nullable": true,
+          "default": null,
+          "definition": "character(3)"
+        },
+        {
+          "ordinal": 16,
+          "name": "response_time",
+          "type": "character varying(50)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(50)"
+        },
+        {
+          "ordinal": 17,
+          "name": "founded_year",
+          "type": "integer",
+          "nullable": true,
+          "default": null,
+          "definition": "integer"
+        },
+        {
+          "ordinal": 18,
+          "name": "business_hours",
+          "type": "jsonb",
+          "nullable": false,
+          "default": "'{}'::jsonb",
+          "definition": "jsonb DEFAULT '{}'::jsonb NOT NULL"
+        },
+        {
+          "ordinal": 19,
+          "name": "faq",
+          "type": "jsonb",
+          "nullable": false,
+          "default": "'[]'::jsonb",
+          "definition": "jsonb DEFAULT '[]'::jsonb NOT NULL"
+        },
+        {
+          "ordinal": 20,
+          "name": "last_reviewed_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null,
+          "definition": "timestamp with time zone"
+        },
+        {
+          "ordinal": 21,
+          "name": "source_label",
+          "type": "character varying(100)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(100)"
+        },
+        {
+          "ordinal": 22,
+          "name": "source_url",
+          "type": "character varying(2048)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(2048)"
+        },
+        {
+          "ordinal": 23,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        },
+        {
+          "ordinal": 24,
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "directory_events",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "event_type",
+          "type": "character varying(30)",
+          "nullable": false,
+          "default": null,
+          "definition": "character varying(30) NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "session_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "ip_hash",
+          "type": "character(64)",
+          "nullable": false,
+          "default": null,
+          "definition": "character(64) NOT NULL"
+        },
+        {
+          "ordinal": 6,
+          "name": "user_agent",
+          "type": "character varying(500)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(500)"
+        },
+        {
+          "ordinal": 7,
+          "name": "referrer",
+          "type": "character varying(2048)",
+          "nullable": true,
+          "default": null,
+          "definition": "character varying(2048)"
+        },
+        {
+          "ordinal": 8,
+          "name": "metadata",
+          "type": "jsonb",
+          "nullable": false,
+          "default": "'{}'::jsonb",
+          "definition": "jsonb DEFAULT '{}'::jsonb NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
         }
       ],
       "owner": "postgres"
@@ -933,6 +1452,54 @@
       "definition": "UNIQUE (user_id)"
     },
     {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_business_name_check",
+      "type": "check",
+      "definition": "CHECK (((char_length(btrim((business_name)::text)) >= 2) AND (char_length(btrim((business_name)::text)) <= 150)))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_consent_check",
+      "type": "check",
+      "definition": "CHECK (consent_confirmed)"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_contact_name_check",
+      "type": "check",
+      "definition": "CHECK (((char_length(btrim((contact_name)::text)) >= 2) AND (char_length(btrim((contact_name)::text)) <= 100)))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_email_check",
+      "type": "check",
+      "definition": "CHECK (((email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2, }$'::text))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_interests_check",
+      "type": "check",
+      "definition": "CHECK (((cardinality(interests) >= 1) AND (cardinality(interests) <= 3) AND (interests <@ ARRAY['profile_plus'::text, 'sponsored_placement'::text, 'enhanced_analytics'::text])))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_ip_hash_check",
+      "type": "check",
+      "definition": "CHECK (((ip_hash)::text ~ '^[a-f0-9]{64}$'::text))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_message_check",
+      "type": "check",
+      "definition": "CHECK (((message IS NULL) OR (char_length(message) <= 2000)))"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
       "table": "advisors",
       "name": "advisors_company_id_fkey",
       "type": "foreign_key",
@@ -1003,6 +1570,150 @@
       "name": "valid_slug_format",
       "type": "check",
       "definition": "CHECK (((slug)::text ~* '^[a-z0-9-]+$'::text))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_age_check",
+      "type": "check",
+      "definition": "CHECK (((player_age IS NULL) OR ((player_age >= 5) AND (player_age <= 30))))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_consent_check",
+      "type": "check",
+      "definition": "CHECK (consent_confirmed)"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_email_check",
+      "type": "check",
+      "definition": "CHECK (((contact_email)::text ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2, }$'::text))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_ip_hash_check",
+      "type": "check",
+      "definition": "CHECK (((ip_hash)::text ~ '^[a-f0-9]{64}$'::text))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_message_check",
+      "type": "check",
+      "definition": "CHECK (((char_length(btrim(message)) >= 50) AND (char_length(btrim(message)) <= 2000)))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_notes_check",
+      "type": "check",
+      "definition": "CHECK (((owner_notes IS NULL) OR (char_length(owner_notes) <= 2000)))"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_status_check",
+      "type": "check",
+      "definition": "CHECK (((status)::text = ANY (ARRAY['new'::text, 'contacted'::text, 'qualified'::text, 'closed'::text, 'spam'::text])))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_business_hours_check",
+      "type": "check",
+      "definition": "CHECK ((jsonb_typeof(business_hours) = 'object'::text))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_currency_check",
+      "type": "check",
+      "definition": "CHECK (((price_currency IS NULL) OR ((price_currency)::text ~ '^[A-Z]{3}$'::text)))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_faq_check",
+      "type": "check",
+      "definition": "CHECK ((jsonb_typeof(faq) = 'array'::text))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_founded_year_check",
+      "type": "check",
+      "definition": "CHECK (((founded_year IS NULL) OR ((founded_year >= 1900) AND (founded_year <= 2100))))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (company_id)"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_price_max_check",
+      "type": "check",
+      "definition": "CHECK (((price_max IS NULL) OR (price_max >= 0)))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_price_min_check",
+      "type": "check",
+      "definition": "CHECK (((price_min IS NULL) OR (price_min >= 0)))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_price_order_check",
+      "type": "check",
+      "definition": "CHECK (((price_min IS NULL) OR (price_max IS NULL) OR (price_max >= price_min)))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_tagline_check",
+      "type": "check",
+      "definition": "CHECK (((tagline IS NULL) OR ((char_length(btrim((tagline)::text)) >= 10) AND (char_length(btrim((tagline)::text)) <= 160))))"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_ip_hash_check",
+      "type": "check",
+      "definition": "CHECK (((ip_hash)::text ~ '^[a-f0-9]{64}$'::text))"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_metadata_check",
+      "type": "check",
+      "definition": "CHECK ((jsonb_typeof(metadata) = 'object'::text))"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_type_check",
+      "type": "check",
+      "definition": "CHECK (((event_type)::text = ANY (ARRAY['profile_view'::text, 'website_click'::text, 'email_click'::text, 'phone_click'::text, 'lead_submit'::text])))"
     },
     {
       "table": "listing_claims",
@@ -1169,6 +1880,33 @@
       "definition": "backed by constraint admin_users_user_id_key"
     },
     {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_created_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX advisor_interest_submissions_created_idx ON public.advisor_interest_submissions USING btree (created_at DESC)"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint advisor_interest_submissions_pkey"
+    },
+    {
+      "table": "advisor_interest_submissions",
+      "name": "advisor_interest_submissions_rate_limit_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX advisor_interest_submissions_rate_limit_idx ON public.advisor_interest_submissions USING btree (ip_hash, created_at DESC)"
+    },
+    {
       "table": "advisors",
       "name": "advisors_active_idx",
       "unique": false,
@@ -1257,6 +1995,123 @@
       "predicate": null,
       "constraintBacked": false,
       "definition": "CREATE INDEX companies_verified_owner_idx ON public.companies USING btree (verified_owner_id)"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_company_created_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_leads_company_created_idx ON public.company_leads USING btree (company_id, created_at DESC)"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_company_status_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_leads_company_status_idx ON public.company_leads USING btree (company_id, status)"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint company_leads_pkey"
+    },
+    {
+      "table": "company_leads",
+      "name": "company_leads_rate_limit_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_leads_rate_limit_idx ON public.company_leads USING btree (ip_hash, created_at DESC)"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_accepting_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(accepting_clients = true)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_profiles_accepting_idx ON public.company_profiles USING btree (accepting_clients) WHERE (accepting_clients = true)"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_pathways_idx",
+      "unique": false,
+      "method": "gin",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_profiles_pathways_idx ON public.company_profiles USING gin (pathways)"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint company_profiles_pkey"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_services_idx",
+      "unique": false,
+      "method": "gin",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_profiles_services_idx ON public.company_profiles USING gin (services)"
+    },
+    {
+      "table": "company_profiles",
+      "name": "company_profiles_specialties_idx",
+      "unique": false,
+      "method": "gin",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_profiles_specialties_idx ON public.company_profiles USING gin (specialties)"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_company_created_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_events_company_created_idx ON public.directory_events USING btree (company_id, created_at DESC)"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_company_type_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_events_company_type_idx ON public.directory_events USING btree (company_id, event_type, created_at DESC)"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_events_pkey"
+    },
+    {
+      "table": "directory_events",
+      "name": "directory_events_rate_limit_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_events_rate_limit_idx ON public.directory_events USING btree (ip_hash, created_at DESC)"
     },
     {
       "table": "listing_claims",
@@ -1392,12 +2247,32 @@
       "forced": false
     },
     {
+      "table": "advisor_interest_submissions",
+      "enabled": true,
+      "forced": false
+    },
+    {
       "table": "advisors",
       "enabled": true,
       "forced": false
     },
     {
       "table": "companies",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "company_leads",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "company_profiles",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "directory_events",
       "enabled": true,
       "forced": false
     },
@@ -1484,6 +2359,91 @@
       "using": "true",
       "withCheck": null,
       "definition": "CREATE POLICY \"Public read access for companies\" ON public.companies FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
+      "table": "company_leads",
+      "name": "Company owners can read own leads",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can read own leads\" ON public.company_leads FOR SELECT TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "company_leads",
+      "name": "Company owners can update own lead status",
+      "permissive": true,
+      "command": "update",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "withCheck": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "definition": "CREATE POLICY \"Company owners can update own lead status\" ON public.company_leads FOR UPDATE TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid()))))) WITH CHECK ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_leads.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "Company owners can create profiles",
+      "permissive": true,
+      "command": "insert",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "definition": "CREATE POLICY \"Company owners can create profiles\" ON public.company_profiles FOR INSERT TO authenticated WITH CHECK ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "Company owners can delete profiles",
+      "permissive": true,
+      "command": "delete",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can delete profiles\" ON public.company_profiles FOR DELETE TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "Company owners can update profiles",
+      "permissive": true,
+      "command": "update",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "withCheck": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "definition": "CREATE POLICY \"Company owners can update profiles\" ON public.company_profiles FOR UPDATE TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid()))))) WITH CHECK ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = company_profiles.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "company_profiles",
+      "name": "Company profiles are public",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company profiles are public\" ON public.company_profiles FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
+      "table": "directory_events",
+      "name": "Company owners can read own directory events",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_events.company_id) AND (companies.verified_owner_id = auth.uid()))))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company owners can read own directory events\" ON public.directory_events FOR SELECT TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_events.company_id) AND (companies.verified_owner_id = auth.uid())))))"
     },
     {
       "table": "listing_claims",
@@ -1668,6 +2628,26 @@
       "definition": "CREATE TRIGGER update_companies_updated_at BEFORE UPDATE ON public.companies FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
     },
     {
+      "table": "company_leads",
+      "name": "update_company_leads_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_company_leads_updated_at BEFORE UPDATE ON public.company_leads FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    },
+    {
+      "table": "company_profiles",
+      "name": "update_company_profiles_updated_at",
+      "timing": "before",
+      "events": [
+        "update"
+      ],
+      "enabled": "origin",
+      "definition": "CREATE TRIGGER update_company_profiles_updated_at BEFORE UPDATE ON public.company_profiles FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()"
+    },
+    {
       "table": "listing_claims",
       "name": "update_listing_claims_updated_at",
       "timing": "before",
@@ -1753,6 +2733,12 @@
     },
     {
       "kind": "table",
+      "name": "advisor_interest_submissions",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
       "name": "advisors",
       "grantee": "anon",
       "privileges": "ALL"
@@ -1784,6 +2770,48 @@
     {
       "kind": "table",
       "name": "companies",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "company_leads",
+      "grantee": "authenticated",
+      "privileges": "SELECT, UPDATE(owner_notes), UPDATE(status)"
+    },
+    {
+      "kind": "table",
+      "name": "company_leads",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "company_profiles",
+      "grantee": "anon",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "company_profiles",
+      "grantee": "authenticated",
+      "privileges": "DELETE, INSERT, SELECT, UPDATE"
+    },
+    {
+      "kind": "table",
+      "name": "company_profiles",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "directory_events",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_events",
       "grantee": "service_role",
       "privileges": "ALL"
     },

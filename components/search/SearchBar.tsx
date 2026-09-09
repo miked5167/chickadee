@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaSearch, FaMapMarkerAlt, FaCrosshairs, FaTimes } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
@@ -30,7 +30,6 @@ export function SearchBar() {
 
   const {
     getCurrentPosition,
-    reverseGeocode,
     loading: geoLoading,
     error: geoError,
     latitude,
@@ -41,16 +40,55 @@ export function SearchBar() {
 
   // Check for cached location on mount
   useEffect(() => {
-    const cached = getCachedLocation()
-    if (cached) {
-      setLocationInput(cached.formatted)
-      setSelectedLocation({
-        name: cached.formatted,
-        lat: cached.latitude,
-        lng: cached.longitude,
-        country: cached.country,
-        state: cached.state,
+    const timer = window.setTimeout(() => {
+      const cached = getCachedLocation()
+      if (cached) {
+        setLocationInput(cached.formatted)
+        setSelectedLocation({
+          name: cached.formatted,
+          lat: cached.latitude,
+          lng: cached.longitude,
+          country: cached.country,
+          state: cached.state,
+        })
+      }
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  const initializeAutocomplete = useCallback(() => {
+    if (!inputRef.current || !window.google?.maps?.places) return
+
+    try {
+      autocompleteRef.current = new google.maps.places.Autocomplete(inputRef.current, {
+        types: ['(cities)'],
+        componentRestrictions: { country: ['us', 'ca'] },
       })
+
+      autocompleteRef.current.addListener('place_changed', () => {
+        const place = autocompleteRef.current?.getPlace()
+        if (place?.geometry?.location) {
+          let country = ''
+          let state = ''
+          if (place.address_components) {
+            for (const component of place.address_components) {
+              if (component.types.includes('country')) country = component.short_name
+              if (component.types.includes('administrative_area_level_1')) state = component.short_name
+            }
+          }
+
+          setSelectedLocation({
+            name: place.formatted_address || place.name || '',
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+            country,
+            state,
+          })
+          setLocationInput(place.formatted_address || place.name || '')
+        }
+      })
+    } catch (error) {
+      console.error('Error initializing Google Places Autocomplete:', error)
     }
   }, [])
 
@@ -93,48 +131,7 @@ export function SearchBar() {
     document.head.appendChild(script)
 
     // Don't remove script on cleanup - other components may need it
-  }, [])
-
-  const initializeAutocomplete = () => {
-    if (!inputRef.current || !window.google?.maps?.places) return
-
-    try {
-      autocompleteRef.current = new google.maps.places.Autocomplete(inputRef.current, {
-        types: ['(cities)'],
-        componentRestrictions: { country: ['us', 'ca'] }, // USA and Canada only
-      })
-
-      autocompleteRef.current.addListener('place_changed', () => {
-        const place = autocompleteRef.current?.getPlace()
-        if (place?.geometry?.location) {
-          // Detect country and state from address components
-          let country = ''
-          let state = ''
-          if (place.address_components) {
-            for (const component of place.address_components) {
-              if (component.types.includes('country')) {
-                country = component.short_name // "US" or "CA"
-              }
-              if (component.types.includes('administrative_area_level_1')) {
-                state = component.short_name // "ON", "QC", "MA", "NY", etc.
-              }
-            }
-          }
-
-          setSelectedLocation({
-            name: place.formatted_address || place.name || '',
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-            country: country,
-            state: state,
-          })
-          setLocationInput(place.formatted_address || place.name || '')
-        }
-      })
-    } catch (error) {
-      console.error('Error initializing Google Places Autocomplete:', error)
-    }
-  }
+  }, [initializeAutocomplete])
 
   // Handle "Near Me" geolocation
   const handleNearMe = async () => {
@@ -342,10 +339,10 @@ export function SearchBar() {
   }
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-4xl mx-auto">
-      <div className="flex flex-col md:flex-row gap-3 bg-white rounded-lg shadow-lg p-2">
+    <form onSubmit={handleSearch} className="mx-auto w-full max-w-5xl" role="search" aria-label="Search the hockey advisor directory">
+      <div className="flex flex-col gap-2 rounded-lg bg-white p-2 shadow-xl md:flex-row">
         {/* Search/Name Input */}
-        <div className="flex-1 flex items-center gap-2 px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
+        <div className="flex min-h-14 flex-1 items-center gap-2 border-b border-frost px-4 py-2 md:border-b-0 md:border-r">
           <FaSearch className="text-gray-400" />
           <input
             type="text"
@@ -368,7 +365,7 @@ export function SearchBar() {
         </div>
 
         {/* Location Input */}
-        <div className="flex-1 flex items-center gap-2 px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200 relative">
+        <div className="relative flex min-h-14 flex-1 items-center gap-2 border-b border-frost px-4 py-2 md:border-b-0 md:border-r">
           <FaMapMarkerAlt className="text-gray-400" />
           <input
             ref={inputRef}
@@ -406,7 +403,7 @@ export function SearchBar() {
         <Button
           type="submit"
           disabled={isGeocoding}
-          className="md:w-auto whitespace-nowrap px-10 py-6 text-lg font-semibold"
+          className="min-h-14 whitespace-nowrap bg-goal-gold px-8 text-base font-extrabold text-arena-navy hover:bg-goal-gold/85 md:w-auto"
         >
           <FaSearch className="mr-2" />
           {isGeocoding ? 'Finding Location...' : 'Search Advisors'}

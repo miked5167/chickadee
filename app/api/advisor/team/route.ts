@@ -1,158 +1,98 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
-/**
- * Get all team members for the authenticated advisor
- * GET /api/advisor/team
- */
-export async function GET(request: NextRequest) {
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+const teamMemberSchema = z.object({
+  name: z.string().trim().min(2).max(50),
+  title: z.string().trim().max(100).optional().nullable(),
+  bio: z.string().trim().max(3000).optional().nullable(),
+  email: z.string().trim().email().max(255).optional().nullable().or(z.literal('')),
+  phone: z.string().trim().max(20).optional().nullable(),
+  display_order: z.coerce.number().int().min(0).max(1000).default(0),
+  is_active: z.boolean().default(true),
+})
 
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+type AdvisorRow = {
+  id: string
+  name: string
+  title: string | null
+  bio: string | null
+  profile_image_url: string | null
+  contact_email: string | null
+  contact_phone: string | null
+  display_order: number | null
+  active: boolean | null
+  created_at: string | null
+  updated_at: string | null
+}
 
-    // Get claimed advisor for this user
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('claimed_by_user_id', user.id)
-      .single()
-
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed advisor found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // Get all team members for this advisor
-    const { data: teamMembers, error: teamError } = await supabase
-      .from('advisor_team_members')
-      .select('*')
-      .eq('advisor_id', advisor.id)
-      .order('display_order', { ascending: true })
-      .order('created_at', { ascending: true })
-
-    if (teamError) {
-      console.error('Error fetching team members:', teamError)
-      return NextResponse.json(
-        { error: 'Failed to fetch team members' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        teamMembers: teamMembers || [],
-        count: teamMembers?.length || 0,
-      },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error in GET /api/advisor/team:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+function present(member: AdvisorRow) {
+  return {
+    id: member.id,
+    name: member.name,
+    title: member.title,
+    bio: member.bio,
+    photo_url: member.profile_image_url,
+    email: member.contact_email,
+    phone: member.contact_phone,
+    display_order: member.display_order ?? 0,
+    is_active: member.active ?? true,
+    created_at: member.created_at,
+    updated_at: member.updated_at,
   }
 }
 
-/**
- * Create a new team member
- * POST /api/advisor/team
- */
+async function ownedCompany() {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return { supabase, status: 401 as const, company: null }
+
+  const { data: company } = await supabase
+    .from('companies')
+    .select('id')
+    .eq('verified_owner_id', user.id)
+    .single()
+
+  return { supabase, status: company ? 200 as const : 404 as const, company }
+}
+
+export async function GET() {
+  const { supabase, status, company } = await ownedCompany()
+  if (!company) return NextResponse.json({ error: status === 401 ? 'Unauthorized' : 'No verified-owner listing found.' }, { status })
+
+  const { data, error } = await supabase
+    .from('advisors')
+    .select('id, name, title, bio, profile_image_url, contact_email, contact_phone, display_order, active, created_at, updated_at')
+    .eq('company_id', company.id)
+    .order('display_order')
+    .order('created_at')
+
+  if (error) return NextResponse.json({ error: 'Team members could not be loaded.' }, { status: 500 })
+  const teamMembers = ((data ?? []) as AdvisorRow[]).map(present)
+  return NextResponse.json({ teamMembers, count: teamMembers.length })
+}
+
 export async function POST(request: NextRequest) {
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+  const { supabase, status, company } = await ownedCompany()
+  if (!company) return NextResponse.json({ error: status === 401 ? 'Unauthorized' : 'No verified-owner listing found.' }, { status })
 
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+  let body: unknown
+  try { body = await request.json() } catch { return NextResponse.json({ error: 'Request body is invalid.' }, { status: 400 }) }
+  const parsed = teamMemberSchema.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ error: 'Please check the team member details.' }, { status: 400 })
 
-    // Get claimed advisor for this user
-    const { data: advisor, error: advisorError } = await supabase
-      .from('advisors')
-      .select('id')
-      .eq('claimed_by_user_id', user.id)
-      .single()
+  const member = parsed.data
+  const { data, error } = await supabase.from('advisors').insert({
+    company_id: company.id,
+    name: member.name,
+    title: member.title || null,
+    bio: member.bio || null,
+    contact_email: member.email || null,
+    contact_phone: member.phone || null,
+    display_order: member.display_order,
+    active: member.is_active,
+  }).select('id, name, title, bio, profile_image_url, contact_email, contact_phone, display_order, active, created_at, updated_at').single()
 
-    if (advisorError || !advisor) {
-      return NextResponse.json(
-        { error: 'No claimed advisor found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // Parse request body
-    const body = await request.json()
-    const {
-      name,
-      title,
-      bio,
-      photo_url,
-      linkedin_url,
-      email,
-      phone,
-      display_order,
-      is_active,
-    } = body
-
-    // Validate required fields
-    if (!name || name.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'Name is required' },
-        { status: 400 }
-      )
-    }
-
-    // Create team member
-    const { data: teamMember, error: createError } = await supabase
-      .from('advisor_team_members')
-      .insert({
-        advisor_id: advisor.id,
-        name: name.trim(),
-        title: title?.trim() || null,
-        bio: bio?.trim() || null,
-        photo_url: photo_url || null,
-        linkedin_url: linkedin_url?.trim() || null,
-        email: email?.trim() || null,
-        phone: phone?.trim() || null,
-        display_order: display_order ?? 0,
-        is_active: is_active ?? true,
-      })
-      .select()
-      .single()
-
-    if (createError) {
-      console.error('Error creating team member:', createError)
-      return NextResponse.json(
-        { error: 'Failed to create team member' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        teamMember,
-        message: 'Team member created successfully',
-      },
-      { status: 201 }
-    )
-  } catch (error) {
-    console.error('Error in POST /api/advisor/team:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
+  if (error || !data) return NextResponse.json({ error: 'Team member could not be created.' }, { status: 500 })
+  return NextResponse.json({ teamMember: present(data as AdvisorRow), message: 'Team member added.' }, { status: 201 })
 }

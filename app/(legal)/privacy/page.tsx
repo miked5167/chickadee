@@ -1,252 +1,101 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - The Hockey Directory',
-  description: 'Privacy Policy for The Hockey Directory - Learn how we collect, use, and protect your personal information.',
+  title: 'Privacy Policy',
+  description: 'How The Hockey Directory collects, uses, stores, and shares personal information.',
+  alternates: { canonical: '/privacy' },
 }
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section className="space-y-4">
+    <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-arena-navy">{title}</h2>
+    <div className="space-y-4 leading-7 text-slate-700">{children}</div>
+  </section>
+)
 
 export default function PrivacyPage() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
+    <main className="bg-ice-white py-14">
+      <article className="mx-auto max-w-4xl px-4 sm:px-6">
+        <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-hockey-blue">Legal</p>
+        <h1 className="mt-3 font-display text-5xl font-extrabold uppercase tracking-tight text-arena-navy">Privacy policy</h1>
+        <p className="mt-4 text-sm text-slate-500"><strong>Last updated:</strong> August 21, 2026</p>
 
-      <div className="prose prose-lg max-w-none">
-        <p className="text-gray-600 mb-8">
-          <strong>Last Updated:</strong> November 4, 2025
-        </p>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
-          <p className="mb-4">
-            The Hockey Directory ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
-          </p>
-          <p className="mb-4">
-            Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">2. Information We Collect</h2>
-
-          <h3 className="text-xl font-semibold mb-3">2.1 Personal Information</h3>
-          <p className="mb-4">
-            We may collect personal information that you voluntarily provide to us when you:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Submit a contact form to an advisor</li>
-            <li>Create an account or sign in with Google</li>
-            <li>Submit a review or rating</li>
-            <li>Claim a listing as a business owner</li>
-            <li>Subscribe to our newsletter</li>
-            <li>Contact us with questions or feedback</li>
-          </ul>
-          <p className="mb-4">
-            This information may include:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Name and email address</li>
-            <li>Phone number</li>
-            <li>Child's age (when contacting advisors)</li>
-            <li>Business information (for claimed listings)</li>
-            <li>Google account information (when using Google OAuth)</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">2.2 Automatically Collected Information</h3>
-          <p className="mb-4">
-            When you visit our website, we automatically collect certain information about your device and browsing actions:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>IP address (hashed for privacy)</li>
-            <li>Browser type and version</li>
-            <li>Operating system</li>
-            <li>Referral source</li>
-            <li>Pages viewed and time spent</li>
-            <li>Click patterns and navigation paths</li>
-            <li>Device information</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">2.3 Cookies and Tracking Technologies</h3>
-          <p className="mb-4">
-            We use cookies, web beacons, and similar tracking technologies to collect information about your browsing activities. See our <a href="/cookie-policy" className="text-blue-600 hover:underline">Cookie Policy</a> for more details.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">3. How We Use Your Information</h2>
-          <p className="mb-4">
-            We use the information we collect to:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Facilitate contact between users and advisors</li>
-            <li>Process and manage listing claims</li>
-            <li>Display and moderate reviews</li>
-            <li>Send transactional emails (confirmations, notifications)</li>
-            <li>Improve and optimize our website</li>
-            <li>Analyze usage patterns and trends</li>
-            <li>Prevent fraud and abuse</li>
-            <li>Comply with legal obligations</li>
-            <li>Send marketing communications (with your consent)</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">4. How We Share Your Information</h2>
-          <p className="mb-4">
-            We may share your information in the following situations:
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">4.1 With Advisors</h3>
-          <p className="mb-4">
-            When you submit a contact form, we share your information (name, email, phone, message) with the advisor you're contacting.
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">4.2 Service Providers</h3>
-          <p className="mb-4">
-            We may share your information with third-party service providers who perform services on our behalf, including:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Hosting and infrastructure (Vercel)</li>
-            <li>Database services (Supabase)</li>
-            <li>Email delivery (Resend/SendGrid)</li>
-            <li>Analytics (Google Analytics)</li>
-            <li>Authentication (Google OAuth)</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">4.3 Legal Requirements</h3>
-          <p className="mb-4">
-            We may disclose your information if required by law or in response to valid requests by public authorities (e.g., court orders, subpoenas).
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">4.4 Business Transfers</h3>
-          <p className="mb-4">
-            In the event of a merger, acquisition, or sale of assets, your information may be transferred to the acquiring entity.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">5. Data Security</h2>
-          <p className="mb-4">
-            We implement appropriate technical and organizational security measures to protect your personal information, including:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Encryption of data in transit (HTTPS/SSL)</li>
-            <li>Hashing of IP addresses for privacy</li>
-            <li>Secure authentication with Google OAuth</li>
-            <li>Regular security audits</li>
-            <li>Access controls and authentication</li>
-            <li>Secure database hosting</li>
-          </ul>
-          <p className="mb-4">
-            However, no method of transmission over the Internet or electronic storage is 100% secure. We cannot guarantee absolute security of your data.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">6. Your Privacy Rights</h2>
-
-          <h3 className="text-xl font-semibold mb-3">6.1 Access and Correction</h3>
-          <p className="mb-4">
-            You have the right to access and update your personal information. You can do this by logging into your account or contacting us.
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">6.2 Data Deletion</h3>
-          <p className="mb-4">
-            You can request deletion of your personal information by contacting us. Note that we may need to retain certain information for legal or legitimate business purposes.
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">6.3 Marketing Opt-Out</h3>
-          <p className="mb-4">
-            You can opt out of receiving marketing emails by clicking the "unsubscribe" link in any marketing email or by contacting us.
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">6.4 Cookie Preferences</h3>
-          <p className="mb-4">
-            You can manage your cookie preferences through your browser settings or our cookie consent banner.
-          </p>
-
-          <h3 className="text-xl font-semibold mb-3">6.5 GDPR Rights (EU Users)</h3>
-          <p className="mb-4">
-            If you are in the European Union, you have additional rights under GDPR:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Right to data portability</li>
-            <li>Right to object to processing</li>
-            <li>Right to restrict processing</li>
-            <li>Right to lodge a complaint with a supervisory authority</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">6.6 CCPA Rights (California Users)</h3>
-          <p className="mb-4">
-            If you are a California resident, you have rights under the California Consumer Privacy Act (CCPA):
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Right to know what personal information is collected</li>
-            <li>Right to delete personal information</li>
-            <li>Right to opt-out of the sale of personal information (we do not sell your information)</li>
-            <li>Right to non-discrimination for exercising your rights</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">7. Children's Privacy</h2>
-          <p className="mb-4">
-            Our services are not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If you believe we have collected information from a child under 13, please contact us immediately.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">8. Third-Party Links</h2>
-          <p className="mb-4">
-            Our website may contain links to third-party websites. We are not responsible for the privacy practices of these websites. We encourage you to read their privacy policies.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">9. International Data Transfers</h2>
-          <p className="mb-4">
-            Your information may be transferred to and processed in countries other than your country of residence. These countries may have data protection laws that are different from the laws of your country.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">10. Data Retention</h2>
-          <p className="mb-4">
-            We retain your personal information for as long as necessary to provide our services and fulfill the purposes described in this policy, unless a longer retention period is required by law.
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Contact form submissions: Retained indefinitely for business purposes</li>
-            <li>Reviews: Retained indefinitely unless deleted</li>
-            <li>Account information: Retained until account deletion</li>
-            <li>Analytics data: Aggregated and anonymized after 26 months</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">11. Changes to This Privacy Policy</h2>
-          <p className="mb-4">
-            We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
-          </p>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">12. Contact Us</h2>
-          <p className="mb-4">
-            If you have questions about this Privacy Policy or wish to exercise your privacy rights, please contact us:
-          </p>
-          <p className="mb-2">
-            <strong>Email:</strong> privacy@thehockeydirectory.com
-          </p>
-          <p className="mb-2">
-            <strong>Website:</strong> https://thehockeydirectory.com
-          </p>
-        </section>
-
-        <div className="mt-12 pt-8 border-t">
-          <p className="text-sm text-gray-600">
-            This privacy policy is compliant with GDPR, CCPA, and other major privacy regulations. We are committed to protecting your privacy and handling your data responsibly.
-          </p>
+        <div className="mt-10 rounded-xl border border-blue-200 bg-blue-50 p-5 leading-7 text-blue-950">
+          The short version: we collect the information needed to run accounts, listing claims, reviews, and advisor inquiries. Optional analytics run only after analytics consent. Saved and comparison lists stay in your browser. We do not sell personal information.
         </div>
-      </div>
-    </div>
+
+        <div className="mt-12 space-y-12">
+          <Section title="1. Who we are">
+            <p>The Hockey Directory is an independent website that helps hockey families research advisory businesses. “We,” “us,” and “our” refer to The Hockey Directory.</p>
+            <p>Questions or privacy requests can be sent to <a className="font-semibold text-hockey-blue underline" href="mailto:privacy@thehockeydirectory.com">privacy@thehockeydirectory.com</a>.</p>
+          </Section>
+
+          <Section title="2. Information we collect">
+            <h3 className="text-xl font-bold text-arena-navy">Information you provide</h3>
+            <ul className="list-disc space-y-2 pl-6">
+              <li>Account details supplied through our authentication provider.</li>
+              <li>Review content, rating, confirmation of experience, and the account identifier needed to prevent duplicate reviews.</li>
+              <li>Listing-claim details, such as business contact information and supporting material you choose to submit.</li>
+              <li>Advisor inquiry details, such as your name, email, optional phone number, optional player age and level, goals, and message.</li>
+              <li>Business contact details and product preferences submitted through the advisor-interest form.</li>
+              <li>Business profile details submitted by a verified listing owner.</li>
+            </ul>
+            <p>Please do not put a child’s name, health information, school records, financial information, or other unnecessary sensitive information in a free-text message.</p>
+
+            <h3 className="pt-2 text-xl font-bold text-arena-navy">Information created when you use the site</h3>
+            <ul className="list-disc space-y-2 pl-6">
+              <li>Security and anti-abuse data. The application stores a one-way hash derived from an IP address for rate limiting; it does not store the raw IP address in its inquiry or event tables.</li>
+              <li>Browser and referral details that help diagnose abuse and understand how an inquiry reached a listing.</li>
+              <li>With analytics consent, profile views and contact-link clicks, plus analytics data collected by Google Analytics.</li>
+              <li>Saved listings and comparison choices stored locally in your browser. They are not sent to our database by those tools.</li>
+            </ul>
+            <p>Hosting and security providers may create their own technical logs. Their handling of those logs is governed by their terms and privacy notices.</p>
+          </Section>
+
+          <Section title="3. Why we use it">
+            <ul className="list-disc space-y-2 pl-6">
+              <li>Operate accounts and verify ownership of business listings.</li>
+              <li>Deliver an inquiry to the selected business and provide that business with a private inquiry inbox.</li>
+              <li>Publish and protect genuine reviews under the directory’s review rules.</li>
+              <li>Maintain security, prevent spam, investigate misuse, and troubleshoot the service.</li>
+              <li>Measure and improve the directory when you have allowed analytics.</li>
+              <li>Evaluate advisor interest in possible paid business tools and follow up with people who ask to help shape them.</li>
+              <li>Meet legal obligations and respond to valid legal requests.</li>
+            </ul>
+          </Section>
+
+          <Section title="4. When information is shared">
+            <p>When you submit an advisor inquiry, its contents are made available to the verified owner of that company listing and may be sent to the business by email. Do not use the form if you do not want that business to receive the information.</p>
+            <p>We use service providers for functions such as hosting, database storage and authentication, email delivery, media hosting, maps, and consent-based analytics. Current application integrations include Vercel, Supabase, Resend, Cloudinary, Google Maps, and Google Analytics. A service is used only when its feature is configured or loaded.</p>
+            <p>We may also disclose information if required by law, to protect users or the service, or as part of a business transaction subject to appropriate safeguards. We do not sell personal information.</p>
+          </Section>
+
+          <Section title="5. Cookies and choices">
+            <p>Essential cookies support security, account sessions, and core operation. Optional analytics are off until you select “Allow analytics” in the consent banner. You can change that choice by clearing the site’s stored consent in your browser and making a new selection.</p>
+            <p>Interactive maps may contact Google when the map feature is loaded. You can browse listing cards without using the map. See the <Link href="/cookie-policy" className="font-semibold text-hockey-blue underline">Cookie Policy</Link> for more detail.</p>
+          </Section>
+
+          <Section title="6. Retention and security">
+            <p>We keep personal information only as long as reasonably needed for the purpose described above, to maintain necessary business records, resolve disputes, enforce agreements, or meet legal obligations. Retention can differ by record type. A formal deletion schedule should be confirmed before commercial launch.</p>
+            <p>We use access controls, row-level database rules, encrypted connections, limited database permissions, and one-way IP hashing. No internet service can promise absolute security.</p>
+          </Section>
+
+          <Section title="7. Your requests">
+            <p>Depending on where you live, you may have rights to ask about, access, correct, delete, restrict, or object to certain uses of your personal information, and to withdraw consent where processing relies on consent. These rights can have legal exceptions.</p>
+            <p>Email <a className="font-semibold text-hockey-blue underline" href="mailto:privacy@thehockeydirectory.com">privacy@thehockeydirectory.com</a> with enough information for us to understand and verify your request. You may also have the right to contact your local privacy regulator.</p>
+          </Section>
+
+          <Section title="8. Children and families">
+            <p>The directory is intended for adults researching services. We do not knowingly invite children under 13 to create accounts or submit personal information. A parent or guardian should make inquiries for a minor and should share only what is necessary.</p>
+          </Section>
+
+          <Section title="9. Changes">
+            <p>We may update this notice when the service or its data practices change. The date at the top shows the latest revision. Material changes should also be brought to users’ attention where appropriate.</p>
+          </Section>
+        </div>
+      </article>
+    </main>
   )
 }

@@ -28,6 +28,11 @@ export const advisorNavigation: NavSection[] = [
         href: '/dashboard/reviews',
         icon: 'Star',
       },
+      {
+        label: 'Manage Team',
+        href: '/dashboard/team',
+        icon: 'Users',
+      },
     ],
   },
 ]

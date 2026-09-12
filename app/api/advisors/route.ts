@@ -103,8 +103,10 @@ export async function GET(request: NextRequest) {
     const remoteOnly = searchParams.get('remote') === 'true'
     const acceptingOnly = searchParams.get('accepting') === 'true'
     const verified = searchParams.get('verified') === 'true'
-    const latitude = Number(searchParams.get('lat'))
-    const longitude = Number(searchParams.get('lng'))
+    // Missing or blank coordinates must not become Number(null) / Number('') = 0.
+    // Explicit "0" remains valid for equator/prime-meridian searches.
+    const latitude = Number(searchParams.get('lat')?.trim() || Number.NaN)
+    const longitude = Number(searchParams.get('lng')?.trim() || Number.NaN)
     const radius = Math.min(Math.max(Number(searchParams.get('radius') || '100'), 5), 1000)
     const hasCoordinates = isValidCoordinate(latitude, longitude)
     const sort = (searchParams.get('sort') || 'name') as string

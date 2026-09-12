@@ -19,6 +19,25 @@ function readPoint(value: PointValue): { lat: number; lng: number } | null {
   if (typeof value === 'string') {
     const match = value.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i)
     if (match) return { lng: Number(match[1]), lat: Number(match[2]) }
+
+    // Supabase's geography(Point,4326) column returns PostGIS hex EWKB.
+    // Only accept a complete 2D point (optional explicit WGS84 SRID).
+    // Format reference: https://postgis.net/docs/ST_AsEWKB.html
+    const hex = value.replace(/^\\x/, '')
+    if (/^(?:[0-9a-f]{42}|[0-9a-f]{50})$/i.test(hex)) {
+      const bytes = Uint8Array.from(hex.match(/.{2}/g)!, (pair) => parseInt(pair, 16))
+      const view = new DataView(bytes.buffer)
+      if (bytes[0] !== 0 && bytes[0] !== 1) return null
+      const littleEndian = bytes[0] === 1
+      const type = view.getUint32(1, littleEndian)
+      const withSrid = type === 0x20000001
+      if (type !== 1 && !withSrid) return null
+      const offset = withSrid ? 9 : 5
+      if (bytes.length !== offset + 16 || (withSrid && view.getUint32(5, littleEndian) !== 4326)) return null
+      const lng = view.getFloat64(offset, littleEndian)
+      const lat = view.getFloat64(offset + 8, littleEndian)
+      if (isValidCoordinate(lat, lng)) return { lat, lng }
+    }
   }
 
   return null

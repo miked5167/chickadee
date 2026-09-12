@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
   [string]$Database = 'hockey_advisor_migration_validation_m7_20260821',
-  [int]$Port = 55434
+  [int]$Port = 55434,
+  [switch]$ReleaseRehearsal
 )
 
 $ErrorActionPreference = 'Stop'
@@ -10,7 +11,7 @@ if ($Database -notmatch '^hockey_advisor_migration_validation_[a-z0-9_]+$') {
   throw 'Database must be a dedicated disposable validation database name.'
 }
 if ($Port -lt 1024 -or $Port -gt 65535) { throw 'Port must be an unprivileged TCP port.' }
-if (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue) { throw "Port $Port is already in use." }
+if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) { throw "Port $Port is already in use." }
 
 $RepositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $InstalledPostgres = 'C:\Program Files\PostgreSQL\18'
@@ -38,7 +39,11 @@ foreach ($Tool in @('initdb.exe', 'pg_ctl.exe', 'createdb.exe', 'psql.exe', 'pg_
 
 try {
   New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
-  Copy-Item -LiteralPath $InstalledPostgres -Destination $RuntimeRoot -Recurse
+  # Copy runtime assets only, never the installed service's data or pgAdmin.
+  New-Item -ItemType Directory -Path $RuntimeRoot | Out-Null
+  foreach ($RuntimeFolder in @('bin', 'lib', 'share')) {
+    Copy-Item -LiteralPath (Join-Path $InstalledPostgres $RuntimeFolder) -Destination $RuntimeRoot -Recurse
+  }
 
   $CachedPostgisArchive = Get-ChildItem -LiteralPath $TempBase -Directory -Filter 'hockey-advisor-*-validation-*' -ErrorAction SilentlyContinue |
     ForEach-Object { Join-Path $_.FullName 'postgis-bundle.zip' } |
@@ -73,7 +78,7 @@ try {
     '-o', ('"-h 127.0.0.1 -p ' + $Port + '"'),
     '-w', 'start'
   )
-  $StartResult = Start-Process -FilePath $PgCtl -ArgumentList $StartArguments -NoNewWindow -PassThru
+  $StartResult = Start-Process -FilePath $PgCtl -ArgumentList $StartArguments -WindowStyle Hidden -PassThru
   $StartResult.WaitForExit()
   if ($StartResult.ExitCode -ne 0) { throw 'Could not start the disposable PostgreSQL cluster.' }
   $ServerStarted = $true
@@ -85,7 +90,11 @@ try {
   try {
     $PreviousErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    & node scripts/database/validate-fresh-bootstrap.mjs --database $Database --port $Port
+    if ($ReleaseRehearsal) {
+      & node scripts/database/tests/m5-m7-rehearsal.mjs $Database $Port $PostgresBin $TempRoot
+    } else {
+      & node scripts/database/validate-fresh-bootstrap.mjs --database $Database --port $Port
+    }
     $ValidationExitCode = $LASTEXITCODE
     $ErrorActionPreference = $PreviousErrorActionPreference
     if ($ValidationExitCode -ne 0) { throw "Fresh-bootstrap validation failed with exit code $ValidationExitCode." }
@@ -97,7 +106,7 @@ try {
 } finally {
   if ($ServerStarted) {
     $StopArguments = @('-D', ('"' + $DataDirectory + '"'), '-w', 'stop', '-m', 'fast')
-    $StopResult = Start-Process -FilePath $PgCtl -ArgumentList $StopArguments -NoNewWindow -PassThru
+    $StopResult = Start-Process -FilePath $PgCtl -ArgumentList $StopArguments -WindowStyle Hidden -PassThru
     $StopResult.WaitForExit()
     if ($StopResult.ExitCode -ne 0) { Write-Error 'Disposable PostgreSQL server did not stop cleanly.' }
     $ServerStopped = $StopResult.ExitCode -eq 0

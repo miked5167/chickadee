@@ -184,7 +184,7 @@ SELECT json_build_object(
   'reviews_policies_exact',(SELECT count(*)=4 AND bool_and(polname IN ('Published company reviews are public','Users can create own company reviews','Users can update own company reviews','Users can delete own company reviews')) AND bool_and(NOT ((SELECT oid FROM pg_catalog.pg_roles WHERE rolname='service_role')=ANY(polroles))) FROM pg_catalog.pg_policy WHERE polrelid=to_regclass('public.reviews')),
   'reviews_trigger_exact',EXISTS(SELECT 1 FROM pg_catalog.pg_trigger t WHERE t.tgrelid=to_regclass('public.reviews') AND t.tgname='update_reviews_updated_at' AND t.tgfoid=to_regprocedure('public.update_updated_at_column()') AND t.tgtype=19 AND t.tgenabled='O' AND NOT t.tgisinternal),
   'reviews_table_grants_exact',NOT EXISTS(SELECT 1 FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee IN ('PUBLIC','anon'))
-    AND (SELECT coalesce(array_agg(privilege_type ORDER BY privilege_type),ARRAY[]::text[])=ARRAY['DELETE']::text[] FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated')
+    AND (SELECT coalesce(array_agg(privilege_type::text ORDER BY privilege_type),ARRAY[]::text[])=ARRAY['DELETE']::text[] FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated')
     AND (SELECT count(*)=7 FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='service_role'),
   'reviews_column_grants_exact',(SELECT coalesce(array_agg(column_name::text ORDER BY column_name),ARRAY[]::text[])=ARRAY['company_id','created_at','experience_confirmed_at','id','rating','review_text','title','updated_at']::text[] FROM information_schema.column_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='anon' AND privilege_type='SELECT')
     AND (SELECT coalesce(array_agg(column_name::text ORDER BY column_name),ARRAY[]::text[])=ARRAY['company_id','created_at','experience_confirmed_at','id','rating','review_text','title','updated_at']::text[] FROM information_schema.column_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated' AND privilege_type='SELECT')
@@ -228,7 +228,7 @@ SELECT json_build_object(
   if ($SiteResponse.StatusCode -ne 200 -or [int64]$ApiResponse.pagination.total -ne 202 -or @($ApiResponse.advisors).Count -ne 1) { throw 'Post-M4 public smokes failed.' }
   if (@(git diff --cached --name-only).Count -ne 0 -or (@(git status --porcelain=v1) -join "`n") -ne $WorktreeBeforeText) { throw 'Repository staging/worktree changed during M4 application.' }
   $ArchiveEntries = @(Get-Content -LiteralPath $ArchiveContentsPath | Where-Object { $_.Trim() -and -not $_.StartsWith(';') }).Count
-  if ($ArchiveEntries -ne 1356) { throw "Post-M4 archive has $ArchiveEntries entries instead of exact target count 1356." }
+  if ($ArchiveEntries -ne 1361) { throw "Post-M4 archive has $ArchiveEntries entries instead of exact target count 1361." }
 
   [ordered]@{
     status='success';captured_at_utc=(Get-Date).ToUniversalTime().ToString('o');project_ref=$ProjectRef

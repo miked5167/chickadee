@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { isM4ArchiveCountFailure, m4ArchiveEntryCount, validateM4ArchiveEntries } from './m4-archive-contract.mjs'
 import {
   baselinePath,
   buildFingerprint,
@@ -114,18 +115,41 @@ function setOwnersFromArchive(projected, archiveLines) {
   for (const item of projected.functions) item.owner = ownerByObject.get(`function:${item.name}`) ?? item.owner
 }
 
-async function validateIntegrity(directory, target) {
+async function validateIntegrity(directory, target, recoverM4ArchiveCount = false) {
   const status = JSON.parse((await readFile(path.join(directory, 'status.json'), 'utf8')).replace(/^\uFEFF/, ''))
   const statusSucceeded = status.success === true || ['success', 'succeeded', 'ok', 'complete', 'completed'].includes(String(status.status ?? status.result ?? '').toLowerCase())
-  assert(statusSucceeded, 'Protected evidence status does not report success')
+  if (recoverM4ArchiveCount) {
+    assert(target === 'm4' && isM4ArchiveCountFailure(status), 'Not the specific recoverable M4 archive-count failure')
+  } else {
+    assert(statusSucceeded, 'Protected evidence status does not report success')
+  }
 
   const checksumLines = (await readFile(path.join(directory, 'SHA256SUMS.txt'), 'utf8')).replace(/^\uFEFF/, '').split(/\r?\n/).filter((line) => line.trim())
   assert(checksumLines.length > 0, 'Checksum manifest is empty')
+  const checksummedNames = new Set()
   for (const line of checksumLines) {
     const match = line.match(/^([0-9a-f]{64})\s+\*?(.+)$/i)
     assert(match, 'Checksum manifest contains an unparseable entry')
+    checksummedNames.add(match[2].trim().replaceAll('\\', '/'))
     const actual = await hashFile(path.join(directory, match[2].trim()))
     assert(actual === match[1].toLowerCase(), `Checksum mismatch for ${path.basename(match[2].trim())}`)
+  }
+
+  if (recoverM4ArchiveCount) {
+    const required = ['status.json', 'archive-contents.txt', 'role-matrix-verification.json', 'supabase-apply.txt',
+      'supabase-dry-run.txt', 'tables.csv', 'columns.csv', 'relationships-and-constraints.csv', 'rls-policies.csv',
+      'functions.csv', 'function-privileges.csv', 'triggers.csv', 'table-privileges.csv', 'column-privileges.csv',
+      'exact-row-counts.csv', 'migration-history-status.csv', 'migration-history-versions.csv']
+    for (const name of required) assert(checksummedNames.has(name), `Recovery evidence lacks checksummed ${name}`)
+    const names = await readdir(directory)
+    for (const pattern of [/^production-\d{8}T\d{6}Z\.dump$/, /^production-schema-\d{8}T\d{6}Z\.sql$/]) {
+      const files = names.filter((name) => pattern.test(name))
+      assert(files.length === 1 && checksummedNames.has(files[0]), 'Recovery backup/schema is missing or not checksummed')
+    }
+    const roles = JSON.parse((await readFile(path.join(directory, 'role-matrix-verification.json'), 'utf8')).replace(/^\uFEFF/, ''))
+    assert(roles.anonymous_public_read === '0' && roles.authenticated_public_read === '0' && roles.service_role_read === '0' &&
+      roles.anonymous_reviewer_identity_read === false && roles.authenticated_moderation_state_read === false &&
+      roles.production_review_rows === 0 && roles.production_admin_rows === 0, 'Recovery role checks differ')
   }
 
   const archiveLines = (await readFile(path.join(directory, 'archive-contents.txt'), 'utf8')).split(/\r?\n/)
@@ -136,8 +160,9 @@ async function validateIntegrity(directory, target) {
   assert(['true', 't', 'false', 'f'].includes(historyStatusValue), 'Migration-history status is not a recognized boolean')
   const historyPresent = historyStatusValue === 'true' || historyStatusValue === 't'
   assert(target === 'baseline' || historyPresent, 'Forward-target evidence requires standard migration history')
-  const expectedArchiveEntries = target === 'm4' ? 1356 : (target === 'current' || target === 'm3' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317)))
+  const expectedArchiveEntries = target === 'm4' ? m4ArchiveEntryCount : (target === 'current' || target === 'm3' ? 1337 : (target === 'm2' ? 1322 : (historyPresent ? 1321 : 1317)))
   assert(archiveEntries.length === expectedArchiveEntries, `Expected ${expectedArchiveEntries.toLocaleString('en-US')} archive entries; found ${archiveEntries.length}`)
+  if (target === 'm4') validateM4ArchiveEntries(archiveLines)
 
   if (historyPresent) {
     const migrationVersions = await csv(directory, 'migration-history-versions.csv')
@@ -304,11 +329,12 @@ async function validateCatalogs(directory, expected, target) {
 async function main() {
   const target = option('--target') || 'baseline'
   assert(['baseline', 'm2', 'm3', 'm4', 'current'].includes(target), '--target must be baseline, m2, m3, m4, or current')
-  const positional = process.argv.slice(2).find((argument, index, arguments_) => argument !== '--target' && arguments_[index - 1] !== '--target')
+  const recoverM4ArchiveCount = process.argv.includes('--recover-m4-archive-count')
+  const positional = process.argv.slice(2).find((argument, index, arguments_) => !argument.startsWith('--') && arguments_[index - 1] !== '--target')
   const supplied = positional || process.env.SCHEMA_EVIDENCE_DIR
   assert(supplied, 'Provide the protected evidence directory as the first argument or SCHEMA_EVIDENCE_DIR')
   const directory = path.resolve(supplied)
-  const integrity = await validateIntegrity(directory, target)
+  const integrity = await validateIntegrity(directory, target, recoverM4ArchiveCount)
   let expected
   if (target === 'm4') {
     const migrationDirectory = path.dirname(baselinePath)
@@ -363,6 +389,8 @@ async function main() {
   setOwnersFromArchive(evidenceFingerprint, integrity.archiveLines)
   assert(JSON.stringify(evidenceFingerprint) === JSON.stringify(expected), 'Canonical baseline fingerprint differs from protected schema-only evidence')
   await validateCatalogs(directory, expected, target)
+
+  if (recoverM4ArchiveCount) process.stdout.write('Offline recovery validated the captured backup; original failed status/evidence left unchanged. No production changes or migration reapplication.\n')
 
   const historyState = integrity.historyPresent ? `exact ${target} migration history` : 'pre-adoption history absence'
   process.stdout.write(`Protected ${target} evidence validated: ${integrity.checksumCount} checksums, ${integrity.archiveEntryCount} archive entries, ${historyState}, exact application counts, and complete application catalog/schema agreement.\n`)

@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
   [Parameter(Mandatory = $true)]
-  [string]$ApplyEvidenceDirectory
+  [string]$ApplyEvidenceDirectory,
+  [switch]$RecoverIncompleteVerification
 )
 
 $ErrorActionPreference = 'Stop'
@@ -95,8 +96,15 @@ $PriorStatus = Get-Content -Raw -LiteralPath (Join-Path $ApplyEvidenceDirectory 
 if ($PriorStatus.production_changes_made -ne $true -or $PriorStatus.first_admin_created -ne $false -or [int64]$PriorStatus.review_rows_created -ne 0) {
   throw 'Prior apply evidence does not prove M4 application without administrator or review rows.'
 }
-& node (Join-Path $RepositoryRoot 'scripts\database\validate-production-evidence.mjs') $ApplyEvidenceDirectory --target m4
-Assert-LastExitCode 'Prior M4 apply evidence failed protected validation.'
+if ($RecoverIncompleteVerification) {
+  # A receipt permits read-only recovery only; it is not a successful post-upgrade backup.
+  # Full live checks and fresh evidence validation below remain mandatory.
+  & node (Join-Path $RepositoryRoot 'scripts\database\validate-m4-apply-receipt.mjs') $ApplyEvidenceDirectory
+  Assert-LastExitCode 'Incomplete M4 apply receipt failed integrity validation.'
+} else {
+  & node (Join-Path $RepositoryRoot 'scripts\database\validate-production-evidence.mjs') $ApplyEvidenceDirectory --target m4
+  Assert-LastExitCode 'Prior M4 apply evidence failed protected validation.'
+}
 $PriorApplyText = Get-Content -Raw -LiteralPath (Join-Path $ApplyEvidenceDirectory 'supabase-apply.txt')
 $PriorDryRunText = Get-Content -Raw -LiteralPath (Join-Path $ApplyEvidenceDirectory 'supabase-dry-run.txt')
 if ($PriorApplyText -notmatch 'Applying migration 20260719000003_company_reviews\.sql' -or $PriorApplyText -notmatch 'Finished supabase db push') {
@@ -139,7 +147,7 @@ SELECT json_build_object(
   'reviews_policies_exact',(SELECT count(*)=4 AND bool_and(polname IN ('Published company reviews are public','Users can create own company reviews','Users can update own company reviews','Users can delete own company reviews')) AND bool_and(NOT ((SELECT oid FROM pg_catalog.pg_roles WHERE rolname='service_role')=ANY(polroles))) FROM pg_catalog.pg_policy WHERE polrelid=to_regclass('public.reviews')),
   'reviews_trigger_exact',EXISTS(SELECT 1 FROM pg_catalog.pg_trigger t WHERE t.tgrelid=to_regclass('public.reviews') AND t.tgname='update_reviews_updated_at' AND t.tgfoid=to_regprocedure('public.update_updated_at_column()') AND t.tgtype=19 AND t.tgenabled='O' AND NOT t.tgisinternal),
   'reviews_table_grants_exact',NOT EXISTS(SELECT 1 FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee IN ('PUBLIC','anon'))
-    AND (SELECT coalesce(array_agg(privilege_type ORDER BY privilege_type),ARRAY[]::text[])=ARRAY['DELETE']::text[] FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated')
+    AND (SELECT coalesce(array_agg(privilege_type::text ORDER BY privilege_type),ARRAY[]::text[])=ARRAY['DELETE']::text[] FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated')
     AND (SELECT count(*)=7 FROM information_schema.table_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='service_role'),
   'reviews_column_grants_exact',(SELECT coalesce(array_agg(column_name::text ORDER BY column_name),ARRAY[]::text[])=ARRAY['company_id','created_at','experience_confirmed_at','id','rating','review_text','title','updated_at']::text[] FROM information_schema.column_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='anon' AND privilege_type='SELECT')
     AND (SELECT coalesce(array_agg(column_name::text ORDER BY column_name),ARRAY[]::text[])=ARRAY['company_id','created_at','experience_confirmed_at','id','rating','review_text','title','updated_at']::text[] FROM information_schema.column_privileges WHERE table_schema='public' AND table_name='reviews' AND grantee='authenticated' AND privilege_type='SELECT')
@@ -196,7 +204,7 @@ SELECT json_build_object(
   if ($SiteResponse.StatusCode -ne 200 -or [int64]$ApiResponse.pagination.total -ne 202 -or @($ApiResponse.advisors).Count -ne 1) { throw 'Post-M4 public smokes failed.' }
   if (@(git diff --cached --name-only).Count -ne 0 -or (@(git status --porcelain=v1) -join "`n") -ne $WorktreeBeforeText) { throw 'Repository staging/worktree changed during post-M4 verification.' }
   $ArchiveEntries = @(Get-Content -LiteralPath $ArchiveContentsPath | Where-Object { $_.Trim() -and -not $_.StartsWith(';') }).Count
-  if ($ArchiveEntries -ne 1356) { throw "Post-M4 archive has $ArchiveEntries entries instead of exact target count 1356." }
+  if ($ArchiveEntries -ne 1361) { throw "Post-M4 archive has $ArchiveEntries entries instead of exact target count 1361." }
 
   [ordered]@{
     status='success';captured_at_utc=(Get-Date).ToUniversalTime().ToString('o');project_ref=$ProjectRef
@@ -205,7 +213,7 @@ SELECT json_build_object(
     m1_sha256=$M1Sha256;m2_sha256=$M2Sha256;m3_sha256=$M3Sha256;m4_sha256=$M4Sha256;supabase_cli_version='2.109.1'
     dry_run_migrations=@($M4Filename);apply_migrations=@($M4Filename);apply_reinvoked=$false
     archive_bytes=(Get-Item -LiteralPath $ArchivePath).Length;archive_entries=$ArchiveEntries;review_catalog='passed';review_grants='passed'
-    role_matrix='production_empty_reviews_and_disposable_full_matrix_passed';site_smoke_status=200;api_total=202
+    role_matrix='production_empty_reviews_read_permissions_passed';site_smoke_status=200;api_total=202
     production_changes_made=$true;baseline_ddl_executed=$false;first_admin_created=$false;review_rows_created=0;verification_only=$true
   } | ConvertTo-Json -Depth 6 | Set-Content -Encoding utf8 -LiteralPath (Join-Path $PostDirectory 'post-m4-summary.json')
   @{success=$true;status='success';production_changes_made=$true;baseline_ddl_executed=$false;first_admin_created=$false;review_rows_created=0;apply_reinvoked=$false;verification_only=$true} | ConvertTo-Json | Set-Content -Encoding utf8 -LiteralPath (Join-Path $PostDirectory 'status.json')

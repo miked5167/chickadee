@@ -1,0 +1,19 @@
+# Local credentials, research, and development output are not deployment inputs.
+.env*
+.git
+.vercel
+.next
+node_modules
+.firecrawl
+data/enrichment
+public/logo-concepts-20260822
+test-results
+playwright-report
+coverage
+lighthouse-results
+.claude.json
+**/mcp.json
+*.pem
+*.dump
+*.tsbuildinfo
+nul

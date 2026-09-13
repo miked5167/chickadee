@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card'
 import { Loader2, Star, CheckCircle } from 'lucide-react'
 import { z } from 'zod'
 import { reviewSubmissionSchema } from '@/lib/reviews/validation'
+import { trackReviewSubmission } from '@/components/analytics/GoogleAnalytics'
 
 interface ReviewFormProps {
   companyId: string
@@ -76,6 +77,7 @@ export function ReviewForm({ companyId, companyName, companySlug }: ReviewFormPr
       }
 
       setSuccess(true)
+      trackReviewSubmission(companyId, rating)
 
       // Redirect back to listing page after 2 seconds
       setTimeout(() => {

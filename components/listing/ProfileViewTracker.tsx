@@ -1,22 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { analyticsAllowed, subscribeToConsent } from '@/lib/analytics/consent'
+import { recordDirectoryEvent } from '@/lib/analytics/client'
 
 export function ProfileViewTracker({ companyId }: { companyId: string }) {
+  const recorded = useRef<string | null>(null)
   useEffect(() => {
-    try {
-      const consent = localStorage.getItem('hockey-directory-cookie-consent')
-      if (!consent || JSON.parse(consent).analytics !== true) return
-    } catch {
-      return
+    const record = () => {
+      if (!analyticsAllowed() || recorded.current === companyId) return
+      recorded.current = companyId
+      void recordDirectoryEvent(companyId, 'profile_view').then((saved) => {
+        if (!saved && recorded.current === companyId) recorded.current = null
+      })
     }
-
-    fetch(`/api/advisors/${companyId}/track-click`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ click_type: 'profile_view' }),
-      keepalive: true,
-    }).catch(() => undefined)
+    record()
+    return subscribeToConsent(record)
   }, [companyId])
 
   return null

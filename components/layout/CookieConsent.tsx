@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { FiX } from 'react-icons/fi'
 
-const CONSENT_KEY = 'hockey-directory-cookie-consent'
+import { CONSENT_KEY, saveConsent } from '@/lib/analytics/consent'
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
@@ -12,8 +12,10 @@ export function CookieConsent() {
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      const consent = localStorage.getItem(CONSENT_KEY)
-      setShowBanner(!consent)
+      try {
+        const consent = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null')
+        setShowBanner(typeof consent?.analytics !== 'boolean')
+      } catch { setShowBanner(true) }
       setIsLoaded(true)
     }, 0)
 
@@ -26,24 +28,12 @@ export function CookieConsent() {
   }, [])
 
   const handleAccept = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({
-      necessary: true,
-      analytics: true,
-      marketing: false,
-      acceptedAt: new Date().toISOString(),
-    }))
-    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: true } }))
+    saveConsent(true)
     setShowBanner(false)
   }
 
   const handleDecline = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({
-      necessary: true,
-      analytics: false,
-      marketing: false,
-      acceptedAt: new Date().toISOString(),
-    }))
-    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: false } }))
+    saveConsent(false)
     setShowBanner(false)
   }
 
@@ -106,8 +96,7 @@ export function CookieConsent() {
 
 export function CookieSettingsButton({ className = '' }: { className?: string }) {
   const reopenSettings = () => {
-    localStorage.removeItem(CONSENT_KEY)
-    window.dispatchEvent(new CustomEvent('hockey-cookie-consent-changed', { detail: { analytics: false } }))
+    saveConsent(false)
     window.dispatchEvent(new CustomEvent('hockey-cookie-consent-reset'))
   }
 

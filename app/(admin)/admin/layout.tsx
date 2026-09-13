@@ -27,6 +27,9 @@ export default async function AdminLayout() {
         <p className="mt-5 leading-7 text-slate-700">
           Your administrator authorization was confirmed, but listing, claim, review, lead, and publishing operations remain disabled until the secure administrator bootstrap and production cutover are completed.
         </p>
+        <Link href="/admin/analytics" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-md bg-hockey-blue px-5 py-3 font-bold text-white hover:bg-board-blue">
+          Open analytics reports
+        </Link>
         <div className="mt-6 flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm leading-6 text-green-950">
           <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
           This page does not grant access, change a role, or enable a database mutation.

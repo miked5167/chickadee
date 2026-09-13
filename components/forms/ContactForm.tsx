@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Loader2, CheckCircle } from 'lucide-react'
 import { z } from 'zod'
+import { trackLeadSubmission } from '@/components/analytics/GoogleAnalytics'
 
 // Validation schema
 const contactFormSchema = z.object({
@@ -88,6 +89,7 @@ export function ContactForm({ advisorId, advisorName }: ContactFormProps) {
       }
 
       setSuccess(true)
+      trackLeadSubmission(advisorId)
 
       // Reset form
       setParentName('')

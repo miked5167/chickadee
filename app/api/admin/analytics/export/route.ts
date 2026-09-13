@@ -1,3 +1,3 @@
-import { disabledAdminWorkflowResponse } from '@/lib/supabase/admin-api'
+import { analyticsResponse } from '@/lib/analytics/admin-response'
 
-export const GET = disabledAdminWorkflowResponse
+export const GET = (request: Request) => analyticsResponse(request, true)

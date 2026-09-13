@@ -9,8 +9,6 @@ const serverMocks = vi.hoisted(() => ({
 
 vi.mock('@/lib/supabase/server', () => serverMocks)
 
-import * as analyticsExport from '@/app/api/admin/analytics/export/route'
-import * as analytics from '@/app/api/admin/analytics/route'
 import * as blogAnalytics from '@/app/api/admin/blog/analytics/route'
 import * as blogCategory from '@/app/api/admin/blog/categories/[id]/route'
 import * as blogCategories from '@/app/api/admin/blog/categories/route'
@@ -32,8 +30,6 @@ import * as reviews from '@/app/api/admin/reviews/route'
 type Handler = () => Promise<Response>
 
 const routeModules: Array<{ path: string; handlers: Handler[] }> = [
-  { path: 'analytics/export', handlers: [analyticsExport.GET] },
-  { path: 'analytics', handlers: [analytics.GET] },
   { path: 'blog/analytics', handlers: [blogAnalytics.GET] },
   { path: 'blog/categories/[id]', handlers: [blogCategory.PATCH, blogCategory.DELETE] },
   { path: 'blog/categories', handlers: [blogCategories.GET, blogCategories.POST] },
@@ -78,9 +74,9 @@ describe('administrator API route cutover', () => {
     vi.clearAllMocks()
   })
 
-  it('covers all 19 modules and 30 exported administrator handlers', () => {
-    expect(routeModules).toHaveLength(19)
-    expect(handlers).toHaveLength(30)
+  it('covers the 17 modules and 28 administrator handlers still awaiting cutover', () => {
+    expect(routeModules).toHaveLength(17)
+    expect(handlers).toHaveLength(28)
   })
 
   it('fails every anonymous request closed before the administrator predicate', async () => {

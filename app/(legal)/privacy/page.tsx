@@ -20,7 +20,7 @@ export default function PrivacyPage() {
       <article className="mx-auto max-w-4xl px-4 sm:px-6">
         <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-hockey-blue">Legal</p>
         <h1 className="mt-3 font-display text-5xl font-extrabold uppercase tracking-tight text-arena-navy">Privacy policy</h1>
-        <p className="mt-4 text-sm text-slate-500"><strong>Last updated:</strong> August 21, 2026</p>
+        <p className="mt-4 text-sm text-slate-500"><strong>Last updated:</strong> October 2, 2026</p>
 
         <div className="mt-10 rounded-xl border border-blue-200 bg-blue-50 p-5 leading-7 text-blue-950">
           The short version: we collect the information needed to run accounts, listing claims, reviews, and advisor inquiries. Optional analytics run only after analytics consent. Saved and comparison lists stay in your browser. We do not sell personal information.
@@ -28,7 +28,11 @@ export default function PrivacyPage() {
 
         <div className="mt-12 space-y-12">
           <Section title="1. Who we are">
-            <p>The Hockey Directory is an independent website that helps hockey families research advisory businesses. “We,” “us,” and “our” refer to The Hockey Directory.</p>
+            <p>
+              The Hockey Directory is an independent website and a{' '}
+              <a className="font-semibold text-hockey-blue underline" href="https://huddlebooks.ca" target="_blank" rel="noreferrer">HuddleBooks</a>{' '}
+              project that helps hockey families research advisory businesses. “We,” “us,” and “our” refer to The Hockey Directory.
+            </p>
             <p>Questions or privacy requests can be sent to <a className="font-semibold text-hockey-blue underline" href="mailto:privacy@thehockeydirectory.com">privacy@thehockeydirectory.com</a>.</p>
           </Section>
 

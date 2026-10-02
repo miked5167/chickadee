@@ -13,13 +13,13 @@ export default function TermsPage() {
 
       <div className="prose prose-lg max-w-none">
         <p className="text-gray-600 mb-8">
-          <strong>Last Updated:</strong> August 21, 2026
+          <strong>Last Updated:</strong> October 2, 2026
         </p>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
           <p className="mb-4">
-            By accessing and using The Hockey Directory (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use our website.
+            By accessing and using The Hockey Directory, a HuddleBooks project (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use our website.
           </p>
         </section>
 
@@ -183,6 +183,10 @@ export default function TermsPage() {
           </p>
           <p className="mb-2">
             <strong>Website:</strong> https://thehockeydirectory.com
+          </p>
+          <p className="mb-2">
+            <strong>Project:</strong>{' '}
+            <a href="https://huddlebooks.ca" className="text-blue-600 underline" target="_blank" rel="noreferrer">HuddleBooks</a>
           </p>
         </section>
 

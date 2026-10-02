@@ -22,7 +22,7 @@ const principles = [
   {
     icon: Users,
     title: 'Keep families in control',
-    copy: 'Comparison tools and practical guides help families prepare better questions before choosing an advisor.',
+    copy: 'Shortlists and practical guides help families prepare better questions before choosing an advisor.',
   },
 ]
 
@@ -33,6 +33,11 @@ export default function AboutPage() {
     name: 'The Hockey Directory',
     url: 'https://thehockeydirectory.com',
     description: 'An independent research directory for hockey families looking for advisor information.',
+    parentOrganization: {
+      '@type': 'Organization',
+      name: 'HuddleBooks',
+      url: 'https://huddlebooks.ca',
+    },
   }
 
   return (
@@ -46,7 +51,14 @@ export default function AboutPage() {
             Better information before a big hockey decision
           </h1>
           <p className="mt-7 max-w-3xl text-lg leading-8 text-frost">
-            The Hockey Directory was created after one family saw how difficult it could be to find, compare, and evaluate hockey advisors. We are building an independent starting point for that research.
+            The Hockey Directory was created after one family saw how difficult it could be to find and evaluate hockey advisors. We are building an independent starting point for that research.
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-blue-100">
+            The Hockey Directory is a{' '}
+            <a href="https://huddlebooks.ca" target="_blank" rel="noreferrer" className="font-bold text-goal-gold underline underline-offset-4">
+              HuddleBooks
+            </a>{' '}
+            project. HuddleBooks creates practical financial tools for minor hockey organizations, teams, and families.
           </p>
         </div>
       </section>

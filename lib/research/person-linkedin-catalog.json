@@ -1,0 +1,486 @@
+{
+  "reviewedAt": "2026-10-02",
+  "method": "Exact directory person name plus matching company evidence. Name-only, ambiguous, and unrelated results are excluded.",
+  "records": [
+    {
+      "companySlug": "2112-hockey-agency",
+      "companyName": "2112 Hockey Agency",
+      "personName": "Darryl Wolski",
+      "url": "https://www.linkedin.com/in/darryl-wolski/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://2112hockeyagency.com/what-we-do/about-nil/",
+      "evidenceText": "Darryl Wolski — https://www.linkedin.com/in/darryl-wolski",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "4d-hockey-training",
+      "companyName": "4D Hockey Training",
+      "personName": "Petr Tichy",
+      "url": "https://www.linkedin.com/in/petr-tichy-a8464b70/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/petr-tichy-a8464b70/",
+      "evidenceText": "Petr Tichy - Owner 4D Hockey Training, LLC | LinkedIn — Owner 4D Hockey Training, LLC · Experience: 4D Hockey Trainig LLC · Location: Detroit Metropolitan Area · 63 connections on LinkedIn. View Petr Tichy's ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "83-llc",
+      "companyName": "83, LLC",
+      "personName": "Ryan Minkoff",
+      "url": "https://www.linkedin.com/in/ryanminkoff/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "http://www.83llc.com/",
+      "evidenceText": "Ryan Minkoff — Ryan Minkoff — Owner/Agent/Advisor",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "85-sports-management",
+      "companyName": "85 Sports Management",
+      "personName": "Nick Shackford",
+      "url": "https://www.linkedin.com/in/nick-shackford-897a29160/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/nick-shackford-897a29160/",
+      "evidenceText": "Nick Shackford - President - 85 Sports Management, LLC | LinkedIn — Nick Shackford · President - 85 Sports Management, LLC · View mutual connections with Nick · Experience · Education · Licenses & Certifications · Websites.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "a7a-hockey",
+      "companyName": "A7A Hockey",
+      "personName": "Mikita Pryshyvalka",
+      "url": "https://www.linkedin.com/in/mikita-pryshyvalka-082322272/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/mikita-pryshyvalka-082322272/",
+      "evidenceText": "Mikita Pryshyvalka - Professional Hockey Consulting | LinkedIn — Mikita Pryshyvalka - Professional Hockey Consulting | LinkedIn. United States 399 followers 401 connections. Website https://a7ahockeyadvisor.com",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "advancement-hockey-advising",
+      "companyName": "Advancement Hockey Advising",
+      "personName": "Braeden Pearl",
+      "url": "https://www.linkedin.com/in/braedenpearl/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://ahadvising.com/our-team/",
+      "evidenceText": "Braeden Pearl — https://www.linkedin.com/in/braedenpearl/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "apollo-athletics",
+      "companyName": "Apollo Athletics",
+      "personName": "Bayne Pettinger",
+      "url": "https://www.linkedin.com/in/bayne-pettinger-6b92821b6/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.apollo-athletics.com/",
+      "evidenceText": "Bayne Pettinger — https://www.linkedin.com/in/bayne-pettinger-6b92821b6/?originalSubdomain=ca",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "apx-advisors",
+      "companyName": "APX Advisors",
+      "personName": "Sean Erickson",
+      "url": "https://www.linkedin.com/in/seanoerickson51/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.apx-hockey.com/team",
+      "evidenceText": "Sean Erickson — https://www.linkedin.com/in/seanoerickson51/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "bartlett-hockey",
+      "companyName": "Bartlett Hockey",
+      "personName": "Brian Bartlett",
+      "url": "https://www.linkedin.com/in/brian-bartlett-718243b3/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/brian-bartlett-718243b3/",
+      "evidenceText": "Brian Bartlett - NHLPA Certified Player Agent at Bartlett Hockey - LinkedIn — Brian Bartlett · NHLPA Certified Player Agent at Bartlett Hockey | Leading career guidance, contract and endorsement negotiation for NHL-All Stars, Olympians and ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "breakout-hockey-advisory",
+      "companyName": "Breakout Hockey Advisory",
+      "personName": "Marty Dyck",
+      "url": "https://www.linkedin.com/in/marty-dyck/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/marty-dyck/",
+      "evidenceText": "Marty Dyck - Owner of Good From Wood & Coach at Breakout Hockey ... — Marty Dyck · Owner of Good From Wood & Coach at Breakout Hockey Advisory · View mutual connections with Marty · Experience · View Marty's full profile · View Marty's ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "breton-management-group",
+      "companyName": "Breton Management Group",
+      "personName": "Francis MacRae",
+      "url": "https://www.linkedin.com/in/francismacrae/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "http://www.bretonmanagement.com/contact.html",
+      "evidenceText": "Francis MacRae — https://ca.linkedin.com/in/francismacrae",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "college-hockey-family-advisor",
+      "companyName": "College Hockey Family Advisor",
+      "personName": "Darryl Wolski",
+      "url": "https://www.linkedin.com/in/darryl-wolski/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.collegehockeyfamilyadvisor.com/",
+      "evidenceText": "Darryl Wolski — https://www.linkedin.com/in/darryl-wolski/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "cooney-management-company",
+      "companyName": "Cooney Management Company",
+      "personName": "Jonathan Cooney",
+      "url": "https://www.linkedin.com/in/jonathan-cooney-7476b178/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/jonathan-cooney-7476b178/",
+      "evidenceText": "Jonathan Cooney - President at Cooney Management Company — Vice President Cooney Management Company Oct 2013 - Present 13 years Nashville Metropolitan Area Helicopter Pilot US Army 2005 - Oct 2013 8 years",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "dynasty-hockey-group",
+      "companyName": "Dynasty Hockey Group",
+      "personName": "Blake Robson",
+      "url": "https://www.linkedin.com/in/blake-robson-08684449/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.dynastyhockeygroup.com/",
+      "evidenceText": "Blake Robson — https://www.linkedin.com/in/blake-robson-08684449/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "elite-hockey-advising",
+      "companyName": "Elite Hockey Advising",
+      "personName": "Mike Mankowski",
+      "url": "https://www.linkedin.com/in/mike-mankowski-a803b2268/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/mike-mankowski-a803b2268/",
+      "evidenceText": "Mike Mankowski - Mercyhurst University - LinkedIn — Mercyhurst University · Experience: Elite Hockey Advising · Education: Niagara County Community College · Location: Niagara Falls. View Mike Mankowski's ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "gda-hockey",
+      "companyName": "GDA Hockey",
+      "personName": "Jay Jenkins",
+      "url": "https://www.linkedin.com/in/jay-jenkins/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/jay-jenkins/",
+      "evidenceText": "Jay Jenkins - Player Consultant at GDA Hockey Agency - LinkedIn — Jay Jenkins. Player Consultant at GDA Hockey Agency. GDA Hockey Agency Southern New Hampshire University. Eden Mills, Vermont, United States. 3K ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "green-mountain",
+      "companyName": "Green Mountain",
+      "personName": "John Rose",
+      "url": "https://www.linkedin.com/in/john-rose-23330a209/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://greenmountainexposurehockey.com/",
+      "evidenceText": "John Rose — https://www.linkedin.com/in/john-rose-23330a209/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "gryphon-sports-management",
+      "companyName": "Gryphon Sports Management",
+      "personName": "Liam Hadcock",
+      "url": "https://www.linkedin.com/in/liam-hadcock-a53b64220/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/liam-hadcock-a53b64220/",
+      "evidenceText": "Liam Hadcock - Sports Marketing & Marketing Specialist | LinkedIn — ... Liam Hadcock's profile on LinkedIn, a professional community of 1 billion members ... Gryphon Sports Management. 2 years 7 months. Program Manager. Gryphon Sports ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "hawkeye-hockey-services",
+      "companyName": "Hawkeye Hockey Services",
+      "personName": "Eric Darwitz",
+      "url": "https://www.linkedin.com/in/eric-darwitz-82a189b4/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/eric-darwitz-82a189b4/",
+      "evidenceText": "Eric Darwitz - Owner/Senior Consultant Hawkeye Hockey ... — Eric Darwitz · Owner/Senior Consultant Hawkeye Hockey Services , Head Scout Fairbanks Ice Dogs (NAHL) · View mutual connections with Eric · Experience · Education ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "hc-sports-management",
+      "companyName": "HC Sports Management",
+      "personName": "Christopher Hills",
+      "url": "https://www.linkedin.com/in/christopherhills/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/christopherhills/",
+      "evidenceText": "Christopher Hills | 95 D1 Placements | Founder, HC Sports Management — I'm Christopher Hills, Founder of HC Sports Management — one of the premier family advisory firms in North American hockey. What we do: We guide hockey families ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "high-end-hockey",
+      "companyName": "High End Hockey",
+      "personName": "Shawn Hutcheon",
+      "url": "https://www.linkedin.com/in/shawn-hutcheon-b1b8a934/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/shawn-hutcheon-b1b8a934/",
+      "evidenceText": "Shawn Hutcheon - Owner and Player Representative at High End Hockey ... — Shawn Hutcheon. Owner and Player Representative at High End Hockey Advising. Elev802 - Boston Fitchburg State College. Billerica ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "hpa-sports-management",
+      "companyName": "HPA Sports Management",
+      "personName": "John Finch",
+      "url": "https://www.linkedin.com/in/john-finch-57b49364/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/john-finch-57b49364/",
+      "evidenceText": "John Finch - VP Product Development at QuadraCure — View John Finch's profile on LinkedIn, a professional community of 1 billion members ... HPA Sports Management. 2012 - 2015 3 years. Education. Brooks Institute.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "hph-advising",
+      "companyName": "HPH Advising",
+      "personName": "Greg Gatto",
+      "url": "https://www.linkedin.com/in/gregory-gatto-7769231a5/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "http://hphadvising.com/",
+      "evidenceText": "Greg Gatto — https://www.linkedin.com/in/gregory-gatto-7769231a5/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "ice-breakers-advisory",
+      "companyName": "Ice Breakers Advisory",
+      "personName": "Dylan Ghaemi",
+      "url": "https://www.linkedin.com/in/dylan-ghaemi-33a826253/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/dylan-ghaemi-33a826253/",
+      "evidenceText": "Dylan Ghaemi - PHPA/PWHLPA Certified Player Agent | LinkedIn — PHPA/PWHLPA Certified Player Agent · Experience: IceBreakers Advisory LLC · Education: Vermont Law and Graduate School · Location: Fairport · 500+ ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "impact-hockey-consulting",
+      "companyName": "Impact Hockey Consulting",
+      "personName": "Chris Santello",
+      "url": "https://www.linkedin.com/in/chris-santello-083726100/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/chris-santello-083726100/",
+      "evidenceText": "Chris Santello - Territory Manager at Bioventus - LinkedIn — ... Chris Santello's profile on LinkedIn, a professional community of 1 billion members ... Impact Hockey Consulting. Dec 2021 - Dec 2024 3 years 1 month. Rhode ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "innovative-hockey-consultants",
+      "companyName": "Innovative Hockey Consultants",
+      "personName": "Viktor Saljanin",
+      "url": "https://www.linkedin.com/in/viktor-saljanin-274815128/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/viktor-saljanin-274815128/",
+      "evidenceText": "Viktor Saljanin - NHLPA Certified Agent; Founder & CEO at ... - LinkedIn — Viktor Saljanin. NHLPA Certified Agent; Founder & CEO at Innovative Hockey Consultants, LLC. Innovative Hockey Consultants, LLC St. John's University ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "inside-edge-hockey",
+      "companyName": "Inside Edge Hockey",
+      "personName": "Tony Michel",
+      "url": "https://www.linkedin.com/in/tony-michel-b758b46/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/tony-michel-b758b46/",
+      "evidenceText": "Tony Michel - Founder- Helping hockey players achieve their goal of ... — Founder- Helping hockey players achieve their goal of playing at the highest level. · Experience: InsideEdge Hockey · Education: University of Wisconsin-Eau ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "jdm-sports",
+      "companyName": "JDM Sports",
+      "personName": "Justin Maciuk",
+      "url": "https://www.linkedin.com/in/justinmaciuk/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/justinmaciuk/",
+      "evidenceText": "Justin Maciuk - JDM Sports - LinkedIn — JDM Sports · Justin stands as a remarkable figure in the world of hockey, serving as the Vice President of Hockey Operations for JDM Sports ... Justin Maciuk's",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "jrc-hockey-management",
+      "companyName": "JRC Hockey Management",
+      "personName": "Bryan Jones",
+      "url": "https://www.linkedin.com/in/bryan-jones-7483272a7/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/bryan-jones-7483272a7/",
+      "evidenceText": "Bryan Jones - Founder, CEO & Agent at Jones Sports Group ... - LinkedIn — ... Bryan Jones' profile on LinkedIn, a professional community of 1 billion members ... JRC Hockey Management. Oct 2023 - Aug 2026 2 years 11 months. United States.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "kam-sports",
+      "companyName": "KAM Sports",
+      "personName": "Mathieu Curadeau",
+      "url": "https://www.linkedin.com/in/mathieu-curadeau-5782115b/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.kam-sports.com/our-team",
+      "evidenceText": "Mathieu Curadeau — https://www.linkedin.com/in/mathieu-curadeau-5782115b/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "monarch-advisory-group",
+      "companyName": "Monarch Advisory Group",
+      "personName": "Kyle Chagnon",
+      "url": "https://www.linkedin.com/in/kyle-chagnon-415a50213/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.monarchadvisorygroup.ca/",
+      "evidenceText": "Kyle Chagnon — https://ca.linkedin.com/in/kyle-chagnon-415a50213",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "nexlevel-hockey",
+      "companyName": "Nexlevel hockey",
+      "personName": "Tim Madsen",
+      "url": "https://www.linkedin.com/in/tim-madsen-6880b51b0/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/tim-madsen-6880b51b0/",
+      "evidenceText": "Tim Madsen - President - Nexlevel Hockey - LinkedIn — Tim Madsen. President - Nexlevel Hockey. Nexlevel Hockey Niagara University. Buffalo-Niagara Falls Area.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "paragon-sports-consulting",
+      "companyName": "Paragon Sports Consulting",
+      "personName": "Colby Drost",
+      "url": "https://www.linkedin.com/in/colby-drost-1638a148/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/colby-drost-1638a148/",
+      "evidenceText": "Colby Drost - Paragon Sports Consulting | Edge Sports NHLPA — Colby Drost is a Partner at Edge Sports Management (NHLPA Certified Agency) and the founder of Paragon Sports Consulting (est. 2019).",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "premier-hockey-management",
+      "companyName": "Premier Hockey Management",
+      "personName": "Alec Austin",
+      "url": "https://www.linkedin.com/in/alec-austin-jd-b175a534/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/alec-austin-jd-b175a534/",
+      "evidenceText": "Alec Austin , JD - CEO and Founder of Premier Hockey ... - LinkedIn — Alec Austin , JD. CEO and Founder of Premier Hockey Management and Ex Pro and NCAA Hockey player. Premier Hockey Management Mitchell Hamline School of Law ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "propulsion-sports-agency",
+      "companyName": "Propulsion Sports Agency",
+      "personName": "Nicola Riopel",
+      "url": "https://www.linkedin.com/in/nick-riopel-4332a6b9/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://propulsionagency.com/en/our-team/",
+      "evidenceText": "Nicola Riopel — https://www.linkedin.com/in/nick-riopel-4332a6b9/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "puck-agency",
+      "companyName": "Puck Agency",
+      "personName": "Dan Fridgen",
+      "url": "https://www.linkedin.com/in/dan-fridgen-475452/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/dan-fridgen-475452/",
+      "evidenceText": "Dan Fridgen - Asset Management Executive at H.T. Lyons, an Equans ... — ... Dan Fridgen's profile on LinkedIn, a professional community of 1 billion members ... Puck Agency. 2006 - Present 20 years. Education. Colgate University. BA ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "rising-athletes-advisory",
+      "companyName": "Rising Athletes Advisory",
+      "personName": "Bryan Pearse",
+      "url": "https://www.linkedin.com/pub/bryan-pearse/29/489/bb7/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://athleteadvisoryagency.com/",
+      "evidenceText": "Bryan Pearse — https://www.linkedin.com/pub/bryan-pearse/29/489/bb7",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "rule-1-sports",
+      "companyName": "Rule 1 Sports",
+      "personName": "Austyn Quarters",
+      "url": "https://www.linkedin.com/in/austyn-quarters-92555a19a/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.rule1sports.com/team",
+      "evidenceText": "Austyn Quarters — https://www.linkedin.com/in/austyn-quarters-92555a19a",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "sport-prospects",
+      "companyName": "Sport Prospects",
+      "personName": "Dominic Boily",
+      "url": "https://www.linkedin.com/in/dominicboily/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://www.sportprospects.ca/blank-1",
+      "evidenceText": "Dominic Boily — http://www.linkedin.com/in/dominicboily",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "steen-sports-systems",
+      "companyName": "Steen Sports Systems",
+      "personName": "Cameron Steen",
+      "url": "https://www.linkedin.com/in/cameron-steen-1a6457239/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/cameron-steen-1a6457239/",
+      "evidenceText": "Cameron Steen - Hockey Performance Coach and Founder of ... — My name is Cameron Steen and I am a Hockey skills and performance specialist located in the DFW metroplex. I am the founder of Steen Sports Systems.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "summit-sports-group",
+      "companyName": "Summit Sports Group",
+      "personName": "Colin Jacobs",
+      "url": "https://www.linkedin.com/in/colin-jacobs-2ba7a018b/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/colin-jacobs-2ba7a018b/",
+      "evidenceText": "Colin Jacobs - Professional Hockey Player Player Development Coach ... — Colin Jacobs. Professional Hockey Player Player Development Coach Hockey Player Agent/Advisor. Summit Sports Group. Dallas-Fort Worth Metroplex.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "swan-hockey",
+      "companyName": "Swan Hockey",
+      "personName": "Eric Swanick",
+      "url": "https://www.linkedin.com/in/eric-swanick-48952068/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/eric-swanick-48952068/",
+      "evidenceText": "Eric Swanick - Swan Hockey - LinkedIn — Eric Swanick. Swan Hockey. Scout Central Hockey. Point Pleasant Beach, New Jersey, United States.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "talent-hockey-agency",
+      "companyName": "Talent Hockey Agency",
+      "personName": "Joseph Kolodziej",
+      "url": "https://www.linkedin.com/in/joseph-kolodziej-9666617/",
+      "evidenceKind": "official_website",
+      "evidenceUrl": "https://hockeytalentmanagement.com/",
+      "evidenceText": "Joseph Kolodziej — https://www.linkedin.com/in/joseph-kolodziej-9666617/",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "tbc-hockey-advisors",
+      "companyName": "TBC Hockey Advisors",
+      "personName": "Bailey Conger",
+      "url": "https://www.linkedin.com/in/baileyconger/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/baileyconger/",
+      "evidenceText": "Bailey Conger - Founder of All Hockey Sticks - LinkedIn — ... Bailey Conger's profile on LinkedIn, a professional community of 1 billion members ... In our inaugural year, TBC Hockey Advisors made a powerful entrance into ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "veritas-hockey",
+      "companyName": "Veritas Hockey",
+      "personName": "Tom Lynn",
+      "url": "https://www.linkedin.com/in/tom-lynn-a28b74130/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/tom-lynn-a28b74130/",
+      "evidenceText": "Tom Lynn - General Counsel. Attorney and Hockey Player Agent | LinkedIn — ... Tom Lynn's profile on LinkedIn, a professional community of 1 billion members ... VERITAS HOCKEY MANAGEMENT, LLC. Jun 2011 - Present 15 years 4 months. St Paul ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "wolfe-hockey-development",
+      "companyName": "Wolfe Hockey Development",
+      "personName": "Jason Wolfe",
+      "url": "https://www.linkedin.com/in/jason-wolfe-88583633/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/jason-wolfe-88583633/",
+      "evidenceText": "Jason Wolfe - USA Paralympic Goalie Consultant at USA ... - LinkedIn — Jason Wolfe. USA Paralympic Goalie Consultant at USA Paralympic Ice Hockey. Wolfe Hockey Development LLC Merrimack College. Severn, Maryland ...",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "womens-college-hockey-recruiting",
+      "companyName": "Women's College Hockey Recruiting",
+      "personName": "Carla Pentimone",
+      "url": "https://www.linkedin.com/in/carlapentimone/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/carlapentimone/",
+      "evidenceText": "Carla Pentimone - Wife| Mother I Owner Founder at Women's ... — Carla Pentimone. Wife| Mother I Owner Founder at Women's College Hockey Recruiting. Loyola Academy. Greater Chicago Area.",
+      "reviewedAt": "2026-10-02"
+    },
+    {
+      "companySlug": "zero-klub-hockey",
+      "companyName": "Zero Klub Hockey",
+      "personName": "Zane Kalemba",
+      "url": "https://www.linkedin.com/in/zane-kalemba-a9937226/",
+      "evidenceKind": "public_search",
+      "evidenceUrl": "https://www.linkedin.com/in/zane-kalemba-a9937226/",
+      "evidenceText": "Zane Kalemba - Director of Hockey Operations at Princeton University — ... Zane Kalemba's profile on LinkedIn, a professional community of 1 billion members ... Zero Klub Hockey and Advisory Group. Aug 2017 - Present 9 years 2 months.",
+      "reviewedAt": "2026-10-02"
+    }
+  ]
+}

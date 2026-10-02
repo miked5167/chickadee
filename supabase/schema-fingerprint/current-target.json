@@ -9,7 +9,8 @@
       "supabase/migrations/20260719000003_company_reviews.sql",
       "supabase/migrations/20260821000000_company_profiles.sql",
       "supabase/migrations/20260821000001_company_leads_and_events.sql",
-      "supabase/migrations/20260821000002_advisor_interest_submissions.sql"
+      "supabase/migrations/20260821000002_advisor_interest_submissions.sql",
+      "supabase/migrations/20260913004623_company_elite_prospects.sql"
     ],
     "containsData": false
   },
@@ -564,6 +565,93 @@
           "nullable": true,
           "default": "now()",
           "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "company_elite_prospects",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "match_status",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "agency_name",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 4,
+          "name": "source_url",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 5,
+          "name": "client_count",
+          "type": "integer",
+          "nullable": true,
+          "default": null,
+          "definition": "integer"
+        },
+        {
+          "ordinal": 6,
+          "name": "match_notes",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "source_file",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 8,
+          "name": "source_sha256",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "source_observed_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null,
+          "definition": "timestamp with time zone"
+        },
+        {
+          "ordinal": 10,
+          "name": "imported_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
         }
       ],
       "owner": "postgres"
@@ -1572,6 +1660,48 @@
       "definition": "CHECK (((slug)::text ~* '^[a-z0-9-]+$'::text))"
     },
     {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_count_check",
+      "type": "check",
+      "definition": "CHECK (client_count IS NULL OR client_count >= 0)"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_hash_check",
+      "type": "check",
+      "definition": "CHECK (source_sha256 ~ '^[a-f0-9]{64}$')"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_match_check",
+      "type": "check",
+      "definition": "CHECK ((match_status IN ('exact', 'likely') AND client_count IS NOT NULL AND source_url IS NOT NULL AND agency_name IS NOT NULL AND length(trim(agency_name)) > 0) OR (match_status IN ('none', 'ambiguous') AND client_count IS NULL AND source_url IS NULL AND agency_name IS NULL))"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (company_id)"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_source_check",
+      "type": "check",
+      "definition": "CHECK (source_url IS NULL OR source_url ~ '^https://www[.]eliteprospects[.]com/agent-portal/[0-9]+/[^[:space:]]+$')"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_status_check",
+      "type": "check",
+      "definition": "CHECK (match_status IN ('exact', 'likely', 'none', 'ambiguous'))"
+    },
+    {
       "table": "company_leads",
       "name": "company_leads_age_check",
       "type": "check",
@@ -1997,6 +2127,15 @@
       "definition": "CREATE INDEX companies_verified_owner_idx ON public.companies USING btree (verified_owner_id)"
     },
     {
+      "table": "company_elite_prospects",
+      "name": "company_elite_prospects_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint company_elite_prospects_pkey"
+    },
+    {
       "table": "company_leads",
       "name": "company_leads_company_created_idx",
       "unique": false,
@@ -2262,6 +2401,11 @@
       "forced": false
     },
     {
+      "table": "company_elite_prospects",
+      "enabled": true,
+      "forced": false
+    },
+    {
       "table": "company_leads",
       "enabled": true,
       "forced": false
@@ -2359,6 +2503,19 @@
       "using": "true",
       "withCheck": null,
       "definition": "CREATE POLICY \"Public read access for companies\" ON public.companies FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
+      "table": "company_elite_prospects",
+      "name": "Elite Prospects measurements are public",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Elite Prospects measurements are public\" ON public.company_elite_prospects FOR SELECT TO anon, authenticated USING (true)"
     },
     {
       "table": "company_leads",
@@ -2770,6 +2927,24 @@
     {
       "kind": "table",
       "name": "companies",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "company_elite_prospects",
+      "grantee": "anon",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "company_elite_prospects",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "company_elite_prospects",
       "grantee": "service_role",
       "privileges": "ALL"
     },

@@ -31,6 +31,14 @@ const m6Filename = '20260821000001_company_leads_and_events.sql'
 const m6Path = path.join(activeDirectory, m6Filename)
 const m7Filename = '20260821000002_advisor_interest_submissions.sql'
 const m7Path = path.join(activeDirectory, m7Filename)
+const m8Filename = '20260913004623_company_elite_prospects.sql'
+const m8Path = path.join(activeDirectory, m8Filename)
+const expectedM8 = {
+  table: ['company_id', 'match_status', 'agency_name', 'source_url', 'client_count', 'match_notes', 'source_file', 'source_sha256', 'source_observed_at', 'imported_at'],
+  constraints: ['pkey', 'company_id_fkey', 'status_check', 'count_check', 'source_check', 'match_check', 'hash_check'].map(name => `company_elite_prospects.company_elite_prospects_${name}`),
+  indexes: ['company_elite_prospects.company_elite_prospects_pkey'],
+  policies: ['company_elite_prospects.Elite Prospects measurements are public'],
+}
 const adoptedBaselineSha256 = '4b65fa234b56534985f249cc8061efd98b05ba927c5de130839b8fd35c1d1db8'
 const reviewedM2Sha256 = '95fb374bb07c5a4941b3dd78e6a6db9bf5b4b456c15670fb3ac9805e3a81b547'
 const reviewedM3Sha256 = 'a968f41fb10e6ecbe1ff8363abe0322031defd6aa361ce3c98498603ade55f6d'
@@ -236,7 +244,7 @@ export function validateActiveFileNames(activeFiles) {
   for (let index = 1; index < ordered.length; index += 1) assert(ordered[index] > ordered[index - 1], 'Active migration versions are not strictly ordered')
 }
 
-export function validateRegister(fingerprint, { currentTarget = false, includesM3 = false, includesM4 = false, includesM5 = false, includesM6 = false, includesM7 = false } = {}) {
+export function validateRegister(fingerprint, { currentTarget = false, includesM3 = false, includesM4 = false, includesM5 = false, includesM6 = false, includesM7 = false, includesM8 = false } = {}) {
   equalList(fingerprint.extensions.map((item) => `${item.schema}.${item.name}`), expected.extensions, 'Extension')
   equalList(fingerprint.enums.map((item) => item.name), expected.enums, 'Enum')
   const expectedTables = {
@@ -246,6 +254,7 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
     ...(includesM5 ? { company_profiles: expectedM5.table } : {}),
     ...(includesM6 ? expectedM6.tables : {}),
     ...(includesM7 ? { advisor_interest_submissions: expectedM7.table } : {}),
+    ...(includesM8 ? { company_elite_prospects: expectedM8.table } : {}),
   }
   equalList(fingerprint.tables.map((item) => item.name), Object.keys(expectedTables), 'Table')
   for (const table of fingerprint.tables) {
@@ -256,6 +265,11 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
   const expectedConstraints = [...expected.constraints, ...(includesM3 ? expectedM3.constraints : []), ...(includesM4 ? expectedM4.constraints : []), ...(includesM5 ? expectedM5.constraints : []), ...(includesM6 ? expectedM6.constraints : []), ...(includesM7 ? expectedM7.constraints : [])]
   const expectedIndexes = [...expected.indexes, ...(includesM3 ? expectedM3.indexes : []), ...(includesM4 ? expectedM4.indexes : []), ...(includesM5 ? expectedM5.indexes : []), ...(includesM6 ? expectedM6.indexes : []), ...(includesM7 ? expectedM7.indexes : [])]
   const expectedPolicies = [...expected.policies, ...(includesM3 ? expectedM3.policies : []), ...(includesM4 ? expectedM4.policies : []), ...(includesM5 ? expectedM5.policies : []), ...(includesM6 ? expectedM6.policies : [])]
+  if (includesM8) {
+    expectedConstraints.push(...expectedM8.constraints)
+    expectedIndexes.push(...expectedM8.indexes)
+    expectedPolicies.push(...expectedM8.policies)
+  }
   equalList(fingerprint.constraints.map((item) => `${item.table}.${item.name}`), expectedConstraints, 'Constraint')
   equalList(fingerprint.indexes.map((item) => `${item.table}.${item.name}`), expectedIndexes, 'Index')
   equalList(fingerprint.policies.map((item) => `${item.table}.${item.name}`), expectedPolicies, 'Policy')
@@ -267,7 +281,7 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
   if (includesM5) expectedTriggers.push(expectedM5.trigger)
   if (includesM6) expectedTriggers.push(expectedM6.trigger)
   equalList(fingerprint.triggers.map((item) => `${item.table}.${item.name}`), expectedTriggers, 'Trigger')
-  assert(fingerprint.rowLevelSecurity.length === 5 + (includesM3 ? 1 : 0) + (includesM4 ? 1 : 0) + (includesM5 ? 1 : 0) + (includesM6 ? 2 : 0) + (includesM7 ? 1 : 0) && fingerprint.rowLevelSecurity.every((item) => item.enabled && !item.forced), 'RLS enabled/forced state differs from production')
+  assert(fingerprint.rowLevelSecurity.length === 5 + (includesM3 ? 1 : 0) + (includesM4 ? 1 : 0) + (includesM5 ? 1 : 0) + (includesM6 ? 2 : 0) + (includesM7 ? 1 : 0) + (includesM8 ? 1 : 0) && fingerprint.rowLevelSecurity.every((item) => item.enabled && !item.forced), 'RLS enabled/forced state differs from production')
   const timestampFunction = fingerprint.functions.find((item) => item.name === 'update_updated_at_column')
   assert(timestampFunction?.owner === 'postgres' && !timestampFunction.securityDefiner && timestampFunction.volatility === 'volatile', 'Timestamp function register differs from production')
   if (includesM3) {
@@ -314,6 +328,7 @@ export function validateRegister(fingerprint, { currentTarget = false, includesM
     'table.directory_events.service_role.ALL',
   )
   if (includesM7) expectedGrants.push('table.advisor_interest_submissions.service_role.ALL')
+  if (includesM8) expectedGrants.push('table.company_elite_prospects.anon.SELECT', 'table.company_elite_prospects.authenticated.SELECT', 'table.company_elite_prospects.service_role.ALL')
   equalList(fingerprint.grants.map((item) => `${item.kind}.${item.name}.${item.grantee}.${item.privileges}`), expectedGrants, 'Grant')
   assert(fingerprint.source.containsData === false, 'Fingerprint must be definitions-only')
 }
@@ -986,7 +1001,7 @@ async function validateSensitiveContent(files) {
 async function main() {
   const activeFiles = (await readdir(activeDirectory)).filter((name) => name.endsWith('.sql')).sort()
   validateActiveFileNames(activeFiles)
-  equalList(activeFiles, [baselineFilename, m2Filename, m3Filename, m4Filename, m5Filename, m6Filename, m7Filename], 'Active migration file')
+  equalList(activeFiles, [baselineFilename, m2Filename, m3Filename, m4Filename, m5Filename, m6Filename, m7Filename, m8Filename], 'Active migration file')
   await validateLegacy(activeFiles)
 
   const baselineBytes = await readFile(baselinePath)
@@ -1010,6 +1025,7 @@ async function main() {
   const m7Bytes = await readFile(m7Path)
   assert(createHash('sha256').update(m7Bytes).digest('hex') === reviewedM7Sha256, 'Reviewed M7 migration bytes changed')
   const m7Sql = m7Bytes.toString('utf8')
+  const m8Sql = await readFile(m8Path, 'utf8')
   const productionApplyScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m2-production-apply.ps1')
   const productionApplyScript = await readFile(productionApplyScriptPath, 'utf8')
   const m3PreflightScriptPath = path.join(repositoryRoot, 'scripts', 'database', 'run-m3-production-preflight.ps1')
@@ -1047,10 +1063,10 @@ async function main() {
     forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`, `supabase/migrations/${m5Filename}`],
     containsData: false,
   })
-  const targetFingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}\n${m5Sql}\n${m6Sql}\n${m7Sql}`, {
+  const targetFingerprint = buildFingerprint(`${baselineSql}\n${m2Sql}\n${m3Sql}\n${m4Sql}\n${m5Sql}\n${m6Sql}\n${m7Sql}\n${m8Sql}`, {
     kind: 'deterministic-current-target',
     baseMigration: `supabase/migrations/${baselineFilename}`,
-    forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`, `supabase/migrations/${m5Filename}`, `supabase/migrations/${m6Filename}`, `supabase/migrations/${m7Filename}`],
+    forwardMigrations: [`supabase/migrations/${m2Filename}`, `supabase/migrations/${m3Filename}`, `supabase/migrations/${m4Filename}`, `supabase/migrations/${m5Filename}`, `supabase/migrations/${m6Filename}`, `supabase/migrations/${m7Filename}`, `supabase/migrations/${m8Filename}`],
     containsData: false,
   })
   validateRegister(baselineFingerprint)
@@ -1058,7 +1074,7 @@ async function main() {
   validateRegister(m3Fingerprint, { currentTarget: true, includesM3: true })
   validateRegister(m4Fingerprint, { currentTarget: true, includesM3: true, includesM4: true })
   validateRegister(m5Fingerprint, { currentTarget: true, includesM3: true, includesM4: true, includesM5: true })
-  validateRegister(targetFingerprint, { currentTarget: true, includesM3: true, includesM4: true, includesM5: true, includesM6: true, includesM7: true })
+  validateRegister(targetFingerprint, { currentTarget: true, includesM3: true, includesM4: true, includesM5: true, includesM6: true, includesM7: true, includesM8: true })
   validateSqlSafety(baselineSql, baselineFingerprint)
   validateM2SqlSafety(m2Sql)
   validateM3SqlSafety(m3Sql)

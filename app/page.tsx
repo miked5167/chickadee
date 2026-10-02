@@ -71,6 +71,11 @@ export default function HomePage() {
       url: 'https://thehockeydirectory.com',
       logo: 'https://thehockeydirectory.com/hockey-directory-logo-v7.png',
       description: 'An independent directory helping hockey families research advisors and player pathways.',
+      parentOrganization: {
+        '@type': 'Organization',
+        name: 'HuddleBooks',
+        url: 'https://huddlebooks.ca',
+      },
     },
   ]
 

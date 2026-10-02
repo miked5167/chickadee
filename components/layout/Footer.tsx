@@ -135,7 +135,18 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 flex flex-col gap-3 border-t border-white/15 pt-8 text-sm text-frost sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {currentYear} The Hockey Directory. All rights reserved.</p>
+          <p>
+            &copy; {currentYear} The Hockey Directory. A{' '}
+            <a
+              href="https://huddlebooks.ca"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-white underline decoration-white/40 underline-offset-4 transition-colors hover:text-goal-gold"
+            >
+              HuddleBooks
+            </a>{' '}
+            project.
+          </p>
           <p>Built for families navigating competitive hockey.</p>
         </div>
       </div>

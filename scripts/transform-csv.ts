@@ -63,7 +63,7 @@ const outputHeaders = [
   'is_featured',
 ]
 
-let outputLines: string[] = [outputHeaders.join(',')]
+const outputLines: string[] = [outputHeaders.join(',')]
 
 // Process each data row
 for (let i = 1; i < lines.length; i++) {

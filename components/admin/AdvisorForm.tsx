@@ -14,7 +14,7 @@ export interface TeamMember {
   email: string
 }
 
-interface AdvisorFormData {
+export interface AdvisorFormData {
   name: string
   title: string
   bio: string
@@ -47,7 +47,7 @@ interface AdvisorFormProps {
   initialData?: Partial<AdvisorFormData>
   advisorId?: string
   mode: 'create' | 'edit'
-  onSubmit?: (data: any) => Promise<void>
+  onSubmit?: (data: AdvisorFormData) => Promise<void>
   onCancel?: () => void
   isSubmitting?: boolean
 }
@@ -550,7 +550,7 @@ export function AdvisorForm({ initialData, advisorId, mode }: AdvisorFormProps) 
         <CardContent className="space-y-4">
           {formData.team_members.length === 0 ? (
             <p className="text-sm text-gray-600">
-              No team members added. Click "Add Team Member" to add individual advisors to this company.
+              No team members added. Click &quot;Add Team Member&quot; to add individual advisors to this company.
             </p>
           ) : (
             <div className="space-y-4">

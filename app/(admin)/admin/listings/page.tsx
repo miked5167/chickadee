@@ -323,7 +323,7 @@ export default function ManageListingsPage() {
                   </label>
                   <select
                     value={claimedFilter}
-                    onChange={(e) => setClaimedFilter(e.target.value as any)}
+                    onChange={(e) => setClaimedFilter(e.target.value as typeof claimedFilter)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="all">All</option>
@@ -339,7 +339,7 @@ export default function ManageListingsPage() {
                   </label>
                   <select
                     value={publishedFilter}
-                    onChange={(e) => setPublishedFilter(e.target.value as any)}
+                    onChange={(e) => setPublishedFilter(e.target.value as typeof publishedFilter)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="all">All</option>
@@ -355,7 +355,7 @@ export default function ManageListingsPage() {
                   </label>
                   <select
                     value={featuredFilter}
-                    onChange={(e) => setFeaturedFilter(e.target.value as any)}
+                    onChange={(e) => setFeaturedFilter(e.target.value as typeof featuredFilter)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="all">All</option>
@@ -371,7 +371,7 @@ export default function ManageListingsPage() {
                   </label>
                   <select
                     value={subscriptionFilter}
-                    onChange={(e) => setSubscriptionFilter(e.target.value as any)}
+                    onChange={(e) => setSubscriptionFilter(e.target.value as typeof subscriptionFilter)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="all">All</option>
@@ -403,7 +403,7 @@ export default function ManageListingsPage() {
                     </label>
                     <select
                       value={qualityFilter}
-                      onChange={(e) => setQualityFilter(e.target.value as any)}
+                      onChange={(e) => setQualityFilter(e.target.value as typeof qualityFilter)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="all">All Quality Levels</option>
@@ -420,7 +420,7 @@ export default function ManageListingsPage() {
                     </label>
                     <select
                       value={ratingFilter}
-                      onChange={(e) => setRatingFilter(e.target.value as any)}
+                      onChange={(e) => setRatingFilter(e.target.value as typeof ratingFilter)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="all">All Ratings</option>

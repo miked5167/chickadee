@@ -9,7 +9,10 @@ interface DataForSEOConfig {
   baseUrl?: string;
 }
 
-interface DataForSEOResponse<T = any> {
+type JsonPrimitive = string | number | boolean | null;
+type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue };
+
+interface DataForSEOResponse<T = unknown> {
   version: string;
   status_code: number;
   status_message: string;
@@ -25,7 +28,7 @@ interface DataForSEOResponse<T = any> {
     cost: number;
     result_count: number;
     path: string[];
-    data: any;
+    data: JsonValue;
     result: T;
   }>;
 }
@@ -50,10 +53,10 @@ export class DataForSEOClient {
   /**
    * Make authenticated request to DataForSEO API
    */
-  private async request<T = any>(
+  private async request<T = unknown>(
     endpoint: string,
     method: 'GET' | 'POST' = 'POST',
-    data?: any
+    data?: JsonValue
   ): Promise<DataForSEOResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
     const auth = Buffer.from(`${this.login}:${this.password}`).toString('base64');
@@ -305,7 +308,7 @@ export function getDataForSEOClient(): DataForSEOClient {
 // Backward compatibility - only create if environment variables are set
 export const dataForSEO = process.env.DATAFORSEO_LOGIN && process.env.DATAFORSEO_PASSWORD
   ? new DataForSEOClient()
-  : null as any;
+  : null;
 
 // Export types
 export type { DataForSEOConfig, DataForSEOResponse };

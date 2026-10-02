@@ -67,7 +67,7 @@ export default function EditAdvisorPage() {
   }, [formData, originalData])
 
   // Handle field changes
-  const handleFieldChange = (field: string, value: any) => {
+  const handleFieldChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -280,7 +280,7 @@ export default function EditAdvisorPage() {
 
         {hasUnsavedChanges && (
           <div className="mb-6 bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg">
-            <p className="text-sm">You have unsaved changes. Click "Save Changes" to update the profile.</p>
+            <p className="text-sm">You have unsaved changes. Click &quot;Save Changes&quot; to update the profile.</p>
           </div>
         )}
 

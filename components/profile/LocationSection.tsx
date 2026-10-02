@@ -142,7 +142,7 @@ export function LocationSection({ data, onChange, errors, mode = 'advisor' }: Pr
         {mode === 'advisor' && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-900">
-              <strong>Note:</strong> Your location helps families find advisors near them. The service area shows where you're willing to work with clients.
+              <strong>Note:</strong> Your location helps families find advisors near them. The service area shows where you&apos;re willing to work with clients.
             </p>
           </div>
         )}

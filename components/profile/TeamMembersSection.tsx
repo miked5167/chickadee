@@ -32,7 +32,7 @@ export function TeamMembersSection({ data, onChange, errors, mode = 'advisor' }:
     setExpandedMember(teamMembers.length)
   }
 
-  const updateTeamMember = (index: number, field: keyof TeamMember, value: any) => {
+  const updateTeamMember = <K extends keyof TeamMember>(index: number, field: K, value: TeamMember[K]) => {
     const updated = [...teamMembers]
     updated[index] = { ...updated[index], [field]: value }
     onChange('team_members', updated)
@@ -297,7 +297,7 @@ export function TeamMembersSection({ data, onChange, errors, mode = 'advisor' }:
                           className="text-sm"
                         />
                         <p className="text-xs text-gray-500">
-                          Optional. Direct URL to team member's headshot photo.
+                          Optional. Direct URL to team member&apos;s headshot photo.
                         </p>
                       </div>
                     </div>
@@ -316,7 +316,7 @@ export function TeamMembersSection({ data, onChange, errors, mode = 'advisor' }:
         {mode === 'advisor' && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-900">
-              <strong>Tip:</strong> Adding team members builds trust and helps families understand who they'll be working with. Include photos and detailed bios when possible.
+              <strong>Tip:</strong> Adding team members builds trust and helps families understand who they&apos;ll be working with. Include photos and detailed bios when possible.
             </p>
           </div>
         )}
@@ -324,7 +324,7 @@ export function TeamMembersSection({ data, onChange, errors, mode = 'advisor' }:
         {teamMembers.length >= FIELD_LIMITS.MAX_TEAM_MEMBERS && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
             <p className="text-xs text-amber-900">
-              You've reached the maximum of {FIELD_LIMITS.MAX_TEAM_MEMBERS} team members.
+              You&apos;ve reached the maximum of {FIELD_LIMITS.MAX_TEAM_MEMBERS} team members.
             </p>
           </div>
         )}

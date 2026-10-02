@@ -38,7 +38,7 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
     .select('tag_id, tag:blog_tags(id, name, slug)')
     .eq('post_id', id)
 
-  const tags = postTags?.map(pt => pt.tag).filter(Boolean) || []
+  const tags = (postTags || []).flatMap(({ tag }) => Array.isArray(tag) ? tag : tag ? [tag] : [])
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">
@@ -66,7 +66,7 @@ export default async function EditBlogPostPage({ params }: EditBlogPostPageProps
           meta_description: post.meta_description,
           status: post.status,
           is_featured: post.is_featured,
-          tags: tags as any,
+          tags,
         }}
       />
     </div>

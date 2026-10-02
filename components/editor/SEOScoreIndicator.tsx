@@ -145,7 +145,7 @@ export function SEOScoreIndicator({
         {seoScore.totalScore < 80 && !expanded && (
           <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-900">
-              <strong>Tip:</strong> Click "Show Details" to see how to improve your SEO score.
+              <strong>Tip:</strong> Click &quot;Show Details&quot; to see how to improve your SEO score.
             </p>
           </div>
         )}

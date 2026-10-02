@@ -12,7 +12,19 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Historical copies are kept for reference but are not application source.
+    "**/*-old-backup.tsx",
   ]),
+  {
+    // Maintenance scripts and tests deliberately exercise loosely shaped
+    // external data. Keep application code strict while allowing those files
+    // to validate data at runtime instead of pretending every payload is typed.
+    files: ["scripts/**/*.{js,ts,tsx}", "tests/**/*.{js,ts,tsx}", "*.js", "test-postgis.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

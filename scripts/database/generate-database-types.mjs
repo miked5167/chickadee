@@ -8,6 +8,7 @@ const outputPath = path.join(repositoryRoot, 'supabase', 'types', 'database.gene
 function typeScriptType(sqlType) {
   if (sqlType === 'uuid' || sqlType === 'text' || sqlType.startsWith('character varying') || sqlType.startsWith('character(') || sqlType === 'timestamp with time zone') return 'string'
   if (sqlType === 'text[]') return 'string[]'
+  if (sqlType === 'uuid[]') return 'string[]'
   if (sqlType === 'smallint' || sqlType === 'integer' || sqlType === 'bigint' || sqlType === 'numeric') return 'number'
   if (sqlType === 'boolean') return 'boolean'
   if (sqlType === 'jsonb') return 'Json'
@@ -100,7 +101,16 @@ export function generateTypes(fingerprint) {
     lines.push('    Functions: {')
     for (const item of callableFunctions) {
       lines.push(`      ${item.name}: {`)
-      lines.push('        Args: Record<PropertyKey, never>')
+      if (!item.identityArguments) lines.push('        Args: Record<PropertyKey, never>')
+      else {
+        lines.push('        Args: {')
+        for (const argument of item.identityArguments.split(',').map((value) => value.trim())) {
+          const match = argument.match(/^([a-z_][a-z0-9_]*)\s+(.+)$/i)
+          if (!match) throw new Error(`Unsupported function argument: ${argument}`)
+          lines.push(`          ${match[1]}: ${typeScriptType(match[2])}`)
+        }
+        lines.push('        }')
+      }
       lines.push(`        Returns: ${typeScriptType(item.resultType)}`)
       lines.push('      }')
     }

@@ -159,6 +159,39 @@ export type Database = {
           },
         ]
       }
+      claim_tags: {
+        Row: {
+          claim_id: string
+          tag_id: string
+          created_at: string
+        }
+        Insert: {
+          claim_id: string
+          tag_id: string
+          created_at?: string
+        }
+        Update: {
+          claim_id?: string
+          tag_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'claim_tags_claim_id_fkey'
+            columns: ['claim_id']
+            isOneToOne: false
+            referencedRelation: 'listing_claims'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'claim_tags_tag_id_fkey'
+            columns: ['tag_id']
+            isOneToOne: false
+            referencedRelation: 'directory_tags'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       companies: {
         Row: {
           id: string
@@ -446,6 +479,39 @@ export type Database = {
           },
         ]
       }
+      company_tags: {
+        Row: {
+          company_id: string
+          tag_id: string
+          created_at: string
+        }
+        Insert: {
+          company_id: string
+          tag_id: string
+          created_at?: string
+        }
+        Update: {
+          company_id?: string
+          tag_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'company_tags_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'company_tags_tag_id_fkey'
+            columns: ['tag_id']
+            isOneToOne: false
+            referencedRelation: 'directory_tags'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       directory_events: {
         Row: {
           id: string
@@ -487,6 +553,155 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'companies'
             referencedColumns: ['id']
+          },
+        ]
+      }
+      directory_tag_groups: {
+        Row: {
+          key: string
+          label: string
+          display_order: number
+          is_core: boolean
+          filter_enabled: boolean
+        }
+        Insert: {
+          key: string
+          label: string
+          display_order?: number
+          is_core?: boolean
+          filter_enabled?: boolean
+        }
+        Update: {
+          key?: string
+          label?: string
+          display_order?: number
+          is_core?: boolean
+          filter_enabled?: boolean
+        }
+        Relationships: []
+      }
+      directory_tag_suggestions: {
+        Row: {
+          id: string
+          requester_user_id: string
+          company_id: string | null
+          claim_id: string | null
+          group_key: string
+          label: string
+          reason: string
+          status: string
+          approved_tag_id: string | null
+          reviewed_by: string | null
+          reviewed_at: string | null
+          review_note: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          requester_user_id: string
+          company_id?: string | null
+          claim_id?: string | null
+          group_key: string
+          label: string
+          reason: string
+          status?: string
+          approved_tag_id?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          review_note?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          requester_user_id?: string
+          company_id?: string | null
+          claim_id?: string | null
+          group_key?: string
+          label?: string
+          reason?: string
+          status?: string
+          approved_tag_id?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          review_note?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'directory_tag_suggestions_approved_tag_fkey'
+            columns: ['approved_tag_id', 'group_key']
+            isOneToOne: false
+            referencedRelation: 'directory_tags'
+            referencedColumns: ['id', 'group_key']
+          },
+          {
+            foreignKeyName: 'directory_tag_suggestions_claim_id_fkey'
+            columns: ['claim_id']
+            isOneToOne: false
+            referencedRelation: 'listing_claims'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'directory_tag_suggestions_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'directory_tag_suggestions_group_key_fkey'
+            columns: ['group_key']
+            isOneToOne: false
+            referencedRelation: 'directory_tag_groups'
+            referencedColumns: ['key']
+          },
+        ]
+      }
+      directory_tags: {
+        Row: {
+          id: string
+          group_key: string
+          slug: string
+          label: string
+          parent_id: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id: string
+          group_key: string
+          slug: string
+          label: string
+          parent_id?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          group_key?: string
+          slug?: string
+          label?: string
+          parent_id?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'directory_tags_group_key_fkey'
+            columns: ['group_key']
+            isOneToOne: false
+            referencedRelation: 'directory_tag_groups'
+            referencedColumns: ['key']
+          },
+          {
+            foreignKeyName: 'directory_tags_parent_id_fkey'
+            columns: ['parent_id', 'group_key']
+            isOneToOne: false
+            referencedRelation: 'directory_tags'
+            referencedColumns: ['id', 'group_key']
           },
         ]
       }
@@ -721,6 +936,36 @@ export type Database = {
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      replace_claim_tags: {
+        Args: {
+          p_claim_id: string
+          p_tag_ids: string[]
+        }
+        Returns: string[]
+      }
+      replace_company_tags: {
+        Args: {
+          p_company_id: string
+          p_tag_ids: string[]
+        }
+        Returns: string[]
+      }
+      review_directory_tag_suggestion: {
+        Args: {
+          p_suggestion_id: string
+          p_action: string
+          p_slug: string
+          p_label: string
+          p_note: string
+        }
+        Returns: string
+      }
+      validate_directory_tag_selection: {
+        Args: {
+          p_tag_ids: string[]
+        }
+        Returns: string[]
       }
     }
     Enums: {

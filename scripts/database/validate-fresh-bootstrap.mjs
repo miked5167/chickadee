@@ -141,18 +141,22 @@ async function applyPending(connection) {
   return applied
 }
 
-function validateCatalog(connection) {
+async function validateCatalog(connection) {
+  const expected = JSON.parse(await readFile(targetFingerprintPath, 'utf8'))
+  const tableNames = expected.tables.map((table) => table.name)
+  assert(tableNames.every((name) => /^[a-z_][a-z0-9_]*$/.test(name)), 'Unsafe catalog table name')
+  const names = tableNames.map((name) => `'${name}'`).join(',')
   const result = scalar(connection, `
     SELECT json_build_object(
-      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
-      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
-      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND NOT t.tgisinternal),
-      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND c.relrowsecurity AND NOT c.relforcerowsecurity),
+      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN (${names})),
+      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names})),
+      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names}) AND NOT t.tgisinternal),
+      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names}) AND c.relrowsecurity AND NOT c.relforcerowsecurity),
       'ambiguous_columns', (SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name IN ('listing_claims','media_content') AND column_name = 'advisor_id')
     )::text;
   `)
   const checks = JSON.parse(result)
-  assert(checks.tables === 11 && checks.policies === 22 && checks.triggers === 9 && checks.rls_enabled === 11 && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
+  assert(checks.tables === expected.tables.length && checks.policies === expected.policies.length && checks.triggers === expected.triggers.length && checks.rls_enabled === expected.rowLevelSecurity.length && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
 }
 
 async function compareFingerprint(connection) {
@@ -523,12 +527,12 @@ async function main() {
   validateFailClosedM4Guards(connection)
   validateFailClosedM5M6M7Guards(connection)
   await compareFingerprint(connection)
-  validateCatalog(connection)
+  await validateCatalog(connection)
 
   const guardAttempt = psql(connection, ['--file', baselineMigrationPath], { expectFailure: true, failureLabel: 'baseline re-execution' })
   assert(guardAttempt.stderr.includes('Fresh-environment guard'), 'Baseline did not fail through its fresh-environment guard on an existing schema')
 
-  process.stdout.write(`Fresh M1 through M7 bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
+  process.stdout.write(`Fresh migration bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
 }
 
 main().catch((error) => {

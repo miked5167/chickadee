@@ -43,6 +43,7 @@ export const targetSource = {
     'supabase/migrations/20260821000001_company_leads_and_events.sql',
     'supabase/migrations/20260821000002_advisor_interest_submissions.sql',
     'supabase/migrations/20260913004623_company_elite_prospects.sql',
+    'supabase/migrations/20261002000000_directory_tags.sql',
   ],
   containsData: false,
 }
@@ -364,13 +365,13 @@ export function buildFingerprint(sql, source = baselineSource) {
       continue
     }
 
-    match = statement.match(/^ALTER (TYPE|FUNCTION|TABLE)\s+public\.([a-z_][a-z0-9_]*)(\(\))?\s+OWNER TO\s+([a-z_][a-z0-9_]*)$/i)
+    match = statement.match(/^ALTER (TYPE|FUNCTION|TABLE)\s+public\.([a-z_][a-z0-9_]*)(\([^)]*\))?\s+OWNER TO\s+([a-z_][a-z0-9_]*)$/i)
     if (match) {
       ownership.push({ kind: match[1].toLowerCase(), name: match[2], owner: match[4] })
       continue
     }
 
-    match = statement.match(/^GRANT\s+(.+?)\s+ON\s+(FUNCTION|TABLE)\s+public\.([a-z_][a-z0-9_]*)(\(\))?\s+TO\s+([a-z_][a-z0-9_]*)$/i)
+    match = statement.match(/^GRANT\s+(.+?)\s+ON\s+(FUNCTION|TABLE)\s+public\.([a-z_][a-z0-9_]*)(\([^)]*\))?\s+TO\s+([a-z_][a-z0-9_]*)$/i)
     if (match) {
       const kind = match[2].toLowerCase()
       const parsedPrivileges = normalizeSql(match[1])

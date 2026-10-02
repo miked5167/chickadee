@@ -1,0 +1,892 @@
+{
+  "groups": [
+    {
+      "key": "services",
+      "label": "Services",
+      "is_core": true,
+      "filter_enabled": true,
+      "display_order": 0
+    },
+    {
+      "key": "pathways",
+      "label": "Pathways",
+      "is_core": true,
+      "filter_enabled": true,
+      "display_order": 1
+    },
+    {
+      "key": "player_level",
+      "label": "Current player level",
+      "is_core": false,
+      "filter_enabled": true,
+      "display_order": 2
+    },
+    {
+      "key": "age_group",
+      "label": "Age groups served",
+      "is_core": false,
+      "filter_enabled": true,
+      "display_order": 3
+    },
+    {
+      "key": "regions",
+      "label": "Regions served",
+      "is_core": false,
+      "filter_enabled": true,
+      "display_order": 4
+    },
+    {
+      "key": "languages",
+      "label": "Languages",
+      "is_core": false,
+      "filter_enabled": true,
+      "display_order": 5
+    },
+    {
+      "key": "price_range",
+      "label": "Typical engagement price",
+      "is_core": false,
+      "filter_enabled": false,
+      "display_order": 6
+    }
+  ],
+  "tags": [
+    {
+      "id": "services:advisor",
+      "group_key": "services",
+      "slug": "advisor",
+      "label": "Hockey advising",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "services:agent",
+      "group_key": "services",
+      "slug": "agent",
+      "label": "Agent representation",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "services:scouting",
+      "group_key": "services",
+      "slug": "scouting",
+      "label": "Scouting & player evaluation",
+      "parent_id": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "services:video",
+      "group_key": "services",
+      "slug": "video",
+      "label": "Video analysis",
+      "parent_id": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "services:recruiting",
+      "group_key": "services",
+      "slug": "recruiting",
+      "label": "Recruiting & placement",
+      "parent_id": null,
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "id": "services:skills-coaching",
+      "group_key": "services",
+      "slug": "skills-coaching",
+      "label": "Skills coaching",
+      "parent_id": null,
+      "display_order": 5,
+      "is_active": true
+    },
+    {
+      "id": "pathways:prep-school",
+      "group_key": "pathways",
+      "slug": "prep-school",
+      "label": "Prep school",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "pathways:junior",
+      "group_key": "pathways",
+      "slug": "junior",
+      "label": "Junior hockey",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "pathways:ncaa",
+      "group_key": "pathways",
+      "slug": "ncaa",
+      "label": "NCAA",
+      "parent_id": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "pathways:u-sports",
+      "group_key": "pathways",
+      "slug": "u-sports",
+      "label": "U SPORTS",
+      "parent_id": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "pathways:professional",
+      "group_key": "pathways",
+      "slug": "professional",
+      "label": "Professional hockey",
+      "parent_id": null,
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "id": "player_level:aa",
+      "group_key": "player_level",
+      "slug": "aa",
+      "label": "AA",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "player_level:aaa",
+      "group_key": "player_level",
+      "slug": "aaa",
+      "label": "AAA",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "player_level:prep-high-school",
+      "group_key": "player_level",
+      "slug": "prep-high-school",
+      "label": "Prep / high school",
+      "parent_id": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "player_level:junior",
+      "group_key": "player_level",
+      "slug": "junior",
+      "label": "Junior",
+      "parent_id": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "player_level:college-university",
+      "group_key": "player_level",
+      "slug": "college-university",
+      "label": "College / university",
+      "parent_id": null,
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "id": "player_level:professional",
+      "group_key": "player_level",
+      "slug": "professional",
+      "label": "Professional",
+      "parent_id": null,
+      "display_order": 5,
+      "is_active": true
+    },
+    {
+      "id": "age_group:13-14",
+      "group_key": "age_group",
+      "slug": "13-14",
+      "label": "13–14",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "age_group:15-17",
+      "group_key": "age_group",
+      "slug": "15-17",
+      "label": "15–17",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "age_group:18-20",
+      "group_key": "age_group",
+      "slug": "18-20",
+      "label": "18–20",
+      "parent_id": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "age_group:21-plus",
+      "group_key": "age_group",
+      "slug": "21-plus",
+      "label": "21 and older",
+      "parent_id": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca",
+      "group_key": "regions",
+      "slug": "ca",
+      "label": "Canada",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "regions:us",
+      "group_key": "regions",
+      "slug": "us",
+      "label": "United States",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-ab",
+      "group_key": "regions",
+      "slug": "ca-ab",
+      "label": "Alberta",
+      "parent_id": "regions:ca",
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-bc",
+      "group_key": "regions",
+      "slug": "ca-bc",
+      "label": "British Columbia",
+      "parent_id": "regions:ca",
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-mb",
+      "group_key": "regions",
+      "slug": "ca-mb",
+      "label": "Manitoba",
+      "parent_id": "regions:ca",
+      "display_order": 4,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-nb",
+      "group_key": "regions",
+      "slug": "ca-nb",
+      "label": "New Brunswick",
+      "parent_id": "regions:ca",
+      "display_order": 5,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-nl",
+      "group_key": "regions",
+      "slug": "ca-nl",
+      "label": "Newfoundland and Labrador",
+      "parent_id": "regions:ca",
+      "display_order": 6,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-nt",
+      "group_key": "regions",
+      "slug": "ca-nt",
+      "label": "Northwest Territories",
+      "parent_id": "regions:ca",
+      "display_order": 7,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-ns",
+      "group_key": "regions",
+      "slug": "ca-ns",
+      "label": "Nova Scotia",
+      "parent_id": "regions:ca",
+      "display_order": 8,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-nu",
+      "group_key": "regions",
+      "slug": "ca-nu",
+      "label": "Nunavut",
+      "parent_id": "regions:ca",
+      "display_order": 9,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-on",
+      "group_key": "regions",
+      "slug": "ca-on",
+      "label": "Ontario",
+      "parent_id": "regions:ca",
+      "display_order": 10,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-pe",
+      "group_key": "regions",
+      "slug": "ca-pe",
+      "label": "Prince Edward Island",
+      "parent_id": "regions:ca",
+      "display_order": 11,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-qc",
+      "group_key": "regions",
+      "slug": "ca-qc",
+      "label": "Quebec",
+      "parent_id": "regions:ca",
+      "display_order": 12,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-sk",
+      "group_key": "regions",
+      "slug": "ca-sk",
+      "label": "Saskatchewan",
+      "parent_id": "regions:ca",
+      "display_order": 13,
+      "is_active": true
+    },
+    {
+      "id": "regions:ca-yt",
+      "group_key": "regions",
+      "slug": "ca-yt",
+      "label": "Yukon",
+      "parent_id": "regions:ca",
+      "display_order": 14,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-al",
+      "group_key": "regions",
+      "slug": "us-al",
+      "label": "Alabama",
+      "parent_id": "regions:us",
+      "display_order": 15,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ak",
+      "group_key": "regions",
+      "slug": "us-ak",
+      "label": "Alaska",
+      "parent_id": "regions:us",
+      "display_order": 16,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-az",
+      "group_key": "regions",
+      "slug": "us-az",
+      "label": "Arizona",
+      "parent_id": "regions:us",
+      "display_order": 17,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ar",
+      "group_key": "regions",
+      "slug": "us-ar",
+      "label": "Arkansas",
+      "parent_id": "regions:us",
+      "display_order": 18,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ca",
+      "group_key": "regions",
+      "slug": "us-ca",
+      "label": "California",
+      "parent_id": "regions:us",
+      "display_order": 19,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-co",
+      "group_key": "regions",
+      "slug": "us-co",
+      "label": "Colorado",
+      "parent_id": "regions:us",
+      "display_order": 20,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ct",
+      "group_key": "regions",
+      "slug": "us-ct",
+      "label": "Connecticut",
+      "parent_id": "regions:us",
+      "display_order": 21,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-de",
+      "group_key": "regions",
+      "slug": "us-de",
+      "label": "Delaware",
+      "parent_id": "regions:us",
+      "display_order": 22,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-fl",
+      "group_key": "regions",
+      "slug": "us-fl",
+      "label": "Florida",
+      "parent_id": "regions:us",
+      "display_order": 23,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ga",
+      "group_key": "regions",
+      "slug": "us-ga",
+      "label": "Georgia",
+      "parent_id": "regions:us",
+      "display_order": 24,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-hi",
+      "group_key": "regions",
+      "slug": "us-hi",
+      "label": "Hawaii",
+      "parent_id": "regions:us",
+      "display_order": 25,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-id",
+      "group_key": "regions",
+      "slug": "us-id",
+      "label": "Idaho",
+      "parent_id": "regions:us",
+      "display_order": 26,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-il",
+      "group_key": "regions",
+      "slug": "us-il",
+      "label": "Illinois",
+      "parent_id": "regions:us",
+      "display_order": 27,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-in",
+      "group_key": "regions",
+      "slug": "us-in",
+      "label": "Indiana",
+      "parent_id": "regions:us",
+      "display_order": 28,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ia",
+      "group_key": "regions",
+      "slug": "us-ia",
+      "label": "Iowa",
+      "parent_id": "regions:us",
+      "display_order": 29,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ks",
+      "group_key": "regions",
+      "slug": "us-ks",
+      "label": "Kansas",
+      "parent_id": "regions:us",
+      "display_order": 30,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ky",
+      "group_key": "regions",
+      "slug": "us-ky",
+      "label": "Kentucky",
+      "parent_id": "regions:us",
+      "display_order": 31,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-la",
+      "group_key": "regions",
+      "slug": "us-la",
+      "label": "Louisiana",
+      "parent_id": "regions:us",
+      "display_order": 32,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-me",
+      "group_key": "regions",
+      "slug": "us-me",
+      "label": "Maine",
+      "parent_id": "regions:us",
+      "display_order": 33,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-md",
+      "group_key": "regions",
+      "slug": "us-md",
+      "label": "Maryland",
+      "parent_id": "regions:us",
+      "display_order": 34,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ma",
+      "group_key": "regions",
+      "slug": "us-ma",
+      "label": "Massachusetts",
+      "parent_id": "regions:us",
+      "display_order": 35,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-mi",
+      "group_key": "regions",
+      "slug": "us-mi",
+      "label": "Michigan",
+      "parent_id": "regions:us",
+      "display_order": 36,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-mn",
+      "group_key": "regions",
+      "slug": "us-mn",
+      "label": "Minnesota",
+      "parent_id": "regions:us",
+      "display_order": 37,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ms",
+      "group_key": "regions",
+      "slug": "us-ms",
+      "label": "Mississippi",
+      "parent_id": "regions:us",
+      "display_order": 38,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-mo",
+      "group_key": "regions",
+      "slug": "us-mo",
+      "label": "Missouri",
+      "parent_id": "regions:us",
+      "display_order": 39,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-mt",
+      "group_key": "regions",
+      "slug": "us-mt",
+      "label": "Montana",
+      "parent_id": "regions:us",
+      "display_order": 40,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ne",
+      "group_key": "regions",
+      "slug": "us-ne",
+      "label": "Nebraska",
+      "parent_id": "regions:us",
+      "display_order": 41,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nv",
+      "group_key": "regions",
+      "slug": "us-nv",
+      "label": "Nevada",
+      "parent_id": "regions:us",
+      "display_order": 42,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nh",
+      "group_key": "regions",
+      "slug": "us-nh",
+      "label": "New Hampshire",
+      "parent_id": "regions:us",
+      "display_order": 43,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nj",
+      "group_key": "regions",
+      "slug": "us-nj",
+      "label": "New Jersey",
+      "parent_id": "regions:us",
+      "display_order": 44,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nm",
+      "group_key": "regions",
+      "slug": "us-nm",
+      "label": "New Mexico",
+      "parent_id": "regions:us",
+      "display_order": 45,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ny",
+      "group_key": "regions",
+      "slug": "us-ny",
+      "label": "New York",
+      "parent_id": "regions:us",
+      "display_order": 46,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nc",
+      "group_key": "regions",
+      "slug": "us-nc",
+      "label": "North Carolina",
+      "parent_id": "regions:us",
+      "display_order": 47,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-nd",
+      "group_key": "regions",
+      "slug": "us-nd",
+      "label": "North Dakota",
+      "parent_id": "regions:us",
+      "display_order": 48,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-oh",
+      "group_key": "regions",
+      "slug": "us-oh",
+      "label": "Ohio",
+      "parent_id": "regions:us",
+      "display_order": 49,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ok",
+      "group_key": "regions",
+      "slug": "us-ok",
+      "label": "Oklahoma",
+      "parent_id": "regions:us",
+      "display_order": 50,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-or",
+      "group_key": "regions",
+      "slug": "us-or",
+      "label": "Oregon",
+      "parent_id": "regions:us",
+      "display_order": 51,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-pa",
+      "group_key": "regions",
+      "slug": "us-pa",
+      "label": "Pennsylvania",
+      "parent_id": "regions:us",
+      "display_order": 52,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ri",
+      "group_key": "regions",
+      "slug": "us-ri",
+      "label": "Rhode Island",
+      "parent_id": "regions:us",
+      "display_order": 53,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-sc",
+      "group_key": "regions",
+      "slug": "us-sc",
+      "label": "South Carolina",
+      "parent_id": "regions:us",
+      "display_order": 54,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-sd",
+      "group_key": "regions",
+      "slug": "us-sd",
+      "label": "South Dakota",
+      "parent_id": "regions:us",
+      "display_order": 55,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-tn",
+      "group_key": "regions",
+      "slug": "us-tn",
+      "label": "Tennessee",
+      "parent_id": "regions:us",
+      "display_order": 56,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-tx",
+      "group_key": "regions",
+      "slug": "us-tx",
+      "label": "Texas",
+      "parent_id": "regions:us",
+      "display_order": 57,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-ut",
+      "group_key": "regions",
+      "slug": "us-ut",
+      "label": "Utah",
+      "parent_id": "regions:us",
+      "display_order": 58,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-vt",
+      "group_key": "regions",
+      "slug": "us-vt",
+      "label": "Vermont",
+      "parent_id": "regions:us",
+      "display_order": 59,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-va",
+      "group_key": "regions",
+      "slug": "us-va",
+      "label": "Virginia",
+      "parent_id": "regions:us",
+      "display_order": 60,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-wa",
+      "group_key": "regions",
+      "slug": "us-wa",
+      "label": "Washington",
+      "parent_id": "regions:us",
+      "display_order": 61,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-wv",
+      "group_key": "regions",
+      "slug": "us-wv",
+      "label": "West Virginia",
+      "parent_id": "regions:us",
+      "display_order": 62,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-wi",
+      "group_key": "regions",
+      "slug": "us-wi",
+      "label": "Wisconsin",
+      "parent_id": "regions:us",
+      "display_order": 63,
+      "is_active": true
+    },
+    {
+      "id": "regions:us-wy",
+      "group_key": "regions",
+      "slug": "us-wy",
+      "label": "Wyoming",
+      "parent_id": "regions:us",
+      "display_order": 64,
+      "is_active": true
+    },
+    {
+      "id": "languages:english",
+      "group_key": "languages",
+      "slug": "english",
+      "label": "English",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "languages:french",
+      "group_key": "languages",
+      "slug": "french",
+      "label": "French",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "price_range:under-1000",
+      "group_key": "price_range",
+      "slug": "under-1000",
+      "label": "Under $1,000",
+      "parent_id": null,
+      "display_order": 0,
+      "is_active": true
+    },
+    {
+      "id": "price_range:1000-2499",
+      "group_key": "price_range",
+      "slug": "1000-2499",
+      "label": "$1,000–$2,499",
+      "parent_id": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    {
+      "id": "price_range:2500-4999",
+      "group_key": "price_range",
+      "slug": "2500-4999",
+      "label": "$2,500–$4,999",
+      "parent_id": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    {
+      "id": "price_range:5000-9999",
+      "group_key": "price_range",
+      "slug": "5000-9999",
+      "label": "$5,000–$9,999",
+      "parent_id": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    {
+      "id": "price_range:10000-plus",
+      "group_key": "price_range",
+      "slug": "10000-plus",
+      "label": "$10,000+",
+      "parent_id": null,
+      "display_order": 4,
+      "is_active": true
+    }
+  ]
+}

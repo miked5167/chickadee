@@ -267,6 +267,6 @@ Documentation that instructs operators to use the legacy model or makes unverifi
 - `docs/WEEK6_FINAL_STATUS.md`, `docs/WEEK7_KICKOFF.md`, and related summaries say migrations/RLS are complete; catalog evidence contradicts them.
 - `docs/DEPLOYMENT.md` and `DEPLOYMENT_CHECKLIST.md` assume migrations are applied but define no schema drift or migration-history gate.
 - `LOCATION_SEARCH_SETUP.md` instructs manual installation of the legacy advisor-distance function.
-- `.github/workflows/deploy.yml` deploys application code without database migration or drift validation; `.github/workflows/ci.yml` builds/tests with Supabase keys but performs no fresh bootstrap or catalog comparison.
+- Vercel's GitHub integration deploys application code without database migration or drift validation; `.github/workflows/ci.yml` builds with isolated placeholders and performs no fresh bootstrap or catalog comparison.
 
 The operational sources of truth for restart work are this package, `PRODUCTION_BASELINE.md`, and `BACKUP_AND_RESTORE_RUNBOOK.md`.

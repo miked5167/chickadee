@@ -47,7 +47,4 @@ desktop footer alignment, long company names, populated and sparse fixtures,
 48-pixel actions, and layouts at 320- and 375-pixel mobile widths. Fixture
 agencies and counts are illustrative, not listing data.
 
-The API's card enrichment is committed independently of the pre-existing search
-refactor. The working server-rendered search component also calls the same
-enrichment helper; that component remains with the existing uncommitted search
-work. Include that work when preparing a release of the current workspace.
+This release uses the existing search API and applies card enrichment to directory, featured and saved listings. It includes only the shared tag type definitions; tag migrations, claim-flow changes and the separate search refactor are outside this release.

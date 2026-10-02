@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { linkedInProfileUrl, professionalLinkedInUrl } from '@/lib/research/company-research'
 import { reviewedPersonLinkedIn, reviewedPersonLinkedInUrl } from '@/lib/research/person-linkedin'
+import { reviewedCompanyLinkedIn, reviewedCompanyLinkedInUrl } from '@/lib/research/company-linkedin'
 
 describe('website LinkedIn destinations', () => {
   it('converts owner-only company links into public links and removes tracking', () => {
@@ -34,6 +35,22 @@ describe('reviewed personal LinkedIn destinations', () => {
     for (const record of reviewedPersonLinkedIn) {
       expect(professionalLinkedInUrl(record.url)).toBe(record.url)
       expect(record.evidenceText).toContain(record.personName)
+      expect(record.reviewedAt).toBe('2026-10-02')
+    }
+  })
+})
+
+describe('reviewed company LinkedIn destinations', () => {
+  it('matches the reviewed company without leaking the link to another listing', () => {
+    expect(reviewedCompanyLinkedInUrl('3g-sports')).toBe('https://www.linkedin.com/company/3g-sports-ltd/')
+    expect(reviewedCompanyLinkedInUrl('another-company')).toBeNull()
+  })
+  it('keeps every deployable company URL safe and evidence-backed', () => {
+    expect(reviewedCompanyLinkedIn).toHaveLength(1)
+    for (const record of reviewedCompanyLinkedIn) {
+      expect(linkedInProfileUrl(record.url)).toBe(record.url)
+      expect(record.evidenceUrl).toMatch(/^https:\/\//)
+      expect(record.evidenceText).toContain(record.url)
       expect(record.reviewedAt).toBe('2026-10-02')
     }
   })

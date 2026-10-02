@@ -10,6 +10,7 @@ import { CompanyLogo } from './CompanyLogo'
 import { FaFacebookF, FaInstagram, FaXTwitter, FaLinkedinIn } from 'react-icons/fa6'
 import { linkedInProfileUrl, professionalLinkedInUrl, type CompanyResearch } from '@/lib/research/company-research'
 import { reviewedPersonLinkedInUrl } from '@/lib/research/person-linkedin'
+import { reviewedCompanyLinkedInUrl } from '@/lib/research/company-linkedin'
 import styles from './AdvisorProfile.module.css'
 import { eliteProspectsSourceUrl, hasEliteProspectsCount, type EliteProspectsMeasurement } from '@/lib/research/elite-prospects'
 
@@ -150,7 +151,7 @@ export function AdvisorProfile({ company, profile, teamMembers: existingTeam, av
     { label: 'Instagram', icon: FaInstagram, brand: 'instagram', url: publicWebUrl(company.instagram_url) },
     { label: 'Facebook', icon: FaFacebookF, brand: 'facebook', url: publicWebUrl(company.facebook_url) },
     { label: 'X', icon: FaXTwitter, brand: 'x', url: publicWebUrl(company.twitter_url) },
-    { label: 'LinkedIn', icon: FaLinkedinIn, brand: 'linkedin', url: linkedInProfileUrl(research?.company_linkedin?.url) },
+    { label: 'LinkedIn', icon: FaLinkedinIn, brand: 'linkedin', url: reviewedCompanyLinkedInUrl(company.slug) || linkedInProfileUrl(research?.company_linkedin?.url) },
   ].filter((social) => social.url)
   const reviewedDate = profile?.last_reviewed_at ? new Date(profile.last_reviewed_at) : null
   const reviewed = reviewedDate && !Number.isNaN(reviewedDate.getTime())

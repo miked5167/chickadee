@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">The Hockey Directory</title>
+  <path fill="#081b33" d="M48 80h64v144h56V80h64v352h-64V288h-56v144H48z"/>
+  <path fill="#c83238" d="M244 68h24v376h-24z"/>
+  <path fill="#081b33" fill-rule="evenodd" d="M280 80h72c76 0 120 65 120 176s-44 176-120 176h-72V80zm64 64v224h8c36 0 56-39 56-112s-20-112-56-112h-8z"/>
+</svg>

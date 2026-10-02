@@ -3,7 +3,8 @@ import { ArrowRight, BadgeCheck, MapPin } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DirectoryShortlistActions } from '@/components/listing/DirectoryShortlistActions'
 import { ListingCardLogo } from './ListingCardLogo'
-import { cardTags, playerFit, type ListingCardDetails } from '@/lib/listing-cards'
+import { cardTags, playerFit, cardSourceDate, type ListingCardDetails } from '@/lib/listing-cards'
+import { eliteProspectsSourceUrl, hasEliteProspectsCount } from '@/lib/research/elite-prospects'
 
 interface AdvisorCardProps {
   advisor: ListingCardDetails & {
@@ -36,6 +37,8 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
   const tags = cardTags(advisor.card_tags)
   const fit = playerFit(advisor)
   const summary = advisor.tagline?.trim() || advisor.description?.trim()
+  const measurement = advisor.elite_prospects || null
+  const sourceDate = cardSourceDate(measurement?.source_observed_at || null)
 
   return (
     <article aria-label={`${advisor.name} listing`} className="group h-full min-w-0 rounded-xl">
@@ -77,6 +80,16 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
             </div>
           )}
           <div className="mt-auto pt-2">
+            {measurement && hasEliteProspectsCount(measurement) && (
+              <div className="mb-4 flex items-center gap-3 rounded-lg bg-ice-blue p-3">
+                <strong className="shrink-0 font-display text-4xl font-bold leading-none text-hockey-blue">{measurement.client_count!.toLocaleString('en-US')}</strong>
+                <div className="min-w-0 border-l border-frost pl-3 text-xs leading-5 text-neutral-gray">
+                  <p className="font-semibold text-board-blue">Clients listed on <a href={eliteProspectsSourceUrl(measurement.source_url)!} target="_blank" rel="noopener noreferrer" className="rounded-sm underline underline-offset-2" aria-label={`View ${advisor.name} client source on Elite Prospects (opens in a new tab)`}>Elite Prospects</a></p>
+                  {sourceDate && <p>Source: {sourceDate}</p>}
+                  {measurement.match_status === 'likely' && <p>Possible agency match</p>}
+                </div>
+              </div>
+            )}
             <div className="flex flex-wrap items-start gap-2">
               <Link href={profileHref} aria-label={`View ${advisor.name} profile`} className="inline-flex min-h-12 min-w-32 flex-1 items-center justify-center gap-2 rounded-lg bg-hockey-blue px-3 text-sm font-bold text-white transition-colors hover:bg-board-blue">View profile <ArrowRight className="h-5 w-5" aria-hidden="true" /></Link>
               <DirectoryShortlistActions companyId={advisor.id} companyName={advisor.name} cardLayout />

@@ -27,6 +27,8 @@ export function DirectoryShortlistActions({ companyId, companyName, showComparis
   const [compared, setCompared] = useState(false)
   const [message, setMessage] = useState('')
   const [comparisonIds, setComparisonIds] = useState<string[]>([])
+  const saveButtonColor = saved ? 'border-hockey-blue bg-ice-blue text-hockey-blue'
+    : `border-frost hover:border-hockey-blue ${cardLayout ? 'text-hockey-blue' : 'text-neutral-gray'}`
 
   useEffect(() => {
     const sync = () => {
@@ -64,7 +66,7 @@ export function DirectoryShortlistActions({ companyId, companyName, showComparis
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={toggleSaved} aria-pressed={saved} aria-label={`${saved ? 'Remove' : 'Save'} ${companyName}${saved ? ' from saved listings' : ''}`} className={`inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 font-bold ${cardLayout ? 'min-h-12 text-sm' : 'min-h-10 text-xs'} ${saved ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-hockey-blue hover:border-hockey-blue'}`}>
+        <button type="button" onClick={toggleSaved} aria-pressed={saved} aria-label={cardLayout ? `${saved ? 'Remove' : 'Save'} ${companyName}${saved ? ' from saved listings' : ''}` : undefined} className={`inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 font-bold ${cardLayout ? 'min-h-12 text-sm' : 'min-h-10 text-xs'} ${saveButtonColor}`}>
           <Bookmark aria-hidden="true" className={`h-4 w-4 ${saved ? 'fill-current' : ''}`} />{saved ? 'Saved' : 'Save'}
         </button>
         {DIRECTORY_COMPARISON_ENABLED && <button type="button" onClick={toggleCompared} aria-pressed={compared} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${compared ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>

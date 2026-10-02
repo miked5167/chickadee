@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { enrichListingCards } from '@/lib/listing-card-data'
-import { cardTags, playerFit } from '@/lib/listing-cards'
+import { cardTags, playerFit, cardSourceDate } from '@/lib/listing-cards'
 import type { DirectoryTag } from '@/lib/tags/types'
 
 function tag(group: DirectoryTag['group_key'], label: string, order = 0, active = true): DirectoryTag {
@@ -37,13 +37,33 @@ describe('listing card details', () => {
 
   it('keeps cards usable with missing tag tables and a rejected optional profile query', async () => {
     const db = database({ company_profiles: new Error('Connection unavailable'), company_tags: { data: null, error: { code: '42P01' } } })
-    expect(await enrichListingCards(db.client, [{ id: 'a', description: 'Existing description' }])).toEqual([{ id: 'a', description: 'Existing description', card_tags: [] }])
+    expect(await enrichListingCards(db.client, [{ id: 'a', description: 'Existing description' }])).toEqual([{ id: 'a', description: 'Existing description', card_tags: [], elite_prospects: null }])
   })
 
   it('makes no supporting queries for empty results', async () => {
     const db = database({})
     expect(await enrichListingCards(db.client, [])).toEqual([])
     expect(db.from).not.toHaveBeenCalled()
+  })
+
+  it('preserves a sourced zero and does not turn an absent measurement into zero', async () => {
+    const measurement = { match_status: 'exact', agency_name: 'First', source_url: 'https://www.eliteprospects.com/agent-portal/12/first', client_count: 0, source_observed_at: '2025-11-11', imported_at: '2026-09-01' }
+    const db = database({ company_elite_prospects: { data: [{ company_id: 'a', ...measurement }], error: null } })
+    const result = await enrichListingCards(db.client, [{ id: 'a' }, { id: 'b' }])
+    expect(result[0].elite_prospects).toEqual(measurement)
+    expect(result[1].elite_prospects).toBeNull()
+    expect(db.queries.filter((query) => query.table === 'company_elite_prospects')).toEqual([{ table: 'company_elite_prospects', ids: ['a', 'b'] }])
+  })
+
+  it('retains profile details when the optional measurement query fails', async () => {
+    const db = database({ company_profiles: { data: [{ company_id: 'a', tagline: 'Known summary' }], error: null }, company_elite_prospects: new Error('Unavailable') })
+    expect((await enrichListingCards(db.client, [{ id: 'a' }]))[0]).toMatchObject({ tagline: 'Known summary', elite_prospects: null })
+  })
+
+  it('formats capture dates in UTC and omits missing or invalid dates', () => {
+    expect(cardSourceDate('2025-11-01T00:00:00Z')).toBe('November 2025')
+    expect(cardSourceDate(null)).toBeNull()
+    expect(cardSourceDate('invalid')).toBeNull()
   })
 
   it('uses active core tags only and respects catalog order and the five-chip limit', () => {

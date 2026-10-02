@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | The Hockey Directory",
   },
   description:
-    "Research hockey advisors and agencies across Canada and the United States. Compare listing details, build a shortlist, and contact advisors directly.",
+    "Research hockey advisors and agencies across Canada and the United States. Review listing details, build a shortlist, and contact advisors directly.",
   keywords: [
     "hockey advisor",
     "hockey consultant",

@@ -2,10 +2,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
+import { redirect } from 'next/navigation'
+import { DIRECTORY_COMPARISON_ENABLED } from '@/lib/features'
 
 export const metadata: Metadata = { title: 'Compare Hockey Advisor Companies', robots: { index: false, follow: true }, alternates: { canonical: '/compare' } }
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ ids?: string }> }) {
+  if (!DIRECTORY_COMPARISON_ENABLED) redirect('/listings')
   const { ids: rawIds } = await searchParams
   const ids = (rawIds || '').split(',').filter((id) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)).slice(0, 3)
   const supabase = await createClient()

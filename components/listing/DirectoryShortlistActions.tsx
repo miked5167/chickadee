@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Bookmark, GitCompareArrows } from 'lucide-react'
+import { DIRECTORY_COMPARISON_ENABLED } from '@/lib/features'
 
 const savedKey = 'hockey-directory-saved-listings'
 const compareKey = 'hockey-directory-compare-listings'
@@ -30,6 +31,11 @@ export function DirectoryShortlistActions({ companyId, companyName, showComparis
   useEffect(() => {
     const sync = () => {
       setSaved(readIds(savedKey).includes(companyId))
+      if (!DIRECTORY_COMPARISON_ENABLED) {
+        setCompared(false)
+        setComparisonIds([])
+        return
+      }
       const ids = readIds(compareKey)
       setCompared(ids.includes(companyId))
       setComparisonIds(ids.slice(0, 3))
@@ -61,12 +67,12 @@ export function DirectoryShortlistActions({ companyId, companyName, showComparis
         <button type="button" onClick={toggleSaved} aria-pressed={saved} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${saved ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>
           <Bookmark aria-hidden="true" className={`h-4 w-4 ${saved ? 'fill-current' : ''}`} />{saved ? 'Saved' : 'Save'}
         </button>
-        <button type="button" onClick={toggleCompared} aria-pressed={compared} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${compared ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>
+        {DIRECTORY_COMPARISON_ENABLED && <button type="button" onClick={toggleCompared} aria-pressed={compared} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${compared ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>
           <GitCompareArrows aria-hidden="true" className="h-4 w-4" />{compared ? 'Comparing' : 'Compare'}
-        </button>
+        </button>}
       </div>
       <p className="sr-only" aria-live="polite">{message}</p>
-      {showComparisonLink && (
+      {DIRECTORY_COMPARISON_ENABLED && showComparisonLink && (
         <div className="mt-3 text-xs leading-6 text-neutral-gray">
           {comparisonIds.length >= 2 ? (
             <Link href={`/compare?ids=${encodeURIComponent(comparisonIds.join(','))}`} className="inline-block min-h-9 text-hockey-blue underline underline-offset-4">

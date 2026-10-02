@@ -22,7 +22,7 @@ function writeIds(key: string, values: string[]) {
   window.dispatchEvent(new CustomEvent('directory-shortlist-changed'))
 }
 
-export function DirectoryShortlistActions({ companyId, companyName, showComparisonLink = false }: { companyId: string; companyName: string; showComparisonLink?: boolean }) {
+export function DirectoryShortlistActions({ companyId, companyName, showComparisonLink = false, cardLayout = false }: { companyId: string; companyName: string; showComparisonLink?: boolean; cardLayout?: boolean }) {
   const [saved, setSaved] = useState(false)
   const [compared, setCompared] = useState(false)
   const [message, setMessage] = useState('')
@@ -64,7 +64,7 @@ export function DirectoryShortlistActions({ companyId, companyName, showComparis
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={toggleSaved} aria-pressed={saved} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${saved ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>
+        <button type="button" onClick={toggleSaved} aria-pressed={saved} aria-label={`${saved ? 'Remove' : 'Save'} ${companyName}${saved ? ' from saved listings' : ''}`} className={`inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 font-bold ${cardLayout ? 'min-h-12 text-sm' : 'min-h-10 text-xs'} ${saved ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-hockey-blue hover:border-hockey-blue'}`}>
           <Bookmark aria-hidden="true" className={`h-4 w-4 ${saved ? 'fill-current' : ''}`} />{saved ? 'Saved' : 'Save'}
         </button>
         {DIRECTORY_COMPARISON_ENABLED && <button type="button" onClick={toggleCompared} aria-pressed={compared} className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold ${compared ? 'border-hockey-blue bg-ice-blue text-hockey-blue' : 'border-frost text-neutral-gray hover:border-hockey-blue'}`}>

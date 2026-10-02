@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { enrichListingCards } from '@/lib/listing-card-data'
 import { calculateDistance, isValidCoordinate } from '@/lib/utils/distance'
 import { publicPreviewFeedUrl, publicPreviewProfileUrl } from '@/lib/preview/advisor-feed'
 
@@ -333,7 +334,7 @@ export async function GET(request: NextRequest) {
     })})
 
     return NextResponse.json({
-      advisors,
+      advisors: await enrichListingCards(supabase, advisors),
       pagination: {
         page,
         limit,

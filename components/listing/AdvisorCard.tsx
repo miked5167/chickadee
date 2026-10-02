@@ -3,9 +3,10 @@ import { ArrowRight, BadgeCheck, MapPin } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DirectoryShortlistActions } from '@/components/listing/DirectoryShortlistActions'
 import { ListingCardLogo } from './ListingCardLogo'
+import { cardTags, playerFit, type ListingCardDetails } from '@/lib/listing-cards'
 
 interface AdvisorCardProps {
-  advisor: {
+  advisor: ListingCardDetails & {
     id: string
     slug: string
     name: string
@@ -32,6 +33,9 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
   const location = [advisor.city, advisor.state]
     .filter(Boolean)
     .join(', ') || advisor.country
+  const tags = cardTags(advisor.card_tags)
+  const fit = playerFit(advisor)
+  const summary = advisor.tagline?.trim() || advisor.description?.trim()
 
   return (
     <article aria-label={`${advisor.name} listing`} className="group h-full min-w-0 rounded-xl">
@@ -53,18 +57,19 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
 
         <CardContent className="flex flex-1 flex-col gap-4 px-5 pb-5">
           {/* Description */}
-          {(advisor.tagline || advisor.description) && (
-            <p className="line-clamp-2 break-words text-sm leading-6 text-neutral-gray">{advisor.tagline || advisor.description}</p>
+          {summary && (
+            <p className="line-clamp-2 break-words text-sm leading-6 text-neutral-gray">{summary}</p>
           )}
-          {(advisor.specialties?.length || advisor.services?.length) ? (
-            <div className="flex flex-wrap gap-1.5" aria-label="Advisor specialties">
-              {Array.from(new Set([...(advisor.specialties || []), ...(advisor.services || [])])).slice(0, 3).map((specialty) => (
-                <span key={specialty} className="rounded-full bg-ice-blue px-2.5 py-1 text-[11px] font-bold text-board-blue">
-                  {specialty}
-                </span>
+          {tags.length > 0 && (
+            <ul className="flex flex-wrap gap-1.5" aria-label="Services and pathways">
+              {tags.map((tag) => (
+                <li key={tag.id} className={`rounded-full border px-3 py-1 text-xs font-semibold ${tag.group_key === 'services' ? 'border-ice-blue bg-ice-blue text-board-blue' : 'border-frost bg-white text-board-blue'}`}>
+                  {tag.label}
+                </li>
               ))}
-            </div>
-          ) : null}
+            </ul>
+          )}
+          {fit && <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-frost pt-3 text-sm"><span className="font-semibold text-neutral-gray">Players served</span><span className="break-words text-arena-navy">{fit}</span></div>}
           {(advisor.accepting_clients === true || advisor.offers_remote) && (
             <div className="flex flex-wrap gap-2 text-xs font-semibold text-board-blue">
               {advisor.accepting_clients === true && <span>Accepting clients</span>}

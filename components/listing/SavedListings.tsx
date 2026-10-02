@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { Bookmark, Loader2 } from 'lucide-react'
 import { AdvisorCard } from '@/components/listing/AdvisorCard'
 import { Button } from '@/components/ui/button'
+import type { ListingCardDetails } from '@/lib/listing-cards'
 
-type Advisor = {
+type Advisor = ListingCardDetails & {
   id: string; slug: string; name: string; city: string | null; state: string | null; country: string
   description: string | null; verified: boolean; logo_url: string | null; website_url?: string | null
   specialties?: string[]; services?: string[]; offers_remote?: boolean; accepting_clients?: boolean | null; tagline?: string | null

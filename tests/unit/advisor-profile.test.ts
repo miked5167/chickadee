@@ -45,6 +45,12 @@ describe('advisor profile presentation', () => {
     show(null, { slug: '83-llc' }, { teamMembers: [{ id: 'ryan', name: 'Ryan Minkoff', title: 'Owner', bio: null, profile_image_url: null }] })
     expect(screen.getByRole('link', { name: /Ryan Minkoff on LinkedIn/ })).toHaveAttribute('href', 'https://www.linkedin.com/in/ryanminkoff/')
   })
+  it('shows 3G Sports LinkedIn beside its existing Instagram link', () => {
+    show(null, { slug: '3g-sports', instagram_url: 'https://www.instagram.com/3gsportsltd/' })
+    const socials = screen.getByRole('navigation', { name: 'Company social profiles' })
+    expect(within(socials).getByRole('link', { name: /Instagram/ })).toHaveAttribute('href', 'https://www.instagram.com/3gsportsltd/')
+    expect(within(socials).getByRole('link', { name: /LinkedIn/ })).toHaveAttribute('href', 'https://www.linkedin.com/company/3g-sports-ltd/')
+  })
   const ep = { match_status: 'exact', agency_name: 'Example Hockey', source_url: 'https://www.eliteprospects.com/agent-portal/123/example-hockey', client_count: 57, source_observed_at: null, imported_at: '2026-09-13T01:00:00Z' }
   it('shows the database client count with a source and no invented capture date', () => {
     show(null, {}, { eliteProspects: ep })

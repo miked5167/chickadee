@@ -7,6 +7,7 @@ import { ProfileViewTracker } from '@/components/listing/ProfileViewTracker'
 import { getCompanyLogo } from '@/lib/branding/company-logos'
 import { getLocalCompanyResearch } from '@/lib/research/company-research.server'
 import type { EliteProspectsMeasurement } from '@/lib/research/elite-prospects'
+import { reviewedCompanyLinkedInUrl } from '@/lib/research/company-linkedin'
 
 export const revalidate = 3600
 
@@ -99,7 +100,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
   const countryName = readableCountry(company.country)
   const ratings = (reviewRatings || []).map((review) => review.rating).filter((rating): rating is number => typeof rating === 'number')
   const averageRating = ratings.length ? Number((ratings.reduce((total, rating) => total + rating, 0) / ratings.length).toFixed(1)) : null
-  const sameAs = [company.website_url, company.instagram_url, company.facebook_url, company.twitter_url].filter((value): value is string => Boolean(value))
+  const sameAs = [company.website_url, company.instagram_url, company.facebook_url, company.twitter_url, reviewedCompanyLinkedInUrl(company.slug)].filter((value): value is string => Boolean(value))
   const validFaq = (profile?.faq || []).filter((item) => item.question?.trim() && item.answer?.trim())
 
   const breadcrumbSchema = {

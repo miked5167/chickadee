@@ -131,7 +131,7 @@ describe('advisor profile presentation', () => {
     expect(toggle.closest('details')?.textContent).toContain(biography)
   })
 
-  it('wires inquiry, reviews anchor, claim, save and comparison to the existing flows', () => {
+  it('wires inquiry, reviews anchor, claim and save while comparison is hidden', () => {
     show()
     for (const link of screen.getAllByRole('link', { name: 'Send an inquiry' })) expect(link).toHaveAttribute('href', '/listings/example-hockey/contact')
     expect(screen.getByRole('link', { name: 'Claim and update this listing' })).toHaveAttribute('href', '/claim/example-hockey')
@@ -139,17 +139,15 @@ describe('advisor profile presentation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Save', exact: true }))
     expect(screen.getByRole('button', { name: 'Saved', exact: true })).toHaveAttribute('aria-pressed', 'true')
     expect(JSON.parse(localStorage.getItem('hockey-directory-saved-listings')!)).toEqual([company.id])
-    fireEvent.click(screen.getByRole('button', { name: 'Compare', exact: true }))
-    expect(screen.getByRole('button', { name: 'Comparing', exact: true })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('link', { name: 'Find another advisor' })).toHaveAttribute('href', '/listings')
+    expect(screen.queryByRole('button', { name: 'Compare', exact: true })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Comparing', exact: true })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Find another advisor' })).not.toBeInTheDocument()
   })
 
-  it('includes the selected company IDs in the comparison link', () => {
+  it('does not expose a comparison link when old browser selections exist', () => {
     localStorage.setItem('hockey-directory-compare-listings', JSON.stringify(['other-company']))
     show()
-    fireEvent.click(screen.getByRole('button', { name: 'Compare', exact: true }))
-    expect(screen.getByRole('link', { name: 'View comparison (2)' })).toHaveAttribute('href', '/compare?ids=other-company%2Ccompany-test')
-    fireEvent.click(screen.getByRole('button', { name: 'Comparing', exact: true }))
+    expect(screen.queryByRole('button', { name: 'Compare', exact: true })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /View comparison/ })).not.toBeInTheDocument()
   })
 

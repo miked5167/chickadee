@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { AdvisorCard } from './AdvisorCard'
 import { publicPreviewFeedUrl, publicPreviewProfileUrl } from '@/lib/preview/advisor-feed'
+import { enrichListingCards } from '@/lib/listing-card-data'
+import type { ListingCardDetails } from '@/lib/listing-cards'
 
-interface FeaturedAdvisor {
+interface FeaturedAdvisor extends ListingCardDetails {
   id: string
   slug: string
   name: string
@@ -64,6 +66,7 @@ export async function FeaturedListings() {
       verified: company.verified,
       website_url: company.website_url,
     }))
+    advisors = await enrichListingCards(supabase, advisors)
   }
 
   if (advisors.length === 0) {

@@ -22,10 +22,20 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-frost/80 bg-ice-white/95 backdrop-blur-xl">
-      <div className="hidden bg-arena-navy text-ice-white md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em]">
-          <span>Independent guidance for hockey families</span>
-          <span className="hidden text-frost lg:inline">Canada · United States</span>
+      <div className="bg-arena-navy text-ice-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] sm:px-6 md:justify-between">
+          <span className="hidden md:inline">Independent guidance for hockey families</span>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://huddlebooks.ca"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-sm text-frost transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-goal-gold"
+            >
+              A <span className="font-extrabold text-goal-gold">HuddleBooks</span> project
+            </a>
+            <span className="hidden border-l border-white/25 pl-4 text-frost lg:inline">Canada · United States</span>
+          </div>
         </div>
       </div>
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
@@ -34,11 +44,12 @@ export function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                src="/hockey-directory-logo-v7.png"
+                src="/brand/the-hockey-directory-header.png"
                 alt="The Hockey Directory"
-                width={2087}
-                height={753}
+                width={900}
+                height={257}
                 priority
+                sizes="(max-width: 640px) 170px, 200px"
                 className="h-12 w-auto sm:h-14"
               />
             </Link>

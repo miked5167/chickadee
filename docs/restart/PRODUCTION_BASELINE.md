@@ -145,9 +145,9 @@ The code also directly reads `ADMIN_USER_EMAILS`, `CRON_SECRET`, `IP_SALT`, emai
 
 ### Deployment path
 
-- `.github/workflows/deploy.yml` deploys Vercel production on pushes to `main` or `master`.
-- The deploy workflow does not apply or validate Supabase migrations and does not create a database backup.
-- `.github/workflows/ci.yml` passes Supabase URL/key secrets to tests and builds, but does not compare local and remote database schemas.
+- Vercel's GitHub integration deploys production when `master` changes. The obsolete duplicate `.github/workflows/deploy.yml` workflow was removed in October 2026 because its required repository secrets were absent and the integration already performed the deployment.
+- Vercel's GitHub integration does not apply or validate Supabase migrations and does not create a database backup.
+- `.github/workflows/ci.yml` uses isolated placeholder values for its build check and test-only setup values for unit tests, but does not compare local and remote database schemas.
 - `docs/DEPLOYMENT.md`, `DEPLOYMENT_CHECKLIST.md`, `ADMIN_SETUP.md`, and `scripts/README.md` describe manual dashboard/SQL steps. This makes production history dependent on operator actions that are not captured in `supabase/migrations`.
 
 ## Production inventory status

@@ -33,4 +33,15 @@ Focused tests cover consent/withdrawal, initial consent on a profile, Strict Mod
 
 `node scripts/analytics/verify-local.mjs` posts disposable events through the actual local endpoint, verifies saved records and a duplicate retry, confirms development labels and URL sanitization, and deletes only its generated test UUIDs. This check passed against the connected Supabase project.
 
-Production deployment and final live verification are recorded below when complete.
+## Production release and live verification
+
+- Released commit `157823ac09fd3f038f9166dc81fae8acb4cf5f25` to `origin/master`.
+- Vercel production deployment `dpl_HYvkWTknw5ySYUQ2hz8pS4ekGHNM` reached READY and serves `https://thehockeydirectory.com`.
+- The production snapshot was built in an isolated checkout of the preceding live commit plus only the 26 analytics files. The local overview, LinkedIn, logo, profile redesign, and research changes were excluded.
+- Isolated TypeScript check, production build, relevant-file ESLint, and 32 focused analytics/authorization tests passed. The 25 existing profile component tests also passed in the working preview.
+- Live homepage returned 200. Anonymous analytics page redirects to `/login?returnTo=/admin/analytics`; anonymous JSON and CSV endpoints return 401 with `Cache-Control: no-store`.
+- On September 13 at 13:13 UTC, a consented browser visit to the live 2112 Hockey Agency profile saved a production `profile_view` event in Supabase. Google Analytics Realtime displayed one active user and received `page_view`, `first_visit`, `session_start`, and `scroll` events. This verification visit remains part of the new property's initial traffic.
+- Private report access uses Google sign-in with the owner's selected verified account. No sign-in credentials were entered or changed during setup.
+
+Dashboard: `https://thehockeydirectory.com/admin/analytics`.
+Google Analytics: `https://analytics.google.com/analytics/web/#/a370060438p553932046/realtime/overview`.

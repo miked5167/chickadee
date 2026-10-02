@@ -25,7 +25,7 @@ export function Header() {
       <div className="hidden bg-arena-navy text-ice-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em]">
           <span>Independent guidance for hockey families</span>
-          <span className="text-frost">Canada · United States</span>
+          <span className="hidden text-frost lg:inline">Canada · United States</span>
         </div>
       </div>
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
@@ -45,7 +45,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-7">
+          <div className="hidden min-[1100px]:flex min-[1100px]:items-center min-[1100px]:space-x-7">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -58,7 +58,7 @@ export function Header() {
           </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex md:items-center md:space-x-4">
+          <div className="hidden min-[1100px]:flex min-[1100px]:items-center min-[1100px]:space-x-4">
             {loading ? (
               <div className="h-8 w-8 animate-pulse bg-neutral-gray/20 rounded-full" />
             ) : user ? (
@@ -82,7 +82,7 @@ export function Header() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex md:hidden">
+          <div className="flex min-[1100px]:hidden">
             <button
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-lg text-neutral-gray hover:text-primary hover:bg-ice-blue transition-colors"
@@ -102,7 +102,7 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div id="mobile-navigation" className="border-t border-border py-4 md:hidden">
+          <div id="mobile-navigation" className="border-t border-border py-4 min-[1100px]:hidden">
             <div className="space-y-1 px-2">
               {navigation.map((item) => (
                 <Link

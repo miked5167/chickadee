@@ -242,6 +242,53 @@ export type Database = {
           },
         ]
       }
+      company_elite_prospects: {
+        Row: {
+          company_id: string
+          match_status: string
+          agency_name: string | null
+          source_url: string | null
+          client_count: number | null
+          match_notes: string
+          source_file: string
+          source_sha256: string
+          source_observed_at: string | null
+          imported_at: string
+        }
+        Insert: {
+          company_id: string
+          match_status: string
+          agency_name?: string | null
+          source_url?: string | null
+          client_count?: number | null
+          match_notes: string
+          source_file: string
+          source_sha256: string
+          source_observed_at?: string | null
+          imported_at?: string
+        }
+        Update: {
+          company_id?: string
+          match_status?: string
+          agency_name?: string | null
+          source_url?: string | null
+          client_count?: number | null
+          match_notes?: string
+          source_file?: string
+          source_sha256?: string
+          source_observed_at?: string | null
+          imported_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'company_elite_prospects_company_id_fkey'
+            columns: ['company_id']
+            isOneToOne: false
+            referencedRelation: 'companies'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       company_leads: {
         Row: {
           id: string

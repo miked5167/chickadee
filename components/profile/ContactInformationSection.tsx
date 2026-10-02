@@ -94,7 +94,7 @@ export function ContactInformationSection({ data, onChange, errors, mode = 'advi
         {mode === 'advisor' && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
             <p className="text-sm text-amber-900">
-              <strong>Privacy Note:</strong> All contact information entered here will be publicly visible on your profile page. Only include information you're comfortable sharing with potential clients.
+              <strong>Privacy Note:</strong> All contact information entered here will be publicly visible on your profile page. Only include information you&apos;re comfortable sharing with potential clients.
             </p>
           </div>
         )}

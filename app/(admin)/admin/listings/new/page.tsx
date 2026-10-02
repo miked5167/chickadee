@@ -6,13 +6,14 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { AdvisorForm } from '@/components/admin/AdvisorForm'
 import { Button } from '@/components/ui/button'
+import type { AdvisorFormData } from '@/components/admin/AdvisorForm'
 
 export default function NewAdvisorPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: AdvisorFormData) => {
     setIsSubmitting(true)
     setError(null)
 

@@ -52,7 +52,7 @@ export interface AdvisorProfile {
   service_area?: string | null
   latitude?: number | null
   longitude?: number | null
-  location?: any // PostGIS geography point
+  location?: unknown // PostGIS geography point
 
   // Services & Expertise
   services_offered?: string[] | null
@@ -119,7 +119,7 @@ export interface AdvisorProfile {
   updated_at?: string
 
   // Search
-  search_vector?: any // tsvector
+  search_vector?: unknown // tsvector
 }
 
 // Form-specific types for editing
@@ -217,7 +217,7 @@ export interface AdvisorFormData {
 // Props for shared profile section components
 export interface ProfileSectionProps {
   data: Partial<AdvisorFormData>
-  onChange: (field: string, value: any) => void
+  onChange: (field: string, value: unknown) => void
   errors?: Record<string, string>
   mode?: 'admin' | 'advisor'
 }

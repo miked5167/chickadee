@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { ArrowUpRight, BadgeCheck, MapPin } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DirectoryShortlistActions } from '@/components/listing/DirectoryShortlistActions'
+import { CompanyLogo } from './CompanyLogo'
+import { getCompanyLogo } from '@/lib/branding/company-logos'
 
 interface AdvisorCardProps {
   advisor: {
@@ -27,7 +29,7 @@ interface AdvisorCardProps {
 }
 
 export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProps) {
-  const profileHref = advisor.profile_url || `/listings/${advisor.slug}`
+  const profileHref = `/listings/${encodeURIComponent(advisor.slug)}`
   const location = [advisor.city, advisor.state]
     .filter(Boolean)
     .join(', ') || advisor.country
@@ -56,15 +58,7 @@ export function AdvisorCard({ advisor, showDistance, distance }: AdvisorCardProp
               </div>
             </div>
 
-            {advisor.logo_url && (
-              <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-frost bg-ice-white p-2">
-                <img
-                  src={advisor.logo_url}
-                  alt={`${advisor.name} logo`}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
+            {getCompanyLogo(advisor) && <CompanyLogo company={advisor} loading="lazy" className="flex h-20 w-28 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-frost bg-ice-white p-2" />}
           </div>
         </CardHeader>
 

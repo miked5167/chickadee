@@ -42,6 +42,7 @@ export const targetSource = {
     'supabase/migrations/20260821000000_company_profiles.sql',
     'supabase/migrations/20260821000001_company_leads_and_events.sql',
     'supabase/migrations/20260821000002_advisor_interest_submissions.sql',
+    'supabase/migrations/20260913004623_company_elite_prospects.sql',
   ],
   containsData: false,
 }

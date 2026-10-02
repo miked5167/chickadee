@@ -84,18 +84,18 @@ export function ReviewsList({ companyId, companySlug }: ReviewsListProps) {
 
   if (reviews.length === 0) {
     return (
-      <Card className="p-12 text-center bg-gradient-to-br from-blue-50 to-white border-2 border-blue-100">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-amber-100 rounded-full mb-4">
-          <Star className="w-10 h-10 text-amber-600" />
+      <div className="rounded-lg border border-frost p-6 sm:p-8">
+        <div className="mb-4 flex items-center gap-3">
+          <Star className="h-5 w-5 shrink-0 text-neutral-gray" aria-hidden="true" />
+          <h3 className="text-2xl font-semibold text-arena-navy">No directory reviews yet</h3>
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-3">Be the First to Share Your Experience</h3>
-        <p className="text-gray-700 mb-6 max-w-md mx-auto">
-          Help other hockey families make informed decisions by sharing your experience.
+        <p className="mb-5 max-w-prose text-sm leading-7 text-neutral-gray">
+          Worked with this company? Share your experience to help another hockey family make their shortlist.
         </p>
-        <Button asChild>
-          <Link href={`/listings/${companySlug}/reviews/new`}>Write a Review</Link>
+        <Button asChild variant="outline">
+          <Link href={`/listings/${companySlug}/reviews/new`}>Write a review</Link>
         </Button>
-      </Card>
+      </div>
     )
   }
 

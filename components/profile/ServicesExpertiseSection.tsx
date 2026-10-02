@@ -41,14 +41,11 @@ export function ServicesExpertiseSection({ data, onChange, errors, mode = 'advis
   }
 
   // State for managing top 4 specializations
-  const [topSpecializations, setTopSpecializations] = useState<string[]>([])
-
-  // Load top specializations from data on mount
-  useEffect(() => {
+  const [topSpecializations, setTopSpecializations] = useState<string[]>(() => {
     const specializations = (data.specializations as string[]) || []
     // Take first 4 as the "top" ones (in the future we might store this separately)
-    setTopSpecializations(specializations.slice(0, Math.min(4, specializations.length)))
-  }, [])
+    return specializations.slice(0, Math.min(4, specializations.length))
+  })
 
   // Update parent when top specializations change
   useEffect(() => {

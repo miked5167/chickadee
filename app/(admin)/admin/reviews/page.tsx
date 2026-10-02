@@ -207,7 +207,7 @@ export default function ModerateReviewsPage() {
                 </label>
                 <select
                   value={verifiedFilter}
-                  onChange={(e) => setVerifiedFilter(e.target.value as any)}
+                  onChange={(e) => setVerifiedFilter(e.target.value as typeof verifiedFilter)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">All Reviews</option>

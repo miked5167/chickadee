@@ -1,0 +1,183 @@
+.profile { background: white; color: var(--arena-navy); overflow-wrap: anywhere; }
+.container { width: min(100%, 1280px); margin-inline: auto; padding-inline: 32px; }
+.breadcrumbBar { background: var(--ice-white); border-bottom: 1px solid var(--frost); }
+.breadcrumb { display: flex; align-items: center; gap: 16px; padding-block: 16px; font-size: 12px; color: var(--neutral-gray); }
+.breadcrumb a { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; font-weight: 700; color: var(--hockey-blue); }
+.breadcrumb span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hero { position: relative; isolation: isolate; overflow: hidden; background: var(--arena-navy); border-bottom: 4px solid var(--red-line); color: white; }
+/* A single rink face-off arc gives the company identity its hockey context. */
+.hero::after { content: ''; position: absolute; z-index: -1; right: -170px; top: -190px; width: 540px; height: 540px; border: 2px solid #c8dce41f; border-radius: 50%; pointer-events: none; }
+.identity { display: flex; align-items: center; gap: 36px; padding-block: 48px 52px; }
+.logo { width: 184px; height: 120px; flex-shrink: 0; display: grid; place-items: center; background: white; border-radius: 12px; padding: 14px; color: var(--hockey-blue); font-family: var(--font-barlow-condensed), sans-serif; font-size: 64px; font-weight: 700; }
+.identityText { min-width: 0; max-width: 880px; }
+.identity h1 { font-size: clamp(38px, 4.8vw, 64px); font-weight: 700; line-height: 1.04; text-wrap: balance; }
+.tagline { margin-top: 16px; max-width: 64ch; color: var(--ice-blue); font-size: 18px; line-height: 1.6; }
+.badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.badges a { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #c8dce466; border-radius: 4px; padding: 5px 9px; font-size: 12px; color: var(--ice-blue); }
+.identityMeta { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 20px; color: var(--frost); font-size: 13px; }
+.identityMeta span, .identityMeta a { display: inline-flex; align-items: center; gap: 7px; }
+.identityMeta a { text-decoration: underline; text-underline-offset: 4px; }
+.heroContact { display: none; }
+.sectionNav { border-bottom: 1px solid var(--frost); background: white; }
+.sectionNav > div { display: flex; gap: 30px; overflow-x: auto; }
+.sectionNav a { display: flex; align-items: center; min-height: 62px; white-space: nowrap; font-size: 13px; font-weight: 700; border-bottom: 3px solid transparent; }
+.sectionNav a:hover, .sectionNav a:focus-visible { color: var(--hockey-blue); border-bottom-color: var(--hockey-blue); }
+.body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 72px; padding-block: 48px 72px; }
+.content { min-width: 0; }
+.section { padding-block: 36px; border-bottom: 1px solid var(--frost); scroll-margin-top: 132px; }
+.section:first-child { padding-top: 0; }
+.section h2 { margin-bottom: 16px; font-size: 32px; line-height: 1.12; font-weight: 600; text-wrap: pretty; }
+.description { white-space: pre-line; max-width: 72ch; line-height: 1.85; color: var(--neutral-gray); font-size: 15px; }
+.intro { font-size: 14px; line-height: 1.7; color: var(--neutral-gray); margin-top: -6px; margin-bottom: 24px; max-width: 68ch; }
+.overviewFacts { display: flex; flex-wrap: wrap; gap: 24px 40px; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--frost); }
+.detail { min-width: 0; font-size: 14px; line-height: 1.65; }
+.detail dt { color: var(--neutral-gray); font-size: 12px; margin-bottom: 5px; }
+.detail dd { font-weight: 600; }
+.serviceGroups { display: grid; gap: 22px; }
+.serviceGroups .detail { display: grid; grid-template-columns: 135px minmax(0, 1fr); gap: 16px; align-items: baseline; }
+.serviceGroups dt { color: var(--arena-navy); font-size: 13px; font-weight: 700; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+.tags li { padding: 6px 12px; background: var(--ice-white); border: 1px solid var(--frost); border-radius: 5px; color: var(--hockey-blue); font-size: 12px; }
+.missingInfo { padding: 22px 24px; background: var(--ice-white); border-left: 3px solid var(--frost); font-size: 14px; line-height: 1.75; }
+.missingInfo p + p { color: var(--neutral-gray); margin-top: 6px; max-width: 64ch; }
+.headingRow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.headingRow > span { font-size: 12px; color: var(--neutral-gray); flex-shrink: 0; }
+.team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.person { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid var(--frost); border-radius: 8px; }
+.portrait { width: 56px; height: 56px; flex-shrink: 0; overflow: hidden; display: grid; place-items: center; border-radius: 50%; background: var(--ice-blue); color: var(--hockey-blue); font-family: var(--font-barlow-condensed), sans-serif; font-size: 26px; font-weight: 600; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.personInfo { min-width: 0; }
+.person h3 { font-family: var(--font-manrope), sans-serif; font-size: 14px; line-height: 1.5; font-weight: 800; }
+.role { margin-top: 3px; color: var(--neutral-gray); font-size: 12px; line-height: 1.6; }
+.bio { font-size: 12px; margin-top: 8px; }
+.bio summary, .hours summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; min-height: 40px; color: var(--hockey-blue); font-weight: 700; list-style: none; }
+.bio summary::-webkit-details-marker, .faq summary::-webkit-details-marker, .hours summary::-webkit-details-marker { display: none; }
+.bio[open] summary svg, .faq details[open] summary svg, .hours[open] summary svg { transform: rotate(180deg); }
+.bio p { color: var(--neutral-gray); line-height: 1.85; white-space: pre-line; }
+.noBio { margin-top: 12px; font-size: 12px; color: var(--neutral-gray); }
+.pricing { background: var(--ice-white); border-radius: 8px; padding: 8px 24px; }
+.pricing .detail { display: grid; grid-template-columns: 135px minmax(0, 1fr); gap: 16px; padding-block: 17px; border-bottom: 1px solid var(--frost); align-items: baseline; }
+.pricing .detail:last-child { border-bottom: 0; }
+.pricing dt { font-size: 13px; margin: 0; }
+.available { display: inline-flex; align-items: center; gap: 6px; color: var(--success-green); }
+.finePrint { margin-top: 15px; color: var(--neutral-gray); font-size: 12px; line-height: 1.8; max-width: 74ch; }
+.faq details { border-bottom: 1px solid var(--frost); }
+.faq summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; padding-block: 20px; font-size: 14px; font-weight: 700; list-style: none; }
+.faq svg { flex-shrink: 0; }
+.faq p { color: var(--neutral-gray); line-height: 1.8; font-size: 14px; padding-bottom: 20px; white-space: pre-line; }
+.provenance { display: flex; align-items: flex-start; gap: 16px; border: 0; padding-bottom: 0; }
+.provenance > svg { flex-shrink: 0; color: var(--hockey-blue); }
+.provenance h2 { font-family: var(--font-manrope), sans-serif; font-size: 14px; margin-bottom: 10px; font-weight: 800; }
+.provenance p { font-size: 12px; line-height: 1.8; color: var(--neutral-gray); margin-top: 8px; max-width: 76ch; }
+.provenance a { display: inline; text-decoration: underline; color: var(--hockey-blue); }
+.provenance a svg { display: inline; margin-left: 5px; }
+.sidebar { min-width: 0; }
+.contactPanel { position: sticky; top: 130px; padding: 26px; background: var(--ice-white); border: 1px solid var(--frost); border-top: 3px solid var(--hockey-blue); border-radius: 8px; }
+.contactPanel h2 { font-size: 28px; font-weight: 600; line-height: 1.15; }
+.contactPanel > p:not(.address):not(.deliveryNote) { color: var(--neutral-gray); font-size: 13px; line-height: 1.8; margin-top: 10px; }
+.primaryButton { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; margin-top: 22px; background: var(--hockey-blue); color: white; border-radius: 5px; font-size: 14px; font-weight: 800; text-align: center; padding: 10px; }
+.primaryButton:hover { background: var(--board-blue); }
+.deliveryNote { margin-top: 10px; color: var(--neutral-gray); font-size: 11px; line-height: 1.7; }
+.contactLinks { display: grid; margin-top: 18px; }
+.contactLinks > a { display: flex; align-items: center; gap: 12px; min-height: 46px; padding-block: 8px; font-size: 13px; font-weight: 600; color: var(--hockey-blue); }
+.contactLinks > a > svg { flex-shrink: 0; }
+.contactLinks > a > span { min-width: 0; }
+.contactLinks small { display: block; font-size: 11px; font-weight: 400; color: var(--neutral-gray); margin-top: 3px; }
+.address { display: flex; gap: 12px; font-size: 12px; line-height: 1.8; color: var(--neutral-gray); margin-top: 14px; }
+.address svg { flex-shrink: 0; margin-top: 3px; }
+.locationShortcut { display: inline-block; min-height: 36px; padding-block: 8px; margin-left: 29px; font-size: 12px; color: var(--hockey-blue); text-decoration: underline; text-underline-offset: 3px; }
+.locationBlock { border: 1px solid var(--frost); border-radius: 8px; overflow: hidden; }
+.locationHeading { display: flex; align-items: flex-start; gap: 14px; padding: 22px 24px; background: var(--ice-white); font-size: 14px; line-height: 1.7; }
+.locationHeading > svg { flex-shrink: 0; margin-top: 5px; color: var(--hockey-blue); }
+.locationLabel { font-size: 12px; color: var(--neutral-gray); margin-bottom: 4px; }
+.mapFrame { min-height: 300px; background: var(--ice-white); border-block: 1px solid var(--frost); }
+.mapFrame iframe { display: block; width: 100%; height: 300px; border: 0; }
+.mapConsent { min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; padding: 24px; text-align: center; }
+.mapConsent > svg { color: var(--hockey-blue); }
+.mapConsent button { padding: 12px 18px; min-height: 44px; border-radius: 5px; background: var(--hockey-blue); color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+.mapConsent button:hover { background: var(--board-blue); }
+.mapConsent p { max-width: 46ch; color: var(--neutral-gray); font-size: 12px; line-height: 1.7; }
+.locationNote { padding: 20px 24px 0; color: var(--neutral-gray); font-size: 12px; line-height: 1.8; }
+.mapLinks { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 10px 24px 20px; }
+.mapLinks a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; font-size: 12px; color: var(--hockey-blue); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.mapLinks svg { flex-shrink: 0; }
+.hours { font-size: 12px; margin-top: 12px; }
+.hours .detail { display: flex; justify-content: space-between; gap: 14px; padding-block: 4px; font-size: 12px; }
+.researchNotice { border-left: 3px solid var(--hockey-blue); padding: 10px 14px; background: var(--ice-white); color: var(--neutral-gray); font-size: 12px; line-height: 1.7; margin-bottom: 22px; }
+.sourceList { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
+.eliteProspects { margin-top: 28px; padding: 22px 24px; border: 1px solid var(--frost); border-left: 3px solid var(--hockey-blue); border-radius: 5px; }
+.eliteProspects h3 { font-size: 22px; color: var(--arena-navy); }
+.clientCount { margin-top: 8px; color: var(--arena-navy); font-size: 14px; }
+.clientCount strong { font-size: 32px; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.matchNotice { font-size: 12px; line-height: 1.7; margin-top: 10px; color: var(--neutral-gray); }
+.epSource { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 12px; color: var(--hockey-blue); text-decoration: underline; text-underline-offset: 3px; }
+.websiteSource { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 11px; line-height: 1.7; color: var(--neutral-gray); margin-top: 8px; }
+.websiteSource a { display: inline-flex; align-items: center; gap: 5px; color: var(--hockey-blue); text-decoration: underline; text-underline-offset: 3px; min-height: 28px; }
+.websiteSource > span { align-self: center; }
+.linkedin { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; color: #0a66c2; font-size: 12px; font-weight: 700; }
+.publishedPrices { border-top: 1px solid var(--frost); margin-top: 24px; }
+.publishedPrices article { padding: 20px 0; border-bottom: 1px solid var(--frost); }
+.publishedPrices h3 { font-size: 24px; }
+.publishedPrices p { max-width: 70ch; font-size: 13px; line-height: 1.8; color: var(--neutral-gray); margin-top: 8px; }
+.publishedPrices .packagePrice { color: var(--arena-navy); font-weight: 700; font-size: 18px; }
+.socials { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; font-size: 11px; font-weight: 700; color: var(--arena-navy); }
+.socials a { display: inline-flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; min-width: 68px; min-height: 78px; padding: 8px; border-radius: 8px; }
+.socials a:hover { background: var(--ice-blue); color: var(--hockey-blue); }
+.socialIcon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 9px; color: white; }
+.socialIcon[data-brand='instagram'] { background: linear-gradient(135deg, #833ab4, #c13584 50%, #f77737); }
+.socialIcon[data-brand='facebook'] { background: #1877f2; }
+.socialIcon[data-brand='x'] { background: #000000; }
+.socialIcon[data-brand='linkedin'] { background: #0a66c2; }
+.shortlist { border-top: 1px solid var(--frost); padding-top: 20px; margin-top: 22px; }
+.shortlist > p { font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+.preparation { padding: 28px 4px; }
+.preparation h2 { font-size: 23px; font-weight: 600; }
+.preparation ul { margin-top: 14px; padding-left: 18px; list-style: disc; color: var(--neutral-gray); font-size: 12px; line-height: 1.8; }
+.preparation li { padding-left: 3px; margin-bottom: 10px; }
+.preparation li::marker { color: var(--hockey-blue); }
+.owner { border-top: 1px solid var(--frost); padding: 20px 4px; font-size: 12px; line-height: 1.8; }
+.owner p { color: var(--neutral-gray); margin-bottom: 6px; }
+.owner a { color: var(--hockey-blue); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+/* Keep the whole research rail together so its sticky card cannot cover following tools. */
+@media (min-width: 1024px) and (min-height: 960px) {
+  .sidebar { align-self: start; position: sticky; top: 130px; }
+  .contactPanel { position: static; }
+}
+@media (max-width: 1100px) {
+  .body { gap: 36px; grid-template-columns: minmax(0, 1fr) 310px; }
+  .team { grid-template-columns: 1fr; }
+}
+@media (max-height: 959px) { .contactPanel { position: static; } }
+@media (max-width: 900px) {
+  .container { padding-inline: 24px; }
+  .body { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 32px 48px; }
+  .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+  .contactPanel { position: static; grid-row: span 2; }
+  .preparation { padding-top: 0; }
+  .heroContact { display: inline-flex; min-height: 44px; align-items: center; background: white; color: var(--arena-navy); padding: 10px 18px; border-radius: 5px; font-size: 13px; font-weight: 800; margin-top: 22px; }
+  .identity { gap: 24px; padding-block: 36px; }
+  .logo { width: 152px; height: 100px; }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .container { padding-inline: 20px; }
+  .breadcrumb { gap: 12px; font-size: 11px; }
+  .identity { flex-direction: column; align-items: flex-start; gap: 22px; }
+  .logo { width: 160px; height: 84px; padding: 10px; border-radius: 8px; font-size: 42px; }
+  .identity h1 { font-size: 42px; }
+  .tagline { font-size: 15px; }
+  .identityMeta { flex-direction: column; align-items: flex-start; font-size: 12px; }
+  .sectionNav > div { gap: 24px; }
+  .sectionNav a { min-height: 54px; font-size: 12px; }
+  .section { padding-block: 28px; scroll-margin-top: 100px; }
+  .section h2 { font-size: 29px; }
+  .description { font-size: 14px; }
+  .serviceGroups .detail { grid-template-columns: 1fr; gap: 5px; }
+  .pricing { padding-inline: 18px; }
+  .pricing .detail { grid-template-columns: 1fr; gap: 3px; }
+  .team, .sidebar { grid-template-columns: 1fr; }
+  .preparation { padding-top: 28px; }
+  .headingRow { align-items: baseline; }
+  .provenance h2 { font-size: 14px; }
+  .contactPanel { padding: 24px; }
+}

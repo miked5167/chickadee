@@ -25,6 +25,7 @@ describe('HuddleBooks brand connection', () => {
       'app/(public)/about/page.tsx',
       'app/(legal)/privacy/page.tsx',
       'app/(legal)/terms/page.tsx',
+      'components/layout/Header.tsx',
     ]
     for (const file of files) {
       const source = readFileSync(path.join(process.cwd(), file), 'utf8')

@@ -47,6 +47,14 @@ export const metadata: Metadata = {
     title: "The Hockey Directory - Research Hockey Advisors",
     description:
       "Research hockey advisors and agencies across Canada and the United States.",
+    images: [
+      {
+        url: "/brand/the-hockey-directory-social.png",
+        width: 1200,
+        height: 630,
+        alt: "The Hockey Directory",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -55,10 +63,10 @@ export const metadata: Metadata = {
       "Research hockey advisors and agencies across Canada and the United States.",
     images: [
       {
-        url: "/hockey-directory-hero-v1.png",
-        width: 2048,
-        height: 819,
-        alt: "A hockey family reviewing player pathways with an advisor at the rink",
+        url: "/brand/the-hockey-directory-social.png",
+        width: 1200,
+        height: 630,
+        alt: "The Hockey Directory",
       },
     ],
   },

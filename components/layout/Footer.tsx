@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { CookieSettingsButton } from './CookieConsent'
 
@@ -42,9 +43,15 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-[1.2fr_2fr] xl:gap-16">
           <div className="space-y-8">
             {/* Logo and Description */}
-            <Link href="/" className="inline-block font-display text-3xl font-extrabold uppercase leading-[0.85] tracking-tight text-white">
-              <span className="block text-goal-gold">The Hockey</span>
-              <span className="block border-b-4 border-red-line pb-2">Directory</span>
+            <Link href="/" className="inline-block">
+              <Image
+                src="/brand/the-hockey-directory-reversed-footer.png"
+                alt="The Hockey Directory"
+                width={720}
+                height={206}
+                sizes="256px"
+                className="h-auto w-64"
+              />
             </Link>
             <p className="max-w-md text-sm leading-6 text-frost">
               An independent directory that helps hockey families research advisors, understand pathways, and make more informed first conversations.

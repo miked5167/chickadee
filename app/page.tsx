@@ -69,7 +69,7 @@ export default function HomePage() {
       '@type': 'Organization',
       name: 'The Hockey Directory',
       url: 'https://thehockeydirectory.com',
-      logo: 'https://thehockeydirectory.com/hockey-directory-logo-v7.png',
+      logo: 'https://thehockeydirectory.com/brand/the-hockey-directory-primary.png',
       description: 'An independent directory helping hockey families research advisors and player pathways.',
       parentOrganization: {
         '@type': 'Organization',

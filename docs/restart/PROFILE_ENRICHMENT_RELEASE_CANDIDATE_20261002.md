@@ -50,7 +50,7 @@ CI now uses Node.js 20.x only and declares `node >=20.9.0`, matching Next.js 16.
 - [x] No credential-shaped literals found in release files.
 - [x] Administrator access and unfinished administrator mutations remain unchanged.
 - [x] Resolve the repository-wide CI lint blocker without relaxing application rules.
-- [ ] Perform a fresh read-only production database/migration preflight.
+- [x] Perform a fresh read-only production database/migration preflight.
 - [ ] Review the final commit diff and approve a feature-branch push.
 - [ ] Open and review a pull request to `master`.
 - [ ] Merge only after required checks and approval; a merge to `master` triggers the production Vercel workflow.
@@ -61,3 +61,15 @@ CI now uses Node.js 20.x only and declares `node >=20.9.0`, matching Next.js 16.
 If the deployed profile UI has a serious problem, revert the application release commit and redeploy the preceding `master` commit. The catalogs are local application assets and require no database rollback. Do not delete the Elite Prospects table or measurements as an application rollback; they predate this website release and are independently documented.
 
 Rollback triggers include a broken listing page, missing directory results, unsafe outbound links, incorrect company-to-person matching, or a material increase in server errors.
+
+## Read-only production preflight — 2026-10-02
+
+- Supabase project `dqskdrqubqnhdssxpryx` is `ACTIVE_HEALTHY` in `ca-central-1` on PostgreSQL 17.6.
+- Migration history is the exact ordered M1–M8 chain through `20260913004623_company_elite_prospects`.
+- `public.company_elite_prospects` has the expected 202 rows: 163 exact, 30 likely, 8 none, and 1 ambiguous; 193 rows have counts.
+- Every row retains source SHA-256 `38c5ac1b33a43e0992bb102af90ef21ca19114a6fe3f05b7b76c0053aceefe68`.
+- The table contract, constraints, SELECT-only RLS policy, and grants match the repository migration. Anonymous and authenticated roles can select but cannot insert.
+- Production has zero reviews and one administrator record. The administrator record is later production state associated with private analytics access; this release makes no administrator change and enables no new administrator mutation.
+- The 2026-09-25 Supabase/PostgreSQL 17.11 breaking-change detection queries returned no `ltree` indexes, no `btree_gist` float indexes, and no custom estimator operators. No application-defined routine references PGP encryption or a legacy cipher option.
+- Supabase advisor findings are pre-existing and outside this application-only release. They include PostGIS extension objects, a deliberately policy-free fail-closed intake table, existing RLS performance advice, and disabled leaked-password protection. No advisor finding is introduced or changed by this release.
+- The production homepage, directory, and 2112 Hockey Agency profile each returned HTTP 200 before deployment.

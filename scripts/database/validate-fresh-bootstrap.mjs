@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import {
@@ -509,6 +509,28 @@ function validateFailClosedM5M6M7Guards(connection) {
   assert(m7Owner.stderr.includes('M7 ownership guard'), 'Wrong M7 migration owner did not fail through the ownership guard')
 }
 
+async function validateDirectoryTagFlow(connection) {
+  // The seed owns its transaction; apply it before the rollback-only flow fixture.
+  psql(connection, ['--file', path.join(repositoryRoot, 'supabase/seeds/directory-tags.sql')])
+  const before = scalar(connection, 'SELECT count(*) FROM public.directory_tags;')
+  const result = psql(connection, ['-qAt', '--command', 'BEGIN;',
+    '--file', path.join(repositoryRoot, 'supabase/validation/directory-tag-release-flow.sql')])
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'hockey-directory-filter-fixture-'))
+  try {
+    const fixturePath = path.join(directory, 'fixture.json')
+    await writeFile(fixturePath, JSON.stringify(JSON.parse(result.stdout.trim())))
+    const check = run(process.execPath, [path.join(repositoryRoot, 'node_modules/tsx/dist/cli.mjs'), path.join(repositoryRoot, 'scripts/database/verify-directory-fixture.ts'), fixturePath])
+    assert(check.status === 0, check.stderr || 'Real saved tag filter checks failed')
+    assert(scalar(connection, 'SELECT count(*) FROM public.directory_tags;') === before, 'Flow test retained seed changes')
+    assert(scalar(connection, "SELECT count(*) FROM public.companies WHERE slug='release-fixture-advisor';") === '0', 'Flow test retained listing fixtures')
+    process.stdout.write(check.stdout)
+  } finally {
+    const relative = path.relative(os.tmpdir(), directory)
+    assert(relative && !relative.startsWith('..') && !path.isAbsolute(relative), 'Unsafe fixture cleanup path')
+    await rm(directory, { recursive: true, force: true })
+  }
+}
+
 async function main() {
   const connection = connectionArguments()
   const identity = verifyIdentity(connection)
@@ -528,6 +550,7 @@ async function main() {
   validateFailClosedM5M6M7Guards(connection)
   await compareFingerprint(connection)
   await validateCatalog(connection)
+  await validateDirectoryTagFlow(connection)
 
   const guardAttempt = psql(connection, ['--file', baselineMigrationPath], { expectFailure: true, failureLabel: 'baseline re-execution' })
   assert(guardAttempt.stderr.includes('Fresh-environment guard'), 'Baseline did not fail through its fresh-environment guard on an existing schema')

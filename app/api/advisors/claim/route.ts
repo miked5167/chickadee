@@ -11,7 +11,7 @@ const noStoreHeaders = { 'Cache-Control': 'no-store' }
 const claimSchema = z.object({
   company_id: z.string().uuid(),
   business_email: z.string().trim().email().max(255),
-  business_phone: z.string().trim().max(30).optional().nullable(),
+  business_phone: z.string().trim().max(20).optional().nullable(),
   relationship: z.string().trim().min(20).max(500),
   verification_details: z.string().trim().min(50).max(1500),
   tag_ids: tagSelectionSchema,
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       p_tag_ids: tagIds,
     })
 
-  if (claimError?.code === '23505') {
+  if (claimError?.code === '23505' || claimError?.code === '23P01') {
     return NextResponse.json(
       { error: 'An active claim already exists for this listing.' },
       { status: 409, headers: noStoreHeaders },

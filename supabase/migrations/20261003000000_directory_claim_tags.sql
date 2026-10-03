@@ -27,7 +27,7 @@ BEGIN
     RAISE EXCEPTION 'Sign in required.' USING ERRCODE = '42501';
   END IF;
   IF p_business_email IS NULL OR length(btrim(p_business_email)) NOT BETWEEN 3 AND 255
-     OR length(COALESCE(p_business_phone, '')) > 30
+     OR length(COALESCE(p_business_phone, '')) > 20
      OR jsonb_typeof(p_verification_data) IS DISTINCT FROM 'object'
      OR length(COALESCE(p_verification_data->>'relationship', '')) NOT BETWEEN 20 AND 500
      OR length(COALESCE(p_verification_data->>'verification_details', '')) NOT BETWEEN 50 AND 1500 THEN

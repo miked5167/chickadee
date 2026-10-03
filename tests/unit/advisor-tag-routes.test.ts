@@ -63,6 +63,10 @@ describe('claim tag transaction', () => {
     expect((await POST(request({ ...claim, tag_ids: [] }, 'POST'))).status).toBe(400)
     expect(mocks.rpc).not.toHaveBeenCalled()
   })
+  it('rejects phone values beyond the existing database column limit before writing', async () => {
+    expect((await POST(request({ ...claim, business_phone: '1'.repeat(21) }, 'POST'))).status).toBe(400)
+    expect(mocks.rpc).not.toHaveBeenCalled()
+  })
   it('saves the claim and private selections with one RPC', async () => {
     mocks.rpc.mockResolvedValueOnce({ data: { id: 'claim-id', claim_status: 'pending', submitted_at: '2026-10-03' }, error: null })
     const response = await POST(request(claim, 'POST'))
@@ -70,5 +74,9 @@ describe('claim tag transaction', () => {
     expect((await response.json()).claimId).toBe('claim-id')
     expect(mocks.rpc.mock.calls[0][0]).toBe('submit_directory_claim')
     expect(mocks.rpc.mock.calls[0][1].p_tag_ids).toEqual([...ids].sort())
+  })
+  it('reports the existing active-claim exclusion as a conflict', async () => {
+    mocks.rpc.mockResolvedValueOnce({ data: null, error: { code: '23P01' } })
+    expect((await POST(request(claim, 'POST'))).status).toBe(409)
   })
 })

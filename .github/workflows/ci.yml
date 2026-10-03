@@ -51,6 +51,21 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
 
+  directory-database:
+    name: Directory tag database checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      - run: npm ci
+      - name: Verify schema rendering stays strict
+        run: node --test scripts/database/tests/elite-prospects-sql-forms.test.mjs
+      - name: Exercise real PostgreSQL tag transactions and permissions
+        run: node scripts/database/test-directory-tags.mjs --pg-bin "$(pg_config --bindir)"
+
   build:
     name: Build Check
     runs-on: ubuntu-latest

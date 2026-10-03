@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
-import { Suspense } from 'react'
-import { SearchResults } from '@/components/search/SearchResults'
+import { TaggedDirectoryResults } from '@/components/search/TaggedDirectoryResults'
+import { searchDirectory } from '@/lib/tags/directory-search'
+import { queryParams, type QueryValues } from '@/lib/tags/filter-state'
 import { AdvisorFilters } from '@/components/search/AdvisorFilters'
 import { ComparisonTray } from '@/components/listing/ComparisonTray'
 
 interface ListingsPageProps {
-  searchParams: Promise<{
+  searchParams: Promise<QueryValues & {
+    tag?: string | string[]
     location?: string
     lat?: string
     lng?: string
@@ -45,6 +47,10 @@ export async function generateMetadata({ searchParams }: ListingsPageProps): Pro
 
 export default async function ListingsPage({ searchParams }: ListingsPageProps) {
   const params = await searchParams
+  let results
+  try { results = await searchDirectory(queryParams(params)) } catch {
+    return <main className="mx-auto max-w-5xl p-8"><h1 className="text-3xl font-bold">Directory temporarily unavailable</h1><p className="mt-4">Results could not be loaded. Please try again shortly.</p><a href="/listings" className="mt-4 inline-flex min-h-11 items-center text-hockey-blue underline">Try again</a></main>
+  }
 
   // Build dynamic title based on search
   const pageTitle = params.search
@@ -63,7 +69,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
             {pageTitle}
           </h1>
           <p className="mt-3 max-w-2xl text-ice-blue">
-            Search 202 company listings, then review the people and details behind each business before making contact.
+            Find advisors by their services, pathways and player fit, then review their profiles before making contact.
           </p>
         </div>
       </div>
@@ -73,21 +79,12 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <AdvisorFilters showLocationFilters={!!params.lat} />
+            <AdvisorFilters initialData={results} />
           </aside>
 
           {/* Search Results */}
-          <div className="flex-1">
-            <Suspense
-              fallback={
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hockey-blue mx-auto"></div>
-                  <p className="mt-4 text-gray-600">Loading advisors...</p>
-                </div>
-              }
-            >
-              <SearchResults searchParams={params} />
-            </Suspense>
+          <div className="min-w-0 flex-1">
+            <TaggedDirectoryResults key={queryParams(params).toString()} data={results} />
           </div>
         </div>
       </div>

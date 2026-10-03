@@ -7,8 +7,10 @@ import type { TagCatalog } from './types'
 import { parseFilterState } from './filter-state'
 import { filterDirectory, type DirectoryListing } from './filter-logic'
 import { getStateAbbreviation, readPoint } from './search-location'
+import { previewCatalog, previewListings, tagPreviewEnabled } from './preview-fixtures'
 
 export async function searchDirectory(params: URLSearchParams) {
+  if (params.get('demo') === 'tags' && tagPreviewEnabled()) return { ...filterDirectory(previewListings, parseFilterState(params, previewCatalog), previewCatalog), catalog: previewCatalog, catalogAvailable: true }
   let catalog: TagCatalog
   let catalogAvailable = true
   const preview = publicPreviewFeedUrl(new URLSearchParams())
@@ -39,7 +41,7 @@ export async function searchDirectory(params: URLSearchParams) {
     const ids = (companies || []).map((company) => company.id)
     const { data: profiles } = ids.length ? await supabase.from('company_profiles').select('company_id, offers_remote, accepting_clients, services, specialties, pathways').in('company_id', ids) : { data: [] }
     const profilesById = new Map((profiles || []).map((profile) => [profile.company_id, profile]))
-    listings = await enrichListingCards(supabase, (companies || []).map((company) => {
+    const candidates = (companies || []).map((company) => {
       const point = readPoint(company.location)
       const profile = profilesById.get(company.id)
       return {
@@ -49,7 +51,14 @@ export async function searchDirectory(params: URLSearchParams) {
         offers_remote: profile?.offers_remote === true, accepting_clients: profile?.accepting_clients ?? null,
         services: profile?.services || [], specialties: profile?.specialties || [], pathways: profile?.pathways || [],
       }
-    }))
+    })
+    // Full-directory facets must not lose assignments to the API's row cap.
+    // Even if every listing has every catalog tag, each join stays below 1,000 rows.
+    const batchSize = Math.max(1, Math.floor(900 / Math.max(1, catalog.tags.length)))
+    for (let offset = 0; offset < candidates.length; offset += batchSize * 5) {
+      const batches = Array.from({ length: 5 }, (_, index) => candidates.slice(offset + index * batchSize, offset + (index + 1) * batchSize)).filter((batch) => batch.length)
+      listings.push(...(await Promise.all(batches.map((batch) => enrichListingCards(supabase, batch)))).flat())
+    }
   }
   if (!catalogAvailable) listings = listings.map((listing) => ({ ...listing, card_tags: [] }))
   const state = parseFilterState(params, catalog)

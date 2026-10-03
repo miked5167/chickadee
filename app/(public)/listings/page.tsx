@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { TaggedDirectoryResults } from '@/components/search/TaggedDirectoryResults'
 import { searchDirectory } from '@/lib/tags/directory-search'
 import { queryParams, type QueryValues } from '@/lib/tags/filter-state'
@@ -49,7 +50,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
   const params = await searchParams
   let results
   try { results = await searchDirectory(queryParams(params)) } catch {
-    return <main className="mx-auto max-w-5xl p-8"><h1 className="text-3xl font-bold">Directory temporarily unavailable</h1><p className="mt-4">Results could not be loaded. Please try again shortly.</p><a href="/listings" className="mt-4 inline-flex min-h-11 items-center text-hockey-blue underline">Try again</a></main>
+    return <main className="mx-auto max-w-5xl p-8"><h1 className="text-3xl font-bold">Directory temporarily unavailable</h1><p className="mt-4">Results could not be loaded. Please try again shortly.</p><Link href="/listings" className="mt-4 inline-flex min-h-11 items-center text-hockey-blue underline">Try again</Link></main>
   }
 
   // Build dynamic title based on search

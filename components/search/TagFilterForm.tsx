@@ -6,11 +6,11 @@ import type { DirectoryFacets } from '@/lib/tags/filter-logic'
 import { serializeFilterState, SORT_OPTIONS, type FilterState } from '@/lib/tags/filter-state'
 import { Button } from '@/components/ui/button'
 
-export function TagFilterForm({ catalog, state, facets, count, pending = false, onChange, onApply }: { catalog: TagCatalog; state: FilterState; facets: DirectoryFacets; count: number; pending?: boolean; onChange?: (state: FilterState) => void; onApply?: () => void }) {
+export function TagFilterForm({ catalog, state, facets, count, pending = false, countError = false, onChange, onApply, basePath = '/listings', showApply = true }: { catalog: TagCatalog; state: FilterState; facets: DirectoryFacets; count: number; pending?: boolean; countError?: boolean; onChange?: (state: FilterState) => void; onApply?: () => void; basePath?: string; showApply?: boolean }) {
   const prefix = useId()
   const params = serializeFilterState({ ...state, page: 1 })
   const editedKeys = ['tag', 'country', 'sort', 'verified', 'remote', 'accepting', 'page', 'radius']
-  return <form action="/listings" method="get" onSubmit={onApply ? (event) => { event.preventDefault(); onApply() } : undefined} className="space-y-4">
+  return <form action={basePath} method="get" onSubmit={onApply ? (event) => { event.preventDefault(); onApply() } : undefined} className="space-y-4">
     {Array.from(params).filter(([key]) => !editedKeys.includes(key)).map(([key, value], index) => <input key={`${key}-${index}`} type="hidden" name={key} value={value} />)}
     <input type="hidden" name="page" value="1" />
     <div className="rounded-xl border border-frost bg-white p-4">
@@ -20,7 +20,7 @@ export function TagFilterForm({ catalog, state, facets, count, pending = false, 
     <fieldset className="rounded-xl border border-frost bg-white p-4">
       <legend className="px-2 font-bold text-arena-navy">Office location</legend>
       {[['', 'Any country'], ['CA', 'Canada'], ['US', 'United States']].map(([value, label]) => <label key={value} className="flex min-h-11 items-center gap-3 text-sm">
-        <input type="radio" name="country" value={value} checked={state.country === value} disabled={Boolean(value && facets.countries[value] === 0 && state.country !== value)} onChange={() => onChange?.({ ...state, country: value, page: 1 })} className="h-5 w-5 accent-hockey-blue" />
+        <input type="radio" name="country" value={value} checked={state.country === value} disabled={Boolean(value && (facets.countries[value] || 0) === 0 && state.country !== value)} onChange={() => onChange?.({ ...state, country: value, page: 1 })} className="h-5 w-5 accent-hockey-blue" />
         <span>{label}{value && ` (${facets.countries[value] || 0})`}</span>
       </label>)}
       <p className="mt-2 text-xs text-neutral-gray">Use Regions served below for client coverage.</p>
@@ -48,8 +48,8 @@ export function TagFilterForm({ catalog, state, facets, count, pending = false, 
       </label>)}
       <p className="mt-2 text-xs leading-5 text-neutral-gray">Business verification confirms a connection to the listing; it is not an endorsement.</p>
     </fieldset>
-    <div className="sticky bottom-0 border-t border-frost bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-      <Button type="submit" disabled={pending} className="min-h-12 w-full" aria-live="polite">{pending ? 'Updating result count…' : `Apply (${count} ${count === 1 ? 'result' : 'results'})`}</Button>
-    </div>
+    {showApply && <div className="sticky bottom-0 border-t border-frost bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <Button type="submit" disabled={pending || countError} className="min-h-12 w-full" aria-live="polite">{countError ? 'Count unavailable' : pending ? 'Updating result count…' : `Apply (${count} ${count === 1 ? 'result' : 'results'})`}</Button>
+    </div>}
   </form>
 }

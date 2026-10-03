@@ -88,7 +88,18 @@ pull request. All required jobs must pass before merge.
 
 No separate Advisor Directory staging database or development database branch
 was available during preparation. The Vercel connector returned 403 for this
-project. No hosted deployment or write smoke test has been performed.
+project, but opening draft PR #10 triggered the existing GitHub/Vercel integration
+and its preview built successfully. No production deployment or hosted write
+smoke test has been performed.
+
+Preview:
+`https://chickadee-git-codex-tags-release-miked5167-3573s-projects.vercel.app/listings`.
+Read-only HTTP checks against its server-rendered HTML passed: 202 total
+advisors, 93 Canadian offices, 109 US offices with Elite Prospects sorting,
+native GET filter forms and initial cards, no price options, and a removable
+NCAA chip with zero results while no tags are assigned. The hosted demo route
+returned 404. These checks do not establish a separate preview database or
+complete the interactive keyboard/mobile and claim-edit browser checklist.
 
 Verify the preview's Supabase project ID and environment settings before any
 fixture write. A preview pointed at production is not a disposable staging

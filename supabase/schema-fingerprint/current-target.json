@@ -10,7 +10,9 @@
       "supabase/migrations/20260821000000_company_profiles.sql",
       "supabase/migrations/20260821000001_company_leads_and_events.sql",
       "supabase/migrations/20260821000002_advisor_interest_submissions.sql",
-      "supabase/migrations/20260913004623_company_elite_prospects.sql"
+      "supabase/migrations/20260913004623_company_elite_prospects.sql",
+      "supabase/migrations/20261002000000_directory_tags.sql",
+      "supabase/migrations/20261003000000_directory_claim_tags.sql"
     ],
     "containsData": false
   },
@@ -382,6 +384,37 @@
           "nullable": true,
           "default": "now()",
           "definition": "timestamp with time zone DEFAULT now()"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "claim_tags",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "claim_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "tag_id",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
         }
       ],
       "owner": "postgres"
@@ -1000,6 +1033,37 @@
     },
     {
       "schema": "public",
+      "name": "company_tags",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "tag_id",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
       "name": "directory_events",
       "columns": [
         {
@@ -1068,6 +1132,235 @@
         },
         {
           "ordinal": 9,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "directory_tag_groups",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "key",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "label",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "display_order",
+          "type": "integer",
+          "nullable": false,
+          "default": "0",
+          "definition": "integer DEFAULT 0 NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "is_core",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false",
+          "definition": "boolean DEFAULT false NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "filter_enabled",
+          "type": "boolean",
+          "nullable": false,
+          "default": "true",
+          "definition": "boolean DEFAULT true NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "directory_tag_suggestions",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "uuid",
+          "nullable": false,
+          "default": "extensions.uuid_generate_v4()",
+          "definition": "uuid DEFAULT extensions.uuid_generate_v4() NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "requester_user_id",
+          "type": "uuid",
+          "nullable": false,
+          "default": null,
+          "definition": "uuid NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "company_id",
+          "type": "uuid",
+          "nullable": true,
+          "default": null,
+          "definition": "uuid"
+        },
+        {
+          "ordinal": 4,
+          "name": "claim_id",
+          "type": "uuid",
+          "nullable": true,
+          "default": null,
+          "definition": "uuid"
+        },
+        {
+          "ordinal": 5,
+          "name": "group_key",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 6,
+          "name": "label",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "reason",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 8,
+          "name": "status",
+          "type": "text",
+          "nullable": false,
+          "default": "'pending'::text",
+          "definition": "text DEFAULT 'pending'::text NOT NULL"
+        },
+        {
+          "ordinal": 9,
+          "name": "approved_tag_id",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 10,
+          "name": "reviewed_by",
+          "type": "uuid",
+          "nullable": true,
+          "default": null,
+          "definition": "uuid"
+        },
+        {
+          "ordinal": 11,
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null,
+          "definition": "timestamp with time zone"
+        },
+        {
+          "ordinal": 12,
+          "name": "review_note",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 13,
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "definition": "timestamp with time zone DEFAULT now() NOT NULL"
+        }
+      ],
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "directory_tags",
+      "columns": [
+        {
+          "ordinal": 1,
+          "name": "id",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 2,
+          "name": "group_key",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 3,
+          "name": "slug",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 4,
+          "name": "label",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "definition": "text NOT NULL"
+        },
+        {
+          "ordinal": 5,
+          "name": "parent_id",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "definition": "text"
+        },
+        {
+          "ordinal": 6,
+          "name": "display_order",
+          "type": "integer",
+          "nullable": false,
+          "default": "0",
+          "definition": "integer DEFAULT 0 NOT NULL"
+        },
+        {
+          "ordinal": 7,
+          "name": "is_active",
+          "type": "boolean",
+          "nullable": false,
+          "default": "true",
+          "definition": "boolean DEFAULT true NOT NULL"
+        },
+        {
+          "ordinal": 8,
           "name": "created_at",
           "type": "timestamp with time zone",
           "nullable": false,
@@ -1624,6 +1917,24 @@
       "definition": "CHECK ((char_length((name)::text) >= 2))"
     },
     {
+      "table": "claim_tags",
+      "name": "claim_tags_claim_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (claim_id) REFERENCES public.listing_claims(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "claim_tags",
+      "name": "claim_tags_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (claim_id, tag_id)"
+    },
+    {
+      "table": "claim_tags",
+      "name": "claim_tags_tag_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (tag_id) REFERENCES public.directory_tags(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
       "table": "companies",
       "name": "companies_pkey",
       "type": "primary_key",
@@ -1816,6 +2127,24 @@
       "definition": "CHECK (((tagline IS NULL) OR ((char_length(btrim((tagline)::text)) >= 10) AND (char_length(btrim((tagline)::text)) <= 160))))"
     },
     {
+      "table": "company_tags",
+      "name": "company_tags_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "company_tags",
+      "name": "company_tags_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (company_id, tag_id)"
+    },
+    {
+      "table": "company_tags",
+      "name": "company_tags_tag_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (tag_id) REFERENCES public.directory_tags(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
       "table": "directory_events",
       "name": "directory_events_company_id_fkey",
       "type": "foreign_key",
@@ -1844,6 +2173,174 @@
       "name": "directory_events_type_check",
       "type": "check",
       "definition": "CHECK (((event_type)::text = ANY (ARRAY['profile_view'::text, 'website_click'::text, 'email_click'::text, 'phone_click'::text, 'lead_submit'::text])))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_core_check",
+      "type": "check",
+      "definition": "CHECK ((is_core = (key = ANY (ARRAY['services'::text, 'pathways'::text]))))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_key_check",
+      "type": "check",
+      "definition": "CHECK ((key = ANY (ARRAY['services'::text, 'pathways'::text, 'player_level'::text, 'age_group'::text, 'regions'::text, 'languages'::text, 'price_range'::text])))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_label_check",
+      "type": "check",
+      "definition": "CHECK (((length(btrim(label)) >= 2) AND (length(btrim(label)) <= 100)))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_order_check",
+      "type": "check",
+      "definition": "CHECK ((display_order >= 0))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (key)"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_approved_tag_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (approved_tag_id, group_key) REFERENCES public.directory_tags(id, group_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_claim_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (claim_id) REFERENCES public.listing_claims(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_company_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (company_id) REFERENCES public.companies(id) ON UPDATE RESTRICT ON DELETE CASCADE"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_context_check",
+      "type": "check",
+      "definition": "CHECK ((num_nonnulls(company_id, claim_id) = 1))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_group_key_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (group_key) REFERENCES public.directory_tag_groups(key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_label_check",
+      "type": "check",
+      "definition": "CHECK (((length(btrim(label)) >= 2) AND (length(btrim(label)) <= 100)))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_note_check",
+      "type": "check",
+      "definition": "CHECK (((review_note IS NULL) OR (length(review_note) <= 1000)))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_reason_check",
+      "type": "check",
+      "definition": "CHECK (((length(btrim(reason)) >= 10) AND (length(btrim(reason)) <= 1000)))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_requester_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (requester_user_id) REFERENCES auth.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_review_check",
+      "type": "check",
+      "definition": "CHECK ((((status = 'pending'::text) AND (approved_tag_id IS NULL) AND (reviewed_by IS NULL) AND (reviewed_at IS NULL) AND (review_note IS NULL)) OR ((status = 'approved'::text) AND (approved_tag_id IS NOT NULL) AND (reviewed_by IS NOT NULL) AND (reviewed_at IS NOT NULL)) OR ((status = 'rejected'::text) AND (approved_tag_id IS NULL) AND (reviewed_by IS NOT NULL) AND (reviewed_at IS NOT NULL))))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_reviewer_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (reviewed_by) REFERENCES auth.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_status_check",
+      "type": "check",
+      "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_group_id_key",
+      "type": "unique",
+      "definition": "UNIQUE (id, group_key)"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_group_key_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (group_key) REFERENCES public.directory_tag_groups(key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_group_slug_key",
+      "type": "unique",
+      "definition": "UNIQUE (group_key, slug)"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_identity_check",
+      "type": "check",
+      "definition": "CHECK ((id = ((group_key || ':'::text) || slug)))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_label_check",
+      "type": "check",
+      "definition": "CHECK (((length(btrim(label)) >= 2) AND (length(btrim(label)) <= 100)))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_order_check",
+      "type": "check",
+      "definition": "CHECK ((display_order >= 0))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_parent_check",
+      "type": "check",
+      "definition": "CHECK (((parent_id IS NULL) OR (parent_id <> id)))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_parent_id_fkey",
+      "type": "foreign_key",
+      "definition": "FOREIGN KEY (parent_id, group_key) REFERENCES public.directory_tags(id, group_key) ON UPDATE RESTRICT ON DELETE RESTRICT"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_pkey",
+      "type": "primary_key",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_slug_check",
+      "type": "check",
+      "definition": "CHECK (((slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(slug) <= 80)))"
     },
     {
       "table": "listing_claims",
@@ -2064,6 +2561,24 @@
       "definition": "backed by constraint advisors_pkey"
     },
     {
+      "table": "claim_tags",
+      "name": "claim_tags_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint claim_tags_pkey"
+    },
+    {
+      "table": "claim_tags",
+      "name": "claim_tags_tag_id_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX claim_tags_tag_id_idx ON public.claim_tags USING btree (tag_id)"
+    },
+    {
       "table": "companies",
       "name": "companies_location_idx",
       "unique": false,
@@ -2217,6 +2732,24 @@
       "definition": "CREATE INDEX company_profiles_specialties_idx ON public.company_profiles USING gin (specialties)"
     },
     {
+      "table": "company_tags",
+      "name": "company_tags_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint company_tags_pkey"
+    },
+    {
+      "table": "company_tags",
+      "name": "company_tags_tag_id_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX company_tags_tag_id_idx ON public.company_tags USING btree (tag_id, company_id)"
+    },
+    {
       "table": "directory_events",
       "name": "directory_events_company_created_idx",
       "unique": false,
@@ -2251,6 +2784,87 @@
       "predicate": null,
       "constraintBacked": false,
       "definition": "CREATE INDEX directory_events_rate_limit_idx ON public.directory_events USING btree (ip_hash, created_at DESC)"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "directory_tag_groups_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_tag_groups_pkey"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_pending_idx",
+      "unique": true,
+      "method": "btree",
+      "predicate": "(status = 'pending'::text)",
+      "constraintBacked": false,
+      "definition": "CREATE UNIQUE INDEX directory_tag_suggestions_pending_idx ON public.directory_tag_suggestions USING btree (requester_user_id, group_key, lower(btrim(label))) WHERE (status = 'pending'::text)"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_tag_suggestions_pkey"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_queue_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_tag_suggestions_queue_idx ON public.directory_tag_suggestions USING btree (status, created_at)"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "directory_tag_suggestions_requester_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_tag_suggestions_requester_idx ON public.directory_tag_suggestions USING btree (requester_user_id)"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_group_id_key",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_tags_group_id_key"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_group_slug_key",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_tags_group_slug_key"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_parent_idx",
+      "unique": false,
+      "method": "btree",
+      "predicate": "(parent_id IS NOT NULL)",
+      "constraintBacked": false,
+      "definition": "CREATE INDEX directory_tags_parent_idx ON public.directory_tags USING btree (parent_id) WHERE (parent_id IS NOT NULL)"
+    },
+    {
+      "table": "directory_tags",
+      "name": "directory_tags_pkey",
+      "unique": true,
+      "method": "btree",
+      "predicate": null,
+      "constraintBacked": true,
+      "definition": "backed by constraint directory_tags_pkey"
     },
     {
       "table": "listing_claims",
@@ -2396,6 +3010,11 @@
       "forced": false
     },
     {
+      "table": "claim_tags",
+      "enabled": true,
+      "forced": false
+    },
+    {
       "table": "companies",
       "enabled": true,
       "forced": false
@@ -2416,7 +3035,27 @@
       "forced": false
     },
     {
+      "table": "company_tags",
+      "enabled": true,
+      "forced": false
+    },
+    {
       "table": "directory_events",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "directory_tag_groups",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "enabled": true,
+      "forced": false
+    },
+    {
+      "table": "directory_tags",
       "enabled": true,
       "forced": false
     },
@@ -2478,6 +3117,18 @@
       "using": "(active = true)",
       "withCheck": null,
       "definition": "CREATE POLICY \"Public read access for advisors\" ON public.advisors FOR SELECT TO anon, authenticated USING ((active = true))"
+    },
+    {
+      "table": "claim_tags",
+      "name": "Claim tags are private",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "(public.is_admin() OR (EXISTS (SELECT 1 FROM public.listing_claims WHERE ((listing_claims.id = claim_tags.claim_id) AND (listing_claims.claimant_user_id = auth.uid())))))",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Claim tags are private\" ON public.claim_tags FOR SELECT TO authenticated USING ((public.is_admin() OR (EXISTS (SELECT 1 FROM public.listing_claims WHERE ((listing_claims.id = claim_tags.claim_id) AND (listing_claims.claimant_user_id = auth.uid()))))))"
     },
     {
       "table": "companies",
@@ -2591,6 +3242,19 @@
       "definition": "CREATE POLICY \"Company profiles are public\" ON public.company_profiles FOR SELECT TO anon, authenticated USING (true)"
     },
     {
+      "table": "company_tags",
+      "name": "Company tags are public",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Company tags are public\" ON public.company_tags FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
       "table": "directory_events",
       "name": "Company owners can read own directory events",
       "permissive": true,
@@ -2601,6 +3265,56 @@
       "using": "(EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_events.company_id) AND (companies.verified_owner_id = auth.uid()))))",
       "withCheck": null,
       "definition": "CREATE POLICY \"Company owners can read own directory events\" ON public.directory_events FOR SELECT TO authenticated USING ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_events.company_id) AND (companies.verified_owner_id = auth.uid())))))"
+    },
+    {
+      "table": "directory_tag_groups",
+      "name": "Directory tag groups are public",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "true",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Directory tag groups are public\" ON public.directory_tag_groups FOR SELECT TO anon, authenticated USING (true)"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "Advisors can suggest tags",
+      "permissive": true,
+      "command": "insert",
+      "roles": [
+        "authenticated"
+      ],
+      "using": null,
+      "withCheck": "((requester_user_id = auth.uid()) AND (status = 'pending'::text) AND ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_tag_suggestions.company_id) AND (companies.verified_owner_id = auth.uid())))) OR (EXISTS (SELECT 1 FROM public.listing_claims WHERE ((listing_claims.id = directory_tag_suggestions.claim_id) AND (listing_claims.claimant_user_id = auth.uid()) AND (listing_claims.claim_status = ANY (ARRAY['pending'::public.claim_status, 'under_review'::public.claim_status])))))))",
+      "definition": "CREATE POLICY \"Advisors can suggest tags\" ON public.directory_tag_suggestions FOR INSERT TO authenticated WITH CHECK (((requester_user_id = auth.uid()) AND (status = 'pending'::text) AND ((EXISTS (SELECT 1 FROM public.companies WHERE ((companies.id = directory_tag_suggestions.company_id) AND (companies.verified_owner_id = auth.uid())))) OR (EXISTS (SELECT 1 FROM public.listing_claims WHERE ((listing_claims.id = directory_tag_suggestions.claim_id) AND (listing_claims.claimant_user_id = auth.uid()) AND (listing_claims.claim_status = ANY (ARRAY['pending'::public.claim_status, 'under_review'::public.claim_status]))))))))"
+    },
+    {
+      "table": "directory_tag_suggestions",
+      "name": "Tag suggestions are private",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "authenticated"
+      ],
+      "using": "((requester_user_id = auth.uid()) OR public.is_admin())",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Tag suggestions are private\" ON public.directory_tag_suggestions FOR SELECT TO authenticated USING (((requester_user_id = auth.uid()) OR public.is_admin()))"
+    },
+    {
+      "table": "directory_tags",
+      "name": "Active directory tags are public",
+      "permissive": true,
+      "command": "select",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "using": "is_active",
+      "withCheck": null,
+      "definition": "CREATE POLICY \"Active directory tags are public\" ON public.directory_tags FOR SELECT TO anon, authenticated USING (is_active)"
     },
     {
       "table": "listing_claims",
@@ -2742,6 +3456,58 @@
     },
     {
       "schema": "public",
+      "name": "replace_claim_tags",
+      "identityArguments": "p_claim_id uuid, p_tag_ids text[]",
+      "resultType": "text[]",
+      "language": "plpgsql",
+      "securityDefiner": true,
+      "volatility": "volatile",
+      "definition": "CREATE FUNCTION public.replace_claim_tags(p_claim_id uuid, p_tag_ids text[]) RETURNS text[] LANGUAGE plpgsql SECURITY DEFINER SET search_path TO '' AS $$ DECLARE selected_ids text[]; BEGIN IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Sign in required.' USING ERRCODE = '42501'; END IF; PERFORM 1 FROM public.listing_claims WHERE id = p_claim_id AND claimant_user_id = auth.uid() AND claim_status IN ('pending', 'under_review') FOR UPDATE; IF NOT FOUND THEN RAISE EXCEPTION 'Pending claim access denied.' USING ERRCODE = '42501'; END IF; selected_ids := public.validate_directory_tag_selection(p_tag_ids); DELETE FROM public.claim_tags WHERE claim_id = p_claim_id; INSERT INTO public.claim_tags(claim_id, tag_id) SELECT p_claim_id, unnest(selected_ids); RETURN selected_ids; END; $$",
+      "definitionSha256": "36f5eb958985edefc9198779bdf2c1fafcd72fefe7cf3a2a4489816227544de3",
+      "searchPath": "",
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "replace_company_tags",
+      "identityArguments": "p_company_id uuid, p_tag_ids text[]",
+      "resultType": "text[]",
+      "language": "plpgsql",
+      "securityDefiner": true,
+      "volatility": "volatile",
+      "definition": "CREATE FUNCTION public.replace_company_tags(p_company_id uuid, p_tag_ids text[]) RETURNS text[] LANGUAGE plpgsql SECURITY DEFINER SET search_path TO '' AS $$ DECLARE company_owner uuid; selected_ids text[]; BEGIN IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Sign in required.' USING ERRCODE = '42501'; END IF; SELECT verified_owner_id INTO company_owner FROM public.companies WHERE id = p_company_id FOR UPDATE; IF NOT FOUND OR (company_owner IS DISTINCT FROM auth.uid() AND NOT public.is_admin()) THEN RAISE EXCEPTION 'Listing access denied.' USING ERRCODE = '42501'; END IF; selected_ids := public.validate_directory_tag_selection(p_tag_ids); DELETE FROM public.company_tags WHERE company_id = p_company_id; INSERT INTO public.company_tags(company_id, tag_id) SELECT p_company_id, unnest(selected_ids); RETURN selected_ids; END; $$",
+      "definitionSha256": "7b6de1ed608c75c94800beb828b08261ad990616524e925f4f1e3cf8ff7ef89f",
+      "searchPath": "",
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "review_directory_tag_suggestion",
+      "identityArguments": "p_suggestion_id uuid, p_action text, p_slug text, p_label text, p_note text",
+      "resultType": "text",
+      "language": "plpgsql",
+      "securityDefiner": true,
+      "volatility": "volatile",
+      "definition": "CREATE FUNCTION public.review_directory_tag_suggestion(p_suggestion_id uuid, p_action text, p_slug text, p_label text, p_note text) RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path TO '' AS $_$ DECLARE suggestion public.directory_tag_suggestions%ROWTYPE; approved_id text; BEGIN IF auth.uid() IS NULL OR NOT public.is_admin() THEN RAISE EXCEPTION 'Administrator access required.' USING ERRCODE = '42501'; END IF; IF p_action IS NULL OR p_action NOT IN ('approve', 'reject') OR length(COALESCE(p_note, '')) > 1000 THEN RAISE EXCEPTION 'Invalid review action or note.' USING ERRCODE = '22023'; END IF; SELECT * INTO suggestion FROM public.directory_tag_suggestions WHERE id = p_suggestion_id FOR UPDATE; IF NOT FOUND OR suggestion.status <> 'pending' THEN RAISE EXCEPTION 'Suggestion is unavailable or already reviewed.' USING ERRCODE = '22023'; END IF; IF p_action = 'approve' THEN IF p_slug IS NULL OR p_slug !~ '^[a-z0-9]+(-[a-z0-9]+)*$' OR length(p_slug) > 80 OR p_label IS NULL OR length(btrim(p_label)) NOT BETWEEN 2 AND 100 THEN RAISE EXCEPTION 'A valid controlled slug and label are required.' USING ERRCODE = '22023'; END IF; approved_id := suggestion.group_key || ':' || p_slug; INSERT INTO public.directory_tags(id, group_key, slug, label) VALUES (approved_id, suggestion.group_key, p_slug, btrim(p_label)) ON CONFLICT (id) DO NOTHING; PERFORM 1 FROM public.directory_tags WHERE id = approved_id AND is_active AND label = btrim(p_label); IF NOT FOUND THEN RAISE EXCEPTION 'Existing tag is inactive or has a different label.' USING ERRCODE = '22023'; END IF; END IF; UPDATE public.directory_tag_suggestions SET status = CASE WHEN p_action = 'approve' THEN 'approved' ELSE 'rejected' END, approved_tag_id = approved_id, reviewed_by = auth.uid(), reviewed_at = now(), review_note = NULLIF(btrim(p_note), '') WHERE id = p_suggestion_id; RETURN approved_id; END; $_$",
+      "definitionSha256": "11fbe872c45202974b6636542e608da68a383da2733b0db7e39469ef13fbe1a8",
+      "searchPath": "",
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "submit_directory_claim",
+      "identityArguments": "p_company_id uuid, p_business_email text, p_business_phone text, p_verification_data jsonb, p_tag_ids text[]",
+      "resultType": "jsonb",
+      "language": "plpgsql",
+      "securityDefiner": true,
+      "volatility": "volatile",
+      "definition": "CREATE FUNCTION public.submit_directory_claim(p_company_id uuid, p_business_email text, p_business_phone text, p_verification_data jsonb, p_tag_ids text[]) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path TO '' AS $$ DECLARE selected_ids text[]; new_claim public.listing_claims%ROWTYPE; BEGIN IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Sign in required.' USING ERRCODE = '42501'; END IF; IF p_business_email IS NULL OR length(btrim(p_business_email)) NOT BETWEEN 3 AND 255 OR length(COALESCE(p_business_phone, '')) > 20 OR jsonb_typeof(p_verification_data) IS DISTINCT FROM 'object' OR length(COALESCE(p_verification_data->>'relationship', '')) NOT BETWEEN 20 AND 500 OR length(COALESCE(p_verification_data->>'verification_details', '')) NOT BETWEEN 50 AND 1500 THEN RAISE EXCEPTION 'Invalid claim information.' USING ERRCODE = '22023'; END IF; PERFORM 1 FROM public.companies WHERE id = p_company_id AND verified_owner_id IS NULL FOR UPDATE; IF NOT FOUND THEN RAISE EXCEPTION 'Listing unavailable for claiming.' USING ERRCODE = '22023'; END IF; IF EXISTS (SELECT 1 FROM public.listing_claims WHERE company_id = p_company_id AND claimant_user_id = auth.uid() AND claim_status IN ('pending', 'under_review')) THEN RAISE EXCEPTION 'An active claim already exists.' USING ERRCODE = '23505'; END IF; selected_ids := public.validate_directory_tag_selection(p_tag_ids); INSERT INTO public.listing_claims(company_id, claimant_user_id, claim_status, verification_method, verification_data, business_email, business_phone) VALUES (p_company_id, auth.uid(), 'pending', 'manual', p_verification_data, btrim(p_business_email), NULLIF(btrim(p_business_phone), '')) RETURNING * INTO new_claim; INSERT INTO public.claim_tags(claim_id, tag_id) SELECT new_claim.id, unnest(selected_ids); RETURN jsonb_build_object('id', new_claim.id, 'claim_status', new_claim.claim_status, 'submitted_at', new_claim.submitted_at); END; $$",
+      "definitionSha256": "00185f22e5964e50317f73d46492d09ae4c19f9341c0b460bba1f2418737a2cc",
+      "searchPath": "",
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
       "name": "update_updated_at_column",
       "identityArguments": "",
       "resultType": "trigger",
@@ -2750,6 +3516,19 @@
       "volatility": "volatile",
       "definition": "CREATE FUNCTION public.update_updated_at_column() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at := NOW(); RETURN NEW; END; $$",
       "definitionSha256": "718bd6024beb8ab5e6fbf99f42857a66aa526d49753078ebd735a797362b94a5",
+      "owner": "postgres"
+    },
+    {
+      "schema": "public",
+      "name": "validate_directory_tag_selection",
+      "identityArguments": "p_tag_ids text[]",
+      "resultType": "text[]",
+      "language": "plpgsql",
+      "securityDefiner": false,
+      "volatility": "stable",
+      "definition": "CREATE FUNCTION public.validate_directory_tag_selection(p_tag_ids text[]) RETURNS text[] LANGUAGE plpgsql STABLE SET search_path TO '' AS $$ DECLARE selected_ids text[]; core_count integer; service_count integer; price_count integer; BEGIN IF p_tag_ids IS NULL OR cardinality(p_tag_ids) NOT BETWEEN 3 AND 100 OR array_ndims(p_tag_ids) <> 1 OR array_position(p_tag_ids, NULL) IS NOT NULL THEN RAISE EXCEPTION 'Choose valid tag IDs.' USING ERRCODE = '22023'; END IF; SELECT array_agg(id ORDER BY id) INTO selected_ids FROM (SELECT DISTINCT unnest(p_tag_ids) AS id) AS selected; IF cardinality(selected_ids) <> cardinality(p_tag_ids) THEN RAISE EXCEPTION 'Duplicate tags are not allowed.' USING ERRCODE = '22023'; END IF; IF (SELECT count(*) FROM public.directory_tags WHERE id = ANY(selected_ids) AND is_active) <> cardinality(selected_ids) THEN RAISE EXCEPTION 'Choose only active, approved tags.' USING ERRCODE = '22023'; END IF; SELECT count(*) FILTER (WHERE group_key IN ('services', 'pathways')), count(*) FILTER (WHERE group_key = 'services'), count(*) FILTER (WHERE group_key = 'price_range') INTO core_count, service_count, price_count FROM public.directory_tags WHERE id = ANY(selected_ids); IF core_count NOT BETWEEN 3 AND 5 OR service_count < 1 THEN RAISE EXCEPTION 'Choose 3 to 5 Services and Pathways tags, including at least one Service.' USING ERRCODE = '22023'; END IF; IF price_count > 1 THEN RAISE EXCEPTION 'Choose at most one price range.' USING ERRCODE = '22023'; END IF; RETURN selected_ids; END; $$",
+      "definitionSha256": "2812a9820d53a92af9c145acba8d6080bdcee7cdf25d5a9c0cd053998767a27a",
+      "searchPath": "",
       "owner": "postgres"
     }
   ],
@@ -2860,6 +3639,30 @@
     },
     {
       "kind": "function",
+      "name": "replace_claim_tags",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "replace_company_tags",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "review_directory_tag_suggestion",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "submit_directory_claim",
+      "grantee": "authenticated",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
       "name": "update_updated_at_column",
       "grantee": "anon",
       "privileges": "ALL"
@@ -2874,6 +3677,12 @@
       "kind": "function",
       "name": "update_updated_at_column",
       "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "function",
+      "name": "validate_directory_tag_selection",
+      "grantee": "authenticated",
       "privileges": "ALL"
     },
     {
@@ -2909,6 +3718,18 @@
     {
       "kind": "table",
       "name": "advisors",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "claim_tags",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "claim_tags",
       "grantee": "service_role",
       "privileges": "ALL"
     },
@@ -2980,6 +3801,24 @@
     },
     {
       "kind": "table",
+      "name": "company_tags",
+      "grantee": "anon",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "company_tags",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "company_tags",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
       "name": "directory_events",
       "grantee": "authenticated",
       "privileges": "SELECT"
@@ -2987,6 +3826,54 @@
     {
       "kind": "table",
       "name": "directory_events",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tag_groups",
+      "grantee": "anon",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tag_groups",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tag_groups",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tag_suggestions",
+      "grantee": "authenticated",
+      "privileges": "INSERT(claim_id), INSERT(company_id), INSERT(group_key), INSERT(label), INSERT(reason), INSERT(requester_user_id), SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tag_suggestions",
+      "grantee": "service_role",
+      "privileges": "ALL"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tags",
+      "grantee": "anon",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tags",
+      "grantee": "authenticated",
+      "privileges": "SELECT"
+    },
+    {
+      "kind": "table",
+      "name": "directory_tags",
       "grantee": "service_role",
       "privileges": "ALL"
     },

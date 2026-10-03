@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { readTagCatalog } from '@/lib/tags/catalog'
+import { tagSelectionSchema, validateTagSelection } from '@/lib/tags/validation'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,9 +11,10 @@ const noStoreHeaders = { 'Cache-Control': 'no-store' }
 const claimSchema = z.object({
   company_id: z.string().uuid(),
   business_email: z.string().trim().email().max(255),
-  business_phone: z.string().trim().max(30).optional().nullable(),
+  business_phone: z.string().trim().max(20).optional().nullable(),
   relationship: z.string().trim().min(20).max(500),
   verification_details: z.string().trim().min(50).max(1500),
+  tag_ids: tagSelectionSchema,
 })
 
 export async function POST(request: NextRequest) {
@@ -44,6 +47,14 @@ export async function POST(request: NextRequest) {
   }
 
   const { company_id, business_email, business_phone, relationship, verification_details } = parsed.data
+  let catalog
+  try { catalog = await readTagCatalog() } catch {
+    return NextResponse.json({ error: 'Approved tags are temporarily unavailable.' }, { status: 503, headers: noStoreHeaders })
+  }
+  let tagIds: string[]
+  try { tagIds = validateTagSelection(parsed.data.tag_ids, catalog.tags) } catch (failure) {
+    return NextResponse.json({ error: failure instanceof Error ? failure.message : 'Choose valid tags.' }, { status: 400, headers: noStoreHeaders })
+  }
 
   const { data: company, error: companyError } = await supabase
     .from('companies')
@@ -87,25 +98,20 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { data: claim, error: claimError } = await supabase
-    .from('listing_claims')
-    .insert({
-      company_id,
-      claimant_user_id: user.id,
-      claim_status: 'pending',
-      verification_method: 'manual',
-      verification_data: {
+  // One database transaction records the pending claim and its private tags.
+  const { data: claim, error: claimError } = await supabase.rpc('submit_directory_claim', {
+      p_company_id: company_id,
+      p_business_email: business_email,
+      p_business_phone: business_phone || null,
+      p_verification_data: {
         relationship,
         verification_details,
         submitted_account_email: user.email ?? null,
       },
-      business_email,
-      business_phone: business_phone || null,
+      p_tag_ids: tagIds,
     })
-    .select('id, claim_status, submitted_at')
-    .single()
 
-  if (claimError?.code === '23505') {
+  if (claimError?.code === '23505' || claimError?.code === '23P01') {
     return NextResponse.json(
       { error: 'An active claim already exists for this listing.' },
       { status: 409, headers: noStoreHeaders },
@@ -113,6 +119,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (claimError || !claim) {
+    if (claimError?.code === '22023' || claimError?.code === '42501') return NextResponse.json({ error: 'The listing or tag selection is no longer available. Refresh and try again.' }, { status: claimError.code === '42501' ? 403 : 400, headers: noStoreHeaders })
     console.error('Failed to submit listing claim:', claimError)
     return NextResponse.json(
       { error: 'The claim could not be submitted.' },

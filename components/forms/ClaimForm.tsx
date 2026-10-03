@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, Loader2, LogIn, ShieldCheck } from 'lucide-react'
 import { z } from 'zod'
@@ -10,6 +10,10 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { TagPicker } from '@/components/tags/TagPicker'
+import { TagSuggestionForm } from '@/components/tags/TagSuggestionForm'
+import { validateTagSelection } from '@/lib/tags/validation'
+import type { TagCatalog } from '@/lib/tags/types'
 
 const claimSchema = z.object({
   businessEmail: z.string().trim().email('Enter a valid business email address.'),
@@ -33,6 +37,20 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [step, setStep] = useState(0)
+  const [catalog, setCatalog] = useState<TagCatalog | null>(null)
+  const [tagIds, setTagIds] = useState<string[]>([])
+  const [claimId, setClaimId] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/directory-tags', { cache: 'no-store' }).then(async (response) => {
+      if (!response.ok) throw new Error('Approved tags are temporarily unavailable. Please try again later.')
+      const result = await response.json()
+      if (!cancelled) setCatalog(result)
+    }).catch((failure) => { if (!cancelled) setError(failure.message) })
+    return () => { cancelled = true }
+  }, [])
 
   if (authLoading) {
     return <Card className="flex min-h-48 items-center justify-center border-frost"><Loader2 className="h-7 w-7 animate-spin text-hockey-blue" aria-label="Checking sign-in status" /></Card>
@@ -63,6 +81,11 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
       return
     }
 
+    if (step === 0) { setStep(1); return }
+    if (!catalog) { setError('Wait for the approved tag catalog before submitting.'); return }
+    try { validateTagSelection(tagIds, catalog.tags) }
+    catch (failure) { setError(failure instanceof Error ? failure.message : 'Choose valid tags.'); return }
+
     setLoading(true)
     try {
       const response = await fetch('/api/advisors/claim', {
@@ -74,10 +97,12 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
           business_phone: parsed.data.businessPhone || null,
           relationship: parsed.data.relationship,
           verification_details: parsed.data.verificationDetails,
+          tag_ids: tagIds,
         }),
       })
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'The claim could not be submitted.')
+      setClaimId(result.claimId)
       setSuccess(true)
     } catch (submissionError) {
       setError(submissionError instanceof Error ? submissionError.message : 'The claim could not be submitted.')
@@ -95,6 +120,7 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
           Your claim for {companyName} is recorded as pending. No listing access is granted until the business relationship is reviewed.
         </p>
         <Button asChild variant="outline" className="mt-6"><Link href={`/listings/${companySlug}`}>Return to the listing</Link></Button>
+        {catalog && claimId && <div className="text-left"><TagSuggestionForm catalog={catalog} context={{ claim_id: claimId }} /></div>}
       </Card>
     )
   }
@@ -112,6 +138,8 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
       {error && <p className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800" role="alert">{error}</p>}
 
       <form onSubmit={handleSubmit} className="mt-7 space-y-6">
+        <p className="text-sm font-bold text-hockey-blue" aria-live="polite">Step {step + 1} of 2 · {step === 0 ? 'Business connection' : 'Directory tags'}</p>
+        <div hidden={step !== 0} className="space-y-6">
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="business-email">Business email</Label>
@@ -138,9 +166,17 @@ export function ClaimForm({ companyId, companyName, companySlug }: ClaimFormProp
         <div className="rounded-lg bg-ice-blue p-4 text-sm leading-6 text-board-blue">
           Submitting a claim does not automatically verify the listing or grant access. False ownership claims may be rejected.
         </div>
+        </div>
+
+        {step === 1 && <div>
+          <h3 className="mb-4 text-xl font-bold text-arena-navy">Help families find your listing</h3>
+          {catalog ? <TagPicker catalog={catalog} value={tagIds} onChange={setTagIds} disabled={loading} /> : <p role="status">Loading approved tags…</p>}
+          <p className="mt-4 text-sm text-neutral-gray">Your selections stay private while the ownership claim is reviewed.</p>
+          <Button type="button" variant="outline" className="mt-4" onClick={() => setStep(0)}>Back to business details</Button>
+        </div>}
 
         <Button type="submit" disabled={loading} className="min-h-12 w-full font-bold">
-          {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting claim…</> : 'Submit claim for review'}
+          {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting claim…</> : step === 0 ? 'Continue to directory tags' : 'Submit claim for review'}
         </Button>
       </form>
     </Card>

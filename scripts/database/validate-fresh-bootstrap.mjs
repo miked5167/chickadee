@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import {
@@ -141,18 +141,22 @@ async function applyPending(connection) {
   return applied
 }
 
-function validateCatalog(connection) {
+async function validateCatalog(connection) {
+  const expected = JSON.parse(await readFile(targetFingerprintPath, 'utf8'))
+  const tableNames = expected.tables.map((table) => table.name)
+  assert(tableNames.every((name) => /^[a-z_][a-z0-9_]*$/.test(name)), 'Unsafe catalog table name')
+  const names = tableNames.map((name) => `'${name}'`).join(',')
   const result = scalar(connection, `
     SELECT json_build_object(
-      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
-      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions')),
-      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND NOT t.tgisinternal),
-      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN ('companies','advisors','listing_claims','media_content','users','admin_users','reviews','company_profiles','company_leads','directory_events','advisor_interest_submissions') AND c.relrowsecurity AND NOT c.relforcerowsecurity),
+      'tables', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' AND c.relname IN (${names})),
+      'policies', (SELECT count(*) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid = p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names})),
+      'triggers', (SELECT count(*) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid = t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names}) AND NOT t.tgisinternal),
+      'rls_enabled', (SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relname IN (${names}) AND c.relrowsecurity AND NOT c.relforcerowsecurity),
       'ambiguous_columns', (SELECT count(*) FROM information_schema.columns WHERE table_schema = 'public' AND table_name IN ('listing_claims','media_content') AND column_name = 'advisor_id')
     )::text;
   `)
   const checks = JSON.parse(result)
-  assert(checks.tables === 11 && checks.policies === 22 && checks.triggers === 9 && checks.rls_enabled === 11 && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
+  assert(checks.tables === expected.tables.length && checks.policies === expected.policies.length && checks.triggers === expected.triggers.length && checks.rls_enabled === expected.rowLevelSecurity.length && checks.ambiguous_columns === 0, 'Representative catalog/RLS checks failed')
 }
 
 async function compareFingerprint(connection) {
@@ -505,6 +509,28 @@ function validateFailClosedM5M6M7Guards(connection) {
   assert(m7Owner.stderr.includes('M7 ownership guard'), 'Wrong M7 migration owner did not fail through the ownership guard')
 }
 
+async function validateDirectoryTagFlow(connection) {
+  // The seed owns its transaction; apply it before the rollback-only flow fixture.
+  psql(connection, ['--file', path.join(repositoryRoot, 'supabase/seeds/directory-tags.sql')])
+  const before = scalar(connection, 'SELECT count(*) FROM public.directory_tags;')
+  const result = psql(connection, ['-qAt', '--command', 'BEGIN;',
+    '--file', path.join(repositoryRoot, 'supabase/validation/directory-tag-release-flow.sql')])
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'hockey-directory-filter-fixture-'))
+  try {
+    const fixturePath = path.join(directory, 'fixture.json')
+    await writeFile(fixturePath, JSON.stringify(JSON.parse(result.stdout.trim())))
+    const check = run(process.execPath, [path.join(repositoryRoot, 'node_modules/tsx/dist/cli.mjs'), path.join(repositoryRoot, 'scripts/database/verify-directory-fixture.ts'), fixturePath])
+    assert(check.status === 0, check.stderr || 'Real saved tag filter checks failed')
+    assert(scalar(connection, 'SELECT count(*) FROM public.directory_tags;') === before, 'Flow test retained seed changes')
+    assert(scalar(connection, "SELECT count(*) FROM public.companies WHERE slug='release-fixture-advisor';") === '0', 'Flow test retained listing fixtures')
+    process.stdout.write(check.stdout)
+  } finally {
+    const relative = path.relative(os.tmpdir(), directory)
+    assert(relative && !relative.startsWith('..') && !path.isAbsolute(relative), 'Unsafe fixture cleanup path')
+    await rm(directory, { recursive: true, force: true })
+  }
+}
+
 async function main() {
   const connection = connectionArguments()
   const identity = verifyIdentity(connection)
@@ -523,12 +549,13 @@ async function main() {
   validateFailClosedM4Guards(connection)
   validateFailClosedM5M6M7Guards(connection)
   await compareFingerprint(connection)
-  validateCatalog(connection)
+  await validateCatalog(connection)
+  await validateDirectoryTagFlow(connection)
 
   const guardAttempt = psql(connection, ['--file', baselineMigrationPath], { expectFailure: true, failureLabel: 'baseline re-execution' })
   assert(guardAttempt.stderr.includes('Fresh-environment guard'), 'Baseline did not fail through its fresh-environment guard on an existing schema')
 
-  process.stdout.write(`Fresh M1 through M7 bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
+  process.stdout.write(`Fresh migration bootstrap passed on proven local target ${identity.database} at ${identity.server_address}:${identity.server_port}; runner rerun was a no-op, migration/catalog/security guards failed closed, the admin and public-review role matrices passed with zero retained fixtures, the M1 guard held, and the current-target fingerprint/catalog matched.\n`)
 }
 
 main().catch((error) => {

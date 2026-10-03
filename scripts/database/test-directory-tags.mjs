@@ -2,7 +2,7 @@
 // Uses minimal dependency fixtures; does not claim to test the PostGIS baseline.
 import { spawnSync } from 'node:child_process'
 import { mkdtemp, readFile, rm } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { createServer } from 'node:net'
 import os from 'node:os'
 import path from 'node:path'
@@ -24,7 +24,9 @@ function run(name, args) {
 function assert(condition, message) { if (!condition) throw new Error(message) }
 function successful(name, args) {
   const result = run(name, args)
-  assert(result.status === 0, result.stderr?.trim() || `${name} failed`)
+  const log = name === 'pg_ctl' && result.status !== 0 && existsSync(path.join(root, 'server.log'))
+    ? `\n${readFileSync(path.join(root, 'server.log'), 'utf8')}` : ''
+  assert(result.status === 0, `${result.stderr?.trim() || `${name} failed`}${log}`)
   return result.stdout.trim()
 }
 const port = await new Promise((resolve, reject) => {
@@ -57,7 +59,10 @@ const core = "ARRAY['services:advisor','pathways:junior','pathways:ncaa']"
 
 try {
   successful('initdb', ['-D', cluster, '-U', 'postgres', '--auth-local=trust', '--auth-host=trust', '--encoding=UTF8', '--locale=C'])
-  successful('pg_ctl', ['-D', cluster, '-l', path.join(root, 'server.log'), '-o', `-h 127.0.0.1 -p ${port}`, '-w', '-t', '30', 'start'])
+  // Linux's default socket directory may be owned by the installed postgres
+  // service. Keep this runner-owned cluster's socket inside its temporary root.
+  const socketOption = process.platform === 'win32' ? '' : ` -k '${root.replaceAll("'", "'\\''")}'`
+  successful('pg_ctl', ['-D', cluster, '-l', path.join(root, 'server.log'), '-o', `-h 127.0.0.1 -p ${port}${socketOption}`, '-w', '-t', '30', 'start'])
   started = true
   successful('createdb', ['-h', '127.0.0.1', '-p', String(port), '-U', 'postgres', database])
   const identity = JSON.parse(sql("SELECT json_build_object('database', current_database(), 'address', inet_server_addr()::text, 'port', inet_server_port(), 'data', current_setting('data_directory'))::text"))

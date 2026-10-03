@@ -1,4 +1,4 @@
-# Controlled directory tags — Step 1
+# Controlled directory tags
 
 ## Status and scope
 
@@ -73,14 +73,21 @@ transaction as its audit. Approval does not auto-assign the tag to any listing.
 
 The API uses request-scoped session clients and existing guards; no service-role
 client is created. All responses are no-store. Requesters cannot self-approve.
-The advisor-facing picker and suggestion form belong to Step 2.
+`GET/PUT /api/advisor/tags` reads and replaces tags for the signed-in listing
+owner. The advisor dashboard includes the picker, a tag-completeness indicator,
+and a suggestion form. The claim form collects tags after connection details.
+`submit_directory_claim` creates the pending claim and its private tags in one
+transaction. Invalid tags cannot leave a partial claim behind. Approving a
+claim does not publish tags automatically; the owner can review their approved
+claim selection and save it through profile editing.
 
 ## Migration, seed and validation
 
 `supabase/migrations/20261002000000_directory_tags.sql` contains schema and
 functions only. Apply it transactionally through the migration runner on an
 approved target. Seed separately with `supabase/seeds/directory-tags.sql`.
-Seed reruns insert missing starter options without overwriting administrator
+Apply `20261003000000_directory_claim_tags.sql` after the tag foundation and
+seed, before releasing the updated claim form. Seed reruns insert missing starter options without overwriting administrator
 labels, visibility changes or retired tags.
 
 ```text
@@ -102,5 +109,5 @@ substitute for the complete PostGIS bootstrap or production release preflight.
 
 The existing schema fingerprint/type generation and full-bootstrap catalog
 checks include the new objects. The immutable baseline and all older migrations
-remain unchanged. Human-reviewed backfill and Elite Prospects sorting are
-later implementation steps.
+remain unchanged. Filtering, the development preview and review-only backfill
+are documented in `docs/directory-filtering.md`.

@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { normalizeEliteProspectsCheck } from './elite-prospects-sql-forms.mjs'
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url))
 export const repositoryRoot = path.resolve(scriptDirectory, '..', '..')
@@ -199,7 +200,7 @@ function parseColumn(item, ordinal) {
 }
 
 function parseConstraint(table, name, definition) {
-  const normalized = normalizeSql(definition)
+  const normalized = normalizeEliteProspectsCheck(table, normalizeSql(definition))
   const type = normalized.match(/^(PRIMARY KEY|UNIQUE|FOREIGN KEY|CHECK|EXCLUDE)\b/i)?.[1]
   if (!type) throw new Error(`Cannot classify constraint ${name}`)
   return { table, name, type: type.toLowerCase().replace(' ', '_'), definition: normalized }

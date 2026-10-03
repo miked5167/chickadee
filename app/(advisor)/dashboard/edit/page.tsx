@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { AdvisorTagSetup } from '@/components/tags/AdvisorTagSetup'
 
 type CompanyForm = {
   name: string
@@ -76,6 +77,7 @@ export default function EditProfilePage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ kind: 'success' | 'error'; text: string } | null>(null)
   const [initialSnapshot, setInitialSnapshot] = useState('')
+  const [tagsComplete, setTagsComplete] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -105,8 +107,8 @@ export default function EditProfilePage() {
 
   const currentSnapshot = useMemo(() => JSON.stringify({ company, profile }), [company, profile])
   const hasChanges = Boolean(initialSnapshot) && currentSnapshot !== initialSnapshot
-  const completedFields = [company.name, company.description, company.email, company.city, profile.tagline, profile.services.length, profile.specialties.length, profile.service_areas.length, profile.accepting_clients !== null].filter(Boolean).length
-  const completion = Math.round((completedFields / 9) * 100)
+  const completedFields = [company.name, company.description, company.email, company.city, profile.tagline, tagsComplete, profile.specialties.length, profile.accepting_clients !== null].filter(Boolean).length
+  const completion = Math.round((completedFields / 8) * 100)
 
   async function save(event: FormEvent) {
     event.preventDefault()
@@ -157,11 +159,13 @@ export default function EditProfilePage() {
 
       <div className="mb-6 rounded-xl border border-frost bg-white p-5">
         <div className="mb-2 flex justify-between text-sm font-bold text-arena-navy"><span>Useful profile information</span><span>{completion}%</span></div>
-        <div className="h-2 overflow-hidden rounded-full bg-ice-blue"><div className="h-full bg-success-green transition-all" style={{ width: `${completion}%` }} /></div>
+        <div role="progressbar" aria-label="Profile completeness" aria-valuemin={0} aria-valuemax={100} aria-valuenow={completion} className="h-2 overflow-hidden rounded-full bg-ice-blue"><div className="h-full bg-success-green transition-all" style={{ width: `${completion}%` }} /></div>
         <p className="mt-2 text-xs text-neutral-gray">This measures useful information, not quality or endorsement.</p>
       </div>
 
       {message && <div role={message.kind === 'error' ? 'alert' : 'status'} className={`mb-6 flex gap-3 rounded-xl border p-4 ${message.kind === 'error' ? 'border-red-200 bg-red-50 text-red-800' : 'border-green-200 bg-green-50 text-green-800'}`}>{message.kind === 'error' ? <AlertCircle className="h-5 w-5 shrink-0" /> : <CheckCircle2 className="h-5 w-5 shrink-0" />}<span>{message.text}</span></div>}
+
+      <AdvisorTagSetup onCompletenessChange={setTagsComplete} />
 
       <form onSubmit={save} className="space-y-8">
         <Card><CardHeader><CardTitle>Company basics</CardTitle><CardDescription>The public identity and introduction for your listing.</CardDescription></CardHeader><CardContent className="grid gap-5 md:grid-cols-2">
@@ -175,17 +179,11 @@ export default function EditProfilePage() {
         <Card><CardHeader><CardTitle>Contact and location</CardTitle><CardDescription>Only publish contact information you want families to use.</CardDescription></CardHeader><CardContent className="grid gap-5 md:grid-cols-2">
           {(['email', 'phone', 'website_url', 'address', 'city', 'state_province'] as const).map((field) => <div key={field} className="space-y-2"><Label htmlFor={field}>{field.replaceAll('_', ' ').replace(/^./, (letter) => letter.toUpperCase())}</Label><Input id={field} type={field === 'email' ? 'email' : field === 'website_url' ? 'url' : 'text'} value={company[field]} onChange={(e) => setCompany({ ...company, [field]: e.target.value })} /></div>)}
           <div className="space-y-2"><Label htmlFor="country">Country</Label><select id="country" value={company.country} onChange={(e) => setCompany({ ...company, country: e.target.value as 'CA' | 'US' })} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="CA">Canada</option><option value="US">United States</option></select></div>
-          <ListField id="service-areas" label="Areas served" value={profile.service_areas} onChange={(service_areas) => setProfile({ ...profile, service_areas })} help="Examples: Ontario, Northeast US, North America" />
           <div className="space-y-2"><Label htmlFor="response">Typical response time</Label><Input id="response" value={profile.response_time} onChange={(e) => setProfile({ ...profile, response_time: e.target.value })} placeholder="Within 2 business days" /></div>
-          <ListField id="languages" label="Languages" value={profile.languages} onChange={(languages) => setProfile({ ...profile, languages })} help="Examples: English, French" />
         </CardContent></Card>
 
-        <Card><CardHeader><CardTitle>Hockey services and fit</CardTitle><CardDescription>Specific fields make your listing more useful and power the directory filters.</CardDescription></CardHeader><CardContent className="grid gap-5 md:grid-cols-2">
-          <ListField id="services" label="Services" value={profile.services} onChange={(services) => setProfile({ ...profile, services })} help="Examples: Player Assessment, College Recruiting, Contract Guidance" />
+        <Card><CardHeader><CardTitle>Additional profile information</CardTitle><CardDescription>Use Directory tags above for services, pathways, player fit, regions and languages.</CardDescription></CardHeader><CardContent className="grid gap-5 md:grid-cols-2">
           <ListField id="specialties" label="Specialties" value={profile.specialties} onChange={(specialties) => setProfile({ ...profile, specialties })} help="Examples: Female Hockey, Goaltenders, NCAA Division I" />
-          <ListField id="pathways" label="Hockey pathways" value={profile.pathways} onChange={(pathways) => setProfile({ ...profile, pathways })} help="Examples: Prep School, Junior Hockey, NCAA, U SPORTS" />
-          <ListField id="levels" label="Player levels" value={profile.player_levels} onChange={(player_levels) => setProfile({ ...profile, player_levels })} help="Examples: AAA, Prep, Junior, College, Professional" />
-          <ListField id="ages" label="Age groups" value={profile.age_groups} onChange={(age_groups) => setProfile({ ...profile, age_groups })} help="Examples: U14, U16, U18, 18+" />
           <div className="space-y-3 rounded-xl border border-frost p-4"><label className="flex min-h-11 items-center gap-3 font-semibold"><input type="checkbox" className="h-5 w-5" checked={profile.offers_remote} onChange={(e) => setProfile({ ...profile, offers_remote: e.target.checked })} />Remote consultations available</label><Label htmlFor="availability">New client availability</Label><select id="availability" value={profile.accepting_clients === null ? 'unknown' : String(profile.accepting_clients)} onChange={(e) => setProfile({ ...profile, accepting_clients: e.target.value === 'unknown' ? null : e.target.value === 'true' })} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"><option value="unknown">Not stated</option><option value="true">Accepting new clients</option><option value="false">Not currently accepting</option></select></div>
         </CardContent></Card>
 

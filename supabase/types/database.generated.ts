@@ -961,6 +961,16 @@ export type Database = {
         }
         Returns: string
       }
+      submit_directory_claim: {
+        Args: {
+          p_company_id: string
+          p_business_email: string
+          p_business_phone: string
+          p_verification_data: Json
+          p_tag_ids: string[]
+        }
+        Returns: Json
+      }
       validate_directory_tag_selection: {
         Args: {
           p_tag_ids: string[]

@@ -91,6 +91,9 @@ try {
     }
   }
   assert(JSON.stringify(expectedFingerprint) === JSON.stringify(actualFingerprint), 'Directory tag schema dump differs from the generated fingerprint')
+  sql(`ALTER TABLE public.listing_claims ALTER COLUMN id SET DEFAULT extensions.uuid_generate_v4();
+    ALTER TABLE public.listing_claims ADD COLUMN verification_method text, ADD COLUMN verification_data jsonb, ADD COLUMN business_email text, ADD COLUMN business_phone text, ADD COLUMN submitted_at timestamptz DEFAULT now();`)
+  successful('psql', [...connection, '--single-transaction', '-f', path.join(repositoryRoot, 'supabase/migrations/20261003000000_directory_claim_tags.sql')])
   checks++
   successful('psql', [...connection, '-f', seed])
   successful('psql', [...connection, '-f', seed])
@@ -101,7 +104,7 @@ try {
 
   sql(`INSERT INTO auth.users(id) VALUES ('${owner}'), ('${other}'), ('${admin}');
     INSERT INTO public.companies VALUES ('${company}', '${owner}', 'Preserved legacy description'), ('${unclaimed}', NULL, 'Unclaimed company');
-    INSERT INTO public.listing_claims VALUES ('${claim}', '${unclaimed}', '${owner}', 'pending');
+    INSERT INTO public.listing_claims(id,company_id,claimant_user_id,claim_status) VALUES ('${claim}', '${unclaimed}', '${owner}', 'pending');
     INSERT INTO public.admin_users VALUES ('${admin}', true);`)
   sql(asUser(owner, `SELECT public.replace_company_tags('${company}', ${core} || ARRAY['player_level:aaa','age_group:15-17','regions:ca-on','languages:english','languages:french']);`))
   equal(`SET ROLE anon; SELECT count(*) FROM public.company_tags WHERE company_id = '${company}'`, 8, 'Supplemental tags consumed core slots or public read failed')
@@ -133,6 +136,15 @@ try {
   fails(`SET ROLE anon; SELECT * FROM public.claim_tags`, /permission denied/, 'public claim tags')
   fails(asUser(other, `SELECT public.replace_claim_tags('${claim}', ${core});`), /access denied/, 'another claimant replacement')
   equal(`SELECT count(*) FROM public.company_tags WHERE company_id = '${unclaimed}'`, 0, 'Claim selections published before ownership')
+  const claimDetails = `jsonb_build_object('relationship', repeat('a', 30), 'verification_details', repeat('b', 60))`
+  const submit = (tags) => `SELECT public.submit_directory_claim('${unclaimed}', 'owner@example.com', NULL, ${claimDetails}, ${tags});`
+  fails(`SET ROLE anon; ${submit(core)}`, /permission denied/, 'anonymous claim transaction')
+  fails(asUser(other, submit("ARRAY['services:advisor','pathways:ncaa']")), /Choose/, 'incomplete claim tags')
+  equal(`SELECT count(*) FROM public.listing_claims WHERE claimant_user_id = '${other}'`, 0, 'Invalid tags left an orphan claim')
+  sql(asUser(other, submit(core)))
+  equal(`SELECT count(*) FROM public.claim_tags t JOIN public.listing_claims c ON c.id=t.claim_id WHERE c.claimant_user_id='${other}'`, 3, 'Claim and tags not saved together')
+  fails(asUser(other, submit(core)), /active claim/, 'duplicate claim transaction')
+  equal(`SELECT verified_owner_id IS NULL FROM public.companies WHERE id='${unclaimed}'`, 't', 'Claim transaction granted ownership')
 
   // INSERT privileges deliberately exclude reviewer-controlled columns.
   fails(asUser(owner, `INSERT INTO public.directory_tag_suggestions(requester_user_id,company_id,group_key,label,reason,status) VALUES ('${owner}','${company}','languages','Spanish','Clients request this language','approved');`), /permission denied/, 'advisor self-approval')
